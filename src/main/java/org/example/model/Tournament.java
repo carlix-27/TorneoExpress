@@ -42,4 +42,8 @@ public class Tournament {
     participatingTeams.add(team);
   }
 
+  public void leave(Team team) {
+    participatingTeams.remove(team);
+  }
+
 }

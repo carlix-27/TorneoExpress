@@ -35,9 +35,16 @@ public class Team {
   private List<Article> articles = new ArrayList<>();
 
 
-
   public void join(Player player) {
     players.add(player);
+  }
+
+  public void joinTournament(Tournament tournament) {
+    tournament.joinTournament(this);
+  }
+
+  public void leaveTournament(Tournament tournament) {
+    tournament.leave(this);
   }
 
   public void buyArticle(Article article) {
