@@ -1,16 +1,34 @@
 package org.example.model.player;
 
 
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import org.example.model.Team;
 
+import javax.persistence.*;
+
+@Entity
 public class Player {
+    @Id
+    private Long player_id;
 
-    @OneToOne(mappedBy = "id")
-    private long player_id;
+    @Column
+    private String player_name;
 
-    @OneToOne
-    @JoinColumn(name = "player_email")
+    @Column
+    private String player_location;
+
+    @Column (nullable = false, unique = true)
     private String player_email;
+
+    public void joinTeam(Team team) {
+      team.join(this);
+    }
+
+    public void createTeam() {
+
+    }
+
+    public void createTournamnet() {
+
+    }
 
 }

@@ -14,5 +14,12 @@ public class Administrator {
     @Column
     private String AdminName;
 
+    public void createTournament() {
+
+    }
+
+    public void uodateRanking() {
+
+    }
 
 }
