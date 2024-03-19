@@ -13,14 +13,6 @@ public class Captain {
   @Column
   private String captain_name;
 
-  public void joinTournament() {
-
-  }
-
-  public void leaveTournament() {
-
-  }
-
   public void acceptPlayer() {
 
   }
@@ -28,5 +20,4 @@ public class Captain {
   public void eliminateTeam() {
 
   }
-
 }
