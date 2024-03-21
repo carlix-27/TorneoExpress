@@ -10,18 +10,19 @@
         <class>org.example.model.admin.AdminLoginInformation</class>
         <class>org.example.model.player.PlayerLoginInformation</class>
         <class>org.example.model.admin.Administrator</class>
+        <class>org.example.model.User</class>
         <class>org.example.model.player.Player</class>
         <class>org.example.model.Captain</class>
         <class>org.example.model.Team</class>
         <class>org.example.model.Tournament</class>
         <class>org.example.model.Ranking</class>
-        <class>org.example.model.Match</class>
+        <class>org.example.model.Match.Match</class>
         <class>org.example.model.shop.Article</class>
         <class>org.example.model.shop.Purchase</class>
 
 
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:../db/mydb"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/xdb; shutdown=true"/>
 
             <property name="javax.persistence.jdbc.user" value=""/>
 
@@ -31,6 +32,9 @@
 
             <property name = "hibernate.show_sql" value="true"/>
 
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
         </properties>
     </persistence-unit>
 </persistence>
