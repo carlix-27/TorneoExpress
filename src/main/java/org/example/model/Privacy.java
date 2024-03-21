@@ -1,6 +1,6 @@
 package org.example.model;
 
-public enum TeamPrivacy {
+public enum Privacy {
   PUBLIC,
   PRIVATE
 }

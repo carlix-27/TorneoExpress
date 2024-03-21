@@ -11,19 +11,19 @@ import java.util.List;
 @Entity
 public class Tournament {
   @Id
-  private Long tournament_id;
+  private Long tournamentId;
 
   @Column
-  private Long creator_id;
+  private Long creatorId;
 
   @Column
-  private String tournament_name;
+  private String tournamentName;
 
   @Column
-  private String tournament_location;
+  private String tournamentLocation;
 
   @Column
-  private String tournament_sport;
+  private String tournamentSport;
 
   @Column
   private Difficulty difficulty;
@@ -31,8 +31,18 @@ public class Tournament {
   @Column
   private String rewards;
 
+  public Tournament() { }
+
+  public Tournament(Long creatorId, String tournamentName, String tournamentLocation, String tournamentSport, Difficulty difficulty, String rewards) {
+    this.tournamentName = tournamentName;
+    this.tournamentLocation = tournamentLocation;
+    this.tournamentSport = tournamentSport;
+    this.difficulty = difficulty;
+    this.rewards = rewards;
+  }
+
   public void setTournament_id(Long tournamentId) {
-    this.tournament_id = tournamentId;
+    this.tournamentId = tournamentId;
   }
 
   @ManyToMany

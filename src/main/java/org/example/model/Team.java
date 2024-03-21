@@ -11,22 +11,22 @@ import java.util.List;
 public class Team {
 
   @Id
-  private Long team_id;
+  private Long teamId;
 
   @Column
-  private String team_name;
+  private String teamName;
 
   @Column
-  private String team_location;
+  private String teamLocation;
 
   @Column
-  private TeamPrivacy team_privacy;
+  private Privacy teamPrivacy;
 
   @Column
-  private int prestige_points;
+  private int prestigePoints;
 
   @ManyToOne
-  private Captain captain;
+  private Player captain;
 
   @ManyToMany
   private List<Player> players = new ArrayList<>();
@@ -34,9 +34,26 @@ public class Team {
   @ManyToMany
   private List<Article> articles = new ArrayList<>();
 
+  public Team(String teamName, String teamLocation, Privacy teamPrivacy, Player captain) {
+    this.teamName = teamName;
+    this.teamLocation = teamLocation;
+    this.teamPrivacy = teamPrivacy;
+    this.captain = captain;
+    this.prestigePoints = 0;
+  }
+
+  public Team() { }
 
   public void join(Player player) {
-    players.add(player);
+    if (this.teamPrivacy == Privacy.PUBLIC) {
+      players.add(player);
+    } else {
+      requestAccess(player);
+    }
+  }
+
+  private void requestAccess(Player player) {
+
   }
 
   public void joinTournament(Tournament tournament) {
@@ -50,4 +67,9 @@ public class Team {
   public void buyArticle(Article article) {
     articles.add(article);
   }
+
+  public Player getCaptain() {
+    return this.captain;
+  }
+
 }

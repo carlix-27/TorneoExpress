@@ -17,7 +17,6 @@
         <class>org.example.model.Ranking</class>
         <class>org.example.model.Match.Match</class>
         <class>org.example.model.shop.Article</class>
-        <class>org.example.model.shop.Purchase</class>
 
 
         <properties>

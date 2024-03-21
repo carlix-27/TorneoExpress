@@ -1,32 +1,33 @@
 package org.example.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Ranking {
 
-  private Long tournament_id;
+  private Long tournamentId;
 
-  private Long team_id;
+  //private Long teamId;
 
-  private Long updater_id;
+  private Long updaterId;
 
-  private int team_points;
+  //private int teamPoints;
 
   @ManyToOne
   private List<Team> ranking = new ArrayList<>();
+
+  @OneToOne
+  private Map<Team, Integer> teamPoints = new HashMap<>();
 
   public List<Team> rankingOf() {
     return ranking;
   }
 
-  public void updateRanking() {
-
+  public void updateRanking(Team team, Integer newPoints) {
+    int currentPoints = teamPoints.get(team);
+    // Update value.
+    teamPoints.put(team, currentPoints + newPoints);
   }
-
 
 }
