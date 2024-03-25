@@ -13,3 +13,5 @@ CREATE TABLE Persons (\u000a                         PersonID int,\u000a        
 DISCONNECT
 /*C4*/SET SCHEMA PUBLIC
 DISCONNECT
+/*C8*/SET SCHEMA PUBLIC
+DISCONNECT

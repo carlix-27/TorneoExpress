@@ -32,12 +32,12 @@ public class Main {
             transaction.begin();
 
 
-            final User pablo = new Player("pablo", "player1@gmail.com", "1234");
+            //final User pablo = new Player("pablo", "player1@gmail.com", "1234");
 
-            final User roberto = new Captain("roberto", "player2@gmail.com", "1234");
+            //final User roberto = new Captain("roberto", "player2@gmail.com", "1234");
 
-            entityManager.persist(pablo);
-            entityManager.persist(roberto);
+            //entityManager.persist(pablo);
+            //entityManager.persist(roberto);
 
             transaction.commit();
         } catch (Exception e){
