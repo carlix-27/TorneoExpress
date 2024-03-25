@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="xdb@186.0.228.202" uuid="62934cac-4221-45f8-abaa-ab8799db6c4c">
+    <data-source source="LOCAL" name="HSQLDB (Remote)" uuid="84819f97-2876-4dc0-bbe9-d8ed7364f8a9">
       <driver-ref>hsqldb.remote</driver-ref>
       <synchronize>true</synchronize>
       <configured-by-url>true</configured-by-url>
       <jdbc-driver>org.hsqldb.jdbcDriver</jdbc-driver>
-      <jdbc-url>jdbc:hsqldb:hsql://186.0.228.202:9001/xdb</jdbc-url>
+      <jdbc-url>jdbc:hsqldb:file:$PROJECT_DIR$/database</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
