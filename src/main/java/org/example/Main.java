@@ -14,7 +14,7 @@ public class Main {
 
         final EntityManager entityManager = factory.createEntityManager();
 
-
+        sample1(entityManager);
         sample2(entityManager);
 
         entityManager.close();
@@ -64,7 +64,7 @@ public class Main {
             transaction.commit();
 
             // Attempt login after registration
-            loginTest(player1, "player3@example.com", "password1");
+            loginTest(player1, "player1@example.com", "password1");
             loginTest(player2, "player2@example.com", "password2");
 
         } catch (Exception e) {
