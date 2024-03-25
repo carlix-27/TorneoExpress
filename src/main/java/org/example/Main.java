@@ -1,8 +1,6 @@
 package org.example;
 
-
-import org.example.model.User;
-import org.example.model.player.Player;
+import org.example.model.player.PlayerLoginInformation;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,14 +13,10 @@ public class Main {
 
         final EntityManager entityManager = factory.createEntityManager();
 
-        try{
-            sample1(entityManager);
-        } catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            entityManager.close();
-            factory.close();
-        }
+        sample1(entityManager);
+
+        entityManager.close();
+        factory.close();
     }
 
     private static void sample1(EntityManager entityManager){
@@ -31,13 +25,14 @@ public class Main {
         try {
             transaction.begin();
 
+            // Creating and persisting PlayerLoginInformation instances
+            PlayerLoginInformation player1 = new PlayerLoginInformation();
+            player1.register("player1@example.com", "password1");
+            entityManager.persist(player1);
 
-            //final User pablo = new Player("pablo", "player1@gmail.com", "1234");
-
-            //final User roberto = new Captain("roberto", "player2@gmail.com", "1234");
-
-            //entityManager.persist(pablo);
-            //entityManager.persist(roberto);
+            PlayerLoginInformation player2 = new PlayerLoginInformation();
+            player2.register("player2@example.com", "password2");
+            entityManager.persist(player2);
 
             transaction.commit();
         } catch (Exception e){
@@ -47,6 +42,4 @@ public class Main {
             e.printStackTrace();
         }
     }
-
-
 }
