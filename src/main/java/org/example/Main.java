@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.model.Captain;
+
 import org.example.model.User;
 import org.example.model.player.Player;
 
