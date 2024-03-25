@@ -11,6 +11,7 @@ import java.util.List;
 public class Team {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long teamId;
 
   @Column

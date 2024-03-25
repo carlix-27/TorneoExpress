@@ -10,4 +10,8 @@ public class Guest {
     PlayerLoginInformation pli = new PlayerLoginInformation();
     pli.login(email, password);
   }
+
+  public void register(String name, String location, String email, String password) {
+
+  }
 }
