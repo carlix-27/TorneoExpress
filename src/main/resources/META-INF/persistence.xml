@@ -20,7 +20,7 @@
 
 
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/xdb; shutdown=true"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/mydb; shutdown=true"/>
 
             <property name="javax.persistence.jdbc.user" value=""/>
 

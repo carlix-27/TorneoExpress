@@ -22,6 +22,7 @@ public abstract class User {
 
     @Enumerated(EnumType.STRING)
     protected Role role;
+
     public User(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
@@ -32,4 +33,5 @@ public abstract class User {
     public User() {
 
     }
+
 }
