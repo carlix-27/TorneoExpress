@@ -3,9 +3,6 @@ package org.example.model.player;
 import org.example.model.Guest.LoginResult;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.List;
 
 @Entity
 public class PlayerLoginInformation {
@@ -18,7 +15,6 @@ public class PlayerLoginInformation {
 
     @Column
     private String player_password;
-
 
     public LoginResult login(String email, String password) {
         return null;
