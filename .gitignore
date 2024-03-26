@@ -36,10 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
-<<<<<<< Updated upstream
 src/main/resources/META-INF/persistance.xml
 db
-=======
-src/main/resources/META-INF/persistence.xml
-src/main/resources/META-INF/persistence.xml
->>>>>>> Stashed changes
