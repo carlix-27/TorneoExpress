@@ -1,0 +1,68 @@
+/* Reset some styles*/ 
+body, h1, p, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Set some basic styles for the whole page */
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  /* Style the header */
+  header {
+    background-color: #3d1f7f;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  header h1 {
+    color: #fff;
+    font-size: 2rem;
+  }
+  
+  /* Style the main content */
+  main {
+    max-width: 800px;
+    margin: 2px auto;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  main p {
+    margin-bottom: 1px;
+  }
+  
+  /* Style the button */
+  .btn {
+    display: inline-block;
+    background-color: #a57cff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;  
+  }
+  
+  .btn:hover {
+    background-color: #3e8e41;
+  }
+  
+  /* Style the login links */
+  
+  .login-links {
+    margin-top: 2rem;
+  }
+  
+  .login-links a {
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #6231cc;
+  }
+  
+  .login-links a:hover {
+    text-decoration: underline;
+  }
