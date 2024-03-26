@@ -2,38 +2,39 @@
 body, h1, p, a {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
   }
   
   /* Set some basic styles for the whole page */
   body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    color: #333;
+    background-color: #6321cc;
   }
   
   /* Style the header */
   header {
     background-color: #3d1f7f;
     padding: 1rem;
-    text-align: center;
+    text-align: left;
   }
   
   header h1 {
     color: #fff;
     font-size: 2rem;
+    margin-left:60px;
   }
   
   /* Style the main content */
   main {
     max-width: 800px;
-    margin: 2px auto;
-    padding: 1rem;
+    margin-top: 2px;
+    padding: 0px;
     text-align: center;
   }
-  
-  main p {
-    margin-bottom: 1px;
+
+  main p{
+    margin-top: 80px;
+    color: white;
   }
   
   /* Style the button */
@@ -42,27 +43,55 @@ body, h1, p, a {
     background-color: #a57cff;
     color: #fff;
     padding: 0.5rem 1rem;
+    margin-left: 312px;
+    margin-top: 80px;
     text-decoration: none;
     border-radius: 4px;
     transition: background-color 0.3s ease;  
   }
   
   .btn:hover {
-    background-color: #3e8e41;
+    background-color: #3d1f7f;
   }
   
-  /* Style the login links */
-  
-  .login-links {
-    margin-top: 2rem;
+
+  /*Style the login, register-links*/
+
+  .container{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 0px;
   }
-  
-  .login-links a {
-    margin-right: 1rem;
+
+
+  .login-links a, .register-links a{
+    color:white;
     text-decoration: none;
-    color: #6231cc;
+  }
+
+  div.login-links{
+    margin: 10px;
+    background-color: #a57cff;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  div.register-links{
+    margin: 25px;
+    background-color: #a57cff;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
   }
   
-  .login-links a:hover {
-    text-decoration: underline;
+  div.login-links:hover, div.register-links:hover{
+    background-color: #7a3dff;
   }
+ 
