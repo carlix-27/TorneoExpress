@@ -15,7 +15,7 @@ public class Main {
         final EntityManager entityManager = factory.createEntityManager();
 
         sample1(entityManager);
-        sample2(entityManager);
+
 
         entityManager.close();
         factory.close();
@@ -35,6 +35,10 @@ public class Main {
             PlayerLoginInformation player2 = new PlayerLoginInformation();
             player2.register("player2@example.com", "password2");
             entityManager.persist(player2);
+
+            PlayerLoginInformation marcos = new PlayerLoginInformation();
+            marcos.register("marcoshashdhasdhashdahd@gmail.com", "password2");
+            entityManager.persist(marcos);
 
             transaction.commit();
         } catch (Exception e){
