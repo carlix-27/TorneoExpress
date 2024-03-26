@@ -1,4 +1,4 @@
-package org.example.model;
+package model;
 
 public enum PlayerType {
   REGULAR_PLAYER,

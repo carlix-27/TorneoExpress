@@ -1,6 +1,6 @@
-package org.example.model.player;
+package model.player;
 
-import org.example.model.Guest.LoginResult;
+import model.Guest.LoginResult;
 
 import javax.persistence.*;
 

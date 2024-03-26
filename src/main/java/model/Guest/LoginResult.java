@@ -1,4 +1,4 @@
-package org.example.model.Guest;
+package model.Guest;
 
 public class LoginResult {
   private boolean success;

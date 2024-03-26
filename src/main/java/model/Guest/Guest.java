@@ -1,8 +1,6 @@
-package org.example.model.Guest;
+package model.Guest;
 
-import org.example.model.player.PlayerLoginInformation;
-
-import javax.persistence.Entity;
+import model.player.PlayerLoginInformation;
 
 public class Guest {
 

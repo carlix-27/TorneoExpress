@@ -1,4 +1,4 @@
-package org.example.model.admin;
+package model.admin;
 
 import javax.persistence.*;
 

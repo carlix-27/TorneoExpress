@@ -1,7 +1,5 @@
-package org.example;
-
-import org.example.model.Guest.LoginResult;
-import org.example.model.player.PlayerLoginInformation;
+import model.Guest.LoginResult;
+import model.player.PlayerLoginInformation;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
