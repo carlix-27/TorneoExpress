@@ -1,5 +1,5 @@
 import model.Guest.LoginResult;
-import model.player.PlayerLoginInformation;
+import model.Guest.Guest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,16 +25,16 @@ public class Main {
             transaction.begin();
 
             // Creating and persisting PlayerLoginInformation instances
-            PlayerLoginInformation player1 = new PlayerLoginInformation();
-            player1.register("121212@example.com", "password1");
+            Guest player1 = new Guest();
+            player1.register("nuevo guest", "buenos aires", "nuevoguest@example.com", "password1");
             entityManager.persist(player1);
 
-            PlayerLoginInformation player2 = new PlayerLoginInformation();
-            player2.register("playasdasdasdr2@example.com", "password2");
+            Guest player2 = new Guest();
+            player2.register("guest 2", "rosario", "guest2@example.com", "password2");
             entityManager.persist(player2);
 
-            PlayerLoginInformation marcos = new PlayerLoginInformation();
-            marcos.register("marcosh20020909090909090090@gmail.com", "password2");
+            Guest marcos = new Guest();
+            marcos.register("alejandro", "entre rios", "ale@gmail.com", "password2");
             entityManager.persist(marcos);
 
             transaction.commit();
@@ -53,12 +53,12 @@ public class Main {
             transaction.begin();
 
             // Creating and persisting PlayerLoginInformation instances
-            PlayerLoginInformation player1 = new PlayerLoginInformation();
-            player1.register("player1@example.com", "password1");
+            Guest player1 = new Guest();
+            //player1.register("player1@example.com", "password1");
             entityManager.persist(player1);
 
-            PlayerLoginInformation player2 = new PlayerLoginInformation();
-            player2.register("player2@example.com", "password2");
+            Guest player2 = new Guest();
+            //player2.register("player2@example.com", "password2");
             entityManager.persist(player2);
 
             // Committing the transaction
@@ -76,7 +76,7 @@ public class Main {
         }
     }
 
-    private static void loginTest(PlayerLoginInformation player, String email, String password) {
+    private static void loginTest(Guest player, String email, String password) {
         System.out.println("Attempting login for " + email + "...");
         LoginResult loginResult = player.login(email, password);
 
