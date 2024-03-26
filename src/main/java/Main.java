@@ -14,7 +14,6 @@ public class Main {
 
         sample1(entityManager);
 
-
         entityManager.close();
         factory.close();
     }
@@ -27,15 +26,15 @@ public class Main {
 
             // Creating and persisting PlayerLoginInformation instances
             PlayerLoginInformation player1 = new PlayerLoginInformation();
-            player1.register("player1@example.com", "password1");
+            player1.register("121212@example.com", "password1");
             entityManager.persist(player1);
 
             PlayerLoginInformation player2 = new PlayerLoginInformation();
-            player2.register("player2@example.com", "password2");
+            player2.register("playasdasdasdr2@example.com", "password2");
             entityManager.persist(player2);
 
             PlayerLoginInformation marcos = new PlayerLoginInformation();
-            marcos.register("marcoshashdhasdhashdahd@gmail.com", "password2");
+            marcos.register("marcosh20020909090909090090@gmail.com", "password2");
             entityManager.persist(marcos);
 
             transaction.commit();
