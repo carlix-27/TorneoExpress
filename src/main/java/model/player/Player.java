@@ -1,10 +1,10 @@
-package org.example.model.player;
+package model.player;
 
 
-import org.example.model.PlayerType;
-import org.example.model.Privacy;
-import org.example.model.Team;
-import org.example.model.Tournament;
+import model.PlayerType;
+import model.Privacy;
+import model.Team;
+import model.Tournament;
 
 import javax.persistence.*;
 import java.util.ArrayList;

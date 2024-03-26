@@ -1,4 +1,4 @@
-package org.example.model;
+package model;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;

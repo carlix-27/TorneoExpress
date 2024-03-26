@@ -1,4 +1,4 @@
-package org.example.model.Match;
+package model.Match;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

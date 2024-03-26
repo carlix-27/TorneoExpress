@@ -1,7 +1,7 @@
-package org.example.model;
+package model;
 
-import org.example.model.player.Player;
-import org.example.model.shop.Article;
+import model.player.Player;
+import model.shop.Article;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.example.model.shop;
+package model.shop;
 
 
 import javax.persistence.Column;
