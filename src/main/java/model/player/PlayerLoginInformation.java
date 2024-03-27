@@ -16,21 +16,45 @@ public class PlayerLoginInformation {
     @Column(nullable = false)
     private String player_password;
 
+    @Transient
+    private EntityManager entityManager;
+
+    public PlayerLoginInformation(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    public PlayerLoginInformation() {
+    }
+
     public LoginResult login(String email, String password) {
         LoginResult loginResult = new LoginResult();
-
-        // Check if the provided email and password match the stored credentials
         if (email.equals(player_email) && password.equals(player_password)) {
-            loginResult.successful(); // Set the login result as successful
+            loginResult.successful();
         }
-
         return loginResult;
     }
 
     public void register(String email, String password) {
-        this.player_email = email;
-        this.player_password = password;
+        // Check if the email already exists in the database
+        PlayerLoginInformation existingPlayer = entityManager.createQuery(
+                        "SELECT p FROM PlayerLoginInformation p WHERE p.player_email = :email", PlayerLoginInformation.class)
+                .setParameter("email", email)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        // If the email doesn't exist, proceed with registration
+        if (existingPlayer == null) {
+            this.player_email = email;
+            this.player_password = password;
+            entityManager.persist(this);
+        } else {
+            // Handle duplicate email error (log error)
+            System.err.println("Email already exists: " + email);
+        }
     }
+
 
     // Getters and setters
     public Long getPlayer_id() {
