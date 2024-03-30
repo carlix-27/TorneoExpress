@@ -2,6 +2,7 @@ package repository;
 
 
 import model.User;
+import model.player.PlayerLoginInformation;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -27,8 +28,8 @@ public class Users {
                 .findFirst();
     }
 
-    public List<User> listAll() {
-        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+    public List<PlayerLoginInformation> listAll() {
+        return entityManager.createQuery("SELECT u FROM PlayerLoginInformation u", PlayerLoginInformation.class).getResultList();
     }
 
     public User persist(User user) {

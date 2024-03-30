@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.Gson;
+
 import javax.persistence.*;
 
 
@@ -34,6 +36,11 @@ public class User {
         // Default constructor
     }
 
+    public static UserBuilder create(String email) {
+        return new UserBuilder(email);
+    }
+
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
@@ -53,6 +60,49 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    private User(UserBuilder builder) {
+        this.password = builder.password;
+        this.email = builder.email;
+    }
+
+    public static User fromJson(String json) {
+        final Gson gson = new Gson();
+        return gson.fromJson(json, User.class);
+    }
+
+    public String asJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+
+    public static class UserBuilder {
+        private final String email;
+        private String password;
+
+        public UserBuilder(String email) {
+            this.email = email;
+        }
+
+        public UserBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
+
     }
 
 }
