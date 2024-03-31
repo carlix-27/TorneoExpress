@@ -1,5 +1,7 @@
 import model.Guest.LoginResult;
 import model.Guest.Guest;
+import model.Sport;
+import model.admin.Administrator;
 import model.player.Player;
 import model.player.PlayerLoginInformation;
 
@@ -15,13 +17,19 @@ public class Main {
         final EntityManager entityManager = factory.createEntityManager();
 
         //sample1(entityManager);
-        sample2(entityManager);
+        // sample2(entityManager);
+        // Sport Example
+        // AddSport(entityManager); // Agregar  A
+        // deleteSport(entityManager, 1); // Baja B
+        updateSport(entityManager, 2, "Paddel", 2); // Modificar M
 
         entityManager.close();
         factory.close();
     }
 
 
+    // -----
+    // -----
     private static void sample1(EntityManager entityManager){
         final EntityTransaction transaction = entityManager.getTransaction();
 
@@ -51,6 +59,8 @@ public class Main {
         }
     }
 
+    // -----
+    // -----
     private static void sample2(EntityManager entityManager) {
         final EntityTransaction transaction = entityManager.getTransaction();
 
@@ -93,4 +103,69 @@ public class Main {
         }
     }
 
+
+    // -----
+    // -----
+    private static void AddSport(EntityManager entityManager){
+        final EntityTransaction transaction = entityManager.getTransaction();
+
+        try{
+            transaction.begin();
+
+            Administrator administrator = new Administrator(entityManager);
+            // Add new sport
+            administrator.createSport("Futbol", 11);
+            administrator.createSport("Baloncesto", 5);
+
+            // Cosas a evaluar:
+            /* - no deben repetirse los deportes, si los distintos modos
+            * por ejemplo futbol 5, futbol 11, burbufutbol o variantes, pero no los mismos deportes*/
+            transaction.commit();
+            System.out.println("Deporte creado exitosamente");
+
+        } catch (Exception e){
+            if(transaction.isActive()){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    private static void deleteSport(EntityManager entityManager, long sport_id){
+        final EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Administrator administrator = new Administrator(entityManager);
+            administrator.deleteSport(sport_id);
+            transaction.commit();
+            System.out.println("Deporte eliminado exitosamente");
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    private static void updateSport(EntityManager entityManager, long sport_id, String newSportName, int newNumPlayers){
+        final EntityTransaction transaction = entityManager.getTransaction();
+
+        try{
+            transaction.begin();
+
+            Administrator administrator = new Administrator(entityManager);
+            administrator.updateSport(sport_id, newSportName, newNumPlayers);
+            transaction.commit();
+            System.out.println("Deporte actualizado exitosamente");
+
+        } catch (Exception e){
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -8,6 +8,7 @@
         <class>model.admin.AdminLoginInformation</class>
         <class>model.player.PlayerLoginInformation</class>
         <class>model.admin.Administrator</class>
+        <class>model.Sport</class>
         <class>model.User</class>
         <class>model.player.Player</class>
         <class>model.Team</class>

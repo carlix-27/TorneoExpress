@@ -2,11 +2,14 @@ package model.Guest;
 
 import model.player.PlayerLoginInformation;
 import model.player.Player;
+import javax.persistence.EntityManager;
 
-public class Guest {
+
+public class Guest{
+
 
   public LoginResult login(String email, String password) {
-    PlayerLoginInformation pli = new PlayerLoginInformation() ;
+    PlayerLoginInformation pli = new PlayerLoginInformation();
     return pli.login(email, password);
   }
 

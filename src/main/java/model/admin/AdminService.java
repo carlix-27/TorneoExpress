@@ -8,7 +8,8 @@ import java.util.List;
 
 /**Propósito del código
  * La idea es que de acá se puedan modificar y agregar datos.
- * En la parte de main, voy a poner a prueba estas dos clases para ver si todo funciona correctamente.*/
+ * En la parte de TestAdmin, voy a poner a prueba estas dos clases para ver si todo funciona correctamente.
+ * Importante. Evaluar como realizar el test de esto.*/
 public class AdminService {
     @PersistenceContext
     private EntityManager entityManager;
@@ -37,5 +38,9 @@ public class AdminService {
         if (admin != null) {
             entityManager.remove(admin);
         }
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+
     }
 }

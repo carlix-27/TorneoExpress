@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 public class PlayerLoginInformation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long player_id;
@@ -16,15 +17,11 @@ public class PlayerLoginInformation {
     @Column(nullable = false)
     private String player_password;
 
+    public PlayerLoginInformation(){}
+
     @Transient
     private EntityManager entityManager;
 
-    public PlayerLoginInformation(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    public PlayerLoginInformation() {
-    }
 
     public LoginResult login(String email, String password) {
         LoginResult loginResult = new LoginResult();
