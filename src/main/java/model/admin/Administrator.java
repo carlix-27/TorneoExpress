@@ -4,15 +4,14 @@ import javax.persistence.*;
 
 public class Administrator {
 
-    @OneToOne(mappedBy = "id")
+    @Id
     private long admin_id;
 
-    @OneToOne
-    @JoinColumn(name = "admin_email")
+    @Column
     private String admin_mail;
 
     @Column
-    private String AdminName;
+    private String admin_name;
 
     public void createTournament() {
 

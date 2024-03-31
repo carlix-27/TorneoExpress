@@ -1,5 +1,7 @@
 import model.Guest.LoginResult;
 import model.Guest.Guest;
+import model.player.Player;
+import model.player.PlayerLoginInformation;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,11 +14,13 @@ public class Main {
 
         final EntityManager entityManager = factory.createEntityManager();
 
-        sample1(entityManager);
+        //sample1(entityManager);
+        sample2(entityManager);
 
         entityManager.close();
         factory.close();
     }
+
 
     private static void sample1(EntityManager entityManager){
         final EntityTransaction transaction = entityManager.getTransaction();
@@ -24,7 +28,8 @@ public class Main {
         try {
             transaction.begin();
 
-            // Creating and persisting PlayerLoginInformation instances
+
+            // Crear y persistir instancias de Guest
             Guest player1 = new Guest();
             player1.register("nuevo guest", "buenos aires", "nuevoguest@example.com", "password1");
             entityManager.persist(player1);
