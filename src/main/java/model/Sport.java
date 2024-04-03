@@ -24,4 +24,8 @@ public class Sport {
         this.num_players = num_players;
     }
 
+    public String toString() {
+        return sportName;
+    }
+
 }

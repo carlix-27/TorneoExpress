@@ -73,4 +73,8 @@ public class Team {
     return this.captain;
   }
 
+  public void addPrestigePoints(int prestigePoints) {
+    this.prestigePoints += prestigePoints;
+  }
+
 }

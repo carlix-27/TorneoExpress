@@ -1,6 +1,9 @@
 package model.admin;
 
+import model.Difficulty;
 import model.Sport;
+import model.Team;
+import model.Tournament;
 
 import javax.persistence.*;
 import java.util.NoSuchElementException;
@@ -23,7 +26,19 @@ public class Administrator {
     @Column
     private String admin_name;
 
-    public void createTournament() {
+    private SportManager sportManager = new SportManager(entityManager);
+
+    private TournamentManager tournamentManager = new TournamentManager();
+
+    public void createTournament(String tournamentName, String tournamentLocation, Sport tournamentSport, Difficulty difficulty) {
+        tournamentManager.createTournament(this.admin_id, tournamentName, tournamentLocation, tournamentSport, difficulty);
+    }
+
+    public void deleteTournament(Tournament tournament) {
+        tournamentManager.deleteTournament(tournament);
+    }
+
+    public void updateTournament() {
 
     }
 
@@ -31,34 +46,20 @@ public class Administrator {
 
     }
 
+    public void assignWinner(Tournament tournament, Team team) {
+        tournamentManager.assignWinner(tournament, team);
+    }
+
     public void createSport(String sportName, int numPlayers){
-        Sport sport = new Sport();
-        sport.setSport(sportName);
-        sport.setNumPlayers(numPlayers);
-        entityManager.persist(sport);
+        sportManager.createSport(sportName, numPlayers);
     }
 
-
-    /*Evaluá acá el caso donde fue eliminado, pero sigue habiendo elementos
-    * Solo el id no existe pero sigue haciendo elementos!*/
     public void deleteSport(long sportId){
-        Sport sport = entityManager.find(Sport.class, sportId);
-        if(sport != null){
-            entityManager.remove(sport);
-        }
-        else {
-            throw new NoSuchElementException("Deporte ya eliminado o no hay deporte alguno");
-        }
+        sportManager.deleteSport(sportId);
     }
-
 
     public void updateSport(long sportId, String newSportName, int newNumPlayers){
-        Sport sport = entityManager.find(Sport.class, sportId);
-        if(sport != null){
-            sport.setSport(newSportName);
-            sport.setNumPlayers(newNumPlayers);
-            entityManager.merge(sport);
-        }
+        sportManager.updateSport(sportId, newSportName, newNumPlayers);
     }
 
 }
