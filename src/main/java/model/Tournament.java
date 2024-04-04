@@ -28,22 +28,20 @@ public class Tournament {
   @Column
   private Difficulty difficulty;
 
-  @Column
-  private String rewards;
-
   public Tournament() { }
 
-  public Tournament(Long creatorId, String tournamentName, String tournamentLocation, String tournamentSport, Difficulty difficulty, String rewards) {
+  public Tournament(Long creatorId, String tournamentName, String tournamentLocation, Sport tournamentSport, Difficulty difficulty) {
     this.tournamentName = tournamentName;
     this.tournamentLocation = tournamentLocation;
-    this.tournamentSport = tournamentSport;
+    this.tournamentSport = tournamentSport.toString();
     this.difficulty = difficulty;
-    this.rewards = rewards;
   }
 
   public void setTournament_id(Long tournamentId) {
     this.tournamentId = tournamentId;
   }
+
+  public Difficulty getDifficulty() { return this.difficulty; }
 
   @ManyToMany
   private List<Team> participatingTeams = new ArrayList<>();
