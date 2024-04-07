@@ -4,6 +4,7 @@ import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
+import jakarta.persistence.*;
 
 public class TournamentManager {
 

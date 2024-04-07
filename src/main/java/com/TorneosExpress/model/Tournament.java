@@ -1,9 +1,6 @@
 package com.TorneosExpress.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,19 +8,19 @@ import java.util.List;
 @Entity
 public class Tournament {
   @Id
-  private Long tournamentId;
+  private Long Id;
 
   @Column
   private Long creatorId;
 
   @Column
-  private String tournamentName;
+  private String name;
 
   @Column
-  private String tournamentLocation;
+  private String location;
 
   @Column
-  private String tournamentSport;
+  private String sport;
 
   @Column
   private Difficulty difficulty;
@@ -31,14 +28,14 @@ public class Tournament {
   public Tournament() { }
 
   public Tournament(Long creatorId, String tournamentName, String tournamentLocation, Sport tournamentSport, Difficulty difficulty) {
-    this.tournamentName = tournamentName;
-    this.tournamentLocation = tournamentLocation;
-    this.tournamentSport = tournamentSport.toString();
+    this.name = tournamentName;
+    this.location = tournamentLocation;
+    this.sport = tournamentSport.toString();
     this.difficulty = difficulty;
   }
 
   public void setTournament_id(Long tournamentId) {
-    this.tournamentId = tournamentId;
+    this.Id = tournamentId;
   }
 
   public Difficulty getDifficulty() { return this.difficulty; }

@@ -1,8 +1,7 @@
 package com.TorneosExpress.model.shop;
 
 
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
+import jakarta.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 

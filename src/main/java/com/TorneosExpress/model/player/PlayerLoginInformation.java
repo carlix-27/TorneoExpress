@@ -2,7 +2,7 @@ package com.TorneosExpress.model.player;
 
 import com.TorneosExpress.model.Guest.LoginResult;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class PlayerLoginInformation {

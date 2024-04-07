@@ -1,6 +1,6 @@
 package com.TorneosExpress.model.shop;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Article {

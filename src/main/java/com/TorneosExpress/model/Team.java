@@ -3,7 +3,7 @@ package com.TorneosExpress.model;
 import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.model.shop.Article;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +32,15 @@ public class Team {
   @ManyToMany
   private List<Player> players = new ArrayList<>();
 
+  public List<Player> getPlayers(){
+    return players;
+  }
+
   @ManyToMany
   private List<Article> articles = new ArrayList<>();
+
+  @ManyToMany
+  private List<Tournament> ActiveTournaments = new ArrayList<>();
 
   public Team(String teamName, String teamLocation, Privacy teamPrivacy, Player captain) {
     this.teamName = teamName;
@@ -54,7 +61,6 @@ public class Team {
   }
 
   private void requestAccess(Player player) {
-
   }
 
   public void joinTournament(Tournament tournament) {

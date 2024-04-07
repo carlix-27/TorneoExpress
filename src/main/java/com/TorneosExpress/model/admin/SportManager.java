@@ -2,8 +2,7 @@ package com.TorneosExpress.model.admin;
 
 import com.TorneosExpress.model.Sport;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.*;
 import java.util.NoSuchElementException;
 
 public class SportManager {

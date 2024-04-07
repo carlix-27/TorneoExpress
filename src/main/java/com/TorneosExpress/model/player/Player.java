@@ -6,7 +6,7 @@ import com.TorneosExpress.model.Privacy;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

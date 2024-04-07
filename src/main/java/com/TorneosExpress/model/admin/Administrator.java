@@ -4,18 +4,14 @@ import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
+import jakarta.persistence.Entity;
 
-import javax.persistence.*;
-import java.util.NoSuchElementException;
+import jakarta.persistence.*;
 
+
+@Entity
 public class Administrator {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public Administrator(EntityManager entityManager){
-        this.entityManager = entityManager;
-    }
 
     @Id
     private long admin_id;
@@ -29,6 +25,10 @@ public class Administrator {
     private SportManager sportManager = new SportManager(entityManager);
 
     private TournamentManager tournamentManager = new TournamentManager();
+
+    public Administrator() {
+
+    }
 
     public void createTournament(String tournamentName, String tournamentLocation, Sport tournamentSport, Difficulty difficulty) {
         tournamentManager.createTournament(this.admin_id, tournamentName, tournamentLocation, tournamentSport, difficulty);

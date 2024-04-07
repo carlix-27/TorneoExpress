@@ -1,7 +1,7 @@
 package com.TorneosExpress.model;
 
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Sport {

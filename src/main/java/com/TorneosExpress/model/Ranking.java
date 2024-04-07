@@ -1,7 +1,6 @@
 package com.TorneosExpress.model;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import jakarta.persistence.*;
 import java.util.*;
 
 public class Ranking {

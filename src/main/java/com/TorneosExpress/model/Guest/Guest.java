@@ -2,7 +2,7 @@ package com.TorneosExpress.model.Guest;
 
 import com.TorneosExpress.model.player.PlayerLoginInformation;
 import com.TorneosExpress.model.player.Player;
-import javax.persistence.EntityManager;
+import jakarta.persistence.*;
 
 
 public class Guest{

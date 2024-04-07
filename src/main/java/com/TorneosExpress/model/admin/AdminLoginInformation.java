@@ -1,6 +1,6 @@
 package com.TorneosExpress.model.admin;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class AdminLoginInformation {
