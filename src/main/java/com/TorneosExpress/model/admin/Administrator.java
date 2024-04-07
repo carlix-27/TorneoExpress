@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.NoSuchElementException;
+
 
 @Entity
 public class Administrator {
@@ -22,20 +24,17 @@ public class Administrator {
     @Column
     private String admin_name;
 
-    private SportManager sportManager = new SportManager(entityManager);
-
-    private TournamentManager tournamentManager = new TournamentManager();
 
     public Administrator() {
 
     }
 
     public void createTournament(String tournamentName, String tournamentLocation, Sport tournamentSport, Difficulty difficulty) {
-        tournamentManager.createTournament(this.admin_id, tournamentName, tournamentLocation, tournamentSport, difficulty);
+        Tournament tournament = new Tournament(admin_id, tournamentName, tournamentLocation, tournamentSport, difficulty);
     }
 
     public void deleteTournament(Tournament tournament) {
-        tournamentManager.deleteTournament(tournament);
+        tournament = null;
     }
 
     public void updateTournament() {
@@ -47,19 +46,22 @@ public class Administrator {
     }
 
     public void assignWinner(Tournament tournament, Team team) {
-        tournamentManager.assignWinner(tournament, team);
+        this.giveRewards(team, tournament.getDifficulty());
     }
 
-    public void createSport(String sportName, int numPlayers){
-        sportManager.createSport(sportName, numPlayers);
+    private void giveRewards(Team team, Difficulty difficulty) {
+        final int prestigePoints = prestigePointsAccordingToDifficulty(difficulty);
+        team.addPrestigePoints(prestigePoints);
     }
 
-    public void deleteSport(long sportId){
-        sportManager.deleteSport(sportId);
+    private int prestigePointsAccordingToDifficulty(Difficulty difficulty) {
+        int prestigePoints;
+        if (difficulty.equals(Difficulty.BEGINNER)) prestigePoints = 5;
+        else if (difficulty.equals(Difficulty.INTERMIDIATE)) prestigePoints = 10;
+        else if (difficulty.equals(Difficulty.ADVANCED)) prestigePoints = 20;
+        else prestigePoints = 50;
+        return prestigePoints;
     }
-
-    public void updateSport(long sportId, String newSportName, int newNumPlayers){
-        sportManager.updateSport(sportId, newSportName, newNumPlayers);
-    }
+    
 
 }
