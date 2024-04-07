@@ -12,7 +12,7 @@ sourceCompatibility = '17'
 
 repositories {
     jcenter()
-    mavenCentral() // Add this line to include Maven Central repository
+    mavenCentral() // Add this line to include Maven Central com.TorneosExpress.repository
 }
 
 dependencies {

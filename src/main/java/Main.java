@@ -1,9 +1,9 @@
-import model.Guest.LoginResult;
-import model.Guest.Guest;
-import model.Sport;
-import model.admin.Administrator;
-import model.player.Player;
-import model.player.PlayerLoginInformation;
+import com.TorneosExpress.model.Guest.LoginResult;
+import com.TorneosExpress.model.Guest.Guest;
+import com.TorneosExpress.model.Sport;
+import com.TorneosExpress.model.admin.Administrator;
+import com.TorneosExpress.model.player.Player;
+import com.TorneosExpress.model.player.PlayerLoginInformation;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
