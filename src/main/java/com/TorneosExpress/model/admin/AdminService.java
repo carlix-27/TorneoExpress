@@ -1,9 +1,9 @@
 package com.TorneosExpress.model.admin;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 /**Propósito del código
