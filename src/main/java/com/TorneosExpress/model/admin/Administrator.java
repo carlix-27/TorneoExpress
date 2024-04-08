@@ -29,8 +29,8 @@ public class Administrator {
 
     }
 
-    public void createTournament(String tournamentName, String tournamentLocation, Sport tournamentSport, Difficulty difficulty) {
-        Tournament tournament = new Tournament(admin_id, tournamentName, tournamentLocation, tournamentSport, difficulty);
+    public void createTournament(String tournamentName, String tournamentLocation, Sport tournamentSport, boolean privacy, Difficulty difficulty) {
+        Tournament tournament = new Tournament(admin_id, tournamentName, tournamentLocation, tournamentSport, privacy, difficulty);
     }
 
     public void deleteTournament(Tournament tournament) {
@@ -41,12 +41,28 @@ public class Administrator {
 
     }
 
+    public void acceptTeam(Team team, Tournament tournament) {
+        if (isAdminOf(tournament)) {
+            tournament.acceptTeam(team);
+        }
+    }
+
+    public void rejectTeam(Team team, Tournament tournament) {
+        if (isAdminOf(tournament)) {
+            tournament.rejectTeam(team);
+        }
+    }
+
     public void updateRanking() {
 
     }
 
     public void assignWinner(Tournament tournament, Team team) {
         this.giveRewards(team, tournament.getDifficulty());
+    }
+
+    private boolean isAdminOf(Tournament tournament) {
+        return tournament.getCreatorId().equals(this.admin_id);
     }
 
     private void giveRewards(Team team, Difficulty difficulty) {

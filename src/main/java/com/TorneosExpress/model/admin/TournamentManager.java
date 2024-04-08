@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 
 public class TournamentManager {
 
-  public void createTournament(Long adminId, String tournamentName, String tournamentLocation, Sport tournamentSport, Difficulty difficulty) {
-    Tournament tournament = new Tournament(adminId, tournamentName, tournamentLocation, tournamentSport, difficulty);
+  public void createTournament(Long adminId, String tournamentName, String tournamentLocation, Sport tournamentSport, boolean privacy, Difficulty difficulty) {
+    Tournament tournament = new Tournament(adminId, tournamentName, tournamentLocation, tournamentSport, privacy, difficulty);
   }
 
   public void deleteTournament(Tournament tournament) {

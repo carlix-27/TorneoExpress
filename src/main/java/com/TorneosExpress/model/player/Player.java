@@ -68,6 +68,7 @@ public class Player {
     }
 
     public void joinTournament(Team team, Tournament tournament) {
+        // equivale a ser capitan.
         if (isOwnerOf(team)) {
             team.joinTournament(tournament);
         }
