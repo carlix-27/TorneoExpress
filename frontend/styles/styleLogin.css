@@ -3,14 +3,14 @@
 body {
 	margin: 0;
 	padding: 0;
-	background: #34495e;
+	background: #3d1f7f;
 	font-family: 'Raleway', sans-serif;
 }
 
 .login-box {
 	width: 320px;
 	height: 450px;
-	background: #142850;
+	background: #a57cff;
 	color: #fff;
 	top: 50%;
 	left: 50%;
@@ -51,11 +51,19 @@ body {
 	border: none;
 	outline: none;
 	background: none;
-	color: #fff;
+	color: #3d1f7f;
 	font-size: 18px;
 	width: 80%;
 	float: left;
 	margin: 0 10px;
+}
+
+.textbox input[name = "username"]{
+	font-family: 'Raleway', sans-serif;
+}
+
+.textbox input[name = "password"]{
+	font-family: 'Raleway', sans-serif;
 }
 
 .login-box input[type="submit"] {
@@ -73,3 +81,4 @@ body {
 .login-box input[type="submit"]:hover {
 	opacity: 0.7;
 }
+
