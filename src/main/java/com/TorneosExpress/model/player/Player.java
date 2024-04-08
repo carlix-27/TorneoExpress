@@ -2,7 +2,6 @@ package com.TorneosExpress.model.player;
 
 
 import com.TorneosExpress.model.PlayerType;
-import com.TorneosExpress.model.Privacy;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 
@@ -46,33 +45,36 @@ public class Player {
       team.join(this);
     }
 
-    public void createTeam(String teamName, String teamLocation, Privacy privacy) {
+    public void createTeam(String teamName, String teamLocation, boolean privacy) {
         Team team = new Team(teamName, teamLocation, privacy, this);
         this.ownedTeams.add(team);
     }
 
     public void eliminateTeam(Team team) {
-        if (checkOwnership(team)) {
+        if (isOwnerOf(team)) {
             team = null;
         }
     }
 
-    public void acceptPlayer() {
-
+    public void acceptPlayer(Player player, Team team) {
+        if (isOwnerOf(team)) {
+            team.acceptPlayer(player);
+        }
     }
 
+    // Para mas adelante: Si un usuario quiere, puede pagar para crear un torneo.
     public void createTournament() {
 
     }
 
     public void joinTournament(Team team, Tournament tournament) {
-        if (checkOwnership(team)) {
+        if (isOwnerOf(team)) {
             team.joinTournament(tournament);
         }
     }
 
-    private boolean checkOwnership(Team team) {
-        return this.ownedTeams.contains(team);
+    private boolean isOwnerOf(Team team) {
+        return team.getCaptain().equals(this);
     }
 
 }

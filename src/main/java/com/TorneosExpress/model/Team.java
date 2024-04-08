@@ -21,7 +21,7 @@ public class Team {
   private String teamLocation;
 
   @Column
-  private Privacy teamPrivacy;
+  private boolean isPrivate;
 
   @Column
   private int prestigePoints;
@@ -42,10 +42,13 @@ public class Team {
   @ManyToMany
   private List<Tournament> ActiveTournaments = new ArrayList<>();
 
-  public Team(String teamName, String teamLocation, Privacy teamPrivacy, Player captain) {
+  @OneToMany
+  private List<Player> joinRequests = new ArrayList<>(20);
+
+  public Team(String teamName, String teamLocation, boolean privacy, Player captain) {
     this.teamName = teamName;
     this.teamLocation = teamLocation;
-    this.teamPrivacy = teamPrivacy;
+    this.isPrivate = privacy;
     this.captain = captain;
     this.prestigePoints = 0;
   }
@@ -53,7 +56,7 @@ public class Team {
   public Team() { }
 
   public void join(Player player) {
-    if (this.teamPrivacy == Privacy.PUBLIC) {
+    if (!this.isPrivate) {
       players.add(player);
     } else {
       requestAccess(player);
@@ -61,6 +64,12 @@ public class Team {
   }
 
   private void requestAccess(Player player) {
+    joinRequests.add(player);
+  }
+
+  public void acceptPlayer(Player player) {
+    players.add(player);
+    joinRequests.remove(player);
   }
 
   public void joinTournament(Tournament tournament) {
