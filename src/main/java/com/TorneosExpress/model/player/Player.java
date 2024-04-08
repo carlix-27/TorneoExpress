@@ -62,6 +62,12 @@ public class Player {
         }
     }
 
+    public void rejectPlayer(Player player, Team team) {
+        if (isOwnerOf(team)) {
+            team.rejectPlayer(player);
+        }
+    }
+
     // Para mas adelante: Si un usuario quiere, puede pagar para crear un torneo.
     public void createTournament() {
 

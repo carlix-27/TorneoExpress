@@ -72,6 +72,10 @@ public class Team {
     joinRequests.remove(player);
   }
 
+  public void rejectPlayer(Player player) {
+    joinRequests.remove(player);
+  }
+
   public void joinTournament(Tournament tournament) {
     tournament.joinTournament(this);
   }
