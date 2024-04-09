@@ -1,9 +1,7 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.model.User;
 import com.TorneosExpress.model.admin.AdminLoginInformation;
 import com.TorneosExpress.repository.AdminRepository;
-import com.TorneosExpress.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
