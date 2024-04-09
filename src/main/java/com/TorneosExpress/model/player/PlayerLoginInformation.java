@@ -1,6 +1,5 @@
 package com.TorneosExpress.model.player;
 
-import com.TorneosExpress.model.Guest.LoginResult;
 
 import jakarta.persistence.*;
 
@@ -23,13 +22,7 @@ public class PlayerLoginInformation {
     private EntityManager entityManager;
 
 
-    public LoginResult login(String email, String password) {
-        LoginResult loginResult = new LoginResult();
-        if (email.equals(player_email) && password.equals(player_password)) {
-            loginResult.successful();
-        }
-        return loginResult;
-    }
+
 
     public void register(String email, String password) {
         // Check if the email already exists in the database

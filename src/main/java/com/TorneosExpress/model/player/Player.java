@@ -11,6 +11,15 @@ import java.util.List;
 
 @Entity
 public class Player {
+    public Player(String playerName, String playerLocation, String playerEmail, String password) {
+        this.player_name = playerName;
+        this.player_location = playerLocation;
+        this.player_email = playerEmail;
+        this.password = password;
+        this.playerType = PlayerType.REGULAR_PLAYER;
+        this.isCaptain = false;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long player_id;
@@ -21,24 +30,19 @@ public class Player {
     @Column
     private String player_location;
 
-    @Column (nullable = false, unique = true)
+    @Column
     private String player_email;
 
     @Column
     private PlayerType playerType;
 
+    @Column
+    private String password;
+
     @ManyToMany
     private List<Team> ownedTeams = new ArrayList<>();
 
     private boolean isCaptain;
-
-    public Player(String playerName, String playerLocation, String playerEmail) {
-        this.player_name = playerName;
-        this.player_location = playerLocation;
-        this.player_email = playerEmail;
-        this.playerType = PlayerType.REGULAR_PLAYER;
-        this.isCaptain = false;
-    }
 
     public Player() {  }
 

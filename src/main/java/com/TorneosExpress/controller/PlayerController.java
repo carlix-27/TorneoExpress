@@ -13,6 +13,11 @@ public class PlayerController {
     @Autowired
     private PlayerService PlayerService;
 
+    @Autowired
+    public PlayerController(PlayerService playerService) {
+        this.PlayerService = playerService;
+    }
+
     @GetMapping("/players/{id}")
     public Optional<Player> getPlayerById(@PathVariable Long id) {
         return PlayerService.getPlayerById(id);
@@ -20,7 +25,7 @@ public class PlayerController {
 
 
     @PostMapping("/submit_registration")
-    public Player createPlayer(@RequestBody Player player){
+    public Player createPlayer(@ModelAttribute Player player){
         return PlayerService.savePlayer(player);
     }
 
