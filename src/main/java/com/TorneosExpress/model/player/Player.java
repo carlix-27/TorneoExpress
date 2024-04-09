@@ -1,7 +1,6 @@
 package com.TorneosExpress.model.player;
 
 
-import com.TorneosExpress.model.PlayerType;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 
@@ -16,7 +15,7 @@ public class Player {
         this.player_location = playerLocation;
         this.player_email = playerEmail;
         this.password = password;
-        this.playerType = PlayerType.REGULAR_PLAYER;
+        this.isPremium = false;
         this.isCaptain = false;
     }
 
@@ -34,7 +33,7 @@ public class Player {
     private String player_email;
 
     @Column
-    private PlayerType playerType;
+    private boolean isPremium;
 
     @Column
     private String password;
