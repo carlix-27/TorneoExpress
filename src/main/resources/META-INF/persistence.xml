@@ -5,17 +5,17 @@
     <persistence-unit name="lab1">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>model.admin.AdminLoginInformation</class>
-        <class>model.player.PlayerLoginInformation</class>
-        <class>model.admin.Administrator</class>
-        <class>model.Sport</class>
-        <class>model.User</class>
-        <class>model.player.Player</class>
-        <class>model.Team</class>
-        <class>model.Tournament</class>
-        <class>model.Ranking</class>
-        <class>model.Match.Match</class>
-        <class>model.shop.Article</class>
+        <class>com.TorneosExpress.model.admin.AdminLoginInformation</class>
+        <class>com.TorneosExpress.model.player.PlayerLoginInformation</class>
+        <class>com.TorneosExpress.model.admin.Administrator</class>
+        <class>com.TorneosExpress.model.Sport</class>
+        <class>com.TorneosExpress.model.User</class>
+        <class>com.TorneosExpress.model.player.Player</class>
+        <class>com.TorneosExpress.model.Team</class>
+        <class>com.TorneosExpress.model.Tournament</class>
+        <class>com.TorneosExpress.model.Ranking</class>
+        <class>com.TorneosExpress.model.Match.Match</class>
+        <class>com.TorneosExpress.model.shop.Article</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>

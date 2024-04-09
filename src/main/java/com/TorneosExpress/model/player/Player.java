@@ -44,7 +44,10 @@ public class Player {
 
     private boolean isCaptain;
 
-    public Player() {  }
+    public Player() {
+
+    }
+
 
     public void joinTeam(Team team) {
       team.join(this);
