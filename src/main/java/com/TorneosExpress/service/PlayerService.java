@@ -15,11 +15,12 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
-    }
 
     public Optional<Player> getPlayerById(Long id) {
         return playerRepository.findById(id);
+    }
+
+    public Player savePlayer(Player player) {
+        return playerRepository.save(player);
     }
 }
