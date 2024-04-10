@@ -23,4 +23,13 @@ public class PlayerService {
     public Player savePlayer(Player player) {
         return playerRepository.save(player);
     }
+
+    public Player createPlayer(String player_name, String player_location, String player_email, String password) {
+        Player newPlayer = new Player();
+        newPlayer.setPlayer_name(player_name);
+        newPlayer.setPlayer_location(player_location);
+        newPlayer.setPlayer_email(player_email);
+        newPlayer.setPassword(password);
+        return playerRepository.save(newPlayer);
+    }
 }

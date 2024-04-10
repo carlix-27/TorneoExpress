@@ -3,6 +3,7 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,8 +26,12 @@ public class PlayerController {
 
 
     @PostMapping("/submit_registration")
-    public Player createPlayer(@ModelAttribute Player player){
-        return PlayerService.savePlayer(player);
+    public ResponseEntity<Player> createPlayer(@RequestParam String player_name,
+                                               @RequestParam String player_location,
+                                               @RequestParam String player_email,
+                                               @RequestParam String password) {
+        Player newPlayer = PlayerService.createPlayer(player_name, player_location, player_email, password);
+        return ResponseEntity.ok(newPlayer);
     }
 
 

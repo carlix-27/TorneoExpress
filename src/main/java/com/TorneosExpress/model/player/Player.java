@@ -21,7 +21,7 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long player_id;
+    private long player_id;
 
     @Column
     private String player_name;
@@ -43,8 +43,22 @@ public class Player {
 
     private boolean isCaptain;
 
-    public Player() {
+    public Player() {}
 
+    public void setPlayer_name(String name){
+        player_name = name;
+    }
+
+    public void setPlayer_location(String location){
+        player_location = location;
+    }
+
+    public void setPlayer_email(String email){
+        player_email = email;
+    }
+
+    public void setPassword(String password1){
+        password = password1;
     }
 
 
