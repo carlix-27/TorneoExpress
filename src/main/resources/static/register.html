@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Torneos Express - Registro</title>
+    <link rel="stylesheet" href="styles/styleRegister.css">
+</head>
+
+<body>
+<h1>Registro</h1>
+<div>
+    <form action="/submit_registration" method="post">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="player_name"><br>
+        <label for="location">Location:</label><br>
+        <input type="text" id="location" name="player_location"><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="player_email"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<a href="login.html">Iniciar Sesión</a>
+<a href="index.html">Volver</a>
+
+</body>
+</html>

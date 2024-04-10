@@ -1,7 +1,6 @@
 package com.TorneosExpress.model.player;
 
 
-import com.TorneosExpress.model.PlayerType;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 
@@ -11,8 +10,18 @@ import java.util.List;
 
 @Entity
 public class Player {
+    public Player(String playerName, String playerLocation, String playerEmail, String password) {
+        this.player_name = playerName;
+        this.player_location = playerLocation;
+        this.player_email = playerEmail;
+        this.password = password;
+        this.isPremium = false;
+        this.isCaptain = false;
+    }
+
     @Id
-    private Long player_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long player_id;
 
     @Column
     private String player_name;
@@ -20,26 +29,38 @@ public class Player {
     @Column
     private String player_location;
 
-    @Column (nullable = false, unique = true)
+    @Column
     private String player_email;
 
     @Column
-    private PlayerType playerType;
+    private boolean isPremium;
+
+    @Column
+    private String password;
 
     @ManyToMany
     private List<Team> ownedTeams = new ArrayList<>();
 
     private boolean isCaptain;
 
-    public Player(String playerName, String playerLocation, String playerEmail) {
-        this.player_name = playerName;
-        this.player_location = playerLocation;
-        this.player_email = playerEmail;
-        this.playerType = PlayerType.REGULAR_PLAYER;
-        this.isCaptain = false;
+    public Player() {}
+
+    public void setPlayer_name(String name){
+        player_name = name;
     }
 
-    public Player() {  }
+    public void setPlayer_location(String location){
+        player_location = location;
+    }
+
+    public void setPlayer_email(String email){
+        player_email = email;
+    }
+
+    public void setPassword(String password1){
+        password = password1;
+    }
+
 
     public void joinTeam(Team team) {
       team.join(this);
