@@ -61,6 +61,9 @@ public class Player {
         password = password1;
     }
 
+    public String getPassword(){
+        return password;
+    }
 
     public void joinTeam(Team team) {
       team.join(this);

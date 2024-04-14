@@ -1,6 +1,5 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.model.User;
 import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +30,18 @@ public class PlayerService {
         newPlayer.setPlayer_email(player_email);
         newPlayer.setPassword(password);
         return playerRepository.save(newPlayer);
+    }
+
+
+    public Player loginPlayer(String player_email, String password) {
+        Player player = playerRepository.findByPlayerEmail(player_email);
+
+        // Verificar si se encontró un jugador y si la contraseña coincide
+        if (player != null && player.getPassword().equals(password)) {
+            return player; // Devuelve el jugador si la autenticación es exitosa
+        } else {
+            return null; // Devuelve null si el jugador no se encuentra o la contraseña es incorrecta
+        }
+
     }
 }

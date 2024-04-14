@@ -3,6 +3,7 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,4 +36,16 @@ public class PlayerController {
     }
 
 
+    @PostMapping("/submit_login")
+    public ResponseEntity<Player> loginPlayer(@RequestParam String player_email,
+                                              @RequestParam String password
+                                              ) {
+        Player player = PlayerService.loginPlayer(player_email, password);
+        if(player != null) {
+            return ResponseEntity.ok(player);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
+
+}
