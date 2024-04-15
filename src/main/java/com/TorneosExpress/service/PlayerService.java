@@ -30,6 +30,6 @@ public class PlayerService {
         newPlayer.setPlayer_location(player_location);
         newPlayer.setPlayer_email(player_email);
         newPlayer.setPassword(password);
-        return playerRepository.save(newPlayer);
+        return savePlayer(newPlayer);
     }
 }
