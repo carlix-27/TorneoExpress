@@ -11,9 +11,9 @@ import java.util.List;
 @Entity
 public class Player {
     public Player(String playerName, String playerLocation, String playerEmail, String password) {
-        this.player_name = playerName;
-        this.player_location = playerLocation;
-        this.player_email = playerEmail;
+        this.name = playerName;
+        this.location = playerLocation;
+        this.email = playerEmail;
         this.password = password;
         this.isPremium = false;
         this.isCaptain = false;
@@ -21,16 +21,16 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long player_id;
+    private long id;
 
     @Column
-    private String player_name;
+    private String name;
 
     @Column
-    private String player_location;
+    private String location;
 
     @Column
-    private String player_email;
+    private String email;
 
     @Column
     private boolean isPremium;
@@ -45,16 +45,16 @@ public class Player {
 
     public Player() {}
 
-    public void setPlayer_name(String name){
-        player_name = name;
+    public void setPlayer_name(String name2){
+        name = name2;
     }
 
-    public void setPlayer_location(String location){
-        player_location = location;
+    public void setPlayer_location(String location2){
+        location = location2;
     }
 
-    public void setPlayer_email(String email){
-        player_email = email;
+    public void setPlayer_email(String email2){
+        email = email2;
     }
 
     public void setPassword(String password1){

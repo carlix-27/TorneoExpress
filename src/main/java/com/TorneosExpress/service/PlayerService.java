@@ -34,7 +34,7 @@ public class PlayerService {
 
 
     public Player loginPlayer(String player_email, String password) {
-        Player player = playerRepository.findByPlayerEmail(player_email);
+        Player player = playerRepository.findByemail(player_email);
 
         // Verificar si se encontró un jugador y si la contraseña coincide
         if (player != null && player.getPassword().equals(password)) {
