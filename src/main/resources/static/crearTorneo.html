@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneos Express - Torneo - Crear Torneo</title>
+</head>
+
+<body>
+    <form id="create-tournament-form">
+        <div class="form-group">
+            <label for="tournament-name">Nombre del Torneo:</label>
+            <input type="text" id="tournament-name" name="tournament-name" required>
+        </div>
+        <div class="form-group">
+            <label for="sport">Deporte:</label>
+            <select id="sport" name="sport" required>
+                <option value="futbol">Fútbol</option>
+                <option value="baloncesto">Baloncesto</option>
+                <option value="tenis">Tenis</option>
+                <!-- Agrega más opciones según sea necesario -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="location">Ubicación:</label>
+            <input type="text" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+            <label for="game-mode">Modo de Juego:</label>
+            <select id="game-mode" name="game-mode" required>
+                <option value="individual">Individual</option>
+                <option value="equipos">Equipos</option>
+                <!-- Agrega más opciones según sea necesario -->
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit">Crear Torneo</button>
+        </div>
+    </form>
+</body>
+
+</html>
+
+
