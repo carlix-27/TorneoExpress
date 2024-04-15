@@ -15,8 +15,8 @@ public class Player {
         this.location = playerLocation;
         this.email = playerEmail;
         this.password = password;
-        this.isPremium = false;
-        this.isCaptain = false;
+        this.is_premium = false;
+        this.is_captain = false;
     }
 
     @Id
@@ -32,16 +32,18 @@ public class Player {
     @Column
     private String email;
 
-    @Column
-    private boolean isPremium;
+    @Column(name = "is_captain")
+    private boolean is_captain;
 
-    @Column
+    @Column(name = "is_premium")
+    private boolean is_premium;
+
+    @Column(name = "password")
     private String password;
 
     @ManyToMany
     private List<Team> ownedTeams = new ArrayList<>();
 
-    private boolean isCaptain;
 
     public Player() {}
 

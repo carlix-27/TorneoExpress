@@ -1,6 +1,5 @@
 package com.TorneosExpress.repository;
 
-import com.TorneosExpress.model.User;
 import com.TorneosExpress.model.admin.AdminLoginInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
