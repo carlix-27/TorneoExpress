@@ -13,7 +13,7 @@
 	<div class="login-box">
 		<h2>Login</h2>
 
-		<form id="login-form">
+		<form id="login-form" action = "/submit_login">
 			<div class="textbox">
 				<i class="fas fa-user"></i>
 				<input type="text" placeholder="Username" name="username" required>
@@ -43,6 +43,20 @@
 
 		</div>
 	</div>
+
+	<script>
+        // Obtén referencia al formulario de inicio de sesión
+        const loginForm = document.getElementById('login-form');
+
+        // Agrega un event listener al formulario para escuchar el evento de envío
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Evita que el formulario se envíe de manera predeterminada
+            // Aquí puedes agregar la lógica para enviar los datos de inicio de sesión al backend
+
+            // Redirige al usuario a home.html después del inicio de sesión
+            window.location.href = 'home.html';
+        });
+    </script>
 
 
 	
