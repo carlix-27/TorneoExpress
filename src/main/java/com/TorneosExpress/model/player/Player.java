@@ -18,11 +18,12 @@ public class Player {
         this.password = password;
         this.isPremium = false;
         this.isCaptain = false;
+        this.isEnabled = false;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     private String name;
@@ -34,7 +35,10 @@ public class Player {
     private String email;
 
     @Column
-    private boolean isPremium;
+    private Boolean isPremium;
+
+    @Column
+    private Boolean isEnabled;
 
     @Column
     private String password;
