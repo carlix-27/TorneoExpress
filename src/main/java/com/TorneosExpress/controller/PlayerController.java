@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Optional;
 
@@ -37,14 +39,14 @@ public class PlayerController {
 
 
     @PostMapping("/submit_login")
-    public ResponseEntity<Player> loginPlayer(@RequestParam String player_email,
-                                              @RequestParam String password
+    public ModelAndView loginPlayer(@RequestParam String player_email,
+                                    @RequestParam String password
                                               ) {
         Player player = PlayerService.loginPlayer(player_email, password);
         if(player != null) {
-            return ResponseEntity.ok(player);
+            return new ModelAndView(new RedirectView("/success.html"));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return new ModelAndView(new RedirectView("/login.html"));
         }
     }
 
