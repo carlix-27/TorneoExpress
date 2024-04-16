@@ -30,7 +30,7 @@ public class Player {
     @Column
     private String location;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     public Boolean getEnabled() {
