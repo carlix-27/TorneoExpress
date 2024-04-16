@@ -35,18 +35,11 @@ public class PlayerService {
     }
 
 
-    public String login(Player player) {
-        String email = player.getEmail();
-        String password = player.getPassword();
-
-        // Check if the player with the given email exists
-        Player existingPlayer = playerRepository.findByemail(email);
-        if (existingPlayer == null || !player.getPassword().equals(password)) {
-            // Redirect to an error page
-            return redirectService.getRedirectUrl(false);
+    public Player login(String email, String password) {
+        Player player = playerRepository.findByemail(email);
+        if (player == null || !player.getPassword().equals(password)) {
+            return null;
         }
-
-        // Successful login
-        return redirectService.getRedirectUrl(true);
+        return player;
     }
 }

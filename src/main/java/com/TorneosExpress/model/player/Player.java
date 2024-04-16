@@ -32,6 +32,17 @@ public class Player {
     @Column
     private String email;
 
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    @Column
+    private Boolean isEnabled;
+
     @Column(name = "is_captain")
     private boolean is_captain;
 
@@ -114,4 +125,55 @@ public class Player {
         return email;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isIs_captain() {
+        return is_captain;
+    }
+
+    public void setIs_captain(boolean is_captain) {
+        this.is_captain = is_captain;
+    }
+
+    public boolean isIs_premium() {
+        return is_premium;
+    }
+
+    public void setIs_premium(boolean is_premium) {
+        this.is_premium = is_premium;
+    }
+
+    public List<Team> getOwnedTeams() {
+        return ownedTeams;
+    }
+
+    public void setOwnedTeams(List<Team> ownedTeams) {
+        this.ownedTeams = ownedTeams;
+    }
 }
