@@ -11,6 +11,15 @@ import java.util.List;
 
 @Entity
 public class Player {
+
+    public Boolean getEnabled() {
+        return is_Enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        is_Enabled = enabled;
+    }
+
     public Player(String playerName, String playerLocation, String playerEmail, String password) {
         this.name = playerName;
         this.location = playerLocation;
@@ -18,29 +27,29 @@ public class Player {
         this.password = password;
         this.isPremium = false;
         this.isCaptain = false;
-        this.isEnabled = false;
+        this.is_Enabled = false;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "NAME")
     private String name;
 
-    @Column
+    @Column(name = "LOCATION")
     private String location;
 
-    @Column
+    @Column(name = "EMAIL")
     private String email;
 
-    @Column
+    @Column(name = "IS_PREMIUM")
     private Boolean isPremium;
 
-    @Column
-    private Boolean isEnabled;
+    @Column(name = "IS_ENABLED")
+    private Boolean is_Enabled;
 
-    @Column
+    @Column(name = "PASSWORD")
     private String password;
 
     @ManyToMany
