@@ -27,13 +27,15 @@ public class AuthController {
         PlayerDto playerDto = new PlayerDto(
                 loggedInPlayer.getId(),
                 loggedInPlayer.getName(),
+                loggedInPlayer.getLocation(),
                 loggedInPlayer.getEmail(),
                 loggedInPlayer.isIs_premium(),
-                loggedInPlayer.is(),
+                loggedInPlayer.getEnabled(),
                 loggedInPlayer.getPassword(),
                 loggedInPlayer.getOwnedTeams(),
-                loggedInPlayer.isCaptain()
+                loggedInPlayer.isIs_captain()
         );
+
         return new ResponseEntity<>(playerDto, HttpStatus.OK);
     }
 }

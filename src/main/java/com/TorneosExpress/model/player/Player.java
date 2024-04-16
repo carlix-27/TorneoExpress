@@ -17,6 +17,7 @@ public class Player {
         this.password = password;
         this.is_premium = false;
         this.is_captain = false;
+        this.isEnabled = false;
     }
 
     @Id
