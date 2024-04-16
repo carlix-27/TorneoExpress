@@ -10,6 +10,7 @@ import java.util.Optional;
 @Service
 public class PlayerService {
 
+    @Autowired
     private RedirectService redirectService;
 
     @Autowired

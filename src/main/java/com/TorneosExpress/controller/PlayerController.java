@@ -1,15 +1,10 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.model.player.Player;
-import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.service.PlayerService;
-import com.TorneosExpress.service.RedirectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Optional;
 
@@ -17,10 +12,8 @@ import java.util.Optional;
 public class PlayerController {
 
     @Autowired
-    private PlayerRepository playerRepository;
-
-    @Autowired
     private PlayerService PlayerService;
+
 
     @Autowired
     public PlayerController(PlayerService playerService) {
@@ -44,8 +37,12 @@ public class PlayerController {
 
 
     @PostMapping("/submit_login")
-    public String login(@RequestBody Player player) {
+    public String login(@RequestParam String email, @RequestParam String password) {
+        Player player = new Player();
+        player.setPlayer_email(email);
+        player.setPassword(password);
         return PlayerService.login(player);
     }
+
 
 }

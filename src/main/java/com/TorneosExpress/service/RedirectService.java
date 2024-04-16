@@ -1,5 +1,9 @@
 package com.TorneosExpress.service;
 
+
+import org.springframework.stereotype.Service;
+
+@Service
 public class RedirectService {
     public String getRedirectUrl(boolean loginSuccessful) {
         if (loginSuccessful) {
