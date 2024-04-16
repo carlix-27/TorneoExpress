@@ -23,11 +23,7 @@ public class PlayerService {
     }
 
     public Player createPlayer(String player_name, String player_location, String player_email, String password) {
-        Player newPlayer = new Player();
-        newPlayer.setPlayer_name(player_name);
-        newPlayer.setPlayer_location(player_location);
-        newPlayer.setPlayer_email(player_email);
-        newPlayer.setPassword(password);
+        Player newPlayer = new Player(player_name, player_location, player_email, password);
         return savePlayer(newPlayer);
     }
 }

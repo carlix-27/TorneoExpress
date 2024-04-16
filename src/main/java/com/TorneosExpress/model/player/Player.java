@@ -40,7 +40,7 @@ public class Player {
     @Column(name = "LOCATION")
     private String location;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
     @Column(name = "IS_PREMIUM")
