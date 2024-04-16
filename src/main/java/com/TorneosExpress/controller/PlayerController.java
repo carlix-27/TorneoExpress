@@ -44,9 +44,9 @@ public class PlayerController {
                                               ) {
         Player player = PlayerService.loginPlayer(player_email, password);
         if(player != null) {
-            return new ModelAndView(new RedirectView("/static/home.html"));
+            return new ModelAndView(new RedirectView("/Users/marcoshussey/Documents/Proyects/laboratorio-I/TorneosExpress/src/main/resources/static/home.html"));
         } else {
-            return new ModelAndView(new RedirectView("/static/login.html"));
+            return new ModelAndView(new RedirectView("/Users/marcoshussey/Documents/Proyects/laboratorio-I/TorneosExpress/src/main/resources/static/login.html"));
         }
     }
 
