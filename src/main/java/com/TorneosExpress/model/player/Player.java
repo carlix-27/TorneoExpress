@@ -110,4 +110,8 @@ public class Player {
         return team.getCaptain().equals(this);
     }
 
+    public String getEmail(){
+        return email;
+    }
+
 }
