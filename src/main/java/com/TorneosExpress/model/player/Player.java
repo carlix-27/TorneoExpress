@@ -52,8 +52,11 @@ public class Player {
     private Boolean is_Enabled;
 
     @Column(name = "PASSWORD")
-
     private String password;
+
+    @Column(name = "IS_CAPTAIN")
+    private boolean isCaptain;
+
 
     @ManyToMany
     private List<Team> ownedTeams = new ArrayList<>();
@@ -157,19 +160,19 @@ public class Player {
     }
 
     public boolean isIs_captain() {
-        return is_captain;
+        return isCaptain;
     }
 
     public void setIs_captain(boolean is_captain) {
-        this.is_captain = is_captain;
+        this.is_Enabled = is_captain;
     }
 
     public boolean isIs_premium() {
-        return is_premium;
+        return isPremium;
     }
 
     public void setIs_premium(boolean is_premium) {
-        this.is_premium = is_premium;
+        this.isPremium = is_premium;
     }
 
     public List<Team> getOwnedTeams() {
