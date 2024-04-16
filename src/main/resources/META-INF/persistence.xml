@@ -9,7 +9,6 @@
         <class>com.TorneosExpress.model.player.PlayerLoginInformation</class>
         <class>com.TorneosExpress.model.admin.Administrator</class>
         <class>com.TorneosExpress.model.Sport</class>
-        <class>com.TorneosExpress.model.User</class>
         <class>com.TorneosExpress.model.player.Player</class>
         <class>com.TorneosExpress.model.Team</class>
         <class>com.TorneosExpress.model.Tournament</class>

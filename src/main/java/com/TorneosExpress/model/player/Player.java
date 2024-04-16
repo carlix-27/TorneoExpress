@@ -45,10 +45,10 @@ public class Player {
     private Boolean isEnabled;
 
     @Column(name = "is_captain")
-    private boolean is_captain;
+    private Boolean is_captain;
 
     @Column(name = "is_premium")
-    private boolean is_premium;
+    private Boolean is_premium;
 
     @Column(name = "password")
     private String password;
