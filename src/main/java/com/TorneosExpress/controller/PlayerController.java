@@ -27,22 +27,12 @@ public class PlayerController {
 
 
     @PostMapping("/submit_registration")
-    public ResponseEntity<Player> createPlayer(@RequestParam String player_name,
-                                               @RequestParam String player_location,
-                                               @RequestParam String player_email,
+    public ResponseEntity<Player> createPlayer(@RequestParam String name,
+                                               @RequestParam String location,
+                                               @RequestParam String email,
                                                @RequestParam String password) {
-        Player newPlayer = PlayerService.createPlayer(player_name, player_location, player_email, password);
+        Player newPlayer = PlayerService.createPlayer(name, location, email, password);
         return ResponseEntity.ok(newPlayer);
     }
-
-
-//    @PostMapping("/submit_login")
-//    public String login(@RequestParam String email, @RequestParam String password) {
-//        Player player = new Player();
-//        player.setPlayer_email(email);
-//        player.setPassword(password);
-//        return PlayerService.login(player);
-//    }
-
 
 }

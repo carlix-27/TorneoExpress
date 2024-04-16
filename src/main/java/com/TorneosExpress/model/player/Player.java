@@ -25,15 +25,13 @@ public class Player {
         this.location = playerLocation;
         this.email = playerEmail;
         this.password = password;
-        this.isPremium = false;
-        this.isCaptain = false;
+        this.is_Premium = false;
+        this.is_Captain = false;
         this.is_Enabled = false;
-
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @Column(name = "NAME")
@@ -46,7 +44,7 @@ public class Player {
     private String email;
 
     @Column(name = "IS_PREMIUM")
-    private Boolean isPremium;
+    private Boolean is_Premium;
 
     @Column(name = "IS_ENABLED")
     private Boolean is_Enabled;
@@ -55,7 +53,7 @@ public class Player {
     private String password;
 
     @Column(name = "IS_CAPTAIN")
-    private boolean isCaptain;
+    private boolean is_Captain;
 
 
     @ManyToMany
@@ -160,7 +158,7 @@ public class Player {
     }
 
     public boolean isIs_captain() {
-        return isCaptain;
+        return is_Captain;
     }
 
     public void setIs_captain(boolean is_captain) {
@@ -168,11 +166,11 @@ public class Player {
     }
 
     public boolean isIs_premium() {
-        return isPremium;
+        return is_Premium;
     }
 
     public void setIs_premium(boolean is_premium) {
-        this.isPremium = is_premium;
+        this.is_Premium = is_premium;
     }
 
     public List<Team> getOwnedTeams() {
