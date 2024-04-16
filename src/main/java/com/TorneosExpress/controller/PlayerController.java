@@ -14,6 +14,7 @@ public class PlayerController {
     @Autowired
     private PlayerService PlayerService;
 
+
     @Autowired
     public PlayerController(PlayerService playerService) {
         this.PlayerService = playerService;
@@ -35,4 +36,13 @@ public class PlayerController {
     }
 
 
-    }
+//    @PostMapping("/submit_login")
+//    public String login(@RequestParam String email, @RequestParam String password) {
+//        Player player = new Player();
+//        player.setPlayer_email(email);
+//        player.setPassword(password);
+//        return PlayerService.login(player);
+//    }
+
+
+}

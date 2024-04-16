@@ -28,10 +28,12 @@ public class Player {
         this.isPremium = false;
         this.isCaptain = false;
         this.is_Enabled = false;
+
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
     @Column(name = "NAME")
@@ -50,12 +52,12 @@ public class Player {
     private Boolean is_Enabled;
 
     @Column(name = "PASSWORD")
+
     private String password;
 
     @ManyToMany
     private List<Team> ownedTeams = new ArrayList<>();
 
-    private boolean isCaptain;
 
     public Player() {}
 
@@ -122,4 +124,59 @@ public class Player {
         return team.getCaptain().equals(this);
     }
 
+    public String getEmail(){
+        return email;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isIs_captain() {
+        return is_captain;
+    }
+
+    public void setIs_captain(boolean is_captain) {
+        this.is_captain = is_captain;
+    }
+
+    public boolean isIs_premium() {
+        return is_premium;
+    }
+
+    public void setIs_premium(boolean is_premium) {
+        this.is_premium = is_premium;
+    }
+
+    public List<Team> getOwnedTeams() {
+        return ownedTeams;
+    }
+
+    public void setOwnedTeams(List<Team> ownedTeams) {
+        this.ownedTeams = ownedTeams;
+    }
 }

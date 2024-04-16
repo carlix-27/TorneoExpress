@@ -19,4 +19,6 @@ public class AdminController {
     public List<AdminLoginInformation> getAdmins() {
         return adminService.getAllAdmins();
     }
+
+
 }
