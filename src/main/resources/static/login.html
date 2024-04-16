@@ -27,17 +27,12 @@
 
 		<script>
 			function login() {
-				var email = document.getElementById('email').value;
-				var password = document.getElementById('password').value;
-
-				var data = {
-					email: email,
-					password: password
-				};
+				var formData = new FormData();
+				formData.append('email', email);
+				formData.append('password', password);
 
 				var xhr = new XMLHttpRequest();
 				xhr.open('POST', '/api/auth/login', true);
-				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.onload = function() {
 					if (xhr.status === 200) {
 						// Handle successful login
@@ -50,7 +45,8 @@
 						// Show error message
 					}
 				};
-				xhr.send(JSON.stringify(data));
+				xhr.send(formData);
+
 			}
 		</script>
 
