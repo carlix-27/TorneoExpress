@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.LoginRequest;
 import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.dto.PlayerDto;
 import com.TorneosExpress.service.PlayerService;
@@ -19,23 +20,22 @@ public class AuthController {
     private PlayerService playerService;
 
     @PostMapping("/login")
-    public ResponseEntity<PlayerDto> login(@RequestBody Player player) {
-        Player loggedInPlayer = playerService.login(player.getEmail(), player.getPassword());
-        if (loggedInPlayer == null) {
+    public ResponseEntity<PlayerDto> login(@RequestBody LoginRequest request) {
+        Player player = playerService.login(request.getEmail(), request.getPassword());
+        if (player == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         PlayerDto playerDto = new PlayerDto(
-                loggedInPlayer.getId(),
-                loggedInPlayer.getName(),
-                loggedInPlayer.getLocation(),
-                loggedInPlayer.getEmail(),
-                loggedInPlayer.isIs_premium(),
-                loggedInPlayer.getEnabled(),
-                loggedInPlayer.getPassword(),
-                loggedInPlayer.getOwnedTeams(),
-                loggedInPlayer.isIs_captain()
+                player.getId(),
+                player.getName(),
+                player.getEmail(),
+                player.getLocation(),
+                player.isIs_premium(),
+                player.getEnabled(),
+                player.getPassword(),
+                player.getOwnedTeams(),
+                player.isIs_captain()
         );
-
         return new ResponseEntity<>(playerDto, HttpStatus.OK);
     }
 }
