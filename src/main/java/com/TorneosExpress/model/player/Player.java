@@ -1,3 +1,4 @@
+
 package com.TorneosExpress.model.player;
 
 
@@ -10,47 +11,48 @@ import java.util.List;
 
 @Entity
 public class Player {
+
+    public Boolean getEnabled() {
+        return is_Enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        is_Enabled = enabled;
+    }
+
     public Player(String playerName, String playerLocation, String playerEmail, String password) {
         this.name = playerName;
         this.location = playerLocation;
         this.email = playerEmail;
         this.password = password;
-        this.is_premium = false;
-        this.is_captain = false;
-        this.isEnabled = false;
+        this.isPremium = false;
+        this.isCaptain = false;
+        this.is_Enabled = false;
+
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
-    @Column
+    private Long id;
+
+    @Column(name = "NAME")
     private String name;
 
-    @Column
+    @Column(name = "LOCATION")
     private String location;
 
-    @Column(unique = true)
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
-    public Boolean getEnabled() {
-        return isEnabled;
-    }
+    @Column(name = "IS_PREMIUM")
+    private Boolean isPremium;
 
-    public void setEnabled(Boolean enabled) {
-        isEnabled = enabled;
-    }
+    @Column(name = "IS_ENABLED")
+    private Boolean is_Enabled;
 
-    @Column
-    private Boolean isEnabled;
+    @Column(name = "PASSWORD")
 
-    @Column(name = "is_captain")
-    private Boolean is_captain;
-
-    @Column(name = "is_premium")
-    private Boolean is_premium;
-
-    @Column(name = "password")
     private String password;
 
     @ManyToMany
@@ -80,7 +82,7 @@ public class Player {
     }
 
     public void joinTeam(Team team) {
-      team.join(this);
+        team.join(this);
     }
 
     public void createTeam(String teamName, String teamLocation, boolean privacy) {
