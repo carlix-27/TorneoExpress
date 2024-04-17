@@ -49,6 +49,8 @@
 						// Handle error
 						console.error(xhr.responseText);
 						// Show error message
+						// Redirect to login error page
+						window.location.replace("login_error.html");
 					}
 				};
 				xhr.send(JSON.stringify(loginRequest));
