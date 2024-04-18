@@ -43,7 +43,7 @@
                     const response = JSON.parse(xhr.responseText);
                     console.log(response);
                     localStorage.setItem("token", response.token);
-                    window.location.replace("login.html");
+                    window.location.replace("register_success.html");
                 } else {
                     console.error(xhr.responseText);
                     window.location.replace("register_error.html");

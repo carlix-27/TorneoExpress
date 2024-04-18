@@ -5,7 +5,6 @@
     <title>Torneos Express - Registro</title>
     <link rel="stylesheet" href="styles/styleRegister.css">
 </head>
-
 <body>
 <h1>Registro</h1>
 <div>
@@ -44,22 +43,14 @@
                     const response = JSON.parse(xhr.responseText);
                     console.log(response);
                     localStorage.setItem("token", response.token);
-                    window.location.replace("login.html");
+                    window.location.replace("registration_error.html");
                 } else {
 
                 }
             };
             xhr.send(JSON.stringify(registerRequest));
         }
-
     </script>
-
 </div>
-
-<a href="login.html">Iniciar Sesión</a>
-<a href="index.html">Volver</a>
-
-
-
 </body>
 </html>
