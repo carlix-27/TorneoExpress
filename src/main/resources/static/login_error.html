@@ -8,6 +8,7 @@
 </head>
 <body>
 <div class="login-box">
+    <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
     <h2>Login</h2>
 
     <form id="login-form" action="/api/auth/login" method="post">
@@ -47,14 +48,13 @@
                 } else {
                     // Handle error
                     console.error(xhr.responseText);
-                    // No need to set error message here since it's already included in HTML
+                    // Show error message
+                    document.getElementById('error-message').style.display = 'block';
                 }
             };
             xhr.send(JSON.stringify(loginRequest));
         }
     </script>
-
-
 </div>
 </body>
 </html>
