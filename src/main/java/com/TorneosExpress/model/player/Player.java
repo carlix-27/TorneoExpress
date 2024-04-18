@@ -20,10 +20,10 @@ public class Player {
         is_Enabled = enabled;
     }
 
-    public Player(String playerName, String playerLocation, String playerEmail, String password) {
-        this.name = playerName;
-        this.location = playerLocation;
-        this.email = playerEmail;
+    public Player(String name, String location, String email, String password) {
+        this.name = name;
+        this.location = location;
+        this.email = email;
         this.password = password;
         this.is_Premium = false;
         this.is_Captain = false;

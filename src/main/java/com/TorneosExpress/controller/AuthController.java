@@ -36,6 +36,23 @@ public class AuthController {
         return new ResponseEntity<>(playerDto, HttpStatus.OK);
     }
 
+    @PostMapping("/submit_registration")
+    public ResponseEntity<PlayerDto> createPlayer(@RequestBody RegisterRequest request) {
+        Player player = playerService.createPlayer(request.getName(), request.getLocation(), request.getEmail(), request.getPassword());
+        PlayerDto playerDto = new PlayerDto(
+                player.getId(),
+                player.getName(),
+                player.getEmail(),
+                player.getLocation(),
+                player.isIs_premium(),
+                player.getEnabled(),
+                player.getPassword(),
+                player.getOwnedTeams(),
+                player.isIs_captain()
+        );
+        return ResponseEntity.ok(playerDto);
+    }
+
 
 
 }
