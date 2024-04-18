@@ -26,13 +26,6 @@ public class PlayerController {
     }
 
 
-    @PostMapping("/submit_registration")
-    public ResponseEntity<Player> createPlayer(@RequestParam String name,
-                                               @RequestParam String location,
-                                               @RequestParam String email,
-                                               @RequestParam String password) {
-        Player newPlayer = PlayerService.createPlayer(name, location, email, password);
-        return ResponseEntity.ok(newPlayer);
-    }
+
 
 }

@@ -7,10 +7,7 @@ import com.TorneosExpress.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,5 +34,14 @@ public class AuthController {
                 player.isIs_captain()
         );
         return new ResponseEntity<>(playerDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/submit_registration")
+    public ResponseEntity<Player> createPlayer(@RequestParam String name,
+                                               @RequestParam String location,
+                                               @RequestParam String email,
+                                               @RequestParam String password) {
+        Player newPlayer = playerService.createPlayer(name, location, email, password);
+        return ResponseEntity.ok(newPlayer);
     }
 }
