@@ -4,24 +4,38 @@
     <meta charset="UTF-8">
     <title>Torneos Express - Registro</title>
     <link rel="stylesheet" href="styles/styleRegister.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-
 <body>
-<h1>Registro</h1>
-<div>
-    <form id= "registration-form" action="api/auth/submit_registration" method="post">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="location">Location:</label><br>
-        <input type="text" id="location" name="location"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br>
+<div class="register-box">
+    <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+    <h2>Registrer Account</h2>
+
+    <form id="registration-form" action="api/auth/submit_registration" method="post">
+        <div class="textbox">
+            <i class="fas fa-user"></i>
+            <input type="text" id="name" placeholder="Name" required>
+        </div>
+        <div class="textbox">
+            <i class="fas fa-map-marker-alt"></i>
+            <input type="text" id="location" placeholder="Location" required>
+        </div>
+        <div class="textbox">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Email" required>
+        </div>
+        <div class="textbox">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password" required>
+        </div>
         <input type="button" value="Register" name="register_button" onclick="register()">
     </form>
-    <script>
 
+    <div class="login-link">
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+
+    <script>
         function register() {
             const name = document.getElementById('name').value;
             const location = document.getElementById('location').value;
@@ -51,15 +65,7 @@
             };
             xhr.send(JSON.stringify(registerRequest));
         }
-
     </script>
-
 </div>
-
-<a href="login.html">Iniciar Sesión</a>
-<a href="index.html">Volver</a>
-
-
-
 </body>
 </html>
