@@ -58,7 +58,7 @@
                     const response = JSON.parse(xhr.responseText);
                     console.log(response);
                     localStorage.setItem("token", response.token);
-                    window.location.replace("register_success.html");
+                    window.location.replace("login.html?success=true");
                 } else {
                     const errorMessage = document.getElementById('error-message');
                     errorMessage.textContent = "Email already in use"; // Set your error message here
