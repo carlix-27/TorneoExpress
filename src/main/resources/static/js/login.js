@@ -11,20 +11,22 @@ function login() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {
-            // Handle successful login
             const response = JSON.parse(xhr.responseText);
             console.log(response);
-            // save token
             localStorage.setItem("token", response.token);
-            // Redirect to home page or show success message
             window.location.replace("home.html");
         } else {
-            // Handle error
             console.error(xhr.responseText);
-            // Show error message
-            // Redirect to login error page
-            window.location.replace("login_error.html");
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'block'; // Display the error message
         }
     };
     xhr.send(JSON.stringify(loginRequest));
+}
+
+// Check for success message parameter in URL
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('success')) {
+    const successMessage = document.getElementById('success-message');
+    successMessage.style.display = 'block'; // Display the success message
 }

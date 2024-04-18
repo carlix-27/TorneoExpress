@@ -1,4 +1,4 @@
-package com.TorneosExpress.controller;
+package com.TorneosExpress.dto;
 
 public class RegisterRequest {
     private String name;
