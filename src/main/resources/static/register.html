@@ -9,7 +9,7 @@
 <body>
 <div class="register-box">
     <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
-    <h2>Registrer Account</h2>
+    <h2>Register new Account</h2>
 
     <form id="registration-form" action="api/auth/submit_registration" method="post">
         <div class="textbox">
@@ -28,6 +28,7 @@
             <i class="fas fa-lock"></i>
             <input type="password" id="password" placeholder="Password" required>
         </div>
+        <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div> <!-- Error message div -->
         <input type="button" value="Register" name="register_button" onclick="register()">
     </form>
 
@@ -59,8 +60,10 @@
                     localStorage.setItem("token", response.token);
                     window.location.replace("register_success.html");
                 } else {
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = "Email already in use"; // Set your error message here
+                    errorMessage.style.display = "block"; // Display the error message div
                     console.error(xhr.responseText);
-                    window.location.replace("register_error.html");
                 }
             };
             xhr.send(JSON.stringify(registerRequest));
