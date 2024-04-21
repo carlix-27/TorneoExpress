@@ -14,6 +14,7 @@ function login() {
             const response = JSON.parse(xhr.responseText);
             console.log(response);
             localStorage.setItem("sessionId", response.sessionId); // Store sessionId in localStorage
+            localStorage.setItem("userId", response.userId); // Store userId in localStorage
             window.location.replace("home.html"); // Redirect to home page after successful login
         } else {
             console.error(xhr.responseText);

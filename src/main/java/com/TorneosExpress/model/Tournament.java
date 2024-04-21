@@ -10,8 +10,72 @@ public class Tournament {
   @Id
   private Long Id;
 
+  public void setCreatorId(Long creatorId) {
+    this.creatorId = creatorId;
+  }
+
   @Column
   private Long creatorId;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public String getSport() {
+    return sport;
+  }
+
+  public void setSport(String sport) {
+    this.sport = sport;
+  }
+
+  public boolean isPrivate() {
+    return isPrivate;
+  }
+
+  public void setPrivate(boolean aPrivate) {
+    isPrivate = aPrivate;
+  }
+
+  public void setDifficulty(Difficulty difficulty) {
+    this.difficulty = difficulty;
+  }
+
+  public List<Team> getParticipatingTeams() {
+    return participatingTeams;
+  }
+
+  public void setParticipatingTeams(List<Team> participatingTeams) {
+    this.participatingTeams = participatingTeams;
+  }
+
+  public List<Team> getParticipationRequests() {
+    return participationRequests;
+  }
+
+  public void setParticipationRequests(List<Team> participationRequests) {
+    this.participationRequests = participationRequests;
+  }
+
+  public Long getId() {
+    return Id;
+  }
+
+  public void setId(Long id) {
+    Id = id;
+  }
 
   @Column
   private String name;
@@ -53,31 +117,5 @@ public class Tournament {
 
   @OneToMany
   private List<Team> participationRequests = new ArrayList<>(20);
-
-
-  public void joinTournament(Team team) {
-    if (!isPrivate) {
-      participatingTeams.add(team);
-    } else {
-      requestParticipation(team);
-    }
-  }
-
-  private void requestParticipation(Team team) {
-    this.participationRequests.add(team);
-  }
-
-  public void acceptTeam(Team team) {
-    participatingTeams.add(team);
-    participationRequests.remove(team);
-  }
-
-  public void rejectTeam(Team team) {
-    participationRequests.remove(team);
-  }
-
-  public void leave(Team team) {
-    participatingTeams.remove(team);
-  }
 
 }

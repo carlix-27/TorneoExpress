@@ -5,10 +5,12 @@ import com.TorneosExpress.dto.PlayerDto;
 public class LoginResponse {
     private PlayerDto playerDto;
     private String sessionId;
+    private Long userID;
 
-    public LoginResponse(PlayerDto playerDto, String sessionId) {
+    public LoginResponse(PlayerDto playerDto, String sessionId, long id) {
         this.playerDto = playerDto;
         this.sessionId = sessionId;
+        this.userID = id;
     }
 
     public PlayerDto getPlayerDto() {

@@ -55,45 +55,8 @@ public class Team {
 
   public Team() { }
 
-  public void join(Player player) {
-    if (!this.isPrivate) {
-      players.add(player);
-    } else {
-      requestAccess(player);
-    }
-  }
 
-  private void requestAccess(Player player) {
-    joinRequests.add(player);
-  }
 
-  public void acceptPlayer(Player player) {
-    players.add(player);
-    joinRequests.remove(player);
-  }
 
-  public void rejectPlayer(Player player) {
-    joinRequests.remove(player);
-  }
-
-  public void joinTournament(Tournament tournament) {
-    tournament.joinTournament(this);
-  }
-
-  public void leaveTournament(Tournament tournament) {
-    tournament.leave(this);
-  }
-
-  public void buyArticle(Article article) {
-    articles.add(article);
-  }
-
-  public Player getCaptain() {
-    return this.captain;
-  }
-
-  public void addPrestigePoints(int prestigePoints) {
-    this.prestigePoints += prestigePoints;
-  }
 
 }

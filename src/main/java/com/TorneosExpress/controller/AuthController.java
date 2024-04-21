@@ -7,7 +7,6 @@ import com.TorneosExpress.dto.PlayerDto;
 import com.TorneosExpress.response.LoginResponse;
 import com.TorneosExpress.service.PlayerService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,37 +22,33 @@ public class AuthController {
     private PlayerService playerService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(HttpServletRequest request, @RequestBody LoginRequest loginRequest) {
-        Player player = playerService.login(loginRequest.getEmail(), loginRequest.getPassword());
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        Player player = playerService.login(request.getEmail(), request.getPassword());
         if (player == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        // Generate a session ID
         String sessionId = UUID.randomUUID().toString();
 
-        // Store the userId and sessionId in request attributes
-        request.setAttribute("userId", player.getId());
-        request.setAttribute("sessionId", sessionId);
-
-        // Create a response with the player data and sessionId
         LoginResponse response = new LoginResponse(
                 new PlayerDto(
                         player.getId(),
                         player.getName(),
                         player.getLocation(),
                         player.getEmail(),
-                        player.isIs_premium(),
+                        player.getIs_Premium(),
                         player.getEnabled(),
                         player.getPassword(),
                         player.getOwnedTeams(),
-                        player.isIs_captain()
+                        player.isIs_Captain()
                 ),
-                sessionId
+                sessionId,
+                player.getId()
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @PostMapping("/submit_registration")
     public ResponseEntity<PlayerDto> createPlayer(@RequestBody RegisterRequest request) {
@@ -63,11 +58,11 @@ public class AuthController {
                 player.getName(),
                 player.getEmail(),
                 player.getLocation(),
-                player.isIs_premium(),
+                player.getIs_Premium(),
                 player.getEnabled(),
                 player.getPassword(),
                 player.getOwnedTeams(),
-                player.isIs_captain()
+                player.isIs_Captain()
         );
         return ResponseEntity.ok(playerDto);
     }
