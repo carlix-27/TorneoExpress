@@ -13,8 +13,8 @@ function login() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             console.log(response);
-            localStorage.setItem("token", response.token);
-            window.location.replace("home.html");
+            localStorage.setItem("sessionId", response.sessionId); // Store sessionId in localStorage
+            window.location.replace("home.html"); // Redirect to home page after successful login
         } else {
             console.error(xhr.responseText);
             const errorMessage = document.getElementById('error-message');
@@ -22,11 +22,4 @@ function login() {
         }
     };
     xhr.send(JSON.stringify(loginRequest));
-}
-
-// Check for success message parameter in URL
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('success')) {
-    const successMessage = document.getElementById('success-message');
-    successMessage.style.display = 'block'; // Display the success message
 }
