@@ -7,6 +7,7 @@ public class LoginResponse {
     private String sessionId;
     private Long userID;
 
+
     public LoginResponse(PlayerDto playerDto, String sessionId, long id) {
         this.playerDto = playerDto;
         this.sessionId = sessionId;
@@ -15,6 +16,14 @@ public class LoginResponse {
 
     public PlayerDto getPlayerDto() {
         return playerDto;
+    }
+
+    public Long getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 
     public void setPlayerDto(PlayerDto playerDto) {

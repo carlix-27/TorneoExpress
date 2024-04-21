@@ -29,6 +29,7 @@ public class AuthController {
         }
 
         String sessionId = UUID.randomUUID().toString();
+        Long userId = player.getId();
 
         LoginResponse response = new LoginResponse(
                 new PlayerDto(
@@ -43,7 +44,7 @@ public class AuthController {
                         player.isIs_Captain()
                 ),
                 sessionId,
-                player.getId()
+                userId
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);

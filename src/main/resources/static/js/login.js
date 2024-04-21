@@ -13,9 +13,19 @@ function login() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             console.log(response);
-            localStorage.setItem("sessionId", response.sessionId); // Store sessionId in localStorage
-            localStorage.setItem("userId", response.userId); // Store userId in localStorage
-            window.location.replace("home.html"); // Redirect to home page after successful login
+
+            // Check if response.userID is undefined (corrected key)
+            if (response.userID === undefined) {
+                console.error("userID is undefined in the response.");
+                return;
+            }
+
+            // Store sessionId and userID in localStorage
+            localStorage.setItem("sessionId", response.sessionId);
+            localStorage.setItem("userId", response.userID); // Corrected key
+
+            // Redirect to home page after successful login
+            redirectToHome();
         } else {
             console.error(xhr.responseText);
             const errorMessage = document.getElementById('error-message');
@@ -23,4 +33,15 @@ function login() {
         }
     };
     xhr.send(JSON.stringify(loginRequest));
+}
+
+// Function to redirect to home page
+function redirectToHome() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('success')) {
+        const successMessage = document.getElementById('success-message');
+        successMessage.style.display = 'block'; // Display the success message
+    }
+
+    window.location.replace("home.html");
 }

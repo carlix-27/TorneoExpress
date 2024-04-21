@@ -11,9 +11,6 @@ import java.util.Optional;
 public class PlayerService {
 
     @Autowired
-    private RedirectService redirectService;
-
-    @Autowired
     private PlayerRepository playerRepository;
 
 
@@ -29,7 +26,6 @@ public class PlayerService {
         Player newPlayer = new Player(player_name, player_location, player_email, password);
         return savePlayer(newPlayer);
     }
-
 
     public Player login(String email, String password) {
         Player player = playerRepository.findByemail(email);
