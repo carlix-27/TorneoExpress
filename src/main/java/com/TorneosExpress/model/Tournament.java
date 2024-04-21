@@ -7,15 +7,40 @@ import java.util.List;
 
 @Entity
 public class Tournament {
+
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long Id;
+
+  @Column
+  private Long creatorId;
+
+  @Column
+  private String name;
+
+  @Column
+  private String location;
+
+  @Column
+  private String sport;
+
+  @Column
+  private boolean isPrivate;
+
+  @Column
+  private Difficulty difficulty;
+
+  @ManyToMany
+  private List<Team> participatingTeams = new ArrayList<>();
+
+  @OneToMany
+  private List<Team> participationRequests = new ArrayList<>(20);
+
+
 
   public void setCreatorId(Long creatorId) {
     this.creatorId = creatorId;
   }
-
-  @Column
-  private Long creatorId;
 
   public String getName() {
     return name;
@@ -77,22 +102,11 @@ public class Tournament {
     Id = id;
   }
 
-  @Column
-  private String name;
 
-  @Column
-  private String location;
-
-  @Column
-  private String sport;
-
-  @Column
-  private boolean isPrivate;
-
-  @Column
-  private Difficulty difficulty;
 
   public Tournament() { }
+
+
 
   public Tournament(Long creatorId, String tournamentName, String tournamentLocation, Sport tournamentSport, boolean privacy, Difficulty difficulty) {
     this.name = tournamentName;
@@ -111,11 +125,5 @@ public class Tournament {
   public Long getCreatorId() {
     return creatorId;
   }
-
-  @ManyToMany
-  private List<Team> participatingTeams = new ArrayList<>();
-
-  @OneToMany
-  private List<Team> participationRequests = new ArrayList<>(20);
 
 }
