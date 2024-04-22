@@ -5,6 +5,20 @@ function createTeam() {
     const captainId = localStorage.getItem("userId");
     console.log(captainId)
 
+    if (!name.trim()) {
+        document.getElementById('error-message').innerText = "Tournament name cannot be blank.";
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'none';
+        return;
+    }
+
+    if (!location.trim()) {
+        document.getElementById('error-message').innerText = "Tournament location cannot be blank.";
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'none';
+        return;
+    }
+
     const createTeamRequest = {
         name: name,
         location: location,
@@ -19,8 +33,16 @@ function createTeam() {
         if (xhr.status === 201) { // Use 201 status for resource created
             const createdTeam = JSON.parse(xhr.responseText);
             console.log("Team created.", createdTeam);
-            console.log("Captain id:", captainId);
-            window.location.replace("home.html?success=true");
+            document.getElementById('success-message').innerText = "Team created successfully!";
+            document.getElementById('success-message').style.color = 'green';
+            document.getElementById('success-message').style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
+            //window.location.replace("home.html?success=true");
+        } else if (xhr.status === 409) {
+            // Conflict - Team name must be unique. Handled without SpringBoot decorator.
+            document.getElementById('error-message').innerText = "Team name must be unique. Please choose a different name.";
+            document.getElementById('error-message').style.display = 'block';
+            document.getElementById('success-message').style.display = 'none';
         } else {
             const errorMessage = document.getElementById('error-message');
             errorMessage.textContent = "Error creating team";

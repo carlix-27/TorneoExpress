@@ -10,7 +10,7 @@ body {
 }
 
 header {
-    background-color: #000;
+    background-color: #333;
     color: #fff;
     padding: 20px 0;
     text-align: center;
@@ -40,34 +40,6 @@ nav ul li a:hover {
     text-decoration: underline; /* Underline on hover */
 }
 
-/*  STYLES FOR EACH RESULT  */
+/*  BODY STYLES */
 
-h2 {
-    text-align: center;
-}
-
-/* Style for each team */
-#lista-todos-equipos li {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    margin-right: 30px;
-}
-
-
-/* Team name style */
-#lista-todos-equipos li h3 {
-    margin: 0;
-    font-size: 20px;
-    color: #333;
-}
-
-/* Additional information style */
-#lista-todos-equipos li p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #666;
-}
 

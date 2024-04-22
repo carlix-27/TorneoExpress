@@ -1,10 +1,51 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway');
 
+/*   HEADER STYLES   */
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/*      FORM STYLES     */
 body {
     margin: 0;
     padding: 0;
     background: #f5f5f5; /* Change to a light background color */
-    font-family: 'Raleway', sans-serif;
+    font-family: sans-serif;
 }
 
 .create-team-box {
