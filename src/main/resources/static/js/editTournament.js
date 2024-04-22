@@ -1,3 +1,36 @@
+// Function to fetch sports from the backend and populate the dropdown
+function fetchAndPopulateSports() {
+    fetch('/api/sports')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch sports: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const sportSelect = document.getElementById('sport');
+            sportSelect.innerHTML = ''; // Clear existing options
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = ''; // Set value as needed
+            defaultOption.textContent = 'Select Sport';
+            sportSelect.appendChild(defaultOption);
+
+            // Populate dropdown with fetched sports
+            data.forEach(sport => {
+                const option = document.createElement('option');
+                option.value = sport.sportId; // Set the value to the sportId
+                option.textContent = sport.sportName; // Set the text to the sportName
+                sportSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching sports:', error);
+            // Handle error, show message to user
+        });
+}
+
 // Function to fetch tournament details by ID
 function fetchTournamentDetails(tournamentId) {
     fetch(`/api/tournaments/${tournamentId}`)
@@ -79,6 +112,10 @@ document.addEventListener("DOMContentLoaded", function() {
     if (tournamentId) {
         // Fetch and populate tournament details
         fetchTournamentDetails(tournamentId);
+
+        // Fetch and populate sports dropdown
+        fetchAndPopulateSports();
+
         // Add event listener to form submission
         const editForm = document.getElementById('edit-tournament-form');
         editForm.addEventListener('submit', updateTournament);
