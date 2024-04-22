@@ -21,19 +21,21 @@ function cargarTorneos() {
             tournaments.forEach(tournament => {
                 const li = document.createElement("li");
                 li.innerHTML = `
-                    <div>
-                        <h3>${tournament.name}</h3>
-                        <p>Descripción: ${tournament.description}</p>
-                        <p>Ubicación: ${tournament.location}</p>
-                        <p>Deporte: ${tournament.sport}</p>
-                        <p>Privacidad: ${tournament.isPrivate ? "Privado" : "Público"}</p>
-                        <p>Dificultad: ${tournament.difficulty}</p>
-                        <button onclick="editarTorneo(${tournament.id})">Editar</button>
-                        <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
-                    </div>
-                `;
+        <div>
+            <h3>${tournament.name}</h3>
+            <p>Deporte: ${tournament.sport.sportName}</p>
+            <p>Ubicación: ${tournament.location}</p>
+            <p>Privacidad: ${tournament.isPrivate ? "Privado" : "Público"}</p>
+            <p>Dificultad: ${tournament.difficulty}</p>
+            <p>Equipos Participantes: ${tournament.teamsParticipating.length}</p>
+            <p>Solicitudes de Participación: ${tournament.participationRequests.length}</p>
+            <button onclick="editarTorneo(${tournament.id})">Editar</button>
+            <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
+        </div>
+    `;
                 listaTorneos.appendChild(li);
             });
+
         })
         .catch(error => {
             console.error('Error:', error);

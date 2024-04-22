@@ -123,10 +123,8 @@ public class Player {
     @Column(name = "IS_CAPTAIN")
     private boolean is_Captain;
 
-
-    @ManyToMany
+    @ManyToMany(mappedBy = "players")
     private List<Team> ownedTeams = new ArrayList<>();
-
 
     public Player() {}
 

@@ -1,5 +1,4 @@
 package com.TorneosExpress.model;
-
 import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.model.shop.Article;
 
@@ -29,28 +28,40 @@ public class Team {
   @Column
   private Long captainId;
 
+  @ManyToMany(mappedBy = "participatingTeams")
+  private List<Tournament> activeTournaments = new ArrayList<>();
+
   @ManyToMany
+  @JoinTable(
+          name = "team_players",
+          joinColumns = @JoinColumn(name = "team_id"),
+          inverseJoinColumns = @JoinColumn(name = "player_id")
+  )
   private List<Player> players = new ArrayList<>();
 
   @ManyToMany
+  @JoinTable(
+          name = "team_articles",
+          joinColumns = @JoinColumn(name = "team_id"),
+          inverseJoinColumns = @JoinColumn(name = "article_id")
+  )
   private List<Article> articles = new ArrayList<>();
 
-  @ManyToMany
-  private List<Tournament> ActiveTournaments = new ArrayList<>();
-
-  @OneToMany
-  private List<Player> joinRequests = new ArrayList<>(20);
+  @ManyToMany(mappedBy = "participationRequests")
+  private List<Tournament> requestedTournaments = new ArrayList<>();
 
   public Team(Long captainId, String teamName, String teamLocation, boolean privacy) {
     this.name = teamName;
     this.location = teamLocation;
     this.isPrivate = privacy;
     this.prestigePoints = 0;
+    this.captainId = captainId;
   }
 
-  public Team() { }
+  public Team() {
+  }
 
-  /* GETTERS */
+  // Getters and setters...
 
   public Long getId() {
     return id;
@@ -58,10 +69,6 @@ public class Team {
 
   public String getName() {
     return name;
-  }
-
-  public int getPrestigePoints() {
-    return prestigePoints;
   }
 
   public String getLocation() {
@@ -72,41 +79,65 @@ public class Team {
     return isPrivate;
   }
 
+  public int getPrestigePoints() {
+    return prestigePoints;
+  }
+
+  public Long getCaptainId() {
+    return captainId;
+  }
+
+  public List<Tournament> getActiveTournaments() {
+    return activeTournaments;
+  }
+
+  public List<Player> getPlayers() {
+    return players;
+  }
+
   public List<Article> getArticles() {
     return articles;
   }
 
-  public List<Player> getJoinRequests() {
-    return joinRequests;
+  public List<Tournament> getRequestedTournaments() {
+    return requestedTournaments;
   }
 
-  public List<Player> getPlayers(){
-    return players;
-  }
-
-  public List<Tournament> getActiveTournaments() {
-    return ActiveTournaments;
-  }
-
-  public Long getCaptain() {
-    return this.captainId;
-  }
-
-  /* END OF GETTERS */
-
-  public void setCaptainId(Long captainId) {
-    this.captainId = captainId;
-  }
+  // Setters...
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
   }
 
   public void setPrivate(boolean aPrivate) {
     isPrivate = aPrivate;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setPrestigePoints(int prestigePoints) {
+    this.prestigePoints = prestigePoints;
+  }
+
+  public void setCaptainId(Long captainId) {
+    this.captainId = captainId;
+  }
+
+  public void setActiveTournaments(List<Tournament> activeTournaments) {
+    this.activeTournaments = activeTournaments;
+  }
+
+  public void setPlayers(List<Player> players) {
+    this.players = players;
+  }
+
+  public void setArticles(List<Article> articles) {
+    this.articles = articles;
+  }
+
+  public void setRequestedTournaments(List<Tournament> requestedTournaments) {
+    this.requestedTournaments = requestedTournaments;
   }
 }

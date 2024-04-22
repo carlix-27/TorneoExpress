@@ -32,7 +32,7 @@ public class Tournament {
   @Column
   private String location;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "sport_id", referencedColumnName = "sportId")
   private Sport sport;
 
@@ -46,10 +46,22 @@ public class Tournament {
   private boolean isActive;
 
   @ManyToMany
+  @JoinTable(
+          name = "tournament_teams",
+          joinColumns = @JoinColumn(name = "tournament_id"),
+          inverseJoinColumns = @JoinColumn(name = "team_id"),
+          uniqueConstraints = @UniqueConstraint(columnNames = { "tournament_id", "team_id" })
+  )
   private List<Team> participatingTeams = new ArrayList<>();
 
-  @OneToMany
-  private List<Team> participationRequests = new ArrayList<>(20);
+  @ManyToMany
+  @JoinTable(
+          name = "tournament_requests",
+          joinColumns = @JoinColumn(name = "tournament_id"),
+          inverseJoinColumns = @JoinColumn(name = "team_id"),
+          uniqueConstraints = @UniqueConstraint(columnNames = { "tournament_id", "team_id" })
+  )
+  private List<Team> participationRequests = new ArrayList<>();
 
   public boolean isActive() {
     return isActive;
