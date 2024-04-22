@@ -25,3 +25,17 @@ nav ul li a {
 nav ul li a:hover {
     background-color: #ddd;
 }
+
+
+
+/* Estilos para la sección de Bienvenida */
+#bienvenida {
+    text-align: center;
+    margin-top: 40px;
+}
+
+#bienvenida h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}

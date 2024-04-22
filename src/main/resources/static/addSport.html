@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneos Express - Torneo - Agregar Deporte</title>
+    <script src="js/addSport.js"></script>
+    <link rel="stylesheet" href="styles/addSport.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <a href="home.html" class="back-button"><i class="fas fa-arrow-left"></i>Back</a>
+    <h2>Agregar Deporte</h2>
+    <!-- Formulario para agregar deporte -->
+    <form id="add-sport-form">
+
+        <div class="form-group">
+            <label for="sport-name">Nombre del Deporte:</label>
+            <input type="text" id="sport-name" name="sport-name" required>
+        </div>
+        <div class="form-group">
+            <label for="num_players">Cantidad de Jugadores:</label>
+            <input type="number" id="num_players" name="num_players" min="1" required>
+        </div>
+        <div class="form-group">
+            <!-- Llama a la función addSport() cuando se envíe el formulario -->
+            <button type="button" onclick="addSport()">Agregar Deporte</button>
+        </div>
+    </form>
+
+    <h3>Otras Opciones</h3>
+    <!-- Aquí puedes agregar contenido relacionado con los torneos -->
+    <ul>
+        <li><a href = "deleteSport.html">Eliminar Deporte</a></li>
+        <li><a href = "updateSport.html">Actualizar Deporte</a></li>
+    </ul>
+</div>
+
+
+</body>
+</html>
