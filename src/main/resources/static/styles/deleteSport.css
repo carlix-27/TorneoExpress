@@ -1,0 +1,55 @@
+/* Estilos generales */
+body {
+    font-family: 'Raleway', sans-serif;
+    background-color: #f5f5f5; /* Color de fondo claro */
+    color: #333; /* Color de texto oscuro */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff; /* Color de fondo claro para el contenedor */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar profundidad */
+}
+
+h2 {
+    color: #3d1f7f; /* Color de texto oscuro para títulos */
+}
+
+/* Estilos específicos para el formulario */
+#remove-sport-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.form-group button {
+    padding: 10px 20px;
+    background-color: #3d1f7f; /* Color de fondo oscuro para el botón */
+    color: #fff; /* Texto blanco para el botón */
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.form-group button:hover {
+    background-color: #5a42a5; /* Color de fondo oscuro más oscuro al pasar el cursor */
+}

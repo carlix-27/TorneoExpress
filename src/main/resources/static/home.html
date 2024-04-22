@@ -6,6 +6,7 @@
     <title>Torneos Express - Home</title>
     <link rel="stylesheet" href="styles/home.css">
     <script src="js/createTournamentRedirect.js"></script> <!-- Include the script file -->
+    <script src="js/createSportRedirect.js"></script>
 </head>
 <body>
 
@@ -25,13 +26,20 @@
     </nav>
 </header>
 
+<!-- Sección de Bienvenida -->
+<section id="bienvenida">
+    <h2>Bienvenido a Torneos Express</h2>
+    <p>Descubre los torneos más emocionantes y únete a la comunidad.</p>
+</section>
+
+
 <!-- Sección de Torneos -->
 <section id="torneos">
     <h2>Torneos</h2>
     <!-- Aquí puedes agregar contenido relacionado con los torneos -->
     <ul>
         <li><a href="#" onclick="redirectToCreateTournament()">Crear Torneo</a></li>
-        <li><a href="agregarDeporte.html">Agregar Deporte</a></li>
+        <li><a href="#" onclick="createSportRedirect()">Agregar Deporte</a></li>
         <li><a href="misTorneos.html">Ver Mis Torneos</a></li> <!-- Nuevo enlace -->
     </ul>
 </section>

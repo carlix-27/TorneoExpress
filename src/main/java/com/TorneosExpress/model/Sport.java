@@ -9,12 +9,19 @@ public class Sport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long sport_id;
+    private Long sport_id;
     @Column
     private String sportName;
 
     @Column
     private int num_players;
+
+    // Getters y Setters
+    public Long getId(){ return sport_id;}
+
+    public String getSportName(){ return sportName;}
+
+    public int getNum_players(){ return num_players;}
 
     public void setSport(String sportName){
         this.sportName = sportName;
