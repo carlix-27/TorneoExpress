@@ -18,12 +18,12 @@ public class TeamService {
     return teamRepository.findById(id);
   }
 
-  public Team saveTeam(Team team) {
+  public Team save(Team team) {
     return teamRepository.save(team);
   }
 
   public Team createTeam(Team team) {
-    return saveTeam(team);
+    return save(team);
   }
 
 }

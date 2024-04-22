@@ -11,7 +11,7 @@ import java.util.List;
 public class Team {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column
@@ -26,8 +26,8 @@ public class Team {
   @Column
   private int prestigePoints;
 
-  @ManyToOne
-  private Player captain;
+  @Column
+  private Long captainId;
 
   @ManyToMany
   private List<Player> players = new ArrayList<>();
@@ -41,11 +41,10 @@ public class Team {
   @OneToMany
   private List<Player> joinRequests = new ArrayList<>(20);
 
-  public Team(String teamName, String teamLocation, boolean privacy, Player captain) {
+  public Team(String teamName, String teamLocation, boolean privacy, Long captainId) {
     this.name = teamName;
     this.location = teamLocation;
     this.isPrivate = privacy;
-    this.captain = captain;
     this.prestigePoints = 0;
   }
 
@@ -89,8 +88,8 @@ public class Team {
     return ActiveTournaments;
   }
 
-  public Player getCaptain() {
-    return this.captain;
+  public Long getCaptain() {
+    return this.captainId;
   }
 
   /* END OF GETTERS */

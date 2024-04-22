@@ -3,27 +3,28 @@ function createTeam() {
     const location = document.getElementById('team-location').value;
     const isPrivate = document.getElementById('team-privacy').checked;
     const captainId = localStorage.getItem("userId");
+    console.log(captainId)
 
     const createTeamRequest = {
         name: name,
         location: location,
-        isPrivate: isPrivate,
+        isPrivate: !isPrivate,
         captain: captainId
     };
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'api/createTeam/submit_creation', true);
+    xhr.open('POST', '/api/teams/create', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
-        if (xhr.status === 201) {
-            const response = JSON.parse(xhr.responseText);
-            console.log("Team created.", response);
-            //localStorage.setItem("token", response.token);
+        if (xhr.status === 201) { // Use 201 status for resource created
+            const createdTeam = JSON.parse(xhr.responseText);
+            console.log("Team created.", createdTeam);
+            console.log("Captain id:", captainId);
             window.location.replace("home.html?success=true");
         } else {
             const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = "Error creating team"; // Set your error message here
-            errorMessage.style.display = "block"; // Display the error message div
+            errorMessage.textContent = "Error creating team";
+            errorMessage.style.display = "block";
             console.error(xhr.responseText);
         }
     };
