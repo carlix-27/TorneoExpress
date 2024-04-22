@@ -3,13 +3,11 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TournamentService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 
@@ -42,6 +40,43 @@ public class TournamentController {
         List<Tournament> tournaments = tournamentService.getTournamentsByUser(userId);
         return ResponseEntity.ok().body(tournaments);
     }
+
+    @DeleteMapping("/{tournamentId}")
+    public ResponseEntity<String> deleteTournament(@PathVariable Long tournamentId) {
+        tournamentService.deleteTournament(tournamentId);
+        return ResponseEntity.ok("Tournament deleted successfully");
+    }
+
+    @GetMapping("/{tournamentId}")
+    public ResponseEntity<Tournament> getTournamentById(@PathVariable Long tournamentId) {
+        Tournament tournament = tournamentService.getTournamentById(tournamentId);
+        if (tournament == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tournament);
+    }
+
+    @PutMapping("/{tournamentId}")
+    public ResponseEntity<Tournament> updateTournament(@PathVariable Long tournamentId,
+                                                       @RequestBody Tournament updatedTournament) {
+        Tournament existingTournament = tournamentService.getTournamentById(tournamentId);
+        if (existingTournament == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Update the existing tournament with the new data
+        existingTournament.setName(updatedTournament.getName());
+        existingTournament.setSport(updatedTournament.getSport());
+        existingTournament.setLocation(updatedTournament.getLocation());
+        existingTournament.setPrivate(updatedTournament.isPrivate());
+        existingTournament.setDifficulty(updatedTournament.getDifficulty());
+
+        Tournament updatedTournamentEntity = tournamentService.updateTournament(existingTournament);
+        return ResponseEntity.ok(updatedTournamentEntity);
+    }
+
+
+
 
 
 }

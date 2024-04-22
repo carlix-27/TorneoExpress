@@ -44,7 +44,7 @@ function cargarTorneos() {
 // Función para editar un torneo
 function editarTorneo(torneoId) {
     // Implementar la lógica para redireccionar a la página de edición del torneo
-    console.log("Editar torneo con ID:", torneoId);
+    window.location.href = `edit-tournament.html?id=${torneoId}`;
 }
 
 // Función para borrar un torneo
