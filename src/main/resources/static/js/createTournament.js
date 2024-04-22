@@ -6,15 +6,17 @@ function createTournament() {
     const difficulty = document.getElementById('difficulty').value;
     const userId = localStorage.getItem("userId");
 
+    // Check if tournament name is blank
+    if (!name.trim()) {
+        document.getElementById('error-message').innerText = "Tournament name cannot be blank.";
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'none';
+        return;
+    }
+
     // Check if user is premium
     checkPremiumStatus(userId, function(isPremium) {
         if (isPremium) {
-            // Check if the tournament name is empty
-            if (!name.trim()) {
-                alert("Tournament name cannot be empty.");
-                return;
-            }
-
             const tournamentData = {
                 name: name,
                 sport: sport,
@@ -32,11 +34,16 @@ function createTournament() {
                 if (xhr.status === 201) {
                     const createdTournament = JSON.parse(xhr.responseText);
                     console.log('Tournament created:', createdTournament);
-                    // You can redirect or show a success message here
+                    // Display success message in green
+                    document.getElementById('success-message').innerText = "Tournament created successfully!";
+                    document.getElementById('success-message').style.color = 'green';
+                    document.getElementById('success-message').style.display = 'block';
+                    document.getElementById('error-message').style.display = 'none';
                 } else if (xhr.status === 409) {
                     // Conflict - Tournament name must be unique
                     document.getElementById('error-message').innerText = "Tournament name must be unique. Please choose a different name.";
                     document.getElementById('error-message').style.display = 'block';
+                    document.getElementById('success-message').style.display = 'none';
                 } else {
                     console.error("Error:", xhr.status, xhr.responseText);
                 }
