@@ -24,10 +24,17 @@ public class TournamentController {
 
     // Create a new tournament
     @PostMapping("/create")
-    public ResponseEntity<Tournament> createTournament(@RequestBody Tournament tournament,
-                                                       HttpServletRequest request) {
-        Tournament createdTournament = tournamentService.createTournament(tournament);
-        return new ResponseEntity<>(createdTournament, HttpStatus.CREATED);
+    public ResponseEntity<?> createTournament(@RequestBody Tournament tournament) {
+        // Check if tournament name is unique
+        if (tournamentService.isTournamentNameUnique(tournament.getName())) {
+            tournament.setActive(true); // Set isActive to true
+            Tournament createdTournament = tournamentService.createTournament(tournament);
+            return new ResponseEntity<>(createdTournament, HttpStatus.CREATED);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Tournament name must be unique.");
+        }
     }
 
     @GetMapping("/user/{userId}")

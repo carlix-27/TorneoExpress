@@ -23,6 +23,10 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
+    public boolean isTournamentNameUnique(String name) {
+        return tournamentRepository.findByName(name) == null;
+    }
+
     public List<Tournament> getAllTournaments() {
         return tournamentRepository.findAll();
     }

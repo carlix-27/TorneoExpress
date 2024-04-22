@@ -8,6 +8,17 @@ import java.util.List;
 @Entity
 public class Tournament {
 
+  public Tournament() { }
+
+  public Tournament(String tournamentName, String tournamentLocation, Sport tournamentSport, boolean privacy, Difficulty difficulty) {
+    this.name = tournamentName;
+    this.location = tournamentLocation;
+    this.sport = tournamentSport.toString();
+    this.isPrivate = privacy;
+    this.difficulty = difficulty;
+    this.isActive = true;
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long Id;
@@ -15,7 +26,7 @@ public class Tournament {
   @Column
   private Long creatorId;
 
-  @Column
+  @Column(unique = true)
   private String name;
 
   @Column
@@ -29,6 +40,17 @@ public class Tournament {
 
   @Column
   private Difficulty difficulty;
+
+  public boolean isActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean active) {
+    isActive = active;
+  }
+
+  @Column
+  private boolean isActive;
 
   @ManyToMany
   private List<Team> participatingTeams = new ArrayList<>();
@@ -100,20 +122,6 @@ public class Tournament {
 
   public void setId(Long id) {
     Id = id;
-  }
-
-
-
-  public Tournament() { }
-
-
-
-  public Tournament(Long creatorId, String tournamentName, String tournamentLocation, Sport tournamentSport, boolean privacy, Difficulty difficulty) {
-    this.name = tournamentName;
-    this.location = tournamentLocation;
-    this.sport = tournamentSport.toString();
-    this.isPrivate = privacy;
-    this.difficulty = difficulty;
   }
 
   public void setTournament_id(Long tournamentId) {
