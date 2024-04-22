@@ -2,7 +2,7 @@ package com.TorneosExpress.model;
 
 public enum Difficulty {
   BEGINNER,
-  INTERMIDIATE,
+  INTERMEDIATE,
   ADVANCED,
   EXPERT
 }

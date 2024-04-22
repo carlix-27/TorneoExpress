@@ -11,14 +11,14 @@ import java.util.List;
 public class Team {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Long teamId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Column
-  private String teamName;
+  private String name;
 
   @Column
-  private String teamLocation;
+  private String location;
 
   @Column
   private boolean isPrivate;
@@ -26,15 +26,11 @@ public class Team {
   @Column
   private int prestigePoints;
 
-  @ManyToOne
-  private Player captain;
+  @Column
+  private Long captainId;
 
   @ManyToMany
   private List<Player> players = new ArrayList<>();
-
-  public List<Player> getPlayers(){
-    return players;
-  }
 
   @ManyToMany
   private List<Article> articles = new ArrayList<>();
@@ -45,18 +41,72 @@ public class Team {
   @OneToMany
   private List<Player> joinRequests = new ArrayList<>(20);
 
-  public Team(String teamName, String teamLocation, boolean privacy, Player captain) {
-    this.teamName = teamName;
-    this.teamLocation = teamLocation;
+  public Team(Long captainId, String teamName, String teamLocation, boolean privacy) {
+    this.name = teamName;
+    this.location = teamLocation;
     this.isPrivate = privacy;
-    this.captain = captain;
     this.prestigePoints = 0;
   }
 
   public Team() { }
 
+  /* GETTERS */
 
+  public Long getId() {
+    return id;
+  }
 
+  public String getName() {
+    return name;
+  }
 
+  public int getPrestigePoints() {
+    return prestigePoints;
+  }
 
+  public String getLocation() {
+    return location;
+  }
+
+  public boolean isPrivate() {
+    return isPrivate;
+  }
+
+  public List<Article> getArticles() {
+    return articles;
+  }
+
+  public List<Player> getJoinRequests() {
+    return joinRequests;
+  }
+
+  public List<Player> getPlayers(){
+    return players;
+  }
+
+  public List<Tournament> getActiveTournaments() {
+    return ActiveTournaments;
+  }
+
+  public Long getCaptain() {
+    return this.captainId;
+  }
+
+  /* END OF GETTERS */
+
+  public void setCaptainId(Long captainId) {
+    this.captainId = captainId;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setPrivate(boolean aPrivate) {
+    isPrivate = aPrivate;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
 }
