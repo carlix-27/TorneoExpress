@@ -38,7 +38,7 @@ function createTournament() {
 
 function checkPremiumStatus(userId, callback) {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/user/premium?userId=' + userId, true);
+    xhr.open('GET', '/api/user/' + userId + '/premium', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {

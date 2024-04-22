@@ -14,6 +14,11 @@ public class TournamentService {
     @Autowired
     private TournamentRepository tournamentRepository;
 
+
+    public List<Tournament> getTournamentsByUser(Long userId) {
+        return tournamentRepository.findByCreatorId(userId);
+    }
+
     public Tournament createTournament(Tournament tournament) {
         return tournamentRepository.save(tournament);
     }

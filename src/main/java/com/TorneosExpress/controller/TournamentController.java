@@ -26,13 +26,14 @@ public class TournamentController {
     @PostMapping("/create")
     public ResponseEntity<Tournament> createTournament(@RequestBody Tournament tournament,
                                                        HttpServletRequest request) {
-
-        boolean isPremium = playerService.isPremiumUser(tournament.getCreatorId());
-        if (!isPremium) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // User is not premium, return unauthorized
-        }
         Tournament createdTournament = tournamentService.createTournament(tournament);
         return new ResponseEntity<>(createdTournament, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Tournament>> getTournamentsByUser(@PathVariable Long userId) {
+        List<Tournament> tournaments = tournamentService.getTournamentsByUser(userId);
+        return ResponseEntity.ok().body(tournaments);
     }
 
 
