@@ -41,7 +41,7 @@ public class Team {
   @OneToMany
   private List<Player> joinRequests = new ArrayList<>(20);
 
-  public Team(String teamName, String teamLocation, boolean privacy, Long captainId) {
+  public Team(Long captainId, String teamName, String teamLocation, boolean privacy) {
     this.name = teamName;
     this.location = teamLocation;
     this.isPrivate = privacy;
@@ -94,6 +94,19 @@ public class Team {
 
   /* END OF GETTERS */
 
+  public void setCaptainId(Long captainId) {
+    this.captainId = captainId;
+  }
 
+  public void setName(String name) {
+    this.name = name;
+  }
 
+  public void setPrivate(boolean aPrivate) {
+    isPrivate = aPrivate;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
 }

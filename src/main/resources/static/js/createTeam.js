@@ -9,7 +9,7 @@ function createTeam() {
         name: name,
         location: location,
         isPrivate: !isPrivate,
-        captain: captainId
+        captainId: captainId
     };
 
     const xhr = new XMLHttpRequest();
