@@ -1,13 +1,11 @@
 function createTeam() {
     const name = document.getElementById('team-name').value;
-    const sport = document.getElementById('team-sport').value;
     const location = document.getElementById('team-location').value;
-    const isPrivate = document.getElementById('team-privacy').value;
+    const isPrivate = document.getElementById('team-privacy').checked;
     const captainId = localStorage.getItem("userId");
 
     const createTeamRequest = {
-        teamName: name,
-        sport: sport,
+        name: name,
         location: location,
         isPrivate: isPrivate,
         captain: captainId
@@ -17,9 +15,9 @@ function createTeam() {
     xhr.open('POST', 'api/createTeam/submit_creation', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
-        if (xhr.status === 200) {
+        if (xhr.status === 201) {
             const response = JSON.parse(xhr.responseText);
-            console.log(response);
+            console.log("Team created.", response);
             //localStorage.setItem("token", response.token);
             window.location.replace("home.html?success=true");
         } else {

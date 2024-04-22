@@ -3,7 +3,7 @@ package com.TorneosExpress.dto;
 import com.TorneosExpress.model.player.Player;
 
 public class CreateTeamRequest {
-  private String teamName;
+  private String name;
   private String location;
   private boolean isPrivate;
   private Player captain;
@@ -17,7 +17,7 @@ public class CreateTeamRequest {
   }
 
   public String getTeamName() {
-    return teamName;
+    return name;
   }
 
   public boolean isPrivate() {

@@ -20,21 +20,10 @@
     <!-- Error message div -->
     <div id="error-message" style="color: red; margin-bottom: 10px; display: none;">Error while creating team.</div>
 
-    <form id="add-team-form" action="api/createTeam/submit_creation" method="post">
+    <form id="add-team-form" action="api/createTeam/submit" method="post">
         <div class="textbox">
             <label for="team-name">Nombre del Equipo:</label>
             <input type="text" id="team-name" name="team-name" required>
-        </div>
-        <div class="textbox">
-            <label for="team-sport">Deporte:</label>
-            <select id="team-sport" name="team-sport" required>
-                <option value="futbol">Fútbol</option>
-                <option value="baloncesto">Baloncesto</option>
-                <option value="tenis">Tenis</option>
-                <!-- Agrega más opciones según sea necesario -->
-                <!-- Habria que meter un script para que cree una <option>
-                     por cada deporte que exista. -->
-            </select>
         </div>
         <div class="textbox">
             <label for="team-location">Ubicación:</label>

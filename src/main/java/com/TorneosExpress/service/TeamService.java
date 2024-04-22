@@ -22,8 +22,7 @@ public class TeamService {
     return teamRepository.save(team);
   }
 
-  public Team createTeam(String teamName, String location, boolean isPrivate, Player captain) {
-    Team team = new Team(teamName, location, isPrivate, captain);
+  public Team createTeam(Team team) {
     return saveTeam(team);
   }
 

@@ -53,11 +53,11 @@ public class Team {
 
   /* GETTERS */
 
-  public Long getTeamId() {
+  public Long getId() {
     return id;
   }
 
-  public String getTeamName() {
+  public String getName() {
     return name;
   }
 
@@ -65,7 +65,7 @@ public class Team {
     return prestigePoints;
   }
 
-  public String getTeamLocation() {
+  public String getLocation() {
     return location;
   }
 
