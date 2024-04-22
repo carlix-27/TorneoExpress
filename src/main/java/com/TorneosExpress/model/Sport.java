@@ -12,9 +12,8 @@ public class Sport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sportId")
     private Long sportId;
-    @Column
+    @Column(unique = true)
     private String sportName;
-
     @Column
     private int num_players;
 
