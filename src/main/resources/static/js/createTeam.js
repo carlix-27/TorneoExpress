@@ -8,7 +8,7 @@ function createTeam() {
     const createTeamRequest = {
         name: name,
         location: location,
-        isPrivate: !isPrivate,
+        isPrivate: isPrivate,
         captainId: captainId
     };
 

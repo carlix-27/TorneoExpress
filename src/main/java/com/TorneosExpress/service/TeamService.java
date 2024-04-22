@@ -1,7 +1,6 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
