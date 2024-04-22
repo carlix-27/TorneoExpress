@@ -34,4 +34,12 @@ public class PlayerService {
         }
         return player;
     }
+
+    public boolean isPremiumUser(Long userId) {
+        Player user = playerRepository.findById(userId).orElse(null);
+        if (user != null) {
+            return user.getIs_Premium();
+        }
+        return false;
+    }
 }

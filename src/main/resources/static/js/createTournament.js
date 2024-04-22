@@ -3,28 +3,52 @@ function createTournament() {
     const sport = document.getElementById('sport').value;
     const location = document.getElementById('location').value;
     const isPrivate = document.getElementById('privacy').checked;
-    const difficulty = document.getElementById('difficulty').value; // Get the selected difficulty value
+    const difficulty = document.getElementById('difficulty').value;
     const userId = localStorage.getItem("userId");
 
-    const tournamentData = {
-        name: name,
-        sport: sport,
-        location: location,
-        isPrivate: isPrivate,
-        difficulty: difficulty, // Send the selected difficulty value
-        creatorId: userId
-    };
+    // Check if user is premium
+    checkPremiumStatus(userId, function(isPremium) {
+        if (isPremium) {
+            const tournamentData = {
+                name: name,
+                sport: sport,
+                location: location,
+                isPrivate: isPrivate,
+                difficulty: difficulty,
+                creatorId: userId
+            };
 
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/tournaments/create', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.status === 201) {
+                    const createdTournament = JSON.parse(xhr.responseText);
+                    console.log('Tournament created:', createdTournament);
+                } else {
+                    console.error(xhr.responseText);
+                }
+            };
+            xhr.send(JSON.stringify(tournamentData));
+        } else {
+            window.location.href = "buy_premium.html"; // Redirect to buy premium page
+        }
+    });
+}
+
+function checkPremiumStatus(userId, callback) {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/tournaments/create', true);
+    xhr.open('GET', '/api/user/premium?userId=' + userId, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
-        if (xhr.status === 201) {
-            const createdTournament = JSON.parse(xhr.responseText);
-            console.log('Tournament created:', createdTournament);
+        if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            const isPremium = response.isPremium;
+            callback(isPremium);
         } else {
             console.error(xhr.responseText);
+            callback(false); // Default to not premium if there's an error
         }
     };
-    xhr.send(JSON.stringify(tournamentData));
+    xhr.send();
 }

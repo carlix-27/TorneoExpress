@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos Express - Home</title>
     <link rel="stylesheet" href="styles/home.css">
+    <script src="js/createTournamentRedirect.js"></script> <!-- Include the script file -->
 </head>
 <body>
 
@@ -18,8 +19,8 @@
             <li><a href="equipo.html">Equipos</a></li>
             <li><a href="tienda.html">Tienda</a></li>
             <li><a href="calendario.html">Calendario</a></li>
-            <!-- Logout Button -->
-            <li><button onclick="logout()">Logout</button></li>
+
+
         </ul>
     </nav>
 </header>
@@ -29,31 +30,10 @@
     <h2>Torneos</h2>
     <!-- Aquí puedes agregar contenido relacionado con los torneos -->
     <ul>
-        <li><a href="crearTorneo.html">Crear Torneo</a></li>
+        <li><a href="#" onclick="redirectToCreateTournament()">Crear Torneo</a></li>
         <li><a href="agregarDeporte.html">Agregar Deporte</a></li>
     </ul>
 </section>
-
-<!-- Include your other content here -->
-
-<!-- Client-Side JavaScript for Logout -->
-<script>
-    function logout() {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/auth/logout', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                localStorage.removeItem("sessionId"); // Clear sessionId from localStorage
-                window.location.replace("login.html"); // Redirect to login page after logout
-            } else {
-                console.error(xhr.responseText);
-                // Handle any error response
-            }
-        };
-        xhr.send();
-    }
-</script>
 
 </body>
 </html>

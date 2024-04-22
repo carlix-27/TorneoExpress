@@ -1,6 +1,7 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TournamentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -18,24 +19,21 @@ public class TournamentController {
 
     @Autowired
     private TournamentService tournamentService;
+    @Autowired
+    private PlayerService playerService;
 
     // Create a new tournament
     @PostMapping("/create")
     public ResponseEntity<Tournament> createTournament(@RequestBody Tournament tournament,
                                                        HttpServletRequest request) {
 
+        boolean isPremium = playerService.isPremiumUser(tournament.getCreatorId());
+        if (!isPremium) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // User is not premium, return unauthorized
+        }
         Tournament createdTournament = tournamentService.createTournament(tournament);
         return new ResponseEntity<>(createdTournament, HttpStatus.CREATED);
     }
 
-    private Long getUserId(HttpServletRequest request) {
-        HttpSession session = request.getSession(true); // Do not create new session if not exist
-        if (session != null) {
-            Long userId = (Long) session.getAttribute("userID");
-            if (userId != null) {
-                return userId;
-            }
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
-    }
+
 }
