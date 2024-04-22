@@ -10,10 +10,10 @@ public class Tournament {
 
   public Tournament() { }
 
-  public Tournament(String tournamentName, String tournamentLocation, Sport tournamentSport, boolean privacy, Difficulty difficulty) {
+  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty) {
     this.name = tournamentName;
     this.location = tournamentLocation;
-    this.sport = tournamentSport.toString();
+    this.sport = sport;
     this.isPrivate = privacy;
     this.difficulty = difficulty;
     this.isActive = true;
@@ -32,8 +32,9 @@ public class Tournament {
   @Column
   private String location;
 
-  @Column
-  private String sport;
+  @ManyToOne
+  @JoinColumn(name = "sport_id", referencedColumnName = "sportId")
+  private Sport sport;
 
   @Column
   private boolean isPrivate;
@@ -80,11 +81,11 @@ public class Tournament {
     this.location = location;
   }
 
-  public String getSport() {
+  public Sport getSport() {
     return sport;
   }
 
-  public void setSport(String sport) {
+  public void setSport(Sport sport) {
     this.sport = sport;
   }
 

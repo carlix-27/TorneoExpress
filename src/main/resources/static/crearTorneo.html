@@ -41,9 +41,7 @@
     <div class="form-group">
         <label for="sport">Sport:</label>
         <select id="sport" name="sport" required>
-            <option value="football">Football</option>
-            <option value="basketball">Basketball</option>
-            <option value="tennis">Tennis</option>
+            <!-- Sport options will be dynamically populated -->
         </select>
     </div>
     <div class="form-group">
@@ -69,13 +67,17 @@
     <!-- Error message div -->
     <div id="error-message"></div>
     <!-- Success message div -->
-    <div id="success-message" class="success" style="display: none;">Tournament created successfully!</div>
+    <div id="success-message" class="success" style="display: none;"></div>
 </form>
 <script src="js/createTournament.js"></script>
 <script>
     function goBack() {
         window.history.back();
     }
+    // Fetch sports and populate dropdown on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchSports();
+    });
 </script>
 </body>
 </html>

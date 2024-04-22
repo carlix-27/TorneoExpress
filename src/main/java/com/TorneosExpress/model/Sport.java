@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 
 @Entity
 public class Sport {
+
     public Sport(){}
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long sport_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "sportId")
+    private Long sportId;
     @Column
     private String sportName;
 
@@ -17,7 +19,7 @@ public class Sport {
     private int num_players;
 
     // Getters y Setters
-    public Long getId(){ return sport_id;}
+    public Long getSportId(){ return sportId;}
 
     public String getSportName(){ return sportName;}
 

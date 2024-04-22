@@ -21,7 +21,7 @@ public class SportController {
     @Autowired
     private SportService sportService;
 
-    @GetMapping()
+    @GetMapping("")
     public List<Sport> getAllSports(){
         return sportService.getAllSports();
     }
@@ -35,7 +35,7 @@ public class SportController {
     public ResponseEntity<SportDto> createSport(@RequestBody CreateSportRequest request){
         Sport createdSport =  sportService.createSport(request.getName(), request.getNum_players());
         SportDto sportDto = new SportDto(
-                createdSport.getId(),
+                createdSport.getSportId(),
                 createdSport.getSportName(),
                 createdSport.getNum_players()
         );
@@ -46,7 +46,7 @@ public class SportController {
     public ResponseEntity<SportDto> updateSport(@RequestBody UpdateSportRequest request) {
         Sport newSport = sportService.updateSport(request.getId(), request.getNew_name(), request.getNew_num_players());
         SportDto sportDto = new SportDto(
-                newSport.getId(),
+                newSport.getSportId(),
                 newSport.getSportName(),
                 newSport.getNum_players()
         );

@@ -1,6 +1,29 @@
+function fetchSports() {
+    fetch('/api/sports') // Assuming this endpoint returns the list of sports
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch sports: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(sports => {
+            const sportDropdown = document.getElementById('sport');
+            sports.forEach(sport => {
+                const option = document.createElement('option');
+                option.value = sport.sportId; // Assuming sportId is the ID field in your Sport entity
+                option.text = sport.sportName; // Assuming sportName is the name field in your Sport entity
+                sportDropdown.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error, show message to user or retry fetch
+        });
+}
+
 function createTournament() {
     const name = document.getElementById('tournament-name').value;
-    const sport = document.getElementById('sport').value;
+    const sportId = document.getElementById('sport').value; // Get the selected sportId
     const location = document.getElementById('location').value;
     const isPrivate = document.getElementById('privacy').checked;
     const difficulty = document.getElementById('difficulty').value;
@@ -19,7 +42,7 @@ function createTournament() {
         if (isPremium) {
             const tournamentData = {
                 name: name,
-                sport: sport,
+                sportId: sportId, // Use the retrieved sportId
                 location: location,
                 isPrivate: isPrivate,
                 difficulty: difficulty,
