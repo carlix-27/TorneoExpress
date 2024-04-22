@@ -35,7 +35,10 @@ function deleteSport(sportId) {
     const confirmed = confirm("Are you sure you want to delete this sport?");
     if (confirmed) {
         fetch(`/api/sports/delete/${sportId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
             .then(response => {
                 if (!response.ok) {
@@ -46,6 +49,7 @@ function deleteSport(sportId) {
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Failed to delete sport. Please try again.');
                 // Handle error, show message to user
             });
     }

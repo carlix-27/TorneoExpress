@@ -64,7 +64,8 @@ public class SportController {
 
 
     @DeleteMapping("/delete/{id}")
-    public void deleteSport(@RequestBody DeleteSportRequest request) {
-        sportService.deleteSport(request.getId());
+    public ResponseEntity<Void> deleteSport(@PathVariable Long id) {
+        sportService.deleteSport(id);
+        return ResponseEntity.noContent().build();
     }
 }
