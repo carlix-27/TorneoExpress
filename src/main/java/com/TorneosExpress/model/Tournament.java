@@ -32,7 +32,7 @@ public class Tournament {
   @Column
   private String location;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "sport_id", referencedColumnName = "sportId")
   private Sport sport;
 
@@ -42,14 +42,6 @@ public class Tournament {
   @Column
   private Difficulty difficulty;
 
-  public boolean isActive() {
-    return isActive;
-  }
-
-  public void setActive(boolean active) {
-    isActive = active;
-  }
-
   @Column
   private boolean isActive;
 
@@ -58,6 +50,14 @@ public class Tournament {
 
   @OneToMany
   private List<Team> participationRequests = new ArrayList<>(20);
+
+  public boolean isActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean active) {
+    isActive = active;
+  }
 
 
 

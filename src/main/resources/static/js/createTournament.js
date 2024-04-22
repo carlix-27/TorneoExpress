@@ -21,6 +21,7 @@ function fetchSports() {
         });
 }
 
+
 function createTournament() {
     const name = document.getElementById('tournament-name').value;
     const sportId = document.getElementById('sport').value; // Get the selected sportId
@@ -42,7 +43,7 @@ function createTournament() {
         if (isPremium) {
             const tournamentData = {
                 name: name,
-                sportId: sportId, // Use the retrieved sportId
+                sport: { sportId: sportId }, // Set the sportId in a nested object
                 location: location,
                 isPrivate: isPrivate,
                 difficulty: difficulty,
@@ -77,6 +78,7 @@ function createTournament() {
         }
     });
 }
+
 
 function checkPremiumStatus(userId, callback) {
     const xhr = new XMLHttpRequest();
