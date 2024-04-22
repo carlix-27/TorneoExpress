@@ -1,14 +1,4 @@
 /* CSS for the horizontal navbar */
-nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-nav ul li {
-    display: inline-block;
-    margin-right: 20px;
-}
 
 nav ul li:last-child {
     margin-right: 0;
@@ -23,9 +13,44 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #ddd;
+    background-color: #333333;
 }
 
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/********/
 
 
 /* Estilos para la sección de Bienvenida */
