@@ -2,21 +2,33 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todos los equipos - Torneos Express</title>
+    <meta charset="UTF-8">
+    <title>Mis Equipos - Torneos Express</title>
     <link rel="stylesheet" href="styles/getAllTeams.css">
 </head>
 <body>
+<!-- Encabezado -->
+<header>
+    <h1>Torneos Express - Equipos</h1>
+    <!-- Menú de navegación -->
+    <nav>
+        <ul>
+            <li><a href="home.html">Inicio</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
 
-    <!-- Encabezado -->
-    <header>
-        <h1>Todos los equipos</h1>
-        <!-- Menú de navegación -->
-        <nav>
-            <ul>
-                <li><a href="home.html">Inicio</a></li>
-                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-    </header>
+<!-- Contenido de la página -->
+<section id="all-teams">
+    <h2>Todos los equipos</h2>
+    <ul id="lista-todos-equipos">
+        <!-- Los torneos se cargarán dinámicamente aquí -->
+    </ul>
+</section>
+
+<!-- Scripts -->
+<script src="js/getAllTeams.js"></script>
+
 </body>
 </html>

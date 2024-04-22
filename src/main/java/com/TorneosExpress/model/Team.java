@@ -35,7 +35,7 @@ public class Team {
   @JoinTable(
           name = "team_players",
           joinColumns = @JoinColumn(name = "team_id"),
-          inverseJoinColumns = @JoinColumn(name = "player_id")
+          inverseJoinColumns = @JoinColumn(name = "players_id")
   )
   private List<Player> players = new ArrayList<>();
 
@@ -43,7 +43,7 @@ public class Team {
   @JoinTable(
           name = "team_articles",
           joinColumns = @JoinColumn(name = "team_id"),
-          inverseJoinColumns = @JoinColumn(name = "article_id")
+          inverseJoinColumns = @JoinColumn(name = "articles_article_id")
   )
   private List<Article> articles = new ArrayList<>();
 
