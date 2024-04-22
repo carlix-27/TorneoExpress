@@ -47,4 +47,10 @@ public class TournamentService {
     public void deleteTournament(Long id) {
         tournamentRepository.deleteById(id);
     }
+
+
+    public List<Tournament> getActiveTournaments() {
+        return tournamentRepository.findByIsActiveTrue();
+    }
+
 }

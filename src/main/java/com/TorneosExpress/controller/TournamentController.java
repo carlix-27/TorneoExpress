@@ -76,6 +76,13 @@ public class TournamentController {
     }
 
 
+    @GetMapping("/active")
+    public List<Tournament> getActiveTournaments() {
+        return tournamentService.getActiveTournaments();
+    }
+
+
+
 
 
 
