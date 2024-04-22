@@ -6,6 +6,7 @@ import com.TorneosExpress.dto.DeleteSportRequest;
 import com.TorneosExpress.dto.SportDto;
 import com.TorneosExpress.dto.UpdateSportRequest;
 import com.TorneosExpress.model.Sport;
+import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class SportController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Sport> getSportById(@PathVariable Long id) {
+    public Sport getSportById(@PathVariable Long id) {
         return sportService.getSportById(id);
     }
 
@@ -43,18 +44,28 @@ public class SportController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<SportDto> updateSport(@RequestBody UpdateSportRequest request) {
-        Sport newSport = sportService.updateSport(request.getId(), request.getNew_name(), request.getNew_num_players());
-        SportDto sportDto = new SportDto(
-                newSport.getSportId(),
-                newSport.getSportName(),
-                newSport.getNum_players()
-        );
-        return ResponseEntity.ok(sportDto);
+    public ResponseEntity<Sport> updateSport(@PathVariable Long id, @RequestBody Sport updatedSport) {
+        Sport existingSport = sportService.getSportById(id);
+        if (existingSport == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        existingSport.setSport(updatedSport.getSportName());
+        existingSport.setNumPlayers(updatedSport.getNum_players());
+
+        Sport updatedSportEntity = sportService.updateSport(existingSport);
+        if (updatedSportEntity == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updatedSportEntity);
     }
 
+
+
     @DeleteMapping("/delete/{id}")
-    public void deleteSport(@RequestBody DeleteSportRequest request) {
-        sportService.deleteSport(request.getId());
+    public ResponseEntity<Void> deleteSport(@PathVariable Long id) {
+        sportService.deleteSport(id);
+        return ResponseEntity.noContent().build();
     }
 }

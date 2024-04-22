@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5; /* Change to a light background color */
+    font-family: 'Raleway', sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff; /* White background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border-radius: 10px;
+}
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sport-card {
+    background: #ffffff; /* White background */
+    border: 1px solid #ccc; /* Light border color */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: box-shadow 0.3s ease;
+}
+
+.sport-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Increased shadow on hover */
+}
+
+.sport-card h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.sport-card p {
+    margin: 10px 0;
+    color: #666; /* Dark gray text color */
+}
+
+.edit-button, .delete-button {
+    background: #3d1f7f; /* Darker accent color */
+    color: #fff; /* Text color */
+    font-size: 16px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover, .delete-button:hover {
+    background: #342160; /* Darker color on hover */
+}
+
+.delete-button {
+    background: #d32f2f; /* Red color for delete button */
+    margin-left: 10px;
+}
+
