@@ -1,12 +1,10 @@
 package com.TorneosExpress.dto;
 
-import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.player.Player;
 
 public class CreateTeamRequest {
   private String teamName;
   private String location;
-  private String sport;
   private boolean isPrivate;
   private Player captain;
 
@@ -16,10 +14,6 @@ public class CreateTeamRequest {
 
   public String getLocation() {
     return location;
-  }
-
-  public String getSport() {
-    return sport;
   }
 
   public String getTeamName() {

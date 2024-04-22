@@ -27,14 +27,13 @@ public class TeamController {
   public ResponseEntity<TeamDto> createTeam(@RequestBody CreateTeamRequest teamRequest) {
     Team team = teamService.createTeam(teamRequest.getTeamName(),
         teamRequest.getLocation(),
-        teamRequest.getSport(),
         teamRequest.isPrivate(),
         teamRequest.getCaptain());
+
     TeamDto teamDto = new TeamDto(
         team.getTeamId(),
         team.getTeamName(),
         team.getTeamLocation(),
-        team.getTeamSport(),
         team.isPrivate(),
         team.getPrestigePoints(),
         team.getCaptain(),

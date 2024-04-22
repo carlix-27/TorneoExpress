@@ -12,13 +12,13 @@ public class Team {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Long teamId;
+  private Long id;
 
   @Column
-  private String teamName;
+  private String name;
 
   @Column
-  private String teamLocation;
+  private String location;
 
   @Column
   private boolean isPrivate;
@@ -32,10 +32,6 @@ public class Team {
   @ManyToMany
   private List<Player> players = new ArrayList<>();
 
-  public List<Player> getPlayers(){
-    return players;
-  }
-
   @ManyToMany
   private List<Article> articles = new ArrayList<>();
 
@@ -46,8 +42,8 @@ public class Team {
   private List<Player> joinRequests = new ArrayList<>(20);
 
   public Team(String teamName, String teamLocation, boolean privacy, Player captain) {
-    this.teamName = teamName;
-    this.teamLocation = teamLocation;
+    this.name = teamName;
+    this.location = teamLocation;
     this.isPrivate = privacy;
     this.captain = captain;
     this.prestigePoints = 0;
@@ -55,7 +51,49 @@ public class Team {
 
   public Team() { }
 
+  /* GETTERS */
 
+  public Long getTeamId() {
+    return id;
+  }
+
+  public String getTeamName() {
+    return name;
+  }
+
+  public int getPrestigePoints() {
+    return prestigePoints;
+  }
+
+  public String getTeamLocation() {
+    return location;
+  }
+
+  public boolean isPrivate() {
+    return isPrivate;
+  }
+
+  public List<Article> getArticles() {
+    return articles;
+  }
+
+  public List<Player> getJoinRequests() {
+    return joinRequests;
+  }
+
+  public List<Player> getPlayers(){
+    return players;
+  }
+
+  public List<Tournament> getActiveTournaments() {
+    return ActiveTournaments;
+  }
+
+  public Player getCaptain() {
+    return this.captain;
+  }
+
+  /* END OF GETTERS */
 
 
 
