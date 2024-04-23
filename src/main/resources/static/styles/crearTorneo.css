@@ -50,9 +50,15 @@ nav ul li a {
     text-decoration: none;
 }
 
+/*  STYLES FOR EACH RESULT  */
 
-/* Form Container Styles */
-.create-team-box {
+h2 {
+    text-align: center;
+}
+
+/* STYLES FOR FORM */
+
+.create-tournament-box {
     width: 80%;
     margin: 20px auto;
     background: #ffffff;
@@ -63,7 +69,7 @@ nav ul li a {
     box-sizing: border-box;
 }
 
-.create-team-box h2 {
+.create-tournament-box h2 {
     margin: 0 0 20px;
     padding: 0;
     text-align: center;
@@ -90,11 +96,6 @@ nav ul li a {
     box-sizing: border-box;
 }
 
-.form-group input[type="checkbox"] {
-    margin-top: 10px;
-    vertical-align: middle;
-}
-
 /* Center the Save Changes button */
 .form-group button[type="submit"] {
     display: block;
@@ -111,3 +112,5 @@ nav ul li a {
 .form-group button[type="submit"]:hover {
     background: #342160;
 }
+
+
