@@ -49,37 +49,3 @@ nav ul li a {
     color: #fff;
     text-decoration: none;
 }
-
-/*      OPTIONS STYLES      */
-
-section#equipos {
-    padding: 20px;
-}
-
-section#equipos h2 {
-    margin-top: 0;
-}
-
-ul#team-options {
-    list-style: none;
-    padding: 0;
-}
-
-ul#team-options li {
-    margin-bottom: 10px;
-}
-
-ul#team-options li a {
-    display: block;
-    background-color: #3d1f7f;
-    color: #fff;
-    padding: 8px 12px; /* Adjusted padding */
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 14px;
-    width: 150px; /* Reduced width */
-}
-
-ul#team-options li a:hover {
-    background-color: #342160;
-}

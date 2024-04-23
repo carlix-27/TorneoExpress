@@ -1,5 +1,25 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway');
+/*		HEADER STYLES 		*/
 
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f0f0f0;
+}
+
+header {
+	background-color: #000;
+	color: #fff;
+	padding: 20px 0;
+	text-align: center;
+}
+
+header h1 {
+	margin: 0;
+	font-size: 2em;
+}
+
+/*		FORM STYLES 		*/
 body {
 	margin: 0;
 	padding: 0;
@@ -62,9 +82,10 @@ body {
 	margin: 0 10px;
 }
 
-.login-box input[type="submit"] {
+.login-box input[type="button"] {
 	background: #3d1f7f; /* Darker accent color */
 	color: #fff; /* Text color */
+	align-content: center;
 	font-size: 18px;
 	padding: 10px 20px;
 	cursor: pointer;
@@ -74,7 +95,7 @@ body {
 	border-radius: 7px;
 }
 
-.login-box input[type="submit"]:hover {
+.login-box input[type="button"]:hover {
 	background: #342160; /* Darker color on hover */
 }
 

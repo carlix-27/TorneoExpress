@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos Express - Home</title>
+    <link rel="stylesheet" href="styles/calendario.css">
 </head>
 
 
@@ -16,7 +17,20 @@
                 <li><a href="equipo.html">Equipos</a></li>
                 <li><a href="tienda.html">Tienda</a></li>
                 <li><a href="calendario.html">Calendario</a></li>
+                <li><a href="buscar.html">Buscar</a> </li>
+                <!-- Logout Button -->
+                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
             </ul>
         </nav>
     </header>
+
+    <h3 style="align-content: center">Section under development</h3>
+
+    <!-- Logout Script -->
+    <script>
+        function logout() {
+            localStorage.removeItem("userId"); // Remove userId from localStorage
+            window.location.href = "login.html"; // Redirect to login page after logout
+        }
+    </script>
 </body>

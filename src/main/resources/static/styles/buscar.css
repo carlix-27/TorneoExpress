@@ -52,24 +52,24 @@ nav ul li a {
 
 /*      OPTIONS STYLES      */
 
-section#equipos {
+section#busqueda {
     padding: 20px;
 }
 
-section#equipos h2 {
+section#busqueda h2 {
     margin-top: 0;
 }
 
-ul#team-options {
+ul#search-options {
     list-style: none;
     padding: 0;
 }
 
-ul#team-options li {
+ul#search-options li {
     margin-bottom: 10px;
 }
 
-ul#team-options li a {
+ul#search-options li a {
     display: block;
     background-color: #3d1f7f;
     color: #fff;
@@ -80,6 +80,6 @@ ul#team-options li a {
     width: 150px; /* Reduced width */
 }
 
-ul#team-options li a:hover {
+ul#search-options li a:hover {
     background-color: #342160;
 }

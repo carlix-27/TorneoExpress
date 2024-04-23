@@ -1,6 +1,20 @@
+/* CSS for the horizontal navbar */
 
-/*   HEADER STYLES   */
+nav ul li:last-child {
+    margin-right: 0;
+}
 
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333333;
+}
 
 body {
     font-family: Arial, sans-serif;
@@ -36,128 +50,64 @@ nav ul li a {
     text-decoration: none;
 }
 
-nav ul li a:hover {
-    text-decoration: underline; /* Underline on hover */
-}
 
-/*      FORM STYLES     */
-body {
-    margin: 0;
-    padding: 0;
-    background: #f5f5f5; /* Change to a light background color */
-    font-family: sans-serif;
-}
-
+/* Form Container Styles */
 .create-team-box {
-    width: 320px;
-    height: 500px; /* Reduced height for better fit */
-    background: #ffffff; /* Change to a light background color */
-    color: #333; /* Change text color to a dark shade */
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
+    width: 80%;
+    margin: 0 auto;
+    background: #ffffff;
+    color: #333;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    padding: 70px 30px;
-    border-radius: 10px; /* Reduced border radius */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }
 
 .create-team-box h2 {
-    margin: -10px 0 10px; /* Adjusted margin for better alignment */
+    margin: 0 0 20px;
     padding: 0;
     text-align: center;
-    font-size: 24px; /* Slightly increased font size */
+    font-size: 24px;
 }
 
-.create-team-box h4 {
-    text-align: center;
-    font-size: 16px; /* Adjusted font size */
-    margin-bottom: 30px; /* Increased margin for better separation */
+.form-group {
+    margin-bottom: 20px;
 }
 
-.textbox {
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.form-group input[type="text"],
+.form-group select {
     width: 100%;
-    overflow: hidden;
-    font-size: 18px; /* Adjusted font size */
-    padding: 8px 0;
-    margin: 8px 0;
-    border-bottom: 1px solid #ccc; /* Lighter border color */
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
-.textbox i {
-    width: 26px;
-    float: left;
-    text-align: center;
-    color: #666; /* Adjusted icon color */
+.form-group input[type="checkbox"] {
+    margin-top: 10px;
+    vertical-align: middle;
 }
 
-.textbox input {
-    border: none;
-    outline: none;
-    background: none;
-    color: #333; /* Adjusted text color */
-    font-size: 16px; /* Adjusted font size */
-    width: 80%;
-    float: left;
-    margin: 0 10px;
-}
-
-.create-team-box input[type="submit"] {
-    background: #3d1f7f; /* Darker accent color */
-    color: #fff; /* Text color */
+/* Center the Save Changes button */
+.form-group button[type="submit"] {
+    display: block;
+    margin: 0 auto; /* Center the button */
+    background: #3d1f7f;
+    color: #fff;
     font-size: 18px;
     padding: 10px 20px;
     cursor: pointer;
     border: none;
-    width: 100%;
-    margin-top: 20px;
     border-radius: 7px;
 }
 
-.create-team-box input[type="submit"]:hover {
-    background: #342160; /* Darker color on hover */
+.form-group button[type="submit"]:hover {
+    background: #342160;
 }
-
-.container {
-    text-align: center;
-    margin: 8px;
-}
-
-.container div {
-    display: inline-block;
-    margin: 15px;
-    padding: 5px;
-    background-color: #f5f5f5; /* Light background color */
-    border: 1px solid #ccc; /* Light border color */
-    cursor: pointer;
-    border-radius: 7px;
-    transition: background-color 0.3s ease;
-}
-
-.container div:hover {
-    background-color: #e0e0e0; /* Darker background color on hover */
-}
-
-.container i {
-    margin-right: 5px;
-}
-
-.google, .apple {
-    font-family: 'Raleway', sans-serif;
-    font-size: 15px;
-}
-
-.back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    color: #3d1f7f;
-    text-decoration: none;
-    font-size: 18px;
-}
-
-.back-button:hover {
-    text-decoration: underline;
-}
-

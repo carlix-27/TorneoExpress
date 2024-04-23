@@ -32,17 +32,17 @@
     <div id="error-message" style="color: red; margin-bottom: 10px; display: none;">Error while creating team.</div>
 
     <form id="add-team-form" action="/api/teams/create" method="post">
-        <div class="textbox">
+        <div class="form-group">
             <label for="team-name">Nombre del Equipo:</label>
             <input type="text" id="team-name" name="team-name" required>
         </div>
-        <div class="textbox">
+        <div class="form-group">
             <label for="team-location">Ubicación:</label>
             <input type="text" id="team-location" name="team-location" required>
         </div>
-        <div class="textbox">
-            <label for="team-privacy">Equipo privado</label>
-            <input type="checkbox" id="team-privacy" name="team-privacy" required>
+        <div class="form-group">
+            <label for="privacy">Privacidad:</label>
+            <input type="checkbox" id="privacy" name="privacy"> Equipo privado
         </div>
         <div class="form-group">
             <button type="submit" onclick="createTeam()">Crear Equipo</button>

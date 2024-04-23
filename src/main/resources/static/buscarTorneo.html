@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Torneos Express - Buscar Torneo</title>
+    <link rel="stylesheet" href="styles/buscarTorneo.css">
+    <script src="js/buscarTorneo.js"></script>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <h1>Torneos Express - Equipos</h1>
+        <!-- Menú de navegación -->
+        <nav>
+            <ul>
+                <li><a href="home.html">Inicio</a></li>
+                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="search-tournament-box">
+        <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+        <h2>Buscar Torneo</h2>
+    </div>
+
+    <!-- Logout Script -->
+    <script>
+        function logout() {
+            localStorage.removeItem("userId"); // Remove userId from localStorage
+            window.location.href = "login.html"; // Redirect to login page after logout
+        }
+    </script>
+</body>
+</html>

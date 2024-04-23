@@ -1,6 +1,20 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway');
+/* CSS for the horizontal navbar */
 
-/*  HEADER STYLES   */
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333333;
+}
 
 body {
     font-family: Arial, sans-serif;
@@ -34,10 +48,6 @@ nav ul li {
 nav ul li a {
     color: #fff;
     text-decoration: none;
-}
-
-nav ul li a:hover {
-    text-decoration: underline; /* Underline on hover */
 }
 
 /*  STYLES FOR EACH RESULT  */
