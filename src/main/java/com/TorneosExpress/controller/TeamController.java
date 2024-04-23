@@ -37,6 +37,12 @@ public class TeamController {
     return ResponseEntity.ok().body(teams);
   }
 
+  @GetMapping("/findByName/{name}")
+  public ResponseEntity<List<Team>> getTeamsByName(@PathVariable String name) {
+    List<Team> teams = teamService.findByName(name);
+    return ResponseEntity.ok().body(teams);
+  }
+
   @DeleteMapping("/{teamId}")
   public ResponseEntity<String> deleteTournament(@PathVariable Long teamId) {
     teamService.deleteTeamById(teamId);

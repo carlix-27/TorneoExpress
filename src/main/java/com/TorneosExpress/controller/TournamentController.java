@@ -35,6 +35,12 @@ public class TournamentController {
         }
     }
 
+    @GetMapping("/findByName/{name}")
+    public ResponseEntity<List<Tournament>> findByName(@PathVariable String name) {
+        List<Tournament> tournaments = tournamentService.findByName(name);
+        return ResponseEntity.ok().body(tournaments);
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Tournament>> getTournamentsByUser(@PathVariable Long userId) {
         List<Tournament> tournaments = tournamentService.getTournamentsByUser(userId);

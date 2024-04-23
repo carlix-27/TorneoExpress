@@ -23,6 +23,10 @@ public class TeamService {
     return teamRepository.findByCaptainId(id);
   }
 
+  public List<Team> findByName(String name) {
+    return teamRepository.findByName(name);
+  }
+
   public List<Team> findAll() {
     return teamRepository.findAll();
   }

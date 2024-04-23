@@ -24,27 +24,24 @@
         <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
         <h2>Buscar Jugador</h2>
 
-        <form id="find-player-form" action="/api/user/players/findByName" method="get">
+        <form id="find-player-form" method="get">
             <div class="form-group">
                 <label for="player-name">Nombre del jugador:</label>
                 <input type="text" id="player-name" name="player-name" required>
             </div>
 
             <div class="form-group">
-                <button type="submit" onclick="searchPlayer()">Buscar</button>
+                <button type="submit">Buscar</button>
             </div>
         </form>
     </div>
 
     <!-- Contenido de la página -->
-    <div id="resultados">
-        <section id="results" hidden="hidden">
-            <h2>Jugadores hallados</h2>
-            <ul id="lista-jugadores">
-                <!-- Los torneos se cargarán dinámicamente aquí -->
-            </ul>
-        </section>
-    </div>
+    <section id="results">
+        <ul id="lista-jugadores">
+            <!-- Los torneos se cargarán dinámicamente aquí -->
+        </ul>
+    </section>
 
 
     <!-- Logout Script -->

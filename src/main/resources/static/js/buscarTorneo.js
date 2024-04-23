@@ -1,5 +1,4 @@
-// Función para cargar usuarios
-function searchPlayer(event) {
+function searchTournament(event) {
     event.preventDefault();
 
     const userId = localStorage.getItem("userId");
@@ -8,35 +7,37 @@ function searchPlayer(event) {
         console.error("User ID not found in localStorage");
         return;
     }
-    const name = document.getElementById("player-name").value;
+    const name = document.getElementById("tournament-name").value;
 
-    fetch(`/api/user/players/findByName/${encodeURIComponent(name)}`)
+    fetch(`/api/tournaments/findByName/${encodeURIComponent(name)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to find player: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
-        .then(players => {
+        .then(tournaments => {
             const section = document.getElementById("results");
-            section.innerHTML = "<h2>Jugadores hallados</h2>" +
-                "<ul id=\"lista-jugadores\">\n" +
+            section.innerHTML = "<h2>Torneos hallados</h2>" +
+                "<ul id=\"lista-torneos\">\n" +
                 "            <!-- Los torneos se cargarán dinámicamente aquí -->\n" +
                 "        </ul>";
-            const listaJugadores = document.getElementById("lista-jugadores");
+            const listaTorneos = document.getElementById("lista-torneos");
 
-            if (players.length === 0) {
-                listaJugadores.innerHTML = "<p>No se hallaron jugadores con ese nombre</p>"
+            if (tournaments.length === 0) {
+                listaTorneos.innerHTML = "<p>No se hallaron torneos con ese nombre</p>"
             } else {
-                players.forEach(player => {
+                tournaments.forEach(tournament => {
                     const li = document.createElement("li");
                     li.innerHTML = `
                     <div>
-                        <h3>${player.name}</h3>
-                        <p>Ubicación: ${player.location}</p>
+                        <h3>${tournament.name}</h3>
+                        <p>Ubicación: ${tournament.location}</p>
+                        <p>Privacidad: ${tournament.privacy ? "Privado" : "Público"}</p>
+                        <p>Difficulty: ${tournament.difficulty}</p>
                     </div>
                 `;
-                    listaJugadores.appendChild(li);
+                    listaTorneos.appendChild(li);
                 });
             }
         })
@@ -50,6 +51,6 @@ function searchPlayer(event) {
 //document.addEventListener("DOMContentLoaded", searchPlayer);
 
 document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById("find-player-form");
-    form.addEventListener('submit', searchPlayer);
+    const form = document.getElementById("find-tournament-form");
+    form.addEventListener('submit', searchTournament);
 });

@@ -23,7 +23,25 @@
     <div class="search-tournament-box">
         <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
         <h2>Buscar Torneo</h2>
+
+        <form id="find-tournament-form" method="get">
+            <div class="form-group">
+                <label for="tournament-name">Nombre del torneo:</label>
+                <input type="text" id="tournament-name" name="tournament-name" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Buscar</button>
+            </div>
+        </form>
     </div>
+
+    <!-- Contenido de la página -->
+    <section id="results">
+        <ul id="lista-torneos">
+            <!-- Los torneos se cargarán dinámicamente aquí -->
+        </ul>
+    </section>
 
     <!-- Logout Script -->
     <script>
