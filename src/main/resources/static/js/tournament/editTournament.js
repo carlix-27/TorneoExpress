@@ -44,7 +44,7 @@ function fetchTournamentDetails(tournamentId) {
             // Populate form fields with tournament details
             document.getElementById('tournament-id').value = tournament.id;
             document.getElementById('tournament-name').value = tournament.name;
-            document.getElementById('sport').value = tournament.sport;
+            document.getElementById('sport').value = tournament.sport.id; // Use tournament.sport.id for the select value
             document.getElementById('location').value = tournament.location;
             document.getElementById('difficulty').value = tournament.difficulty;
 
@@ -58,14 +58,13 @@ function fetchTournamentDetails(tournamentId) {
         });
 }
 
-
 // Function to handle form submission
 function updateTournament(event) {
     event.preventDefault(); // Prevent default form submission
 
     const tournamentId = document.getElementById('tournament-id').value;
     const name = document.getElementById('tournament-name').value;
-    const sport = document.getElementById('sport').value;
+    const sportId = document.getElementById('sport').value;
     const location = document.getElementById('location').value;
     const isPrivate = document.getElementById('privacy').checked;
     const difficulty = document.getElementById('difficulty').value;
@@ -73,7 +72,7 @@ function updateTournament(event) {
     const updatedTournament = {
         id: tournamentId, // Include the ID in the updated data
         name: name,
-        sport: sport,
+        sport: { sportId: sportId}, // Wrap sport ID in an object
         location: location,
         isPrivate: isPrivate,
         difficulty: difficulty
