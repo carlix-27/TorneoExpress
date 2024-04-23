@@ -46,4 +46,16 @@ public class PlayerService {
         }
         return false;
     }
+
+    public boolean upgradeToPremium(Long playerId) {
+        Optional<Player> optionalPlayer = playerRepository.findById(playerId);
+        if (optionalPlayer.isPresent()) {
+            Player player = optionalPlayer.get();
+            player.setIs_Premium(true);
+            playerRepository.save(player);
+            return true;
+        } else {
+            return false; // Player not found
+        }
+    }
 }

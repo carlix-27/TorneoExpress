@@ -3,6 +3,7 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,4 +42,18 @@ public class PlayerController {
         List<Player> response = playerService.getPlayerByName(name);
         return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("/upgrade/{userId}")
+    public ResponseEntity<?> upgradeToPremium(@PathVariable Long userId) {
+        boolean isUpgradeSuccessful = playerService.upgradeToPremium(userId);
+
+        if (isUpgradeSuccessful) {
+            String successMessage = "User upgraded to Premium successfully!";
+            return ResponseEntity.ok().body(successMessage); // Return a success message
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upgrade player to Premium"); // Return an error message if failed
+        }
+    }
+
 }
