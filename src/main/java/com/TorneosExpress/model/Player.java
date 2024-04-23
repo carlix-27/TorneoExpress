@@ -1,5 +1,4 @@
-package com.TorneosExpress.model.player;
-import com.TorneosExpress.model.Team;
+package com.TorneosExpress.model;
 
 
 import jakarta.persistence.*;

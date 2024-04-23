@@ -1,9 +1,8 @@
 
 package com.TorneosExpress.repository;
 
-import com.TorneosExpress.model.player.Player;
+import com.TorneosExpress.model.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 
 public interface PlayerRepository extends JpaRepository<Player, Long>{

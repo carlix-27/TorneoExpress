@@ -1,5 +1,4 @@
 package com.TorneosExpress.model;
-import com.TorneosExpress.model.player.Player;
 import com.TorneosExpress.model.shop.Article;
 
 import jakarta.persistence.*;

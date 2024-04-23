@@ -1,6 +1,6 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.model.player.Player;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

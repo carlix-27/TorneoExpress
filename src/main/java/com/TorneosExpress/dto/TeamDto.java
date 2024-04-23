@@ -1,8 +1,7 @@
 package com.TorneosExpress.dto;
 
-import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Tournament;
-import com.TorneosExpress.model.player.Player;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.shop.Article;
 
 import java.util.List;

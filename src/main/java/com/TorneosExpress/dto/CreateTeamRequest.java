@@ -1,6 +1,6 @@
 package com.TorneosExpress.dto;
 
-import com.TorneosExpress.model.player.Player;
+import com.TorneosExpress.model.Player;
 
 public class CreateTeamRequest {
   private String name;

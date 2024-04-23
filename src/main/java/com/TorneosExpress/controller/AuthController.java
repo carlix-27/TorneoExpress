@@ -2,7 +2,7 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.LoginRequest;
 import com.TorneosExpress.dto.RegisterRequest;
-import com.TorneosExpress.model.player.Player;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.dto.PlayerDto;
 import com.TorneosExpress.response.LoginResponse;
 import com.TorneosExpress.service.PlayerService;
