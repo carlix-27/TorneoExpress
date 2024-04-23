@@ -1,4 +1,5 @@
 package com.TorneosExpress.controller;
+import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TeamService;
@@ -19,8 +20,8 @@ public class TeamController {
   TeamService teamService;
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Team> createTeam(@RequestBody Team team, HttpServletRequest request) {
-    Team createdTeam = teamService.createTeam(team);
+  public ResponseEntity<Team> createTeam(@RequestBody TeamDto team, HttpServletRequest request) {
+    Team createdTeam = teamService.createTeam(new Team(team));
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
 

@@ -1,4 +1,5 @@
 package com.TorneosExpress.model;
+import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.model.shop.Article;
 
 import jakarta.persistence.*;
@@ -7,6 +8,10 @@ import java.util.List;
 
 @Entity
 public class Team {
+
+  public Team(TeamDto teamDto) {
+    this.id = teamDto.getId();
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,10 +54,10 @@ public class Team {
   @ManyToMany(mappedBy = "participationRequests")
   private List<Tournament> requestedTournaments = new ArrayList<>();
 
-  public Team(Long captainId, String teamName, String teamLocation, boolean privacy) {
+  public Team(Long captainId, String teamName, String teamLocation, boolean isPrivate) {
     this.name = teamName;
     this.location = teamLocation;
-    this.isPrivate = privacy;
+    this.isPrivate = isPrivate;
     this.prestigePoints = 0;
     this.captainId = captainId;
   }
