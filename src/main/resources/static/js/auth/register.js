@@ -4,6 +4,13 @@ function register() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
+    if (!name || !location || !email || !password) {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = "Please fill out all fields"; // Error message for empty fields
+        errorMessage.style.display = "block"; // Display the error message div
+        return; // Exit the function if any required field is empty
+    }
+
     const registerRequest = {
         name: name,
         location: location,
