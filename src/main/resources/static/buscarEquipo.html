@@ -24,7 +24,25 @@
     <div class="search-team-box">
         <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
         <h2>Buscar Equipo</h2>
+
+        <form id="find-team-form" method="get">
+            <div class="form-group">
+                <label for="team-name">Nombre del jugador:</label>
+                <input type="text" id="team-name" name="team-name" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Buscar</button>
+            </div>
+        </form>
     </div>
+
+    <!-- Contenido de la página -->
+    <section id="results">
+        <ul id="lista-equipos">
+            <!-- Los torneos se cargarán dinámicamente aquí -->
+        </ul>
+    </section>
 
     <!-- Logout Script -->
     <script>

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos Express - Tournament - Create Tournament</title>
-    <link rel="stylesheet" href="styles/createTournament.css">
+    <link rel="stylesheet" href="styles/crearTorneo.css">
     <script src="js/auth/checkRedirect.js"></script>
+
     <style>
         /* Styles for error and success messages */
         #error-message,
@@ -31,46 +32,64 @@
         }
     </style>
 </head>
-<body>
-<form id="create-tournament-form" action="/api/tournaments/create" method="post">
-    <!-- Back button -->
-    <button class="back-button" onclick="goBack()">Back</button>
 
-    <div class="form-group">
-        <label for="tournament-name">Tournament Name:</label>
-        <input type="text" id="tournament-name" name="tournament-name" required>
+<!-- Encabezado -->
+<header>
+    <h1>Torneos Express - Torneos</h1>
+    <!-- Menú de navegación -->
+    <nav>
+        <ul>
+            <li><a href="home.html">Inicio</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<body>
+    <div class="create-tournament-box">
+        <h2>Crear Torneo</h2>
+
+        <form id="create-tournament-form" action="/api/tournaments/create" method="post">
+            <!-- Back button -->
+            <button class="back-button" onclick="goBack()">Back</button>
+
+            <div class="form-group">
+                <label for="tournament-name"> Nombre del torneo:</label>
+                <input type="text" id="tournament-name" name="tournament-name" required>
+            </div>
+            <div class="form-group">
+                <label for="sport">Deporte:</label>
+                <select id="sport" name="sport" required>
+                    <!-- Sport options will be dynamically populated -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location">Ubicacion:</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+            <div class="form-group">
+                <label for="privacy">Privacidad:</label>
+                <input type="checkbox" id="privacy" name="privacy"> Private
+            </div>
+            <div class="form-group">
+                <label for="difficulty">Dificultad:</label>
+                <select id="difficulty" name="difficulty" required>
+                    <option value="BEGINNER">Beginner</option>
+                    <option value="INTERMEDIATE">Intermediate</option>
+                    <option value="ADVANCED">Advanced</option>
+                    <option value="EXPERT">Expert</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" onclick="createTournament()">Crear Torneo</button>
+            </div>
+            <!-- Error message div -->
+            <div id="error-message"></div>
+            <!-- Success message div -->
+            <div id="success-message" class="success" style="display: none;"></div>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="sport">Sport:</label>
-        <select id="sport" name="sport" required>
-            <!-- Sport options will be dynamically populated -->
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" required>
-    </div>
-    <div class="form-group">
-        <label for="privacy">Privacy:</label>
-        <input type="checkbox" id="privacy" name="privacy"> Private
-    </div>
-    <div class="form-group">
-        <label for="difficulty">Difficulty:</label>
-        <select id="difficulty" name="difficulty" required>
-            <option value="BEGINNER">Beginner</option>
-            <option value="INTERMEDIATE">Intermediate</option>
-            <option value="ADVANCED">Advanced</option>
-            <option value="EXPERT">Expert</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <button type="button" onclick="createTournament()">Create Tournament</button>
-    </div>
-    <!-- Error message div -->
-    <div id="error-message"></div>
-    <!-- Success message div -->
-    <div id="success-message" class="success" style="display: none;"></div>
-</form>
+
 <script src="js/tournament/createTournament.js"></script>
 <script>
     function goBack() {

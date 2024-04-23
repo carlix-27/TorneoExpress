@@ -1,6 +1,7 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ public class TournamentService {
 
     @Autowired
     private TournamentRepository tournamentRepository;
+  @Autowired
+  private PlayerRepository playerRepository;
 
 
     public List<Tournament> getTournamentsByUser(Long userId) {
@@ -34,6 +37,10 @@ public class TournamentService {
     public Tournament getTournamentById(Long id) {
         Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
         return optionalTournament.orElse(null);
+    }
+
+    public List<Tournament> findByName(String name) {
+        return tournamentRepository.findByName(name);
     }
 
     public Tournament updateTournament(Tournament tournament) {

@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface TournamentRepository extends JpaRepository<Tournament, Long> {
     List<Tournament> findByCreatorId(Long creatorId);
-    Tournament findByName(String name);
+    List<Tournament> findByName(String name);
     List<Tournament> findByIsActiveTrue();
 }
