@@ -1,0 +1,85 @@
+/* CSS for the horizontal navbar */
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333333;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/*      OPTIONS STYLES      */
+
+section#busqueda {
+    padding: 20px;
+}
+
+section#busqueda h2 {
+    margin-top: 0;
+}
+
+ul#search-options {
+    list-style: none;
+    padding: 0;
+}
+
+ul#search-options li {
+    margin-bottom: 10px;
+}
+
+ul#search-options li a {
+    display: block;
+    background-color: #3d1f7f;
+    color: #fff;
+    padding: 8px 12px; /* Adjusted padding */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px; /* Reduced width */
+}
+
+ul#search-options li a:hover {
+    background-color: #342160;
+}
