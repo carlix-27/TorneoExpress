@@ -24,7 +24,7 @@
             <li><a href="calendario.html">Calendario</a></li>
             <li><a href="buscar.html">Buscar</a> </li>
             <!-- Logout Button -->
-            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+            <li><a id="logout-link" href="#">Cerrar Sesión</a></li>
         </ul>
     </nav>
 </header>
@@ -61,10 +61,22 @@
 
 <!-- Logout Script -->
 <script>
-    function logout() {
-        localStorage.removeItem("userId"); // Remove userId from localStorage
-        window.location.href = "login.html"; // Redirect to login page after logout
+
+    // Function to handle logout confirmation
+    function confirmLogout() {
+        // Display confirmation dialog
+        const logoutConfirmed = window.confirm('Do you want to logout?');
+
+        // If user confirms, proceed with logout
+        if (logoutConfirmed) {
+            localStorage.removeItem("userId"); // Remove userId from localStorage
+            window.location.href = "login.html";
+        }
     }
+
+    // Call confirmLogout function when logout link is clicked
+    document.getElementById("logout-link").addEventListener("click", confirmLogout);
+
 </script>
 
 </body>
