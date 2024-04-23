@@ -64,3 +64,71 @@ nav ul li a {
     font-size: 24px;
     margin-bottom: 20px;
 }
+
+/* STYLES FOR LIST */
+
+section#torneos {
+    padding: 20px;
+}
+
+section#torneos h2 {
+    margin-top: 0;
+}
+
+ul#tournament-options {
+    list-style: none;
+    padding: 0;
+}
+
+ul#tournament-options li {
+    margin-bottom: 10px;
+}
+
+ul#tournament-options li a {
+    display: block;
+    background-color: #3d1f7f;
+    color: #fff;
+    padding: 8px 12px; /* Adjusted padding */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px; /* Reduced width */
+}
+
+ul#tournament-options li a:hover {
+    background-color: #342160;
+}
+
+section#deportes {
+    padding: 20px;
+}
+
+section#deportes h2 {
+    margin-top: 0;
+}
+
+ul#sport-options {
+    list-style: none;
+    padding: 0;
+}
+
+ul#sport-options li {
+    margin-bottom: 10px;
+}
+
+ul#sport-options li a {
+    display: block;
+    background-color: #3d1f7f;
+    color: #fff;
+    padding: 8px 12px; /* Adjusted padding */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px; /* Reduced width */
+}
+
+ul#sport-options li a:hover {
+    background-color: #342160;
+}
+
+
