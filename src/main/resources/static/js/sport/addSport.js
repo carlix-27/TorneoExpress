@@ -3,6 +3,8 @@ function addSport() {
     const num_players = document.getElementById('num_players').value;
     const userId = localStorage.getItem("userId");
 
+    // Todo -> Otra cosa a chequear, sería el ingreso de números negativos!
+
     // Check if sport name or number of players is empty
     if (!sportName.trim()) {
         document.getElementById('error-message').innerText = "Sport name cannot be blank.";

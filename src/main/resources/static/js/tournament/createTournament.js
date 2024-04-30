@@ -55,17 +55,20 @@ function createTournament() {
             xhr.open('POST', '/api/tournaments/create', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
-                if (xhr.status === 201) {
+                if (xhr.status === 200) {
                     const createdTournament = JSON.parse(xhr.responseText);
                     console.log('Tournament created:', createdTournament);
+
                     // Display success message in green
                     document.getElementById('success-message').innerText = "Tournament created successfully!";
                     document.getElementById('success-message').style.color = 'green';
                     document.getElementById('success-message').style.display = 'block';
                     document.getElementById('error-message').style.display = 'none';
+                    document.getElementById('create-tournament-form').reset();
                 } else if (xhr.status === 409) {
                     // Conflict - Tournament name must be unique
                     document.getElementById('error-message').innerText = "Tournament name must be unique. Please choose a different name.";
+                    document.getElementById('error-message').style.color = 'red';
                     document.getElementById('error-message').style.display = 'block';
                     document.getElementById('success-message').style.display = 'none';
                 } else {

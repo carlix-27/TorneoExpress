@@ -1,5 +1,8 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.CreateTournamentRequest;
+import com.TorneosExpress.dto.TeamDto;
+import com.TorneosExpress.dto.TournamentDto;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TournamentService;
@@ -21,7 +24,7 @@ public class TournamentController {
     private PlayerService playerService;
 
     // Create a new tournament
-    @PostMapping("/create")
+    /*@PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody Tournament tournament) {
         // Check if tournament name is unique
         if (tournamentService.isTournamentNameUnique(tournament.getName())) {
@@ -32,6 +35,23 @@ public class TournamentController {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("Tournament name must be unique.");
+        }
+    }*/
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createTournament(@RequestBody CreateTournamentRequest request) { // Todo - Toda request, termina en el "Tournament name must be unique"
+        // Check if tournament name is unique
+        if (tournamentService.isTournamentNameUnique(request.getName())) {
+            Tournament createdTournament = tournamentService.createTournament(request.getName(), request.getLocation());
+            createdTournament.setActive(true); // Set isActive to True
+            TournamentDto tournamentDto = new TournamentDto(
+                    createdTournament.getId(),
+                    createdTournament.getName(),
+                    createdTournament.getLocation()
+            );
+            return ResponseEntity.ok(tournamentDto);
+        } else{
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
         }
     }
 
@@ -86,10 +106,5 @@ public class TournamentController {
     public List<Tournament> getActiveTournaments() {
         return tournamentService.getActiveTournaments();
     }
-
-
-
-
-
 
 }

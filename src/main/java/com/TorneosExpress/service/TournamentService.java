@@ -14,20 +14,24 @@ public class TournamentService {
 
     @Autowired
     private TournamentRepository tournamentRepository;
-  @Autowired
-  private PlayerRepository playerRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
 
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorId(userId);
     }
 
-    public Tournament createTournament(Tournament tournament) {
+    public Tournament createTournament(String name, String location) { // Realizar la validación acá. Para evitar que la base de datos rompa.
+        Tournament tournament = new Tournament();
+        tournament.setName(name);
+        tournament.setLocation(location);
         return tournamentRepository.save(tournament);
     }
 
     public boolean isTournamentNameUnique(String name) {
-        return tournamentRepository.findByName(name) == null;
+        return tournamentRepository.findByName(name).isEmpty();
     }
 
     public List<Tournament> getAllTournaments() {
