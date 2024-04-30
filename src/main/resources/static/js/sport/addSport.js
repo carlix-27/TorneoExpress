@@ -34,14 +34,20 @@ function addSport() {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     console.log('Deporte creado: ', response);
-                    alert('Deporte agregado exitosamente');
+
+                    // Display success message in green
+                    document.getElementById('success-message').innerText = "Sport created successfully!";
+                    document.getElementById('success-message').style.color = 'green';
+                    document.getElementById('success-message').style.display = 'block';
+                    document.getElementById('error-message').style.display = 'none';
                     document.getElementById('add-sport-form').reset();
                 } else if (xhr.status === 500) {
                     document.getElementById('error-message').innerText = "Sport name must be unique. Please choose a different name.";
+                    document.getElementById('error-message').style.color = 'red';
                     document.getElementById('error-message').style.display = 'block';
+                    document.getElementById('success-message').style.display = 'none';
                 } else {
-                    alert('Ocurrió un error al agregar el deporte. Por favor, inténtalo de nuevo.');
-                    console.error(xhr.responseText);
+                    console.error("Error:", xhr.status, xhr.responseText);
                 }
             };
 

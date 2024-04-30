@@ -9,8 +9,10 @@ import java.util.List;
 @Entity
 public class Team {
 
-  public Team(TeamDto teamDto) {
+  public Team(TeamDto teamDto) { // Todo. Para que te deje de aparecer null. Toquetea de acá!.
     this.id = teamDto.getId();
+    this.name = teamDto.getName();
+    this.location = teamDto.getLocation();
   }
 
   @Id

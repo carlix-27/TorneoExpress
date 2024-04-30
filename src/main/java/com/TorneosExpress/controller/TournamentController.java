@@ -39,7 +39,7 @@ public class TournamentController {
     }*/
 
     @PostMapping("/create")
-    public ResponseEntity<?> createTournament(@RequestBody CreateTournamentRequest request) { // Todo - Toda request, termina en el "Tournament name must be unique"
+    public ResponseEntity<?> createTournament(@RequestBody CreateTournamentRequest request) {
         // Check if tournament name is unique
         if (tournamentService.isTournamentNameUnique(request.getName())) {
             Tournament createdTournament = tournamentService.createTournament(request.getName(), request.getLocation());

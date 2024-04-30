@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TeamDto {
   private Long id;
-  private String teamName;
+  private String name;
   private String location;
   private boolean isPrivate;
   private int prestigePoints;
@@ -18,9 +18,9 @@ public class TeamDto {
   private List<Article> articles;
   private List<Player> joinRequests;
 
-  public TeamDto(Long id, String teamName, String location, boolean isPrivate, int prestigePoints, Player captain, List<Player> players, List<Article> articles, List<Player> joinRequests, List<Tournament> tournaments) {
+  public TeamDto(Long id, String name, String location, boolean isPrivate, int prestigePoints, Player captain, List<Player> players, List<Article> articles, List<Player> joinRequests, List<Tournament> tournaments) {
     this.id = id;
-    this.teamName = teamName;
+    this.name = name;
     this.location = location;
     this.isPrivate = isPrivate;
     this.prestigePoints = prestigePoints;
@@ -35,8 +35,8 @@ public class TeamDto {
     return id;
   }
 
-  public String getTeamName() {
-    return teamName;
+  public String getName() {
+    return name;
   }
 
   public String getLocation() {
