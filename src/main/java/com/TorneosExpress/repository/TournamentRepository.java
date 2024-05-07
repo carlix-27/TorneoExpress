@@ -10,5 +10,15 @@ import java.util.List;
 public interface TournamentRepository extends JpaRepository<Tournament, Long> {
     List<Tournament> findByCreatorId(Long creatorId);
     List<Tournament> findByName(String name);
-    List<Tournament> findByIsActiveTrue();
+
+
+    List<Tournament> findByisActiveTrue();
+
+    List<Tournament> findByisPrivate(boolean privacy);
+
+
+    List<Tournament> findBySport_SportName(String sportName);
+
+    // Combine filters for privacy and sport name
+    List<Tournament> findByisPrivateAndSport_SportName(boolean isPrivate, String sportName);
 }

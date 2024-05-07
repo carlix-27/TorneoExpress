@@ -58,7 +58,20 @@ public class TournamentService {
 
 
     public List<Tournament> getActiveTournaments() {
-        return tournamentRepository.findByIsActiveTrue();
+        return tournamentRepository.findByisActiveTrue();
     }
+
+    public List<Tournament> findByPrivacy(boolean isPrivate) {
+        return tournamentRepository.findByisPrivate(isPrivate);
+    }
+
+    public List<Tournament> findBySport(String sportName) {
+        return tournamentRepository.findBySport_SportName(sportName);
+    }
+
+    public List<Tournament> findByPrivacyAndSport(boolean isPrivate, String sportName) {
+        return tournamentRepository.findByisPrivateAndSport_SportName(isPrivate, sportName);
+    }
+
 
 }

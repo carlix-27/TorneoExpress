@@ -3,16 +3,26 @@ function searchTournament(event) {
 
     const userId = localStorage.getItem("userId");
     if (!userId) {
-        // Handle error, redirect to log in or show message
         console.error("User ID not found in localStorage");
         return;
     }
-    const name = document.getElementById("tournament-name").value;
 
-    fetch(`/api/tournaments/findByName/${encodeURIComponent(name)}`)
+    const name = document.getElementById("tournament-name").value;
+    const type = document.getElementById("tournament-type").value;
+    const sport = document.getElementById("tournament-sport").value;
+
+    let url = `/api/tournaments/findByName/${encodeURIComponent(name)}`;
+    if (type !== 'all') {
+        url += `?type=${type}`;
+    }
+    if (sport) {
+        url += (type === 'all' ? '?' : '&') + `sport=${encodeURIComponent(sport)}`;
+    }
+
+    fetch(url)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to find player: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to find tournaments: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
@@ -34,7 +44,8 @@ function searchTournament(event) {
                         <h3>${tournament.name}</h3>
                         <p>Ubicación: ${tournament.location}</p>
                         <p>Privacidad: ${tournament.privacy ? "Privado" : "Público"}</p>
-                        <p>Difficulty: ${tournament.difficulty}</p>
+                        <p>Deporte: ${tournament.sport}</p>
+                        <p>Dificultad: ${tournament.difficulty}</p>
                     </div>
                 `;
                     listaTorneos.appendChild(li);
@@ -46,9 +57,6 @@ function searchTournament(event) {
             // Handle error, show message to user
         });
 }
-
-// Al cargar la página, cargar los torneos del usuario
-//document.addEventListener("DOMContentLoaded", searchPlayer);
 
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("find-tournament-form");

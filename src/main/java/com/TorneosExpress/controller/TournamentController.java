@@ -50,11 +50,11 @@ public class TournamentController {
         }
     }
 
-    @GetMapping("/findByName/{name}")
+    /*@GetMapping("/findByName/{name}")
     public ResponseEntity<List<Tournament>> findByName(@PathVariable String name) {
         List<Tournament> tournaments = tournamentService.findByName(name);
         return ResponseEntity.ok().body(tournaments);
-    }
+    }*/
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Tournament>> getTournamentsByUser(@PathVariable Long userId) {
@@ -101,5 +101,26 @@ public class TournamentController {
     public List<Tournament> getActiveTournaments() {
         return tournamentService.getActiveTournaments();
     }
+
+    @GetMapping("/findByName/{name}")
+    public ResponseEntity<List<Tournament>> findByName(
+            @PathVariable String name,
+            @RequestParam(required = false) Boolean isPrivate,
+            @RequestParam(required = false) String sport) {
+        List<Tournament> tournaments;
+
+        if (isPrivate != null && sport != null) {
+            tournaments = tournamentService.findByPrivacyAndSport(isPrivate, name);
+        } else if (isPrivate != null) {
+            tournaments = tournamentService.findByPrivacy(isPrivate);
+        } else if (sport != null) {
+            tournaments = tournamentService.findBySport(name);
+        } else {
+            tournaments = tournamentService.findByName(name);
+        }
+
+        return ResponseEntity.ok().body(tournaments);
+    }
+
 
 }
