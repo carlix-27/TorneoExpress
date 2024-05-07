@@ -5,7 +5,7 @@ public class TournamentDto {
     private String name;
     private String location;
 
-    public TournamentDto(Long id, String name, String location){
+    public TournamentDto(Long id, Long creatorId, String name, String location){
         this.id = id;
         this.name = name;
         this.location = location;
