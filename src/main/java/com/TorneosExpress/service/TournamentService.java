@@ -23,10 +23,7 @@ public class TournamentService {
         return tournamentRepository.findByCreatorId(userId);
     }
 
-    public Tournament createTournament(String name, String location) { // Realizar la validación acá. Para evitar que la base de datos rompa.
-        Tournament tournament = new Tournament();
-        tournament.setName(name);
-        tournament.setLocation(location);
+    public Tournament createTournament(Tournament tournament) {
         return tournamentRepository.save(tournament);
     }
 

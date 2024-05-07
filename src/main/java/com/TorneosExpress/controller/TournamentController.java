@@ -39,17 +39,12 @@ public class TournamentController {
     }*/
 
     @PostMapping("/create")
-    public ResponseEntity<?> createTournament(@RequestBody CreateTournamentRequest request) {
+    public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
         // Check if tournament name is unique
         if (tournamentService.isTournamentNameUnique(request.getName())) {
-            Tournament createdTournament = tournamentService.createTournament(request.getName(), request.getLocation());
+            Tournament createdTournament = tournamentService.createTournament(new Tournament(request));
             createdTournament.setActive(true); // Set isActive to True
-            TournamentDto tournamentDto = new TournamentDto(
-                    createdTournament.getId(),
-                    createdTournament.getName(),
-                    createdTournament.getLocation()
-            );
-            return ResponseEntity.ok(tournamentDto);
+            return ResponseEntity.ok(createdTournament);
         } else{
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
         }

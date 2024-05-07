@@ -1,5 +1,6 @@
 package com.TorneosExpress.model;
 
+import com.TorneosExpress.dto.TournamentDto;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,17 @@ import java.util.List;
 public class Tournament {
 
   public Tournament() { }
+
+  public Tournament(TournamentDto dto){
+    this.Id = dto.getId();
+    this.creatorId = dto.getCreatorId();
+    this.name = dto.getName();
+    this.location = dto.getLocation();
+    this.sport = dto.getSport();
+    this.isPrivate = dto.getIsPrivate();
+    this.difficulty = dto.getDifficulty();
+    this.isActive = dto.getIsActive();
+  }
 
   public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty) {
     this.name = tournamentName;
@@ -33,7 +45,7 @@ public class Tournament {
   private String location;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "sport_id", referencedColumnName = "sportId")
+  @JoinColumn(name = "sport_id", referencedColumnName = "sport_Id")
   private Sport sport;
 
   @Column
