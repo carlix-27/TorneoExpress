@@ -10,7 +10,7 @@ public class Sport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sportId")
+    @Column(name = "sport_Id")
     private Long sportId;
     @Column(unique = true)
     private String sportName;
