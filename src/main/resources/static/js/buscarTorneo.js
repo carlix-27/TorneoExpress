@@ -11,7 +11,7 @@ function searchTournament(event) {
     const type = document.getElementById("tournament-type").value;
     const sport = document.getElementById("tournament-sport").value;
 
-    let url = `/api/tournaments/findByName/${encodeURIComponent(name)}`;
+    let url = `/api/tournaments/findByName/${encodeURIComponent(name)}?type=${encodeURIComponent(type)}`;
     if (type !== 'all') {
         url += `?type=${type}`;
     }

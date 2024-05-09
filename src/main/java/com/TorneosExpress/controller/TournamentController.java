@@ -1,8 +1,7 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.CreateTournamentRequest;
-import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.dto.TournamentDto;
+import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TournamentService;
@@ -106,21 +105,30 @@ public class TournamentController {
     public ResponseEntity<List<Tournament>> findByName(
             @PathVariable String name,
             @RequestParam(required = false) Boolean isPrivate,
-            @RequestParam(required = false) String sport) {
+            @RequestParam(required = false) Sport sport,
+            @RequestParam(required = false) String privacy) {
         List<Tournament> tournaments;
 
-        if (isPrivate != null && sport != null) {
-            tournaments = tournamentService.findByPrivacyAndSport(isPrivate, name);
+        if (isPrivate != null && sport != null && privacy != null) {
+            tournaments = tournamentService.findByPrivacyAndSportAndType(isPrivate, name, sport, privacy);
+        } else if (isPrivate != null && privacy != null) {
+            tournaments = tournamentService.findByPrivacyAndType(isPrivate, privacy);
+        } else if (isPrivate != null && sport != null) {
+            tournaments = tournamentService.findByPrivacyAndSport(isPrivate, name, sport);
         } else if (isPrivate != null) {
             tournaments = tournamentService.findByPrivacy(isPrivate);
+        } else if (sport != null && privacy != null) {
+            tournaments = tournamentService.findBySportAndType(sport, name, privacy);
         } else if (sport != null) {
-            tournaments = tournamentService.findBySport(name);
+            tournaments = tournamentService.findBySport(name, sport);
+        } else if (privacy != null) {
+            tournaments = tournamentService.findByType(name, privacy);
         } else {
             tournaments = tournamentService.findByName(name);
         }
-
         return ResponseEntity.ok().body(tournaments);
     }
+
 
 
 }

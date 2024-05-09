@@ -1,6 +1,7 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +59,11 @@ public class TournamentService {
 
 
     public List<Tournament> getActiveTournaments() {
-        return tournamentRepository.findByisActiveTrue();
+        return tournamentRepository.findByIsActiveTrue();
     }
 
     public List<Tournament> findByPrivacy(boolean isPrivate) {
-        return tournamentRepository.findByisPrivate(isPrivate);
+        return tournamentRepository.findByIsPrivate(isPrivate);
     }
 
     public List<Tournament> findBySport(String sportName) {
@@ -70,7 +71,31 @@ public class TournamentService {
     }
 
     public List<Tournament> findByPrivacyAndSport(boolean isPrivate, String sportName) {
-        return tournamentRepository.findByisPrivateAndSport_SportName(isPrivate, sportName);
+        return tournamentRepository.findByIsPrivateAndSport_SportName(isPrivate, sportName);
+    }
+
+    public List<Tournament> findByPrivacyAndSportAndType(boolean isPrivate, String name, Sport sport, String type) {
+        return tournamentRepository.findByIsPrivateAndSport_SportNameAndType(isPrivate, name, sport.getSportName(), type);
+    }
+
+    public List<Tournament> findByPrivacyAndType(boolean isPrivate, String type) {
+        return tournamentRepository.findByIsPrivateAndType(isPrivate, type);
+    }
+
+    public List<Tournament> findByPrivacyAndSport(boolean isPrivate, String name, Sport sport) {
+        return tournamentRepository.findByIsPrivateAndSport_SportName(isPrivate, name, sport.getSportName());
+    }
+
+    public List<Tournament> findBySportAndType(Sport sport, String name, String type) {
+        return tournamentRepository.findBySport_SportNameAndType(sport.getSportName(), name, type);
+    }
+
+    public List<Tournament> findBySport(String name, Sport sport) {
+        return tournamentRepository.findBySport_SportName(name, sport.getSportName());
+    }
+
+    public List<Tournament> findByType(String name, String type) {
+        return tournamentRepository.findByType(name, type);
     }
 
 
