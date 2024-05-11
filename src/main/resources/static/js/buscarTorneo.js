@@ -57,9 +57,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Filter tournaments based on user input
                 const filteredTournaments = tournaments.filter(function (tournament) {
-                    return (tournament.name.toLowerCase().includes(tournamentName) || tournamentName === "") &&
-                        (tournament.isPrivate === (tournamentType === "private")) &&
-                        (tournament.sport.sportName.toLowerCase().includes(tournamentSport) || tournamentSport === "");
+                    // Convert filter values to lower case for case-insensitive matching
+                    const lowerCaseTournamentName = tournament.name.toLowerCase();
+                    const lowerCaseTournamentSport = tournament.sport.sportName.toLowerCase();
+
+                    // Check if the tournament name contains the search query
+                    const nameMatches = lowerCaseTournamentName.includes(tournamentName.toLowerCase()) || tournamentName === "";
+
+                    // Check if the tournament type matches the selected type
+                    const typeMatches = tournamentType === "all" || (tournament.isPrivate && tournamentType === "private") || (!tournament.isPrivate && tournamentType === "public");
+
+                    // Check if the tournament sport name contains the search query
+                    const sportMatches = lowerCaseTournamentSport.includes(tournamentSport.toLowerCase()) || tournamentSport === "";
+
+                    return nameMatches && typeMatches && sportMatches;
                 });
 
                 console.log("Filtered tournaments:", filteredTournaments);
