@@ -10,3 +10,4 @@
 - [ ] Agregar locks para cuando empieza un Torneo(asi no se puede agregar nadie cuando empieza). Sino que cuando un user empieza un torneo -> isAvailable = false.
 
 ### Equipos
+- [ ] En filter teams hacer que nombre del equipo no sea obligatorio

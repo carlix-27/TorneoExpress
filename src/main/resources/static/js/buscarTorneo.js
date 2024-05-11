@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // DOM elements
     const form = document.getElementById("find-tournament-form");
     const tournamentList = document.getElementById("lista-torneos");
 
