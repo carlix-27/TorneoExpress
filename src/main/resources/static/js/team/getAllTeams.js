@@ -16,7 +16,7 @@ function loadTeams() {
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
-                        <a href="loadTeam.html"><h3>${team.name}</h3></a>
+                        <a href="loadTeam.html?id=${team.id}"><h3>${team.name}</h3></a>
                         <p>Ubicación: ${team.location}</p>
                         <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
                     </div>
