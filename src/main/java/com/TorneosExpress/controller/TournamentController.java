@@ -1,9 +1,7 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.TournamentDto;
-import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Tournament;
-import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,23 +17,6 @@ public class TournamentController {
 
     @Autowired
     private TournamentService tournamentService;
-    @Autowired
-    private PlayerService playerService;
-
-    // Create a new tournament
-    /*@PostMapping("/create")
-    public ResponseEntity<?> createTournament(@RequestBody Tournament tournament) {
-        // Check if tournament name is unique
-        if (tournamentService.isTournamentNameUnique(tournament.getName())) {
-            tournament.setActive(true); // Set isActive to true
-            Tournament createdTournament = tournamentService.createTournament(tournament);
-            return new ResponseEntity<>(createdTournament, HttpStatus.CREATED);
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("Tournament name must be unique.");
-        }
-    }*/
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
@@ -48,12 +29,6 @@ public class TournamentController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
         }
     }
-
-    /*@GetMapping("/findByName/{name}")
-    public ResponseEntity<List<Tournament>> findByName(@PathVariable String name) {
-        List<Tournament> tournaments = tournamentService.findByName(name);
-        return ResponseEntity.ok().body(tournaments);
-    }*/
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Tournament>> getTournamentsByUser(@PathVariable Long userId) {
@@ -84,7 +59,6 @@ public class TournamentController {
             return ResponseEntity.notFound().build();
         }
 
-        // Update the existing tournament with the new data
         existingTournament.setName(updatedTournament.getName());
         existingTournament.setSport(updatedTournament.getSport());
         existingTournament.setLocation(updatedTournament.getLocation());
@@ -100,35 +74,5 @@ public class TournamentController {
     public List<Tournament> getActiveTournaments() {
         return tournamentService.getActiveTournaments();
     }
-
-    @GetMapping("/findByName/{name}")
-    public ResponseEntity<List<Tournament>> findByName(
-            @PathVariable String name,
-            @RequestParam(required = false) Boolean isPrivate,
-            @RequestParam(required = false) Sport sport,
-            @RequestParam(required = false) String privacy) {
-        List<Tournament> tournaments;
-
-        if (isPrivate != null && sport != null && privacy != null) {
-            tournaments = tournamentService.findByPrivacyAndSportAndType(isPrivate, name, sport, privacy);
-        } else if (isPrivate != null && privacy != null) {
-            tournaments = tournamentService.findByPrivacyAndType(isPrivate, privacy);
-        } else if (isPrivate != null && sport != null) {
-            tournaments = tournamentService.findByPrivacyAndSport(isPrivate, name, sport);
-        } else if (isPrivate != null) {
-            tournaments = tournamentService.findByPrivacy(isPrivate);
-        } else if (sport != null && privacy != null) {
-            tournaments = tournamentService.findBySportAndType(sport, name, privacy);
-        } else if (sport != null) {
-            tournaments = tournamentService.findBySport(name, sport);
-        } else if (privacy != null) {
-            tournaments = tournamentService.findByType(name, privacy);
-        } else {
-            tournaments = tournamentService.findByName(name);
-        }
-        return ResponseEntity.ok().body(tournaments);
-    }
-
-
 
 }
