@@ -84,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-
     // Event listener for form submission
     form.addEventListener("submit", filterTournaments);
 
