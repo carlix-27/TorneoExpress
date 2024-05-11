@@ -3,10 +3,12 @@
 ### Auth
 
 ### Deportes
-- [ ] En agregar deporte: especificar cantidad de jugadores (si es por equipo o entre los 2)
+- [ ] En agregar deporte: especificar cantidad de jugadores (si es por equipo o entre los 2).
+- [ ] No dejar numeros negativos para cantidad de jugadores.
 
 ### Torneos
 - [ ] Agregar locks para cuando empieza un Torneo(asi no se puede agregar nadie cuando empieza). Sino que cuando un user empieza un torneo -> isAvailable = false.
+- [ ] Especificar cantidad de equipos perimidos.
 
 ### Equipos
 - [ ] Arreglar tema privacy cuando se crea un equipo
