@@ -25,7 +25,7 @@ function cargarTorneos() {
             <h3>${tournament.name}</h3>
             <p>Deporte: ${tournament.sport.sportName}</p>
             <p>Ubicación: ${tournament.location}</p>
-            <p>Privacidad: ${tournament.isPrivate ? "Privado" : "Público"}</p>
+            <p>Privacidad: ${tournament.private ? "Privado" : "Público"}</p>
             <p>Dificultad: ${tournament.difficulty}</p>
             <p>Equipos Participantes: ${tournament.participatingTeams.length}</p>
             <p>Solicitudes de Participación: ${tournament.participationRequests.length}</p>
