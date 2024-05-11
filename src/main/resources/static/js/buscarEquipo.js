@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const locationMatches = lowerCaseTeamLocation.includes(teamLocation) || teamLocation === "";
 
                     // Check if the team privacy matches the selected value
-                    const isPrivateMatches = teamIsPrivate === "all" || team.isPrivate === (teamIsPrivate === "private");
+                    const isPrivateMatches = teamIsPrivate === "all" || (team.isPrivate && teamIsPrivate ==="private") || (!team.isPrivate && teamIsPrivate === "public");
 
                     return nameMatches && locationMatches && isPrivateMatches;
                 });
