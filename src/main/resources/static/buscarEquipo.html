@@ -35,9 +35,14 @@
             <label for="team-location">Ubicación del equipo:</label>
             <input type="text" id="team-location" name="team-location">
         </div>
+
         <div class="form-group">
-            <label for="team-isPrivate">¿Equipo privado?</label>
-            <input type="checkbox" id="team-isPrivate" name="team-isPrivate">
+            <label for="team-isPrivate">Tipo de Equipo:</label>
+            <select id="team-isPrivate" name="team-isPrivate">
+                <option value="all">Todos</option>
+                <option value="public">Público</option>
+                <option value="private">Privado</option>
+            </select>
         </div>
 
         <div class="form-group">

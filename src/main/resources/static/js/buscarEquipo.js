@@ -4,12 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to fetch active teams
     function fetchActiveTeams() {
-        fetch('/api/teams/all')
+        fetch('/api/teams/allTeams')  // Corrected path
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to fetch active teams: ${response.status} ${response.statusText}`);
                 }
                 return response.json();
+            })
+            .then(teams => {
+                console.log("Fetched teams:", teams);
+                renderTeams(teams);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -29,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to filter teams based on user input
+    // Function to filter teams based on user input
     function filterTeams(event) {
         event.preventDefault(); // Prevent form submission
 
@@ -36,14 +41,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const teamName = form.querySelector("#team-name").value.trim().toLowerCase();
         const teamLocation = form.querySelector("#team-location").value.trim().toLowerCase();
-        const teamIsPrivate = form.querySelector("#team-isPrivate").checked;
+        const teamIsPrivate = form.querySelector("#team-isPrivate").value;
 
         console.log("Name:", teamName);
         console.log("Location:", teamLocation);
         console.log("Privacy:", teamIsPrivate);
 
-        // Fetch active teams based on user input
-        fetchActiveTeams()
+        // Fetch all teams from the server
+        fetch("/api/teams/allTeams")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
             .then(teams => {
                 console.log("Fetched teams:", teams);
 
@@ -60,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const locationMatches = lowerCaseTeamLocation.includes(teamLocation) || teamLocation === "";
 
                     // Check if the team privacy matches the selected value
-                    const isPrivateMatches = team.isPrivate === teamIsPrivate;
+                    const isPrivateMatches = teamIsPrivate === "all" || team.isPrivate === (teamIsPrivate === "private");
 
                     return nameMatches && locationMatches && isPrivateMatches;
                 });

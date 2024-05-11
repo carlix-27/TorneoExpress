@@ -38,6 +38,11 @@ public class TeamController {
     return ResponseEntity.ok().body(teams);
   }
 
+  @GetMapping("/allTeams")
+  public List<Team> getTeams() {
+    return teamService.getAllTeams();
+  }
+
   @GetMapping("/findByName/{name}")
   public ResponseEntity<List<Team>> getTeamsByName(@PathVariable String name) {
     List<Team> teams = teamService.findByName(name);
