@@ -75,7 +75,7 @@ public class TeamController {
     // Update the existing tournament with the new data
     existingTeam.setName(updatedTournament.getName());
     existingTeam.setLocation(updatedTournament.getLocation());
-    existingTeam.setPrivate(updatedTournament.isPrivate());
+    existingTeam.setIsPrivate(updatedTournament.isPrivate());
 
     Team updatedTeam = teamService.updateTeam(existingTeam);
     return ResponseEntity.ok(updatedTeam);

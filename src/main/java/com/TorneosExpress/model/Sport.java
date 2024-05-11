@@ -14,7 +14,7 @@ public class Sport {
     @Column(name = "sport_Id")
     private Long sportId;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "NAME")
     private String sportName;
 
     @Column

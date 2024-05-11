@@ -13,6 +13,8 @@ public class Team {
     this.id = teamDto.getId();
     this.name = teamDto.getName();
     this.location = teamDto.getLocation();
+    this.isPrivate = teamDto.isPrivate();
+    this.prestigePoints = teamDto.getPrestigePoints();
     this.captainId = teamDto.getCaptainId();
   }
 
@@ -120,7 +122,7 @@ public class Team {
     this.location = location;
   }
 
-  public void setPrivate(boolean aPrivate) {
+  public void setIsPrivate(boolean aPrivate) {
     isPrivate = aPrivate;
   }
 
