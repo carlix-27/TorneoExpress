@@ -18,7 +18,7 @@ function fetchActiveTournaments() {
                 listItem.innerHTML = `
                     <h3>${tournament.name}</h3>
                     <p>Deporte: ${tournament.sport.sportName}</p>
-                    <p>${tournament.isPrivate ? 'Privado' : 'Público'}</p>
+                    <p>${tournament.private ? 'Privado' : 'Público'}</p>
                 `;
                 tournamentList.appendChild(listItem);
             });
