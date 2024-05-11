@@ -1,7 +1,7 @@
 // Función para cargar los torneos del usuario
-function loadTeams() {
+function loadTeam() {
 
-    fetch(`/api/teams/all`)
+    fetch(`/api/teams/${URL}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
@@ -9,19 +9,19 @@ function loadTeams() {
             return response.json();
         })
         .then(teams => {
-            const listaEquipos = document.getElementById("lista-todos-equipos");
-            listaEquipos.innerHTML = ""; // Limpiar la lista antes de cargar equipos
+            const teamList = document.getElementById("team");
+            teamList.innerHTML = ""; // Limpiar la lista antes de cargar equipos
 
             teams.forEach(team => {
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
-                        <a href="loadTeam.html"><h3>${team.name}</h3></a>
+                        <h3>${team.name}</h3>
                         <p>Ubicación: ${team.location}</p>
                         <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
                     </div>
                 `;
-                listaEquipos.appendChild(li);
+                teamList.appendChild(li);
             });
         })
         .catch(error => {
@@ -31,4 +31,4 @@ function loadTeams() {
 }
 
 // Al cargar la página, cargar los torneos del usuario
-document.addEventListener("DOMContentLoaded", loadTeams);
+document.addEventListener("DOMContentLoaded", loadTeam);
