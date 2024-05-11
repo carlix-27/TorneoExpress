@@ -12,19 +12,19 @@ public class TeamDto {
   private String location;
   private boolean isPrivate;
   private int prestigePoints;
-  private Player captain;
+  private Long captainId;
   private List<Player> players;
   private List<Tournament> tournaments;
   private List<Article> articles;
   private List<Player> joinRequests;
 
-  public TeamDto(Long id, String name, String location, boolean isPrivate, int prestigePoints, Player captain, List<Player> players, List<Article> articles, List<Player> joinRequests, List<Tournament> tournaments) {
+  public TeamDto(Long id, String name, String location, boolean isPrivate, int prestigePoints, Long captainId, List<Player> players, List<Article> articles, List<Player> joinRequests, List<Tournament> tournaments) {
     this.id = id;
     this.name = name;
     this.location = location;
     this.isPrivate = isPrivate;
     this.prestigePoints = prestigePoints;
-    this.captain = captain;
+    this.captainId = captainId;
     this.players = players;
     this.tournaments = tournaments;
     this.articles = articles;
@@ -51,8 +51,8 @@ public class TeamDto {
     return prestigePoints;
   }
 
-  public Player getCaptain() {
-    return captain;
+  public Long getCaptainId() {
+    return captainId;
   }
 
   public List<Article> getArticles() {

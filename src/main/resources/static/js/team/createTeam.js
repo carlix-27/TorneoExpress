@@ -34,6 +34,7 @@ function createTeam(event) {
         if (xhr.status === 201) {
             const createdTeam = JSON.parse(xhr.responseText);
             console.log("Team created.", createdTeam);
+            console.log(captainId);
             document.getElementById('success-message').innerText = "Equipo creado exitosamente!";
             document.getElementById('success-message').style.color = 'green';
             document.getElementById('success-message').style.display = 'block';
