@@ -1,7 +1,6 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,4 +50,7 @@ public class TeamService {
     return save(team);
   }
 
+  public List<Team> getAllTeams() {
+    return teamRepository.findAll();
+  }
 }

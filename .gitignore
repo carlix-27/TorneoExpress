@@ -6,4 +6,5 @@ out
 build
 target
 *.iml
+src/main/resources/application.properties
 db

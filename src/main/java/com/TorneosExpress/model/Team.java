@@ -13,6 +13,7 @@ public class Team {
     this.id = teamDto.getId();
     this.name = teamDto.getName();
     this.location = teamDto.getLocation();
+    this.captainId = teamDto.getCaptainId();
   }
 
   @Id

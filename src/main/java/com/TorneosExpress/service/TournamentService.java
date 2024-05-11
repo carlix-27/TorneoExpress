@@ -1,7 +1,6 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Tournament;
-import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +14,6 @@ public class TournamentService {
     @Autowired
     private TournamentRepository tournamentRepository;
 
-    @Autowired
-    private PlayerRepository playerRepository;
-
-
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorId(userId);
     }
@@ -31,23 +26,13 @@ public class TournamentService {
         return tournamentRepository.findByName(name).isEmpty();
     }
 
-    public List<Tournament> getAllTournaments() {
-        return tournamentRepository.findAll();
-    }
-
     public Tournament getTournamentById(Long id) {
         Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
         return optionalTournament.orElse(null);
     }
-
-    public List<Tournament> findByName(String name) {
-        return tournamentRepository.findByName(name);
-    }
-
     public Tournament updateTournament(Tournament tournament) {
-        // Check if the tournament with given ID exists
         if (tournament.getId() == null || !tournamentRepository.existsById(tournament.getId())) {
-            return null; // Tournament not found
+            return null;
         }
         return tournamentRepository.save(tournament);
     }
@@ -58,7 +43,7 @@ public class TournamentService {
 
 
     public List<Tournament> getActiveTournaments() {
-        return tournamentRepository.findByIsActiveTrue();
+        return tournamentRepository.findByisActiveTrue();
     }
 
 }
