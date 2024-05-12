@@ -47,6 +47,14 @@ public class PlayerService {
         return false;
     }
 
+    public boolean isCaptain(Long userId){
+        Player user = playerRepository.findById(userId).orElse(null);
+        if(user != null){
+            return user.isIs_Captain();
+        }
+        return false;
+    }
+
     public boolean upgradeToPremium(Long playerId) {
         Optional<Player> optionalPlayer = playerRepository.findById(playerId);
         if (optionalPlayer.isPresent()) {

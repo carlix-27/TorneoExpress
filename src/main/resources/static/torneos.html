@@ -6,6 +6,19 @@
     <title>Torneos Activos</title>
     <link rel="stylesheet" href="styles/torneos.css"> <!-- Agrega tu archivo CSS -->
     <script src="js/auth/checkRedirect.js"></script>
+
+    <style>
+        /* Styles for error and success messages */
+        #error-message,
+        #success-message {
+            color: red;
+            display: none;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -13,6 +26,7 @@
     <ul id="tournament-list">
         <!-- Aquí se agregarán los torneos dinámicamente -->
     </ul>
+
 </div>
 <script src="js/tournament/torneos.js"></script> <!-- Agrega tu archivo JavaScript -->
 </body>
