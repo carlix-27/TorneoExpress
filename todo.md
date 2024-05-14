@@ -1,7 +1,7 @@
 # Todo
 
 ### Auth
-- [ ] Cuando haces login salta mensaje de exito pero de registracion
+- [x] Cuando haces login salta mensaje de exito pero de registracion
 - [ ] Arreglar mensaje buy premium 
 
 ### Deportes
