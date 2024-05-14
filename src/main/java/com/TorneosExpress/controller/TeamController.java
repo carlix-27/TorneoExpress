@@ -1,7 +1,9 @@
 package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.TeamDto;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -19,9 +20,14 @@ public class TeamController {
   @Autowired
   TeamService teamService;
 
+  @Autowired
+  PlayerService playerService;
+
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Team> createTeam(@RequestBody TeamDto team, HttpServletRequest request) {
-    Team createdTeam = teamService.createTeam(new Team(team));
+  public ResponseEntity<Team> createTeam(@RequestBody TeamDto dto, HttpServletRequest request) {
+    Team createdTeam = teamService.createTeam(new Team(dto));
+    playerService.getPlayerById(createdTeam.getCaptainId()).ifPresent(
+        p -> teamService.addPlayer(createdTeam.getId(), p));
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
 

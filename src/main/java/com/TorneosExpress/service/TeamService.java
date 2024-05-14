@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,14 @@ public class TeamService {
 
   public Team findById(long id) {
     return teamRepository.findById(id);
+  }
+
+  public void addPlayer(Long teamId, Player player) {
+    Team team = teamRepository.findById(teamId).orElse(null);
+    if (team != null) {
+      team.addPlayer(player);
+      teamRepository.save(team);
+    }
   }
 
   public List<Team> findByCaptainId(long id) {

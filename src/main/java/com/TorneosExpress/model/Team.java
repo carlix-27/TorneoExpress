@@ -2,6 +2,7 @@ package com.TorneosExpress.model;
 import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.model.shop.Article;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Team {
     this.isPrivate = teamDto.isPrivate();
     this.prestigePoints = teamDto.getPrestigePoints();
     this.captainId = teamDto.getCaptainId();
+    //this.players.add()
   }
 
   @Id
@@ -140,6 +142,10 @@ public class Team {
 
   public void setPlayers(List<Player> players) {
     this.players = players;
+  }
+
+  public void addPlayer(Player player) {
+    this.players.add(player);
   }
 
   public void setArticles(List<Article> articles) {

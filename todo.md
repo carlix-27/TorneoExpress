@@ -11,7 +11,7 @@
 - [ ] Especificar cantidad de equipos perimidos.
 
 ### Equipos
-- [ ] Arreglar tema privacy cuando se crea un equipo
+- [ ] Agregar capitan al equipo cuando se crea un equipo
 
 ## Filter
 - [ ] Hacer que nombre del equipo y torneo no sea obligatorio
