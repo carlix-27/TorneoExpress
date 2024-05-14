@@ -70,6 +70,15 @@ public class TeamController {
     return ResponseEntity.ok(team);
   }
 
+  @PostMapping("/{teamId}/join")
+  public ResponseEntity<String> joinTeam(@PathVariable Long teamId, Long playerId, HttpServletRequest request) {
+    Player p = playerService.getPlayerById(playerId).orElse(null);
+    if (p != null) {
+      return ResponseEntity.ok(teamService.addPlayer(teamId, p));
+    }
+    return ResponseEntity.ok("Error while joining team.");
+  }
+
   @PutMapping("/{teamId}")
   public ResponseEntity<Team> updateTeam(@PathVariable Long teamId,
                                                      @RequestBody Tournament updatedTournament) {

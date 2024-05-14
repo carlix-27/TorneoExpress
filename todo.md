@@ -11,8 +11,8 @@
 - [ ] Especificar cantidad de equipos perimidos.
 
 ### Equipos
-- [ ] Agregar capitan al equipo cuando se crea un equipo
+- [ ]  
 
-## Filter
+### Filter
 - [ ] Hacer que nombre del equipo y torneo no sea obligatorio
 - [ ] Hacer que en equipos aparezcan mas datos para buscar: Como numero de equipos inscriptos, se puede unir o no, hace cuanto empezó, etc.
