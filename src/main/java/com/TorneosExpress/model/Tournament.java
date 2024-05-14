@@ -125,6 +125,16 @@ public class Tournament {
     this.difficulty = difficulty;
   }
 
+  @Override
+  public boolean equals(Object o){ // Define bien como tiene que comparar contains con las colecciones de java.
+    if (this == o) return true;
+    if (!(o instanceof Tournament)) {
+      return false;
+    }
+    Tournament other = (Tournament) o;
+    return this.getId().equals(other.getId());
+  }
+
   public List<Team> getParticipatingTeams() {
     return participatingTeams;
   }
