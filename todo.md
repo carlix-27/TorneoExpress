@@ -10,7 +10,8 @@
 
 ### Torneos
 - [ ] Agregar locks para cuando empieza un Torneo(asi no se puede agregar nadie cuando empieza). Sino que cuando un user empieza un torneo -> isAvailable = false.
-- [ ] Especificar cantidad de equipos perimidos.
+- [ ] Especificar cantidad de equipos pertimidos.
+
 
 ### Equipos
 - [ ] Arreglar tema privacy cuando se crea un equipo

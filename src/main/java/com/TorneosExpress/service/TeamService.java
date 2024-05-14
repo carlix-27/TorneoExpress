@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.AccessRequest;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,4 +54,9 @@ public class TeamService {
   public List<Team> getAllTeams() {
     return teamRepository.findAll();
   }
+
+  public void processAccessRequest(Long id, Long userId){
+
+  }
+
 }

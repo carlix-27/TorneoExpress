@@ -56,7 +56,7 @@ function enrollInTournament(id, private) {
     if (private) {
         const confirmation = confirm("Este torneo es privado. ¿Deseas enviar una solicitud de acceso?");
         if (confirmation) {
-            sendAccessRequest(id); // Aquí puedes implementar la lógica para enviar una solicitud de acceso
+            sendAccessRequest(id, userId); // Aquí puedes implementar la lógica para enviar una solicitud de acceso
         }
     } else {
         enrollUserInPublicTournament(id); // Si el torneo es público, el usuario puede inscribirse directamente
@@ -64,10 +64,33 @@ function enrollInTournament(id, private) {
 }
 
 // Función para enviar una solicitud de acceso
-function sendAccessRequest(id) {
+function sendAccessRequest(id, userId) {
     // Aquí puedes implementar la lógica para enviar una solicitud de acceso al administrador del torneo
     // Esto podría ser mediante un formulario de solicitud o una solicitud AJAX al backend
     // Una vez enviada la solicitud, podrías mostrar un mensaje de confirmación al usuario
+    const requestData ={
+        id: id,
+        userId: userId
+    }
+
+    fetch('/api/tournaments/{tournamentId}/access-request', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error(`Failed to send access request: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .catch(error =>{
+            console.error('Error:', error);
+        })
 }
 
 // Función para inscribir al usuario en un torneo público
