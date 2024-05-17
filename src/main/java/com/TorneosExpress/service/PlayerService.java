@@ -55,6 +55,15 @@ public class PlayerService {
         return false;
     }
 
+    public void upgradeToCaptain(Long userId){
+        Optional<Player> optionalPlayer = playerRepository.findById(userId);
+        if(optionalPlayer.isPresent()){
+            Player player = optionalPlayer.get();
+            player.setIs_Captain(true); // Ahora cambié el estado que tenía en la db a True. Sos capitán!
+            playerRepository.save(player);
+        }
+    }
+
     public boolean upgradeToPremium(Long playerId) {
         Optional<Player> optionalPlayer = playerRepository.findById(playerId);
         if (optionalPlayer.isPresent()) {

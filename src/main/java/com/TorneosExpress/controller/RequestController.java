@@ -31,19 +31,24 @@ public class RequestController {
     @Autowired
     PlayerService playerService;
 
+
+    //ToDo
     @PostMapping("/api/tournaments/{tournamentId}/access-request")
-    public ResponseEntity<?> requestTournamentAccess(@PathVariable Long tournamentId, @PathVariable Long userId, @PathVariable Long teamId){
+    public ResponseEntity<?> requestTournamentAccess(@PathVariable Long tournamentId, @RequestBody AccessRequest request){
         try{
-            tournamentService.processAccessRequest(tournamentId, userId, teamId);
-            return ResponseEntity.ok().build();
+            tournamentService.processAccessRequest(tournamentId, request.getUserId(), request.getTeamId());
+            return ResponseEntity.ok().body("Solicitud enviada exitosamente !");
         } catch (NullPointerException e){ // Casos de exception que tire los métodos.
-            return ResponseEntity.badRequest().body(userId + " no encontrado");
+            return ResponseEntity.badRequest().body(request.getUserId() + " no encontrado");
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body("Tu equipo ya está en este torneo");
+        } catch (Exception e){
+            return ResponseEntity.status(500).body("Error interno del servidor: " + e.getMessage());
         }
 
     }
 
+    //ToDo
     @PostMapping("/api/tournaments/{tournamentId}/enroll")
     public ResponseEntity<?> accessToPublicTournament(@PathVariable Long tournamentId){ // mira como usar acá el tournamentId.
         return ResponseEntity.ok().body("Te has inscripto exitosamente al torneo");

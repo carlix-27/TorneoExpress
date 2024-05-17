@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.AccessRequest;
 import com.TorneosExpress.dto.TournamentDto;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;

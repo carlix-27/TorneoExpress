@@ -40,40 +40,44 @@ function fetchActiveTournaments() {
         });
 }
 
+// .......................
+
 // Función para inscribirse en un torneo
-function enrollInTournament(id, private) {
+
+function enrollInTournament(id, isPrivate) { // Fijate que esté en private
     const userId = localStorage.getItem("userId");
 
     // Verificar si el usuario está en un equipo
     checkIfUserIsCaptain(userId, function (isCaptain){
         if(!isCaptain){
             document.getElementById('error-message').innerText = "Debes ser capitán para poder unirte a un torneo.";
-            return;
+            document.getElementById('error-message').style.color = 'red';
+            document.getElementById('error-message').style.display = 'block';
+            document.getElementById('success-message').style.display = 'none';
         }
     });
 
     // Si el torneo es privado, mostrar un formulario de solicitud de acceso
-    if (private) {
+    if (isPrivate) {
         const confirmation = confirm("Este torneo es privado. ¿Deseas enviar una solicitud de acceso?");
-        if (confirmation) {
-            sendAccessRequest(id, userId); // Aquí puedes implementar la lógica para enviar una solicitud de acceso
-        }
+        if (confirmation) {sendAccessRequest(id, userId); } // Aquí puedes implementar la lógica para enviar una solicitud de acceso
     } else {
         enrollUserInPublicTournament(id); // Si el torneo es público, el usuario puede inscribirse directamente
     }
 }
 
+
+// .......................
+
 // Función para enviar una solicitud de acceso
+
 function sendAccessRequest(id, userId) {
-    // Aquí puedes implementar la lógica para enviar una solicitud de acceso al administrador del torneo
-    // Esto podría ser mediante un formulario de solicitud o una solicitud AJAX al backend
-    // Una vez enviada la solicitud, podrías mostrar un mensaje de confirmación al usuario
     const requestData ={
         id: id,
         userId: userId
     }
 
-    fetch('/api/tournaments/{tournamentId}/access-request', {
+    fetch(`/api/tournaments/${id}/access-request`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -93,7 +97,10 @@ function sendAccessRequest(id, userId) {
         })
 }
 
+// .......................
+
 // Función para inscribir al usuario en un torneo público
+
 function enrollUserInPublicTournament(id) {
     const userId = localStorage.getItem("userId");
     const data = {
@@ -102,7 +109,7 @@ function enrollUserInPublicTournament(id) {
     }
 
     // Realizar una solicitud AJAX al backend para inscribir al usuario en el torneo público
-    fetch('/api/tournaments/' + id + '/enroll', {
+    fetch(`/api/tournaments/${id}/enroll`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -121,17 +128,20 @@ function enrollUserInPublicTournament(id) {
         })
         .catch(error => {
             console.error('Error: ', error);
-            document.getElementById('error-message').innerText = "\"Hubo un error al inscribirse en el torneo. Por favor, intenta nuevamente más tarde.";
+            document.getElementById('error-message').innerText = "Hubo un error al inscribirse en el torneo. Por favor, intenta nuevamente más tarde.";
             document.getElementById('error-message').style.color = 'red';
             document.getElementById('error-message').style.display = 'block';
             document.getElementById('success-message').style.display = 'none';
         });
 }
 
+// .......................
+
 // Chequea si el usuario está en un equipo
+
 function checkIfUserIsCaptain(userId, callback) {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/user/' + userId + '/team-owner', true);
+    xhr.open('GET', `/api/user/${userId}/team-owner`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {
@@ -146,7 +156,10 @@ function checkIfUserIsCaptain(userId, callback) {
     xhr.send();
 }
 
+// .......................
+
 // Punto de entrada cuando se carga la página
+
 document.addEventListener("DOMContentLoaded", function() {
     fetchActiveTournaments();
 });

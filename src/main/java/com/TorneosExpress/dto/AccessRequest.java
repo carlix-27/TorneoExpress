@@ -1,9 +1,14 @@
 package com.TorneosExpress.dto;
 
 public class AccessRequest {
-    private String email;
+    private Long userId;
+    private Long teamId;
 
-    public String getEmail(){
-        return email;
+    public Long getUserId(){
+        return userId;
+    }
+
+    public Long getTeamId(){
+        return teamId;
     }
 }

@@ -72,7 +72,7 @@ public class TournamentService {
         // Es capitán?
         if(player.isIs_Captain()){
             if(isTeamInTournament(teamId, id)){ // true
-                throw new IllegalArgumentException("Tu equipo ya está en este torneo"); // NO conviene manejarlo así, fijate desde la página directamente!!!!. Lo haces desde el Controller
+                throw new IllegalArgumentException("Tu equipo ya está en este torneo");
                 // ya está inscripto? -> Ver la tabla. El equipo ya está inscripto?
                 // ¿Cómo chequear si ya está inscripto o no?
             }
@@ -86,8 +86,12 @@ public class TournamentService {
             // Chequear si los equipos que tiene no excedería la cantidad previamente dicha en el torneo -> TODO!
             if(tournament.isActive()){
                 participatingTeams.add(team); // Si es todo valido, directamente lo agrego.
+                tournament.setParticipatingTeams(participatingTeams);
+                tournamentRepository.save(tournament);
             }
         }
+
+
 
         // ---
         // en la base, tiene que tener una relación entre torneos y equipos, o torneos y capitan
