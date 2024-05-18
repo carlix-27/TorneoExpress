@@ -55,7 +55,11 @@ public class TournamentService {
         return tournamentRepository.findByisActiveTrue();
     }
 
-    public void processAccessRequest(Long id, Long userId, Long teamId){ // Manejo de la solicitud a un torneo privado
+    public void accessToPublicTournament(Long tournamentId, Long userId, Long teamId){
+        processAccessRequest(tournamentId, userId, teamId);
+    }
+
+    public boolean processAccessRequest(Long id, Long userId, Long teamId){ // Manejo de la solicitud a un torneo privado
         // Base de datos de id, si existe el usuario
 
         // Optimizaciones
@@ -64,8 +68,12 @@ public class TournamentService {
         // Todo -> Agregar Optional en lugar de manejarlo como lo manejamos acá!
         Optional<Player> playerOptional = playerService.getPlayerById(userId);
         Team team = teamService.findById(teamId); // Abarcar si el team realmente existe.
-        if(!playerOptional.isPresent()){
-            throw new NullPointerException(userId + "no encontrado"); // Hay una forma más amigable en lugar de tirar una excepción?
+        if(playerOptional.isEmpty()){
+            throw new NullPointerException(userId + "no encontrado");
+        }
+
+        if(team == null){ // Fijate de crear tus propias excepciones!
+            throw new IllegalArgumentException();
         }
         // si fue encontrado. Me quedo con el jugador.
         Player player = playerOptional.get();
@@ -84,25 +92,29 @@ public class TournamentService {
         if(tournament != null){
             List<Team> participatingTeams = tournament.getParticipatingTeams();
             // Chequear si los equipos que tiene no excedería la cantidad previamente dicha en el torneo -> TODO!
-            if(tournament.isActive()){
-                participatingTeams.add(team); // Si es todo valido, directamente lo agrego.
-                tournament.setParticipatingTeams(participatingTeams);
-                tournamentRepository.save(tournament);
-            }
+            participatingTeams.add(team); // Si es todo valido, directamente lo agrego.
+            tournament.setParticipatingTeams(participatingTeams);
+            tournamentRepository.save(tournament);
+            return true;
         }
-
-
-
+        return false;
         // ---
         // en la base, tiene que tener una relación entre torneos y equipos, o torneos y capitan
         // count de la cantidad de equipos mostrados.
     }
 
-    private boolean isTeamInTournament(Long teamId, Long tournamentId){ // Todo
+    /*private boolean isTeamInTournament(Long teamId, Long tournamentId){
         Team team = teamService.findById(teamId); // Busco el equipo que quiere inscribirse
         Tournament tournament = getTournamentById(tournamentId); // Busco el torneo donde se quiere inscribir
         List<Tournament> activeTournaments = team.getActiveTournaments(); // En que torneos juega el equipo? // Obtener el id del torneo activo y armo como quiero que se comparen.
         return activeTournaments.contains(tournament); // Ver la comparación, tengo que especificar que es lo que quiero comparar.
+    }*/
+
+    private boolean isTeamInTournament(Long teamId, Long tournamentId){
+        Tournament tournament = getTournamentById(tournamentId);
+        if(tournament == null) return false;
+        List<Team> participatingTeams = tournament.getParticipatingTeams();
+        return participatingTeams.stream().anyMatch(team -> team.getId().equals(teamId));
     }
 
     private void requestedTournament(Long teamId, Long tournamentId){

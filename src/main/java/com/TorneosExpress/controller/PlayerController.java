@@ -39,11 +39,11 @@ public class PlayerController {
 
 
     @GetMapping("/{userId}/team-owner")
-    public ResponseEntity<Map<String, Boolean>> checkIfUserIsCaptain(@PathVariable Long userId){
-        boolean ownerTeam = playerService.isCaptain(userId);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("ownerTeam", ownerTeam);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> checkIfUserIsCaptain(@PathVariable Long userId){
+        if(playerService.isCaptain(userId)){
+            return ResponseEntity.ok().body("El usuario es capitan");
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario no es capitán");
     }
 
 

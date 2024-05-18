@@ -14,6 +14,9 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
+    /*@Autowired
+    private TournamentService tournamentService;*/
+
     public List<Player> getPlayerByName(String name) {
         return playerRepository.findByName(name);
     }
@@ -54,6 +57,11 @@ public class PlayerService {
         }
         return false;
     }
+
+    // Considero que aquí tiene que haber una lógica de realizar una solicitud, y procesarla.
+    /*public boolean requestTournamentAccess(Long playerId, Long tournamentId, Long teamId){
+        return tournamentService.processAccessRequest(tournamentId, playerId, teamId);
+    }*/
 
     public void upgradeToCaptain(Long userId){
         Optional<Player> optionalPlayer = playerRepository.findById(userId);

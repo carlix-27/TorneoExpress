@@ -48,9 +48,10 @@ public class RequestController {
 
     }
 
-    //ToDo
+
     @PostMapping("/api/tournaments/{tournamentId}/enroll")
-    public ResponseEntity<?> accessToPublicTournament(@PathVariable Long tournamentId){ // mira como usar acá el tournamentId.
+    public ResponseEntity<?> accessToPublicTournament(@PathVariable Long tournamentId, @RequestBody AccessRequest request){ // mira como usar acá el tournamentId.
+        tournamentService.accessToPublicTournament(tournamentId, request.getUserId(), request.getTeamId());
         return ResponseEntity.ok().body("Te has inscripto exitosamente al torneo");
     }
 
@@ -59,8 +60,6 @@ public class RequestController {
         teamService.processAccessRequest(teamId, userId);
         return ResponseEntity.ok().build();
     }
-
-
 
 }
 

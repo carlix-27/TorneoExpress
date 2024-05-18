@@ -158,7 +158,7 @@ function checkIfUserIsCaptain(userId, callback) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
-            const isCaptain = response.ownerTeam;
+            const isCaptain = response.is_Captain;
             callback(isCaptain);
         } else {
             console.error(xhr.responseText);
