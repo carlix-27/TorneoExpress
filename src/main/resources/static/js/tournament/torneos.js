@@ -36,7 +36,8 @@ function fetchActiveTournaments() {
         })
         .catch(error => {
             console.error('Error:', error);
-            // Manejar el error, mostrar mensaje al usuario
+            document.getElementById('error-message').innerText = 'Error al obtener los torneos activos.';
+            document.getElementById('error-message').style.display = 'block';
         });
 }
 
@@ -44,8 +45,9 @@ function fetchActiveTournaments() {
 
 // Función para inscribirse en un torneo
 
-function enrollInTournament(id, isPrivate) { // Fijate que esté en private
+function enrollInTournament(tournamentId, isPrivate) { // Fijate que esté en private
     const userId = localStorage.getItem("userId");
+    const teamId = localStorage.getItem("teamId");
 
     // Verificar si el usuario está en un equipo
     checkIfUserIsCaptain(userId, function (isCaptain){
@@ -60,9 +62,12 @@ function enrollInTournament(id, isPrivate) { // Fijate que esté en private
     // Si el torneo es privado, mostrar un formulario de solicitud de acceso
     if (isPrivate) {
         const confirmation = confirm("Este torneo es privado. ¿Deseas enviar una solicitud de acceso?");
-        if (confirmation) {sendAccessRequest(id, userId); } // Aquí puedes implementar la lógica para enviar una solicitud de acceso
+        if (confirmation) {
+            sendAccessRequest(tournamentId, userId, teamId);
+        }
+
     } else {
-        enrollUserInPublicTournament(id); // Si el torneo es público, el usuario puede inscribirse directamente
+        enrollUserInPublicTournament(tournamentId); // Si el torneo es público, el usuario puede inscribirse directamente
     }
 }
 
@@ -71,45 +76,52 @@ function enrollInTournament(id, isPrivate) { // Fijate que esté en private
 
 // Función para enviar una solicitud de acceso
 
-function sendAccessRequest(id, userId) {
-    const requestData ={
-        id: id,
-        userId: userId
-    }
+function sendAccessRequest(tournamentId, userId, teamId) {
+    const requestPayload = {
+        userId: userId,
+        teamId: teamId
+    };
 
-    fetch(`/api/tournaments/${id}/access-request`, {
+    fetch(`/api/tournaments/${tournamentId}/access-request`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify(requestPayload)
     })
-
         .then(response => {
-
-            if (!response.ok) {
-                throw new Error(`Failed to send access request: ${response.status} ${response.statusText}`);
+            if (response.ok) {
+                console.log("Solicitud enviada exitosamente.");
+                document.getElementById('success-message').innerText = "Solicitud enviada exitosamente.";
+                document.getElementById('success-message').style.color = 'green';
+                document.getElementById('success-message').style.display = 'block';
+                document.getElementById('error-message').style.display = 'none';
+            } else {
+                throw new Error(`Error al enviar la solicitud: ${response.status} ${response.statusText}`);
             }
-            return response.json();
         })
-        .catch(error =>{
+        .catch(error => {
             console.error('Error:', error);
-        })
+            document.getElementById('error-message').innerText = "Error al enviar la solicitud.";
+            document.getElementById('error-message').style.color = 'red';
+            document.getElementById('error-message').style.display = 'block';
+            document.getElementById('success-message').style.display = 'none';
+        });
 }
 
 // .......................
 
 // Función para inscribir al usuario en un torneo público
 
-function enrollUserInPublicTournament(id) {
+function enrollUserInPublicTournament(tournamentId) {
     const userId = localStorage.getItem("userId");
     const data = {
         userId: userId,
-        tournamentId: id
+        tournamentId: tournamentId
     }
 
     // Realizar una solicitud AJAX al backend para inscribir al usuario en el torneo público
-    fetch(`/api/tournaments/${id}/enroll`, {
+    fetch(`/api/tournaments/${tournamentId}/enroll`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
