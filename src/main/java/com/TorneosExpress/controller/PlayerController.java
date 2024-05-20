@@ -55,4 +55,10 @@ public class PlayerController {
         }
     }
 
+    @GetMapping("/players")
+    public ResponseEntity<List<Player>> getAllPlayers() {
+        List<Player> response = playerService.getAllPlayers();
+        return ResponseEntity.ok().body(response);
+    }
+
 }

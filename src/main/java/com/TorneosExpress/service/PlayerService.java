@@ -58,4 +58,8 @@ public class PlayerService {
             return false; // Player not found
         }
     }
+
+    public List<Player> getAllPlayers() {
+        return playerRepository.findAll();
+    }
 }
