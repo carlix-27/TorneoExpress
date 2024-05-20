@@ -50,10 +50,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const filteredPlayers = players.filter(function (player) {
                     const lowercasePlayerName = player.name.toLowerCase();
-                    const lowercaseLocation = playerLocation.toLowerCase();
+                    console.log("LowercasePlayerName: ", lowercasePlayerName);
+                    const lowercaseLocation = player.location.toLowerCase(); // Corrected this line
+                    console.log("LowercasePlayerLocation: ", lowercaseLocation);
 
                     const nameMatches = lowercasePlayerName.includes(playerName.toLowerCase()) || playerName === "";
-                    const locationMatches = lowercaseLocation.includes(playerLocation.toLowerCase()) || playerName === "";
+                    console.log("Name Matches? : ", nameMatches);
+
+                    const locationMatches = lowercaseLocation.includes(playerLocation.toLowerCase()) || playerLocation === ""; // Corrected this line
+                    console.log("Location Matches? : ", locationMatches);
 
                     return nameMatches && locationMatches;
                 });
