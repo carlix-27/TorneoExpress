@@ -2,6 +2,8 @@ package com.TorneosExpress.model;
 
 import com.TorneosExpress.dto.TournamentDto;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +50,7 @@ public class Tournament {
   private String location;
 
   @Column
-  private Date startDate;
+  private LocalDate startDate;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "sport_id", referencedColumnName = "sport_Id")
@@ -122,11 +124,11 @@ public class Tournament {
     this.location = location;
   }
 
-  public Date getStartDate() {
+  public LocalDate getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Date startDate) {
+  public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
 

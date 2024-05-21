@@ -2,6 +2,7 @@ package com.TorneosExpress.fixture;
 
 import com.TorneosExpress.model.Match.Match;
 import com.TorneosExpress.model.Team;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,10 +10,12 @@ import java.util.List;
 public class FixtureBuilder {
   private final Long tournamentId;
   private final String location;
+  private final LocalDate startDate;
 
-  public FixtureBuilder(Long tournamentId, String location) {
+  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate) {
     this.tournamentId = tournamentId;
     this.location = location;
+    this.startDate = startDate;
   }
 
   public Fixture build(List<Team> teams) {
@@ -30,5 +33,10 @@ public class FixtureBuilder {
       }
     }
     return new Fixture(matches);
+  }
+
+  private LocalDate calculateMatchDate() {
+
+    return startDate;
   }
 }

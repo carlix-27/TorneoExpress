@@ -2,22 +2,21 @@ package com.TorneosExpress.dto;
 
 import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TournamentDto {
     private final Long id;
     private final Long creatorId;
     private final String name;
     private final String location;
-    private final Date startDate;
+    private final LocalDate startDate;
     private final Sport sport;
     private final boolean isPrivate;
     private final Difficulty difficulty;
     private final boolean isActive;
     private final int maxTeams;
 
-    public TournamentDto(Long id, Long creatorId, String name, String location, Date date, Sport sport, boolean isPrivate, Difficulty difficulty, boolean isActive, int maxTeams){
+    public TournamentDto(Long id, Long creatorId, String name, String location, LocalDate date, Sport sport, boolean isPrivate, Difficulty difficulty, boolean isActive, int maxTeams){
         this.id = id;
         this.creatorId = creatorId;
         this.name = name;
@@ -48,7 +47,7 @@ public class TournamentDto {
         return location;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
