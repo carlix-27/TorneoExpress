@@ -4,14 +4,14 @@ import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
 
 public class TournamentDto {
-    private Long id;
-    private Long creatorId;
-    private String name;
-    private String location;
-    private Sport sport;
-    private boolean isPrivate;
-    private Difficulty difficulty;
-    private boolean isActive;
+    private final Long id;
+    private final Long creatorId;
+    private final String name;
+    private final String location;
+    private final Sport sport;
+    private final boolean isPrivate;
+    private final Difficulty difficulty;
+    private final boolean isActive;
     private int maxTeams;
 
     public TournamentDto(Long id, Long creatorId, String name, String location, Sport sport, boolean isPrivate, Difficulty difficulty, boolean isActive){
