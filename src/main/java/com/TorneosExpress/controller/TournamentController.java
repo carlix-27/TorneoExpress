@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.AccessRequest;
 import com.TorneosExpress.dto.TournamentDto;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
@@ -21,9 +22,12 @@ public class TournamentController {
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
         // Check if tournament name is unique
-        if (tournamentService.isTournamentNameUnique(request.getName())) {
-            Tournament createdTournament = tournamentService.createTournament(new Tournament(request));
-            createdTournament.setActive(true); // Set isActive to True
+        String requestName = request.getName();
+        boolean tournamentNameUnique = tournamentService.isTournamentNameUnique(requestName);
+        if (tournamentNameUnique) {
+            Tournament tournament = new Tournament(request);
+            Tournament createdTournament = tournamentService.createTournament(tournament);
+            createdTournament.setActive(true);
             return ResponseEntity.ok(createdTournament);
         } else{
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");

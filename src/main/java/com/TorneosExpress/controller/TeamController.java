@@ -24,10 +24,10 @@ public class TeamController {
   PlayerService playerService;
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Team> createTeam(@RequestBody TeamDto dto, HttpServletRequest request) {
-    Team createdTeam = teamService.createTeam(new Team(dto));
-    playerService.getPlayerById(createdTeam.getCaptainId()).ifPresent(
-        p -> teamService.addPlayer(createdTeam.getId(), p));
+
+  public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
+    Team createdTeam = teamService.createTeam(new Team(teamRequest));
+    playerService.upgradeToCaptain(teamRequest.getCaptainId()); // Acá hago que el jugador que creó el equipo, tenga el campo isCaptain como True.
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
 
@@ -37,6 +37,13 @@ public class TeamController {
     List<Team> teams = teamService.findByCaptainId(userId);
     return ResponseEntity.ok().body(teams);
   }
+
+//  @GetMapping("/user/{userId}")
+//  public ResponseEntity<List<Team>> getAllTeamsOfUser(@PathVariable Long userId) {
+//    /* Gets all teams that 'user' is part of. */
+//    List<Team> teams = teamService.findByPlayers_ID(userId);
+//    return ResponseEntity.ok().body(teams);
+//  }
 
   @GetMapping("/all")
   public ResponseEntity<List<Team>> getAllTeams() {

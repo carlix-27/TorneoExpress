@@ -1,6 +1,7 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.model.Player;
+import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,16 @@ public class PlayerController {
         return ResponseEntity.ok().body(response);
     }
 
+
+    @GetMapping("/{userId}/team-owner")
+    public ResponseEntity<?> checkIfUserIsCaptain(@PathVariable Long userId){
+        if(playerService.isCaptain(userId)){
+            return ResponseEntity.ok().body("El usuario es capitan");
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario no es capitán");
+    }
+
+
     @GetMapping("/players/findByName/{name}")
     public ResponseEntity<List<Player>> getPlayersByName(@PathVariable String name) {
         List<Player> response = playerService.getPlayerByName(name);
@@ -48,12 +59,22 @@ public class PlayerController {
         boolean isUpgradeSuccessful = playerService.upgradeToPremium(userId);
 
         if (isUpgradeSuccessful) {
-            String successMessage = "User upgraded to Premium successfully!";
-            return ResponseEntity.ok().body(successMessage); // Return a success message
+            return ResponseEntity.ok().body(true);
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to upgrade player to Premium"); // Return an error message if failed
         }
+    }
+
+    @GetMapping("/players")
+    public ResponseEntity<List<Player>> getAllPlayers() {
+        List<Player> response = playerService.getAllPlayers();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{playerId}/teams")
+    public List<Team> getTeamsByPlayerId(@PathVariable Long playerId) {
+        return playerService.findTeamsByPlayerId(playerId);
     }
 
 }

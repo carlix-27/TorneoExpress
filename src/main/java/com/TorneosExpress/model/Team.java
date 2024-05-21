@@ -107,7 +107,7 @@ public class Team {
 
   public List<Tournament> getActiveTournaments() {
     return activeTournaments;
-  }
+  } // En los torneos donde ya estoy
 
   public List<Player> getPlayers() {
     return players;
@@ -123,7 +123,7 @@ public class Team {
 
   public List<Tournament> getRequestedTournaments() {
     return requestedTournaments;
-  }
+  } // Los torneos a los que envio solicitud
 
   // Setters...
 
