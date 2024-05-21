@@ -12,6 +12,7 @@ public class TournamentDto {
     private boolean isPrivate;
     private Difficulty difficulty;
     private boolean isActive;
+    private int maxTeams;
 
     public TournamentDto(Long id, Long creatorId, String name, String location, Sport sport, boolean isPrivate, Difficulty difficulty, boolean isActive){
         this.id = id;
@@ -29,6 +30,10 @@ public class TournamentDto {
     }
 
     public Long getCreatorId(){return creatorId;}
+
+    public int getMaxTeams() {
+        return maxTeams;
+    }
 
     public String getName(){
         return name;
