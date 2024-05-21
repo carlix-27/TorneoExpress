@@ -67,5 +67,4 @@ public class PlayerController {
         return playerService.findTeamsByPlayerId(playerId);
     }
 
-
 }

@@ -83,11 +83,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to show invite modal
+    // Function to show invite modal
     function showInviteModal(player) {
         const modal = document.getElementById("inviteModal");
         const closeButton = document.getElementsByClassName("close")[0];
         const sendInviteButton = document.getElementById("sendInviteButton");
-        const teamInput = document.getElementById("teamInput");
+        const teamSelect = document.getElementById("teamInput");
 
         // Display modal
         modal.style.display = "block";
@@ -107,10 +108,36 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+        // Fetch teams for the current user and populate the dropdown
+        const playerId = localStorage.getItem("userId");
+        fetch(`/api/user/${playerId}/teams`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(teams => {
+                // Clear previous options
+                teamSelect.innerHTML = "<option value=''>Select Team</option>";
+
+                // Populate the dropdown menu with the fetched teams
+                teams.forEach(team => {
+                    const option = document.createElement("option");
+                    option.value = team.id; // Assuming the team ID is used as the value
+                    option.textContent = team.name; // Assuming the team name is displayed in the dropdown
+                    teamSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching teams:', error);
+                // Handle the error, display a message to the user
+            });
+
         // Send invite when the send invite button is clicked
         sendInviteButton.onclick = function() {
-            const team = teamInput.value.trim();
-            if (team) {
+            const teamId = teamSelect.value;
+            if (teamId) {
                 // Check if the team is private and the current user is the captain
                 const isPrivate = true; // You need to retrieve this information from your backend
                 const isCaptain = true; // You need to retrieve this information from your backend
@@ -118,14 +145,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (isPrivate && !isCaptain) {
                     alert("You are not the captain of this private team. You cannot invite players.");
                 } else {
-                    sendInvite(player, team);
+                    sendInvite(player, teamId);
                     modal.style.display = "none"; // Close modal after sending invite
                 }
             } else {
-                alert("Please enter a team name.");
+                alert("Please select a team.");
             }
         }
     }
+
+
 
 // Function to show invite popup
     function sendInvite(player, team) {
