@@ -1,6 +1,7 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.model.Player;
+import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,5 +61,11 @@ public class PlayerController {
         List<Player> response = playerService.getAllPlayers();
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping("/{playerId}/teams")
+    public List<Team> getTeamsByPlayerId(@PathVariable Long playerId) {
+        return playerService.findTeamsByPlayerId(playerId);
+    }
+
 
 }

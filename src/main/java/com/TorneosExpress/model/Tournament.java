@@ -57,6 +57,9 @@ public class Tournament {
   @Column
   private boolean isActive;
 
+  @Column
+  private int maxTeams;
+
   @ManyToMany
   @JoinTable(
           name = "tournament_teams",
@@ -81,6 +84,14 @@ public class Tournament {
 
   public void setActive(boolean active) {
     isActive = active;
+  }
+
+  public int getMaxTeams() {
+    return maxTeams;
+  }
+
+  public void setMaxTeams(int maxTeams) {
+    this.maxTeams = maxTeams;
   }
 
 
