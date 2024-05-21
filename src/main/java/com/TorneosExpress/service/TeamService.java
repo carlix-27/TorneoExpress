@@ -1,12 +1,12 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.AccessRequest;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -53,4 +53,27 @@ public class TeamService {
   public List<Team> getAllTeams() {
     return teamRepository.findAll();
   }
+
+  public void invitePlayerToTeam(Long teamId, Long playerId, Long inviteeId) {
+    Team team = teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
+    if (team.isPrivate()) {
+      if (team.getCaptainId().equals(playerId)) {
+        sendInvite(inviteeId, team);
+      } else {
+        throw new RuntimeException("Only the captain can invite players to a private team");
+      }
+    } else {
+      sendInvite(inviteeId, team);
+    }
+  }
+
+  private void sendInvite(Long inviteeId, Team team) {
+    // Implement the logic to send the invite
+    System.out.println("Invite sent to player with ID: " + inviteeId + " for team: " + team.getName());
+  }
+
+  public void processAccessRequest(Long id, Long userId){
+
+  }
+
 }

@@ -39,6 +39,10 @@ function createTeam(event) {
             document.getElementById('success-message').style.color = 'green';
             document.getElementById('success-message').style.display = 'block';
             document.getElementById('error-message').style.display = 'none';
+
+            // Actualizo el estado del capitán en el frontend
+            localStorage.setItem("isCaptain", true);
+
         } else if (xhr.status === 500) {
             document.getElementById('error-message').innerText = "El nombre del equipo debe ser único. Por favor, elija un nombre diferente.";
             document.getElementById('error-message').style.display = 'block';
