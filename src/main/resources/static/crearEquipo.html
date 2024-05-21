@@ -23,7 +23,8 @@
 </header>
 
 <div class="create-team-box">
-    <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+
+    <a href="javascript: goBack()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
     <h2>Crear Equipo</h2>
 
     <!-- Check for success message parameter -->
@@ -37,19 +38,38 @@
             <label for="team-name">Nombre del Equipo:</label>
             <input type="text" id="team-name" name="team-name" required>
         </div>
+
+        <div class="form-group">
+            <label for="sport">Deporte:</label>
+            <select id="sport" name="sport" required>
+                <!-- Sport options will be dynamically populated -->
+            </select>
+        </div>
+
         <div class="form-group">
             <label for="team-location">Ubicación:</label>
             <input type="text" id="team-location" name="team-location" required>
         </div>
+
         <div class="form-group">
             <label for="privacy">Privacidad:</label>
             <input type="checkbox" id="privacy" name="privacy"> Equipo privado
         </div>
+
         <div class="form-group">
             <button type="submit">Crear Equipo</button>
         </div>
     </form>
 </div>
 <script src="js/team/createTeam.js"></script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    // Fetch sports and populate dropdown on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchSports();
+    });
+</script>
 </body>
 </html>
