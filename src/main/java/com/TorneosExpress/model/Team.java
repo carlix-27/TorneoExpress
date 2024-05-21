@@ -155,4 +155,12 @@ public class Team {
   public void setRequestedTournaments(List<Tournament> requestedTournaments) {
     this.requestedTournaments = requestedTournaments;
   }
+
+  public Sport getSport() {
+    return sport;
+  }
+
+  public void setSport(Sport sport) {
+    this.sport = sport;
+  }
 }

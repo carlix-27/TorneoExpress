@@ -45,9 +45,8 @@ public class TeamController {
 //  }
 
   @GetMapping("/all")
-  public ResponseEntity<List<Team>> getAllTeams() {
-    List<Team> teams = teamService.findAll();
-    return ResponseEntity.ok().body(teams);
+  public List<Team> getAllTeams() {
+    return teamService.getAllTeams();
   }
 
   @GetMapping("/allTeams")
