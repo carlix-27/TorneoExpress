@@ -58,6 +58,9 @@ public class Tournament {
   @Column
   private boolean isActive;
 
+  @Column
+  private int maxTeams;
+
   @ManyToMany
   @JoinTable(
           name = "tournament_teams",
