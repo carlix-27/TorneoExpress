@@ -38,6 +38,16 @@ public class PlayerController {
         return ResponseEntity.ok().body(response);
     }
 
+
+    @GetMapping("/{userId}/team-owner")
+    public ResponseEntity<?> checkIfUserIsCaptain(@PathVariable Long userId){
+        if(playerService.isCaptain(userId)){
+            return ResponseEntity.ok().body("El usuario es capitan");
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario no es capitán");
+    }
+
+
     @GetMapping("/players/findByName/{name}")
     public ResponseEntity<List<Player>> getPlayersByName(@PathVariable String name) {
         List<Player> response = playerService.getPlayerByName(name);

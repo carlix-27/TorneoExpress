@@ -15,6 +15,9 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
+    /*@Autowired
+    private TournamentService tournamentService;*/
+
     public List<Player> getPlayerByName(String name) {
         return playerRepository.findByName(name);
     }
@@ -46,6 +49,28 @@ public class PlayerService {
             return user.getIs_Premium();
         }
         return false;
+    }
+
+    public boolean isCaptain(Long userId){
+        Player user = playerRepository.findById(userId).orElse(null);
+        if(user != null){
+            return user.isIs_Captain();
+        }
+        return false;
+    }
+
+    // Considero que aquí tiene que haber una lógica de realizar una solicitud, y procesarla.
+    /*public boolean requestTournamentAccess(Long playerId, Long tournamentId, Long teamId){
+        return tournamentService.processAccessRequest(tournamentId, playerId, teamId);
+    }*/
+
+    public void upgradeToCaptain(Long userId){
+        Optional<Player> optionalPlayer = playerRepository.findById(userId);
+        if(optionalPlayer.isPresent()){
+            Player player = optionalPlayer.get();
+            player.setIs_Captain(true); // Ahora cambié el estado que tenía en la db a True. Sos capitán!
+            playerRepository.save(player);
+        }
     }
 
     public boolean upgradeToPremium(Long playerId) {

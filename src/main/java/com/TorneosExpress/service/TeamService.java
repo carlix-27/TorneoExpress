@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.AccessRequest;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,4 +71,9 @@ public class TeamService {
     // Implement the logic to send the invite
     System.out.println("Invite sent to player with ID: " + inviteeId + " for team: " + team.getName());
   }
+
+  public void processAccessRequest(Long id, Long userId){
+
+  }
+
 }

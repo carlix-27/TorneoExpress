@@ -16,7 +16,7 @@ function fetchAllSports() {
             sports.forEach(sport => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <h3>${sport.sportName}</h3>
+                    <h3>${sport.sportName}</h3> 
                     <p>Number of Players: ${sport.num_players}</p>
                     <button onclick="editSport(${sport.sportId})">Edit</button>
                     <button onclick="deleteSport(${sport.sportId})">Delete</button>
@@ -71,6 +71,5 @@ function logout() {
 
 // Entry point when the page loads
 document.addEventListener("DOMContentLoaded", function() {
-    // Fetch all sports when the page loads
-    fetchAllSports();
+    fetchAllSports(); // Fetch all sports when the page loads
 });
