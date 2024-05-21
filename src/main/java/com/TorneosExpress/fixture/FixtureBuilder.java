@@ -19,20 +19,23 @@ public class FixtureBuilder {
   }
 
   public Fixture build(List<Team> teams) {
-    List<Match> matches = new ArrayList<>();
+    List<Match> matchesAux = new ArrayList<>();
     for (int i = 0; i < teams.size() - 1; i++) {
       for (int j = i + 1; j < teams.size(); j++) {
-        matches.add(new Match(
+        matchesAux.add(new Match(
             teams.get(i).getId(),
-            teams.get(j).getId(),
-            this.tournamentId,
-            this.location,
-            new Date(),
-            "Not played"
+            teams.get(j).getId()
         ));
       }
     }
-    return new Fixture(matches);
+    return new Fixture(calculateFinalMatches(matchesAux));
+  }
+
+  private List<Match> calculateFinalMatches(List<Match> matches) {
+    List<Match> finalMatches = new ArrayList<>();
+    
+
+    return finalMatches;
   }
 
   private LocalDate calculateMatchDate() {

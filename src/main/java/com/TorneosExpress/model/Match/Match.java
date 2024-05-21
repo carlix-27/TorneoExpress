@@ -37,6 +37,11 @@ public class Match {
     this.team1_id = team1_id;
   }
 
+  /* Auxiliary constructor for FixtureBuilder. */
+  public Match(Long team1Id, Long team2Id) {
+
+  }
+
   public Match() {}
 
   public void setMatch_id(Long matchId) {
