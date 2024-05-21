@@ -20,6 +20,7 @@ public class Tournament {
     this.isPrivate = dto.getIsPrivate();
     this.difficulty = dto.getDifficulty();
     this.isActive = dto.getIsActive();
+    this.maxTeams = dto.getMaxTeams();
   }
 
   public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty) {
