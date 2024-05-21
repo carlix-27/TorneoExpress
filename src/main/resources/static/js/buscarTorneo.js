@@ -64,7 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     const nameMatches = lowerCaseTournamentName.includes(tournamentName.toLowerCase()) || tournamentName === "";
 
                     // Check if the tournament type matches the selected type
-                    const typeMatches = tournamentType === "all" || (tournament.isPrivate && tournamentType === "private") || (!tournament.isPrivate && tournamentType === "public");
+                    const typeMatches = tournamentType === "all" || (tournament.private && tournamentType === "private") || (!tournament.private && tournamentType === "public");
+                    console.log(typeMatches);
 
                     // Check if the tournament sport name contains the search query
                     const sportMatches = lowerCaseTournamentSport.includes(tournamentSport.toLowerCase()) || tournamentSport === "";

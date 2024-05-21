@@ -28,6 +28,8 @@ function createTournament() {
     const location = document.getElementById('location').value;
     const isPrivate = document.getElementById('privacy').checked;
     const difficulty = document.getElementById('difficulty').value;
+    const maxTeams = document.getElementById('maxTeams').value;
+
     const userId = localStorage.getItem("userId");
 
     // Check if tournament name is blank
@@ -48,6 +50,7 @@ function createTournament() {
                 isPrivate: isPrivate,
                 difficulty: difficulty,
                 creatorId: userId,
+                maxTeams: maxTeams,
                 isActive: true
             };
 
