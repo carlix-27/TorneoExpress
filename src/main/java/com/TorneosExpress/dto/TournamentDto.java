@@ -14,7 +14,7 @@ public class TournamentDto {
     private boolean isActive;
     private int maxTeams;
 
-    public TournamentDto(Long id, Long creatorId, String name, String location, Sport sport, boolean isPrivate, Difficulty difficulty, boolean isActive){
+    public TournamentDto(Long id, Long creatorId, String name, String location, Sport sport, boolean isPrivate, Difficulty difficulty, boolean isActive, int maxTeams){
         this.id = id;
         this.creatorId = creatorId;
         this.name = name;
@@ -23,6 +23,7 @@ public class TournamentDto {
         this.isPrivate = isPrivate;
         this.difficulty = difficulty;
         this.isActive = isActive;
+        this.maxTeams = maxTeams;
     }
 
     public Long getId(){
