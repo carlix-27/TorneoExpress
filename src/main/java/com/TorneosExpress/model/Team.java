@@ -76,6 +76,11 @@ public class Team {
     this.captainId = captainId;
   }
 
+  @Override
+  public String toString() {
+    return name;
+  }
+
   public Team() {
   }
 
