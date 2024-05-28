@@ -18,7 +18,7 @@ function loadTeams() {
                         <h3>${team.name}</h3>
                         <p>Ubicación: ${team.location}</p>
                         <p>Deporte: ${team.sport.sportName}</p>
-                        <p>Privacidad: ${team.isPrivate ? "Privado" : "Público"}</p>
+                        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
                         <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
                         <button class="signup-button" data-team-id="${team.id}">Signup</button>
                 `;
@@ -43,6 +43,7 @@ function loadTeams() {
 function showSignupModal(teamId) {
     const modal = document.getElementById("signupModal");
     const closeButton = modal.querySelector(".close");
+    const signupButton = modal.querySelector("#sendInviteButton");
 
     // Fetch team details and populate the modal
     fetch(`/api/teams/${teamId}`)
@@ -58,9 +59,18 @@ function showSignupModal(teamId) {
                 <p><strong>Team Name:</strong> ${team.name}</p>
                 <p><strong>Location:</strong> ${team.location}</p>
                 <p><strong>Deporte:</strong> ${team.sport.sportName}</p>
-                <p><strong>Privacy:</strong> ${team.isPrivate ? "Private" : "Public"}</p>
+                <p><strong>Privacy:</strong> ${team.private ? "Private" : "Public"}</p>
                 <p><strong>Players:</strong> ${team.players.length} / ${team.sport.num_players * 2}</p>
             `;
+
+            // Update the button text based on privacy
+            if (team.private) {
+                signupButton.textContent = "Send Request";
+                signupButton.setAttribute("data-privacy", "private");
+            } else {
+                signupButton.textContent = "Sign Up";
+                signupButton.setAttribute("data-privacy", "public");
+            }
         })
         .catch(error => {
             console.error("Error:", error);
@@ -82,6 +92,8 @@ function showSignupModal(teamId) {
         }
     };
 }
+
+
 
 // Load the teams when the page loads
 document.addEventListener("DOMContentLoaded", loadTeams);
