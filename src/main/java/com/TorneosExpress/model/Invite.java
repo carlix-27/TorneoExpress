@@ -11,15 +11,11 @@ public class Invite {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
-    private Team team;
-
-    @ManyToOne
-    @JoinColumn(name = "inviter_id", nullable = false)
+    @JoinColumn(name = "from_id", nullable = false)
     private Player inviter;
 
     @ManyToOne
-    @JoinColumn(name = "invitee_id", nullable = false)
+    @JoinColumn(name = "to_id", nullable = false)
     private Player invitee;
 
     @Column(nullable = false)
@@ -31,8 +27,7 @@ public class Invite {
     public Invite() {
     }
 
-    public Invite(Team team, Player inviter, Player invitee) {
-        this.team = team;
+    public Invite(Player inviter, Player invitee) {
         this.inviter = inviter;
         this.invitee = invitee;
         this.createdAt = LocalDateTime.now();
@@ -46,14 +41,6 @@ public class Invite {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
     }
 
     public Player getInviter() {
