@@ -1,6 +1,8 @@
 package com.TorneosExpress.model.Match;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,12 +25,12 @@ public class Match {
   private String match_location;
 
   @Column
-  private Date date;
+  private LocalDate date;
 
   @Column
   private String score;
 
-  public Match(Long team1_id, Long team2_id, Long tournament_id, String match_location, Date date, String score) {
+  public Match(Long team1_id, Long team2_id, Long tournament_id, String match_location, LocalDate date, String score) {
     this.score = score;
     this.date = date;
     this.match_location = match_location;
@@ -37,10 +39,6 @@ public class Match {
     this.team1_id = team1_id;
   }
 
-  /* Auxiliary constructor for FixtureBuilder. */
-  public Match(Long team1Id, Long team2Id) {
-
-  }
 
   public Match() {}
 
@@ -50,5 +48,13 @@ public class Match {
 
   public Long getMatch_id() {
     return match_id;
+  }
+
+  public Long getTeam1_id() {
+    return team1_id;
+  }
+
+  public Long getTeam2_id() {
+    return team2_id;
   }
 }

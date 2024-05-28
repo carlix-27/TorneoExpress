@@ -4,7 +4,7 @@ import com.TorneosExpress.model.Match.Match;
 import com.TorneosExpress.model.Team;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 public class FixtureBuilder {
@@ -19,27 +19,40 @@ public class FixtureBuilder {
   }
 
   public Fixture build(List<Team> teams) {
-    List<Match> matchesAux = new ArrayList<>();
+    return new Fixture(calculateMatchCalendar(teams));
+  }
+
+  private List<Match> calculateMatchCalendar(List<Team> teams) {
+    List<Match> matches = new ArrayList<>();
+    Collections.shuffle(teams);
+    /* Shuffle so that there are less misses. */
     for (int i = 0; i < teams.size() - 1; i++) {
-      for (int j = i + 1; j < teams.size(); j++) {
-        matchesAux.add(new Match(
+      List<Long> hasMatchOnWeek = new ArrayList<>();
+      processWeek(teams, i, hasMatchOnWeek, matches);
+    }
+    return matches;
+  }
+
+  private void processWeek(List<Team> teams, int i, List<Long> hasMatchOnWeek, List<Match> matches) {
+    for (int j = i + 1; j < teams.size(); j++) {
+      if (isFreeOnWeek(teams.get(i).getId(), teams.get(j).getId(), hasMatchOnWeek)) {
+        matches.add(new Match(
             teams.get(i).getId(),
-            teams.get(j).getId()
+            teams.get(j).getId(),
+            tournamentId,
+            location,
+            startDate.plusWeeks(j),
+            "To be played"
         ));
+        hasMatchOnWeek.add(teams.get(i).getId());
+        hasMatchOnWeek.add(teams.get(j).getId());
       }
     }
-    return new Fixture(calculateFinalMatches(matchesAux));
   }
 
-  private List<Match> calculateFinalMatches(List<Match> matches) {
-    List<Match> finalMatches = new ArrayList<>();
-    
-
-    return finalMatches;
+  private boolean isFreeOnWeek(Long team1Id, Long team2Id, List<Long> teamsWithMatchForWeek) {
+    return !teamsWithMatchForWeek.contains(team1Id)
+        && !teamsWithMatchForWeek.contains(team2Id);
   }
 
-  private LocalDate calculateMatchDate() {
-
-    return startDate;
-  }
 }
