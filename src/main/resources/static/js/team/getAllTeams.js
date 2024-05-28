@@ -56,11 +56,11 @@ function showSignupModal(teamId) {
         .then(team => {
             const teamDetails = document.getElementById("teamDetails");
             teamDetails.innerHTML = `
-                <p><strong>Team Name:</strong> ${team.name}</p>
-                <p><strong>Location:</strong> ${team.location}</p>
-                <p><strong>Deporte:</strong> ${team.sport.sportName}</p>
-                <p><strong>Privacy:</strong> ${team.private ? "Private" : "Public"}</p>
-                <p><strong>Players:</strong> ${team.players.length} / ${team.sport.num_players * 2}</p>
+                <h3>${team.name}</h3>
+                <p>Ubicación: ${team.location}</p>
+                <p>Deporte: ${team.sport.sportName}</p>
+                <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
+                <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
             `;
 
             // Update the button text based on privacy
