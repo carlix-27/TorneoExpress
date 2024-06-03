@@ -10,14 +10,11 @@ public class Invite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "from_id", nullable = false)
-    private Player inviter;
+    @Column
+    private Long from;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "to_id", nullable = false)
-    private Player invitee;
-
+    @Column
+    private Long to;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -25,16 +22,15 @@ public class Invite {
     @Column(nullable = false)
     private boolean accepted;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
-    private Team team;
+    @Column
+    private Long team;
 
     public Invite() {
     }
 
-    public Invite(Player inviter, Player invitee, Team team) {
-        this.inviter = inviter;
-        this.invitee = invitee;
+    public Invite(Long from, Long invitee, Long team) {
+        this.from = from;
+        this.to = invitee;
         this.team = team;
         this.createdAt = LocalDateTime.now();
         this.accepted = false;
@@ -49,20 +45,20 @@ public class Invite {
         this.id = id;
     }
 
-    public Player getInviter() {
-        return inviter;
+    public Long getFrom() {
+        return from;
     }
 
-    public void setInviter(Player inviter) {
-        this.inviter = inviter;
+    public void setFrom(Long inviter) {
+        this.from = inviter;
     }
 
-    public Player getInvitee() {
-        return invitee;
+    public Long getTo() {
+        return to;
     }
 
-    public void setInvitee(Player invitee) {
-        this.invitee = invitee;
+    public void setTo(Long invitee) {
+        this.to = invitee;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -81,11 +77,11 @@ public class Invite {
         this.accepted = accepted;
     }
 
-    public Team getTeam() {
+    public Long getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(Long team) {
         this.team = team;
     }
 }

@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.InviteDto;
 import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.repository.InviteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,13 @@ public class InviteService {
         this.inviteRepository = inviteRepository;
     }
 
-    public Invite sendInvite(Invite invite) {
+    public Invite sendInvite(InviteDto inviteDto) {
+
+        Invite invite = new Invite();
+        invite.setFrom(inviteDto.getInviterId());
+        invite.setTo(inviteDto.getInviteeId());
+        invite.setTeam(inviteDto.getTeamId());
+
         return inviteRepository.save(invite);
     }
 

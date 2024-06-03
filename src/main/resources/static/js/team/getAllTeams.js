@@ -39,7 +39,6 @@ function loadTeams() {
         });
 }
 
-
 function showSignupModal(teamId) {
     const modal = document.getElementById("signupModal");
     const closeButton = modal.querySelector(".close");
@@ -80,79 +79,66 @@ function showSignupModal(teamId) {
                     // Check if the player is not already part of the team
                     if (!team.players.includes(userId)) { // You need to replace `playerId` with the actual ID of the player
                         // Send invite to the team captain
-                        fetch(`/api/teams/${teamId}`)
+                        fetch(`/api/invites/send`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                inviter: {
+                                    id: userId // You need to replace `userId` with the actual ID of the inviter
+                                },
+                                invitee: {
+                                    id: team.captain_id // You need to replace `captainId` with the actual ID of the captain
+                                },
+                                team: {
+                                    id: teamId // You need to replace `teamId` with the actual ID of the team
+                                },
+                                createdAt: {
+
+                                }
+                            })
+                        })
                             .then(response => {
                                 if (!response.ok) {
-                                    throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
+                                    throw new Error(`Failed to send invite: ${response.status} ${response.statusText}`);
                                 }
                                 return response.json();
                             })
-                            .then(team => {
-                                const captainId = team.captain_id; // Assuming captain_id is the property containing the captain's ID
-
-                                // Send invite to the captain
-                                fetch(`/api/invites/send`, {
+                            .then(invite => {
+                                console.log("Invite sent successfully.");
+                                // Create notification for the captain
+                                fetch(`/api/notifications/create`, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
                                     },
                                     body: JSON.stringify({
-                                        inviter: {
-                                            id: userId // You need to replace `userId` with the actual ID of the inviter
-                                        },
-                                        invitee: {
-                                            id: captainId // You need to replace `captainId` with the actual ID of the captain
-                                        },
-                                        team: {
-                                            id: teamId // You need to replace `teamId` with the actual ID of the team
-                                        }
+                                        recipientId: team.captain_id,
+                                        message: `You have received an invite to join the team ${team.name}.`
                                     })
                                 })
                                     .then(response => {
                                         if (!response.ok) {
-                                            throw new Error(`Failed to send invite: ${response.status} ${response.statusText}`);
+                                            throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
                                         }
                                         return response.json();
                                     })
-                                    .then(invite => {
-                                        console.log("Invite sent successfully.");
-                                        // Create notification for the captain
-                                        fetch(`/api/notifications/create`, {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json'
-                                            },
-                                            body: JSON.stringify({
-                                                recipientId: captainId,
-                                                message: `You have received an invite to join the team ${team.name}.`
-                                            })
-                                        })
-                                            .then(response => {
-                                                if (!response.ok) {
-                                                    throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
-                                                }
-                                                return response.json();
-                                            })
-                                            .then(notification => {
-                                                console.log("Notification created successfully.");
-                                                // Display success message
-                                                const successMessage = document.getElementById("successMessage");
-                                                successMessage.textContent = "Signup successful! An invite has been sent to the team captain.";
-                                                successMessage.style.display = "block";
-                                            })
-                                            .catch(error => {
-                                                console.error("Error creating notification:", error);
-                                                // Handle error creating notification
-                                            });
+                                    .then(notification => {
+                                        console.log("Notification created successfully.");
+                                        // Display success message
+                                        const successMessage = document.getElementById("successMessage");
+                                        successMessage.textContent = "Signup successful! An invite has been sent to the team captain.";
+                                        successMessage.style.display = "block";
                                     })
                                     .catch(error => {
-                                        console.error("Error sending invite:", error);
-                                        // Handle error sending invite
+                                        console.error("Error creating notification:", error);
+                                        // Handle error creating notification
                                     });
                             })
                             .catch(error => {
-                                console.error("Error fetching team details:", error);
-                                // Handle error fetching team details
+                                console.error("Error sending invite:", error);
+                                // Handle error sending invite
                             });
                     } else {
                         console.log("Player is already part of the team.");
@@ -163,9 +149,6 @@ function showSignupModal(teamId) {
                     // Handle case where maximum number of players is reached
                 }
             });
-
-
-
         })
         .catch(error => {
             console.error("Error:", error);
@@ -187,9 +170,6 @@ function showSignupModal(teamId) {
         }
     };
 }
-
-
-
 
 // Load the teams when the page loads
 document.addEventListener("DOMContentLoaded", loadTeams);

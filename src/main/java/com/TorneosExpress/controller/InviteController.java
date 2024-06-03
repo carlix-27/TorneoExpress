@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.InviteDto;
 import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.service.InviteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class InviteController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<Invite> sendInvite(@RequestBody Invite invite) {
-        Invite sentInvite = inviteService.sendInvite(invite);
+    public ResponseEntity<Invite> sendInvite(@RequestBody InviteDto inviteDto) {
+        Invite sentInvite = inviteService.sendInvite(inviteDto);
         return new ResponseEntity<>(sentInvite, HttpStatus.CREATED);
     }
 
