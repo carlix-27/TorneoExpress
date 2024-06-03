@@ -10,13 +10,14 @@ public class Invite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "from_id", nullable = false)
     private Player inviter;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "to_id", nullable = false)
     private Player invitee;
+
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -24,12 +25,17 @@ public class Invite {
     @Column(nullable = false)
     private boolean accepted;
 
+    @ManyToOne
+    @JoinColumn(name = "team_id", nullable = false)
+    private Team team;
+
     public Invite() {
     }
 
-    public Invite(Player inviter, Player invitee) {
+    public Invite(Player inviter, Player invitee, Team team) {
         this.inviter = inviter;
         this.invitee = invitee;
+        this.team = team;
         this.createdAt = LocalDateTime.now();
         this.accepted = false;
     }
@@ -73,5 +79,13 @@ public class Invite {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

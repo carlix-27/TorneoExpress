@@ -16,13 +16,10 @@ public class InviteService {
     }
 
     public Invite sendInvite(Invite invite) {
-        // Implement your business logic here (e.g., validation)
-        // You can directly save the invite to the repository
         return inviteRepository.save(invite);
     }
 
     public Invite getInviteById(Long id) {
-        // Retrieve the invite by ID from the repository
         return inviteRepository.findById(id).orElse(null);
     }
 

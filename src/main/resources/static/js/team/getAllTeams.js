@@ -97,9 +97,15 @@ function showSignupModal(teamId) {
                                         'Content-Type': 'application/json'
                                     },
                                     body: JSON.stringify({
-                                        inviterId: userId, // You need to replace `playerId` with the actual ID of the player
-                                        inviteeId: captainId,
-                                        teamId: teamId
+                                        inviter: {
+                                            id: userId // You need to replace `userId` with the actual ID of the inviter
+                                        },
+                                        invitee: {
+                                            id: captainId // You need to replace `captainId` with the actual ID of the captain
+                                        },
+                                        team: {
+                                            id: teamId // You need to replace `teamId` with the actual ID of the team
+                                        }
                                     })
                                 })
                                     .then(response => {

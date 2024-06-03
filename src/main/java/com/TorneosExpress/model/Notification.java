@@ -20,9 +20,9 @@ public class Notification {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    // Constructors, getters, and setters...
 
     public Notification() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public Notification(Player recipient, String message) {
@@ -31,5 +31,35 @@ public class Notification {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and setters...
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Player getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(Player recipient) {
+        this.recipient = recipient;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
