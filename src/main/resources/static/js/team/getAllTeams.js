@@ -7,6 +7,7 @@ export function showSignupModal(teamId) {
     const signupButton = modal.querySelector("#sendInviteButton");
     const userId = localStorage.getItem("userId");
 
+
     fetchTeamDetails(teamId)
         .then(team => {
             displayTeamDetails(team, signupButton);

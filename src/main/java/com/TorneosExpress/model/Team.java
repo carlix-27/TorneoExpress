@@ -2,6 +2,7 @@ package com.TorneosExpress.model;
 import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.model.shop.Article;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,14 @@ public class Team {
           inverseJoinColumns = @JoinColumn(name = "players_id")
   )
   private List<Player> players = new ArrayList<>();
+
+  @ManyToMany
+  @JoinTable(
+      name = "team_players",
+      joinColumns = @JoinColumn(name = "team_id"),
+      inverseJoinColumns = @JoinColumn(name = "players_id")
+  )
+  private List<Player> joinRequests = new ArrayList<>();
 
   @ManyToMany
   @JoinTable(
@@ -110,6 +119,10 @@ public class Team {
     return players;
   }
 
+  public List<Player> getJoinRequests() {
+    return joinRequests;
+  }
+
   public List<Article> getArticles() {
     return articles;
   }
@@ -146,6 +159,18 @@ public class Team {
 
   public void setPlayers(List<Player> players) {
     this.players = players;
+  }
+
+  public void addPlayer(Player player) {
+    this.players.add(player);
+  }
+
+  public void setJoinRequests(List<Player> players) {
+    this.players = players;
+  }
+
+  public void addJoinRequest(Player requester) {
+    this.joinRequests.add(requester);
   }
 
   public void setArticles(List<Article> articles) {
