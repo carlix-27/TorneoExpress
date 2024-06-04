@@ -10,17 +10,11 @@ public class Invite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
-    private Team team;
+    @Column
+    private Long from;
 
-    @ManyToOne
-    @JoinColumn(name = "inviter_id", nullable = false)
-    private Player inviter;
-
-    @ManyToOne
-    @JoinColumn(name = "invitee_id", nullable = false)
-    private Player invitee;
+    @Column
+    private Long to;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -28,13 +22,16 @@ public class Invite {
     @Column(nullable = false)
     private boolean accepted;
 
+    @Column
+    private Long team;
+
     public Invite() {
     }
 
-    public Invite(Team team, Player inviter, Player invitee) {
+    public Invite(Long from, Long invitee, Long team) {
+        this.from = from;
+        this.to = invitee;
         this.team = team;
-        this.inviter = inviter;
-        this.invitee = invitee;
         this.createdAt = LocalDateTime.now();
         this.accepted = false;
     }
@@ -48,28 +45,20 @@ public class Invite {
         this.id = id;
     }
 
-    public Team getTeam() {
-        return team;
+    public Long getFrom() {
+        return from;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setFrom(Long inviter) {
+        this.from = inviter;
     }
 
-    public Player getInviter() {
-        return inviter;
+    public Long getTo() {
+        return to;
     }
 
-    public void setInviter(Player inviter) {
-        this.inviter = inviter;
-    }
-
-    public Player getInvitee() {
-        return invitee;
-    }
-
-    public void setInvitee(Player invitee) {
-        this.invitee = invitee;
+    public void setTo(Long invitee) {
+        this.to = invitee;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -86,5 +75,13 @@ public class Invite {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public Long getTeam() {
+        return team;
+    }
+
+    public void setTeam(Long team) {
+        this.team = team;
     }
 }
