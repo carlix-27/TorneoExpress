@@ -115,4 +115,69 @@ function displayModal(modal, closeButton) {
     };
 }
 
+
+function sendInvite(team, userId) {
+    fetch(`/api/invites/send`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            inviterId: userId,
+            inviteeId: team.captainId,
+            teamId: team.id
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to send invite: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(invite => {
+            console.log("Invite sent successfully.");
+            createNotification(team, userId);
+        })
+        .catch(error => {
+            console.error("Error sending invite:", error);
+            // Handle error sending invite
+        });
+}
+
+
+function createNotification(team, userId) {
+    fetch(`/api/notifications/create`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fromId: userId,
+            toId: team.captain_id,
+            message: `You have received an invite to join the team ${team.name}.`
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(notification => {
+            console.log("Notification created successfully.");
+            displaySuccessMessage("Signup successful! An invite has been sent to the team captain.");
+        })
+        .catch(error => {
+            console.error("Error creating notification:", error);
+            // Handle error creating notification
+        });
+}
+
+
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+}
+
 document.addEventListener("DOMContentLoaded", loadTeams);
