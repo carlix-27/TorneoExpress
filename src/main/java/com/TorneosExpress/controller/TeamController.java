@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.TeamDto;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.PlayerService;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -24,6 +24,7 @@ public class TeamController {
   PlayerService playerService;
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+
   public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
     Team createdTeam = teamService.createTeam(new Team(teamRequest));
     playerService.upgradeToCaptain(teamRequest.getCaptainId()); // Acá hago que el jugador que creó el equipo, tenga el campo isCaptain como True.
@@ -73,6 +74,15 @@ public class TeamController {
       return ResponseEntity.notFound().build();
     }
     return ResponseEntity.ok(team);
+  }
+
+  @PostMapping("/{teamId}/join")
+  public ResponseEntity<String> joinTeam(@PathVariable Long teamId, Long playerId, HttpServletRequest request) {
+    Player p = playerService.getPlayerById(playerId).orElse(null);
+    if (p != null) {
+      return ResponseEntity.ok(teamService.addPlayer(teamId, p));
+    }
+    return ResponseEntity.ok("Error while joining team.");
   }
 
   @PutMapping("/{teamId}")

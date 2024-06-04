@@ -1,0 +1,99 @@
+/* CSS for the horizontal navbar */
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333333;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/*      STYLES FOR THE RESULT       */
+
+h2 {
+    margin: 10px 10px;
+}
+
+#team-result {
+    margin: 30px auto; /* Center the box horizontally */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Increase border radius for smoother edges */
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+    max-width: 400px; /* Limit width for better readability */
+}
+
+/* Team name style */
+#team-result h2 {
+    margin: 0;
+    font-size: 24px; /* Increase font size for emphasis */
+    color: #333;
+}
+
+#team-result p {
+    margin: 10px 0; /* Increase vertical spacing between paragraphs */
+    font-size: 16px;
+    color: #666;
+}
+
+#team-result button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px; /* Increase padding for better button appearance */
+    border: none;
+    align-self: center;
+    border-radius: 5px;
+    background-color: #3d1f7f;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px; /* Increase font size for better readability */
+    transition: background-color 0.3s ease; /* Add transition for smoother hover effect */
+}
+
+/* Button hover style */
+#team-result button:hover {
+    background-color: #342160;
+}

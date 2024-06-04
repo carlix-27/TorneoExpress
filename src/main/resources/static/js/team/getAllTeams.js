@@ -12,10 +12,11 @@ function loadTeams() {
             listaEquipos.innerHTML = ''; // Clear the list before loading teams
 
             teams.forEach(team => {
-                const listItem = document.createElement("li");
 
-                listItem.innerHTML = `
-                        <h3>${team.name}</h3>
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <div>
+                        <a href="loadTeam.html?id=${team.id}"><h3>${team.name}</h3></a>
                         <p>Ubicación: ${team.location}</p>
                         <p>Deporte: ${team.sport.sportName}</p>
                         <p>Privacidad: ${team.isPrivate ? "Privado" : "Público"}</p>
