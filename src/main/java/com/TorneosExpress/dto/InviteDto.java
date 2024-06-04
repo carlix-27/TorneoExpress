@@ -1,9 +1,13 @@
 package com.TorneosExpress.dto;
 
+import java.time.LocalDateTime;
+
 public class InviteDto {
+
     private Long inviterId;
     private Long inviteeId;
     private Long teamId;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public InviteDto() {
     }
@@ -36,5 +40,13 @@ public class InviteDto {
 
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

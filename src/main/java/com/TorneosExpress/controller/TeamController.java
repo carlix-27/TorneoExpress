@@ -26,7 +26,7 @@ public class TeamController {
 
   public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
     Team createdTeam = teamService.createTeam(new Team(teamRequest));
-    playerService.upgradeToCaptain(teamRequest.getCaptainId()); // Acá hago que el jugador que creó el equipo, tenga el campo isCaptain como True.
+    playerService.upgradeToCaptain(teamRequest.getCaptainId());
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
 

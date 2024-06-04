@@ -140,8 +140,14 @@ function sendInvite(team, userId) {
         })
         .catch(error => {
             console.error("Error sending invite:", error);
-            // Handle error sending invite
+            showErrorMessage("There was an error sending the invite. Please try again.");
         });
+}
+
+function showErrorMessage(message) {
+    // Implementation of showing the error message to the user
+    // This could involve displaying a modal, toast notification, or any other form of UI feedback
+    console.error(message); // Placeholder for actual UI implementation
 }
 
 
