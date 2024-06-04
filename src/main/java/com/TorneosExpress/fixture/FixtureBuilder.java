@@ -35,20 +35,25 @@ public class FixtureBuilder {
     List<Team> teamsCopy = new ArrayList<>(teams);
     for (int week = 0; week < numWeeks; week++) {
       LocalDate matchDate = startDate.plusWeeks(week);
-      for (int i = 0; i < numTeams / 2; i++) {
-        Team team1 = teamsCopy.get(i);
-        Team team2 = teamsCopy.get(numTeams - i - 1);
-        if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
-          matches.add(new Match(
-              team1, team2, tournamentId, location, matchDate, "To be played."));
-        }
-      }
+      buildMatches(numTeams, teamsCopy, matches, matchDate);
       Collections.rotate(teamsCopy.subList(1, numTeams), 1);
     }
 
     return matches;
   }
-  
+
+  private void buildMatches(int numTeams, List<Team> teamsCopy, List<Match> matches, LocalDate matchDate) {
+    for (int i = 0; i < numTeams / 2; i++) {
+      Team team1 = teamsCopy.get(i);
+      Team team2 = teamsCopy.get(numTeams - i - 1);
+      if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
+        matches.add(new Match(
+            team1, team2, tournamentId, location, matchDate, "To be played."));
+      }
+    }
+  }
+
+
   public static void main(String[] args) {
     List<Team> teams = List.of(
         new Team(1L, "test1", "pilar", false),
