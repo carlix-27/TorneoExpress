@@ -12,13 +12,11 @@ public class FixtureBuilder {
   private final Long tournamentId;
   private final String location;
   private final LocalDate startDate;
-  private final Sport sport;
 
-  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate, Sport sport) {
+  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate) {
     this.tournamentId = tournamentId;
     this.location = location;
     this.startDate = startDate;
-    this.sport = sport;
   }
 
   public Fixture build(List<Team> teams) {
@@ -66,7 +64,7 @@ public class FixtureBuilder {
     teams.add(new Team(4L, "test4", futbol, "pilar", false));
     teams.add(new Team(5L, "test5", futbol, "pilar", false));
 
-    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now(), futbol);
+    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now());
     Fixture fixture = fb.build(teams);
     fixture.getMatches().forEach(System.out::println);
     /* Fixture should contain N(N-1)/2 matches, N being the amount of teams. */
