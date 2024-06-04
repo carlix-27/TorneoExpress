@@ -17,6 +17,7 @@ public class Team {
     this.isPrivate = teamDto.isPrivate();
     this.prestigePoints = teamDto.getPrestigePoints();
     this.captainId = teamDto.getCaptainId();
+    this.sport = teamDto.getSport();
   }
 
   @Id
@@ -37,6 +38,10 @@ public class Team {
 
   @Column
   private Long captainId;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "sport_id", referencedColumnName = "sport_Id")
+  private Sport sport;
 
   @ManyToMany(mappedBy = "participatingTeams")
   private List<Tournament> activeTournaments = new ArrayList<>();
@@ -68,9 +73,10 @@ public class Team {
   @ManyToMany(mappedBy = "participationRequests")
   private List<Tournament> requestedTournaments = new ArrayList<>();
 
-  public Team(Long captainId, String teamName, String teamLocation, boolean isPrivate) {
+  public Team(Long captainId, String teamName, Sport sport, String teamLocation, boolean isPrivate) {
     this.name = teamName;
     this.location = teamLocation;
+    this.sport = sport;
     this.isPrivate = isPrivate;
     this.prestigePoints = 0;
     this.captainId = captainId;
@@ -173,5 +179,13 @@ public class Team {
 
   public void setRequestedTournaments(List<Tournament> requestedTournaments) {
     this.requestedTournaments = requestedTournaments;
+  }
+
+  public Sport getSport() {
+    return sport;
+  }
+
+  public void setSport(Sport sport) {
+    this.sport = sport;
   }
 }
