@@ -1,4 +1,6 @@
-function loadTeams() {
+import{showSignupModal} from 'getAllTeams.js'
+
+export function loadTeams() {
     fetch(`/api/teams/all`)
         .then(response => {
             if (!response.ok) {

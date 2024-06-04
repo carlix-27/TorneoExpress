@@ -1,6 +1,7 @@
-loadTeams()
+import { loadTeams } from 'loadTeams.js';
 
-function showSignupModal(teamId) {
+
+export function showSignupModal(teamId) {
     const modal = document.getElementById("signupModal");
     const closeButton = modal.querySelector(".close");
     const signupButton = modal.querySelector("#sendInviteButton");
@@ -70,7 +71,7 @@ function displayModal(modal, closeButton) {
     };
 
     window.onclick = function(event) {
-        if (event.target == modal) {
+        if (event.target === modal) {
             modal.style.display = "none";
         }
     };
