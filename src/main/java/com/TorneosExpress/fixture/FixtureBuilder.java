@@ -59,12 +59,12 @@ public class FixtureBuilder {
 
   public static void main(String[] args) {
     Sport futbol = new Sport();
-    List<Team> teams = List.of(
-        new Team(1L, "test1", futbol, "pilar", false),
-        new Team(2L, "test2", futbol, "pilar", false),
-        new Team(3L, "test3", futbol, "pilar", true),
-        new Team(4L, "test4", futbol, "pilar", false)
-        );
+    List<Team> teams = new ArrayList<>();
+    teams.add(new Team(1L, "test1", futbol, "pilar", false));
+    teams.add(new Team(2L, "test2", futbol, "pilar", false));
+    teams.add(new Team(3L, "test3", futbol, "pilar", true));
+    teams.add(new Team(4L, "test4", futbol, "pilar", false));
+    teams.add(new Team(5L, "test5", futbol, "pilar", false));
 
     FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now(), futbol);
     Fixture fixture = fb.build(teams);
