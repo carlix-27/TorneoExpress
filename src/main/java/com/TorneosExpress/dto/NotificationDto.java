@@ -2,23 +2,24 @@ package com.TorneosExpress.dto;
 
 public class NotificationDto {
 
-    private Long recipientId;
+    private Long fromId;
+    private Long toId;
     private String message;
 
     public NotificationDto() {
     }
 
     public NotificationDto(Long recipientId, String message) {
-        this.recipientId = recipientId;
+        this.toId = recipientId;
         this.message = message;
     }
 
     public Long getRecipientId() {
-        return recipientId;
+        return toId;
     }
 
     public void setRecipientId(Long recipientId) {
-        this.recipientId = recipientId;
+        this.toId = recipientId;
     }
 
     public String getMessage() {
@@ -27,5 +28,13 @@ public class NotificationDto {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Long getFromId() {
+        return fromId;
+    }
+
+    public void setFromId(Long fromId) {
+        this.fromId = fromId;
     }
 }
