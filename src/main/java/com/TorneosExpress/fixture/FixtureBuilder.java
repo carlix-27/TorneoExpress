@@ -1,6 +1,7 @@
 package com.TorneosExpress.fixture;
 
 import com.TorneosExpress.model.Match.Match;
+import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,11 +12,13 @@ public class FixtureBuilder {
   private final Long tournamentId;
   private final String location;
   private final LocalDate startDate;
+  private final Sport sport;
 
-  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate) {
+  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate, Sport sport) {
     this.tournamentId = tournamentId;
     this.location = location;
     this.startDate = startDate;
+    this.sport = sport;
   }
 
   public Fixture build(List<Team> teams) {
@@ -55,14 +58,15 @@ public class FixtureBuilder {
 
 
   public static void main(String[] args) {
+    Sport futbol = new Sport();
     List<Team> teams = List.of(
-        new Team(1L, "test1", "pilar", false),
-        new Team(2L, "test2", "pilar", false),
-        new Team(3L, "test3", "pilar", true),
-        new Team(4L, "test4", "pilar", false)
+        new Team(1L, "test1", futbol, "pilar", false),
+        new Team(2L, "test2", futbol, "pilar", false),
+        new Team(3L, "test3", futbol, "pilar", true),
+        new Team(4L, "test4", futbol, "pilar", false)
         );
 
-    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now());
+    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now(), futbol);
     Fixture fixture = fb.build(teams);
     fixture.getMatches().forEach(System.out::println);
     /* Fixture should contain N(N-1)/2 matches, N being the amount of teams. */
