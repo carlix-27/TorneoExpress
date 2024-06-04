@@ -1,6 +1,5 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.dto.AccessRequest;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
@@ -84,7 +83,7 @@ public class TournamentService {
                 // ya está inscripto? -> Ver la tabla. El equipo ya está inscripto?
                 // ¿Cómo chequear si ya está inscripto o no?
             }
-            requestedTournament(teamId, id); // Enviar solicitud al creador del Torneo
+            sendRequest(teamId, id); // Enviar solicitud al creador del Torneo
         }
 
         // chequear si el id del torneo existe
@@ -117,7 +116,7 @@ public class TournamentService {
         return participatingTeams.stream().anyMatch(team -> team.getId().equals(teamId));
     }
 
-    private void requestedTournament(Long teamId, Long tournamentId){
+    private void sendRequest(Long teamId, Long tournamentId){
         Team team = teamService.findById(teamId);
         Tournament tournament = getTournamentById(tournamentId);
         List<Team> participationRequest = tournament.getParticipationRequests();

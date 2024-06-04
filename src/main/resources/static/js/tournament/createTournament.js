@@ -26,6 +26,7 @@ function createTournament() {
     const name = document.getElementById('tournament-name').value;
     const sportId = document.getElementById('sport').value; // Get the selected sportId
     const location = document.getElementById('location').value;
+    const date = document.getElementById('start-date').value;
     const isPrivate = document.getElementById('privacy').checked;
     const difficulty = document.getElementById('difficulty').value;
     const maxTeams = document.getElementById('maxTeams').value;
@@ -47,6 +48,7 @@ function createTournament() {
                 name: name,
                 sport: { sportId: sportId }, // Set the sportId in a nested object
                 location: location,
+                date: date,
                 isPrivate: isPrivate,
                 difficulty: difficulty,
                 creatorId: userId,
