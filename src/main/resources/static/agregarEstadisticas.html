@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Estadisticas</title>
+</head>
+<body>
+
+<header>
+    <h1>Torneos Express</h1>
+    <!-- Menú de navegación -->
+    <nav>
+        <ul>
+            <li><a href="home.html">Inicio</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Logout Script -->
+<script>
+    function logout() {
+        localStorage.removeItem("userId"); // Remove userId from localStorage
+        window.location.href = "login.html"; // Redirect to login page after logout
+    }
+</script>
+
+
+<!--Partidos Activos-->
+<!-- Partidos Activos -->
+<ul id="partidosActivos">
+    <!-- Los partidos se agregarán aquí dinámicamente -->
+</ul>
+
+
+<!-- Formulario para agregar estadísticas -->
+<form id="formularioEstadisticas" style="display:none;">
+    <input type="text" placeholder="Resultado del Partido">
+    <input type="text" placeholder="Posesión del balón">
+    <input type="text" placeholder="Tiros al arco">
+    <input type="text" placeholder="Tiros a puerta">
+    <input type="text" placeholder="Faltas">
+    <button type="submit">Guardar</button>
+</form>
+
+</body>
+</html>

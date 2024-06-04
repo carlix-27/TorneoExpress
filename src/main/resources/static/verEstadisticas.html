@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizar estadísticas</title>
+
+  <script src="js/auth/checkRedirect.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Torneos Express</h1>
+  <!-- Menú de navegación -->
+  <nav>
+    <ul>
+      <li><a href="home.html">Inicio</a></li>
+      <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+</header>
+<!-- Logout Script -->
+<script>
+  function logout() {
+    localStorage.removeItem("userId"); // Remove userId from localStorage
+    window.location.href = "login.html"; // Redirect to login page after logout
+  }
+</script>
+
+
+<!-- Mostrar equipos participantes y Fixture -->
+
+<!-- Tabla de Equipos-->
+<table id="equipoPuntajeTable" border="1">
+  <thead>
+  <tr>
+    <th>Nombre del Equipo</th>
+    <th>Puntaje</th>
+  </tr>
+  </thead>
+  <tbody id="tablaContenido">
+  <!-- Filas se agregarán aquí dinámicamente -->
+  </tbody>
+</table>
+
+<div id="functions">
+  <button id="agregarEstadisticas">Agregar Estadísticas</button>
+</div>
+
+<!-- Incluir el archivo JavaScript para manejar la redirección -->
+<script src="js/agregarEstadisticas.js"></script>
+</body>
+</html>

@@ -22,7 +22,7 @@ function cargarTorneos() {
                 const li = document.createElement("li");
                 li.innerHTML = `
         <div>
-            <h3>${tournament.name}</h3>
+            <a href="verEstadisticas.html?id=${tournament.id}"><h3>${tournament.name}</h3></a>
             <p>Deporte: ${tournament.sport.sportName}</p>
             <p>Ubicación: ${tournament.location}</p>
             <p>Privacidad: ${tournament.private ? "Privado" : "Público"}</p>
