@@ -76,6 +76,11 @@ public class Team {
     this.captainId = captainId;
   }
 
+  /* Constructor for creating dummy teams on Fixture. */
+  public Team(String name) {
+    this.name = name;
+  }
+
   @Override
   public String toString() {
     return name;

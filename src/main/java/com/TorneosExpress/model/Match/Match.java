@@ -47,7 +47,7 @@ public class Match {
 
   @Override
   public String toString() {
-    return teamName1 + " VS " + teamName2;
+    return teamName1 + " VS " + teamName2 + " on date " + date;
   }
 
   public Match() {}

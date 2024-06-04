@@ -4,6 +4,7 @@ import com.TorneosExpress.model.Match.Match;
 import com.TorneosExpress.model.Team;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FixtureBuilder {
@@ -23,37 +24,31 @@ public class FixtureBuilder {
 
   private List<Match> calculateMatchCalendar(List<Team> teams) {
     List<Match> matches = new ArrayList<>();
+    int numTeams = teams.size();
+
+    if (numTeams % 2 != 0) {
+      teams.add(new Team("Dummy")); // 'Dummy' team.
+      numTeams++;
+    }
     int numWeeks = teams.size() - 1; // Teams play against everyone except for themselves.
 
+    List<Team> teamsCopy = new ArrayList<>(teams);
     for (int week = 0; week < numWeeks; week++) {
-      List<Long> hasMatchForWeek = new ArrayList<>();
-      processTeams(matches, teams, hasMatchForWeek, week);
+      LocalDate matchDate = startDate.plusWeeks(week);
+      for (int i = 0; i < numTeams / 2; i++) {
+        Team team1 = teamsCopy.get(i);
+        Team team2 = teamsCopy.get(numTeams - i - 1);
+        if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
+          matches.add(new Match(
+              team1, team2, tournamentId, location, matchDate, "To be played."));
+        }
+      }
+      Collections.rotate(teamsCopy.subList(1, numTeams), 1);
     }
+
     return matches;
   }
-
-  private void processTeams(List<Match> matches, List<Team> teams, List<Long> hasMatchForWeek, int week) {
-    for (int i = 0; i < teams.size() - 1; i++) {
-      if (isFreeOnWeek(teams.get(i).getId(), teams.get(i + 1).getId(), hasMatchForWeek)) {
-        matches.add(new Match(
-            teams.get(i),
-            teams.get(i + 1),
-            tournamentId,
-            location,
-            startDate.plusWeeks(week),
-            "To be played"
-        ));
-        hasMatchForWeek.add(teams.get(i).getId());
-        hasMatchForWeek.add(teams.get(i + 1).getId());
-      }
-    }
-  }
-
-  private boolean isFreeOnWeek(Long team1Id, Long team2Id, List<Long> teamsWithMatchForWeek) {
-    return !teamsWithMatchForWeek.contains(team1Id)
-        && !teamsWithMatchForWeek.contains(team2Id);
-  }
-
+  
   public static void main(String[] args) {
     List<Team> teams = List.of(
         new Team(1L, "test1", "pilar", false),
