@@ -1,12 +1,10 @@
-import { loadTeams } from 'loadTeams.js';
-
+import { loadTeams } from '/loadTeams.js';
 
 export function showSignupModal(teamId) {
     const modal = document.getElementById("signupModal");
     const closeButton = modal.querySelector(".close");
     const signupButton = modal.querySelector("#sendInviteButton");
     const userId = localStorage.getItem("userId");
-
 
     fetchTeamDetails(teamId)
         .then(team => {
@@ -37,7 +35,7 @@ function displayTeamDetails(team, signupButton) {
     <h3>${team.name}</h3>
     <p>Ubicación: ${team.location}</p>
     <p>Deporte: ${team.sport.sportName}</p>
-    <p>Privacidad: ${team.private? "Privado" : "Público"}</p>
+    <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
     <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
   `;
 
