@@ -53,19 +53,4 @@ public class FixtureBuilder {
     }
   }
 
-
-  public static void main(String[] args) {
-    List<Team> teams = List.of(
-        new Team(1L, "test1", "pilar", false),
-        new Team(2L, "test2", "pilar", false),
-        new Team(3L, "test3", "pilar", true),
-        new Team(4L, "test4", "pilar", false)
-        );
-
-    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now());
-    Fixture fixture = fb.build(teams);
-    fixture.getMatches().forEach(System.out::println);
-    /* Fixture should contain N(N-1)/2 matches, N being the amount of teams. */
-  }
-
 }
