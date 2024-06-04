@@ -9,38 +9,38 @@
 </head>
 <body>
 <!-- Encabezado -->
-<header>
-    <h1>Torneos Express - Equipos</h1>
-    <!-- Menú de navegación -->
-    <nav>
-        <ul>
-            <li><a href="home.html">Inicio</a></li>
-            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
-</header>
+    <header>
+        <h1>Torneos Express - Equipos</h1>
+        <!-- Menú de navegación -->
+        <nav>
+            <ul>
+                <li><a href="home.html">Inicio</a></li>
+                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
 
 <!-- Contenido de la página -->
-<section id="all-teams">
-    <h2>Todos los equipos</h2>
-    <ul id="lista-todos-equipos">
-        <!-- Los torneos se cargarán dinámicamente aquí -->
-    </ul>
-</section>
+    <section id="all-teams">
+        <h2>Todos los equipos</h2>
+        <ul id="lista-todos-equipos">
+            <!-- Los torneos se cargarán dinámicamente aquí -->
+        </ul>
+    </section>
 
-<div id="signupModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Team Details</h2>
-        <div id="teamDetails">
-            <!-- Team details will be populated dynamically here -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Team Details</h2>
+            <div id="teamDetails">
+                <!-- Team details will be populated dynamically here -->
+            </div>
+            <button id="sendInviteButton">Send Invite</button>
         </div>
-        <button id="sendInviteButton">Send Invite</button>
     </div>
-</div>
 
-<!-- Scripts -->
-<script src="js/team/getAllTeams.js"></script>
+    <!-- Scripts -->
+    <script src="js/team/getAllTeams.js"></script>
 
 </body>
 </html>

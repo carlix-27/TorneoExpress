@@ -1,9 +1,26 @@
-/* Estilos para el cuerpo y la barra de navegación */
+/* CSS for the horizontal navbar */
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333333;
+}
+
 body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f5f5f5;
-    font-family: 'Raleway', sans-serif;
+    background-color: #f0f0f0;
 }
 
 header {
@@ -28,21 +45,9 @@ nav ul li {
     margin-right: 20px;
 }
 
-nav ul li:last-child {
-    margin-right: 0;
-}
-
 nav ul li a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #333333;
     color: #fff;
+    text-decoration: none;
 }
 
 /* Estilos para el contenedor */
@@ -60,47 +65,48 @@ nav ul li a:hover {
     margin-bottom: 20px;
 }
 
-/* Estilos para las tarjetas de torneos */
-.sport-card {
-    background: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
+/*  STYLES FOR EACH RESULT  */
+
+h2 {
+    text-align: center;
+}
+
+/* Style for each team */
+#tournament-list li {
     margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-right: 30px;
 }
 
-.sport-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
-.sport-card h2 {
+/* Team name style */
+#tournament-list li h3 {
     margin: 0;
-    font-size: 24px;
+    font-size: 20px;
+    color: #333;
 }
 
-.sport-card p {
-    margin: 10px 0;
+/* Additional information style */
+#tournament-list li p {
+    margin: 5px 0;
+    font-size: 16px;
     color: #666;
 }
 
-.edit-button, .delete-button {
-    background: #3d1f7f;
-    color: #fff;
-    font-size: 16px;
+#tournament-list li button {
+    margin-top: 10px;
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
+    background-color: #3d1f7f;
+    color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.edit-button:hover, .delete-button:hover {
-    background: #342160;
-}
-
-.delete-button {
-    background: #d32f2f;
-    margin-left: 10px;
+/* Button hover style */
+#tournament-list li button:hover {
+    background-color: #342160;
 }
