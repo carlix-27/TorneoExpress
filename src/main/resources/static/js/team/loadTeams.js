@@ -14,18 +14,18 @@ export function loadTeams() {
             listaEquipos.innerHTML = '';
 
             teams.forEach(team => {
-                const listItem = document.createElement("li");
 
-                listItem.innerHTML = `
-                        <h3>${team.name}</h3>
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <div>
+                        <a href="loadTeam.html?id=${team.id}"><h3>${team.name}</h3></a>
                         <p>Ubicación: ${team.location}</p>
                         <p>Deporte: ${team.sport.sportName}</p>
-                        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
+                        <p>Privacidad: ${team.isPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
                         <button class="signup-button" data-team-id="${team.id}">Signup</button>
                 `;
-
-                listaEquipos.appendChild(listItem);
+                listaEquipos.appendChild(li);
             });
 
             // Attach event listeners to the signup buttons
