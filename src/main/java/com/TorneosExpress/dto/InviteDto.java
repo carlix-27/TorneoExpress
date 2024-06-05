@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class InviteDto {
 
+    private Long id;
     private Long inviterId;
     private Long inviteeId;
     private Long teamId;
@@ -48,5 +49,13 @@ public class InviteDto {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

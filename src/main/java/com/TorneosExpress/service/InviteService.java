@@ -15,8 +15,8 @@ public class InviteService {
         this.inviteRepository = inviteRepository;
     }
 
-    public Invite sendInvite(Long inviterId, Long inviteeId, Long teamId) {
-        Invite invite = new Invite(inviterId, inviteeId, teamId);
+    public Invite sendInvite(Long from, Long to, Long team) {
+        Invite invite = new Invite(from, to, team);
         return inviteRepository.save(invite);
     }
 

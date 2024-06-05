@@ -1,5 +1,6 @@
 package com.TorneosExpress.model;
 
+import com.TorneosExpress.dto.InviteDto;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,11 +11,11 @@ public class Invite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long from;
+    @Column(name = "FROM_ID")
+    private Long invite_from;
 
-    @Column
-    private Long to;
+    @Column(name = "TO_ID")
+    private Long invite_to;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -29,9 +30,18 @@ public class Invite {
     }
 
     public Invite(Long from, Long invitee, Long team) {
-        this.from = from;
-        this.to = invitee;
+        this.invite_from = from;
+        this.invite_to = invitee;
         this.team = team;
+        this.createdAt = LocalDateTime.now();
+        this.accepted = false;
+    }
+
+    public Invite(InviteDto inviteDto){
+        this.id = inviteDto.getId();
+        this.invite_from = inviteDto.getInviterId();
+        this.invite_to = inviteDto.getInviterId();
+        this.team = inviteDto.getTeamId();
         this.createdAt = LocalDateTime.now();
         this.accepted = false;
     }
@@ -46,19 +56,19 @@ public class Invite {
     }
 
     public Long getFrom() {
-        return from;
+        return invite_from;
     }
 
     public void setFrom(Long inviter) {
-        this.from = inviter;
+        this.invite_from = inviter;
     }
 
     public Long getTo() {
-        return to;
+        return invite_to;
     }
 
     public void setTo(Long invitee) {
-        this.to = invitee;
+        this.invite_to = invitee;
     }
 
     public LocalDateTime getCreatedAt() {

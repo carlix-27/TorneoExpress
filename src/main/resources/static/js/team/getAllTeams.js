@@ -101,6 +101,37 @@ function addSignupButtonListener(team, userId, signupButton) {
     });
 }
 
+function sendInvite(team, userId) {
+    fetch(`/api/invites/create`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            teamId: team.id,
+            userId: userId
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to send invite: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(invite => {
+            console.log("Invite created successfully.", invite);
+            displaySuccessMessage("Invite sent successfully! An invite has been sent to the team captain.");
+
+            // Optionally create a notification for the team captain
+            createNotification(team, userId);
+        })
+        .catch(error => {
+            console.error("Error sending invite:", error);
+            // Handle error sending invite
+        });
+}
+
+
 function displayModal(modal, closeButton) {
     modal.style.display = "block";
 
@@ -114,42 +145,6 @@ function displayModal(modal, closeButton) {
         }
     };
 }
-
-
-function sendInvite(team, userId) {
-    fetch(`/api/invites/send`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            inviterId: userId,
-            inviteeId: team.captainId,
-            teamId: team.id
-        })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to send invite: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(invite => {
-            console.log("Invite sent successfully.");
-            createNotification(team, userId);
-        })
-        .catch(error => {
-            console.error("Error sending invite:", error);
-            showErrorMessage("There was an error sending the invite. Please try again.");
-        });
-}
-
-function showErrorMessage(message) {
-    // Implementation of showing the error message to the user
-    // This could involve displaying a modal, toast notification, or any other form of UI feedback
-    console.error(message); // Placeholder for actual UI implementation
-}
-
 
 function createNotification(team, userId) {
     fetch(`/api/notifications/create`, {
