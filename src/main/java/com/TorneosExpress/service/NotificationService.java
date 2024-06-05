@@ -1,14 +1,12 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.dto.NotificationDto;
+import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.model.Notification;
-import com.TorneosExpress.model.Player;
 import com.TorneosExpress.repository.NotificationRepository;
-import com.TorneosExpress.repository.PlayerRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class NotificationService {
@@ -16,21 +14,22 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    public List<Notification> getUnreadNotifications(Long userId) {
+        return notificationRepository.findByToIdAndReadFalse(userId);
+    }
 
-    @Transactional
-    public void createNotification(NotificationDto notificationDTO) {
+    public Notification markAsRead(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow();
+        notification.setRead(true);
+        return notificationRepository.save(notification);
+    }
 
-        Player recipient = playerRepository.findById(notificationDTO.getRecipientId())
-                .orElseThrow(() -> new EntityNotFoundException("Player not found with ID: " + notificationDTO.getRecipientId()));
+    public void deleteNotification(Long notificationId) {
+        notificationRepository.deleteById(notificationId);
+    }
 
-
-        Notification notification = new Notification();
-        notification.setRecipient(recipient);
-        notification.setMessage(notificationDTO.getMessage());
-
-
-        notificationRepository.save(notification);
+    public Notification createNotification(Long toId, String message, Invite invite) {
+        Notification notification = new Notification(toId, message, invite);
+        return notificationRepository.save(notification);
     }
 }

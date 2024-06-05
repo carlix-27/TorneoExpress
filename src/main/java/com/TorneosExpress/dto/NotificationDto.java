@@ -2,39 +2,30 @@ package com.TorneosExpress.dto;
 
 public class NotificationDto {
 
-    private Long fromId;
+    private Long inviteId;
     private Long toId;
     private String message;
+
 
     public NotificationDto() {
     }
 
-    public NotificationDto(Long recipientId, String message) {
-        this.toId = recipientId;
+    public NotificationDto(Long toId, String message) {
+        this.toId = toId;
         this.message = message;
     }
 
-    public Long getRecipientId() {
+    public Long getToId() {
         return toId;
     }
 
-    public void setRecipientId(Long recipientId) {
-        this.toId = recipientId;
+    public Long getInviteId() {
+        return inviteId;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
-    public Long getFromId() {
-        return fromId;
-    }
-
-    public void setFromId(Long fromId) {
-        this.fromId = fromId;
-    }
 }

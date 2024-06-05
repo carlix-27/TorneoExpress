@@ -39,8 +39,8 @@ public class Invite {
 
     public Invite(InviteDto inviteDto){
         this.id = inviteDto.getId();
-        this.invite_from = inviteDto.getInviterId();
-        this.invite_to = inviteDto.getInviterId();
+        this.invite_from = inviteDto.getInvite_from();
+        this.invite_to = inviteDto.getInvite_from();
         this.team = inviteDto.getTeamId();
         this.createdAt = LocalDateTime.now();
         this.accepted = false;

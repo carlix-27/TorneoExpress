@@ -10,9 +10,8 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "recipient_id", nullable = false)
-    private Player recipient;
+    @Column(nullable = false)
+    private Long toId;
 
     @Column(nullable = false)
     private String message;
@@ -20,17 +19,25 @@ public class Notification {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private boolean read;
+
+    @OneToOne
+    @JoinColumn(name = "invite_id", referencedColumnName = "id")
+    private Invite invite;
 
     public Notification() {
-        this.createdAt = LocalDateTime.now();
     }
 
-    public Notification(Player recipient, String message) {
-        this.recipient = recipient;
+    public Notification(Long toId, String message, Invite invite) {
+        this.toId = toId;
         this.message = message;
         this.createdAt = LocalDateTime.now();
+        this.read = false;
+        this.invite = invite;
     }
 
+    // Getters and setters...
     public Long getId() {
         return id;
     }
@@ -39,12 +46,12 @@ public class Notification {
         this.id = id;
     }
 
-    public Player getRecipient() {
-        return recipient;
+    public Long getToId() {
+        return toId;
     }
 
-    public void setRecipient(Player recipient) {
-        this.recipient = recipient;
+    public void setToId(Long toId) {
+        this.toId = toId;
     }
 
     public String getMessage() {
@@ -61,5 +68,21 @@ public class Notification {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+
+    public Invite getInvite() {
+        return invite;
+    }
+
+    public void setInvite(Invite invite) {
+        this.invite = invite;
     }
 }

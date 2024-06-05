@@ -108,27 +108,37 @@ function sendInvite(team, userId) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            teamId: team.id,
-            userId: userId
+            invite_from: userId,
+            invite_to: team.captain_id,
+            teamId: team.id
         })
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to send invite: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(invite => {
-            console.log("Invite created successfully.", invite);
-            displaySuccessMessage("Invite sent successfully! An invite has been sent to the team captain.");
-
-            // Optionally create a notification for the team captain
-            createNotification(team, userId);
+            createNotification(invite);
         })
-        .catch(error => {
-            console.error("Error sending invite:", error);
-            // Handle error sending invite
-        });
+        .catch(error => console.error('Error:', error));
+}
+
+function createNotification(invite) {
+    const message = `You have received an invite to join the team ${invite.team.name}.`;
+
+    fetch(`/api/notifications/create`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            toId: invite.to,
+            message: message,
+            inviteId: invite.id
+        })
+    })
+        .then(response => response.json())
+        .then(notification => {
+            console.log('Notification created successfully:', notification);
+        })
+        .catch(error => console.error('Error:', error));
 }
 
 
@@ -146,33 +156,6 @@ function displayModal(modal, closeButton) {
     };
 }
 
-function createNotification(team, userId) {
-    fetch(`/api/notifications/create`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            fromId: userId,
-            toId: team.captain_id,
-            message: `You have received an invite to join the team ${team.name}.`
-        })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(notification => {
-            console.log("Notification created successfully.");
-            displaySuccessMessage("Signup successful! An invite has been sent to the team captain.");
-        })
-        .catch(error => {
-            console.error("Error creating notification:", error);
-            // Handle error creating notification
-        });
-}
 
 
 function displaySuccessMessage(message) {

@@ -20,10 +20,12 @@ public class InviteController {
         this.inviteService = inviteService;
     }
 
-    @PostMapping("/send")
-    public ResponseEntity<Invite> sendInvite(@RequestBody InviteDto inviteRequest) {
-        Invite invite = inviteService.sendInvite(inviteRequest.getInviterId(), inviteRequest.getInviteeId(), inviteRequest.getTeamId());
-        return ResponseEntity.ok(invite);
+    @PostMapping("/create")
+    public Invite sendInvite(@RequestBody InviteDto inviteRequest) {
+        Long invite_from = inviteRequest.getInvite_from();
+        Long invite_to = inviteRequest.getInvite_to();
+        Long teamId = inviteRequest.getTeamId();
+        return inviteService.sendInvite(invite_from, invite_to, teamId);
     }
 
     @GetMapping("/{id}")
