@@ -109,7 +109,7 @@ function sendInvite(team, userId) {
         },
         body: JSON.stringify({
             invite_from: userId,
-            invite_to: team.captain_id,
+            invite_to: team.captainId,
             teamId: team.id
         })
     })
