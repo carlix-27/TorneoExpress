@@ -91,7 +91,7 @@ function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
         if (team.players.length < team.sport.num_players * 2) {
             if (!team.players.includes(userId)) {
-                sendInvite(team, userId);
+                sendRequest(team, userId);
             } else {
                 console.log("Player is already part of the team.");
             }
@@ -101,7 +101,13 @@ function addSignupButtonListener(team, userId, signupButton) {
     });
 }
 
-function sendInvite(team, userId) {
+function sendRequest(team, userId) {
+
+    const teamCaptain = team.captainId
+    const teamId = team.id
+
+
+
     fetch(`/api/invites/create`, {
         method: 'POST',
         headers: {
@@ -109,18 +115,18 @@ function sendInvite(team, userId) {
         },
         body: JSON.stringify({
             invite_from: userId,
-            invite_to: team.captainId,
-            teamId: team.id
+            invite_to: teamCaptain,
+            teamId: teamId
         })
     })
         .then(response => response.json())
         .then(invite => {
-            createNotification(invite);
+            createRequestInvitation(invite);
         })
         .catch(error => console.error('Error:', error));
 }
 
-function createNotification(invite) {
+function createInviteNotification(invite) {
     const inviteTeamId = invite.team
     fetchTeamDetails(inviteTeamId)
         .then(team => {
@@ -151,6 +157,45 @@ function createNotification(invite) {
 }
 
 
+function createRequestInvitation(invite) {
+    const inviteTeamId = invite.team;
+    const inviteFromId = invite.from;
+
+    Promise.all([fetchTeamDetails(inviteTeamId), fetchPlayerDetails(inviteFromId)])
+        .then(([team, player]) => {
+            const playerName = player.name
+            const teamName = team.name
+            const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
+
+            const notificationTo = invite.to
+
+            const inviteId = invite.id
+
+            return fetch(`/api/notifications/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    toId: notificationTo,
+                    message: message,
+                    inviteId: inviteId
+                })
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(notification => {
+            console.log('Notification created successfully:', notification);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
 function displayModal(modal, closeButton) {
     modal.style.display = "block";
 
@@ -163,6 +208,16 @@ function displayModal(modal, closeButton) {
             modal.style.display = "none";
         }
     };
+}
+
+function fetchPlayerDetails(playerId) {
+    return fetch(`/api/user/players/${playerId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
 }
 
 

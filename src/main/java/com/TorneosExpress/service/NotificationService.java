@@ -32,4 +32,8 @@ public class NotificationService {
         Notification notification = new Notification(toId, message, invite);
         return notificationRepository.save(notification);
     }
+
+    public List<Notification> getActiveNotifications() {
+        return notificationRepository.findByReadFalse();
+    }
 }

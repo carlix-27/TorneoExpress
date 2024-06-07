@@ -43,4 +43,9 @@ public class NotificationController {
         String message = notificationDto.getMessage();
         return notificationService.createNotification(toId, message, invite);
     }
+
+    @GetMapping("/active")
+    public List<Notification> getActiveNotifications() {
+        return notificationService.getActiveNotifications();
+    }
 }
