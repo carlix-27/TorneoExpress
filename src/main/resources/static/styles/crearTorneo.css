@@ -97,7 +97,7 @@ h2 {
 }
 
 /* Center the Save Changes button */
-.form-group button[type="submit"] {
+.form-group button[type="button"] {
     display: block;
     margin: 0 auto; /* Center the button */
     background: #3d1f7f;
@@ -109,7 +109,7 @@ h2 {
     border-radius: 7px;
 }
 
-.form-group button[type="submit"]:hover {
+.form-group button[type="button"]:hover {
     background: #342160;
 }
 
