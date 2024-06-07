@@ -121,20 +121,29 @@ function sendInvite(team, userId) {
 }
 
 function createNotification(invite) {
-    const message = `You have received an invite to join the team ${invite.team.name}.`;
+    const inviteTeamId = invite.team
+    fetchTeamDetails(inviteTeamId)
+        .then(team => {
+            const message = `Te han invitado a unirte al siguiente equipo: ${team.name}.`;
 
-    fetch(`/api/notifications/create`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            toId: invite.to,
-            message: message,
-            inviteId: invite.id
+            return fetch(`/api/notifications/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    toId: invite.to,
+                    message: message,
+                    inviteId: invite.id
+                })
+            });
         })
-    })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(notification => {
             console.log('Notification created successfully:', notification);
         })
