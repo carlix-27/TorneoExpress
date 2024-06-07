@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    getActiveNotifications();
+    const userId = localStorage.getItem("userId");
+    getActiveNotifications(userId);
 });
 
-function getActiveNotifications() {
-    fetch('/api/notifications/active')
+function getActiveNotifications(userId) {
+    fetch(`/api/notifications/active/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`);

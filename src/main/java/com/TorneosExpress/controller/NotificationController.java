@@ -44,8 +44,10 @@ public class NotificationController {
         return notificationService.createNotification(toId, message, invite);
     }
 
-    @GetMapping("/active")
-    public List<Notification> getActiveNotifications() {
-        return notificationService.getActiveNotifications();
+    @GetMapping("/active/{userId}")
+    public List<Notification> getActiveNotificationsForUser(@PathVariable Long userId) {
+        return notificationService.getActiveNotificationsForUser(userId);
     }
+
+
 }
