@@ -5,7 +5,6 @@ import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,23 +26,16 @@ public class TeamController {
 
   public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
     Team createdTeam = teamService.createTeam(new Team(teamRequest));
-    playerService.upgradeToCaptain(teamRequest.getCaptainId()); // Acá hago que el jugador que creó el equipo, tenga el campo isCaptain como True.
+    playerService.upgradeToCaptain(teamRequest.getCaptainId());
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
 
   @GetMapping("/user/{userId}")
   public ResponseEntity<List<Team>> getTeamsByUser(@PathVariable Long userId) {
-    /* Gets all teams that 'user' is captain of. */
     List<Team> teams = teamService.findByCaptainId(userId);
     return ResponseEntity.ok().body(teams);
   }
 
-//  @GetMapping("/user/{userId}")
-//  public ResponseEntity<List<Team>> getAllTeamsOfUser(@PathVariable Long userId) {
-//    /* Gets all teams that 'user' is part of. */
-//    List<Team> teams = teamService.findByPlayers_ID(userId);
-//    return ResponseEntity.ok().body(teams);
-//  }
 
   @GetMapping("/all")
   public List<Team> getAllTeams() {
@@ -77,7 +69,7 @@ public class TeamController {
   }
 
   @PostMapping("/{teamId}/join")
-  public ResponseEntity<String> joinTeam(@PathVariable Long teamId, Long playerId, HttpServletRequest request) {
+  public ResponseEntity<String> joinTeam(@PathVariable Long teamId, Long playerId) {
     Player p = playerService.getPlayerById(playerId).orElse(null);
     if (p != null) {
       return ResponseEntity.ok(teamService.addPlayer(teamId, p));
@@ -93,7 +85,6 @@ public class TeamController {
       return ResponseEntity.notFound().build();
     }
 
-    // Update the existing tournament with the new data
     existingTeam.setName(updatedTournament.getName());
     existingTeam.setLocation(updatedTournament.getLocation());
     existingTeam.setIsPrivate(updatedTournament.isPrivate());

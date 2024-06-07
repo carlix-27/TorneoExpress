@@ -61,7 +61,6 @@ public class TeamService {
   }
 
   public Team updateTeam(Team team) {
-    // Check if the tournament with given ID exists
     if (team.getId() == null || !teamRepository.existsById(team.getId())) {
       return null; // Tournament not found
     }
@@ -78,28 +77,6 @@ public class TeamService {
 
   public List<Team> getAllTeams() {
     return teamRepository.findAll();
-  }
-
-  public void invitePlayerToTeam(Long teamId, Long playerId, Long inviteeId) {
-    Team team = teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
-    if (team.isPrivate()) {
-      if (team.getCaptainId().equals(playerId)) {
-        sendInvite(inviteeId, team);
-      } else {
-        throw new RuntimeException("Only the captain can invite players to a private team");
-      }
-    } else {
-      sendInvite(inviteeId, team);
-    }
-  }
-
-  private void sendInvite(Long inviteeId, Team team) {
-    // Implement the logic to send the invite
-    System.out.println("Invite sent to player with ID: " + inviteeId + " for team: " + team.getName());
-  }
-
-  public void processAccessRequest(Long id, Long userId){
-
   }
 
 }

@@ -1,4 +1,3 @@
-// Función para cargar los torneos del usuario
 function loadTeams() {
     const userId = localStorage.getItem("userId");
     if (!userId) {
@@ -38,13 +37,10 @@ function loadTeams() {
         });
 }
 
-// Función para editar un torneo
 function editarEquipo(teamId) {
-    // Implementar la lógica para redireccionar a la página de edición del torneo
     window.location.href = `editar-equipo.html?id=${teamId}`;
 }
 
-// Función para borrar un torneo
 function borrarEquipo(teamId) {
     const confirmarBorrar = confirm("¿Estás seguro de que deseas borrar este equipo?");
     if (confirmarBorrar) {
@@ -55,15 +51,12 @@ function borrarEquipo(teamId) {
                 if (!response.ok) {
                     throw new Error(`Failed to delete team: ${response.status} ${response.statusText}`);
                 }
-                // Recargar la lista de torneos después de borrar
                 loadTeams();
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Handle error, show message to user
             });
     }
 }
 
-// Al cargar la página, cargar los torneos del usuario
 document.addEventListener("DOMContentLoaded", loadTeams);
