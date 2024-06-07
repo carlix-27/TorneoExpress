@@ -12,7 +12,6 @@ function loadTeams() {
             listaEquipos.innerHTML = '';
 
             teams.forEach(team => {
-
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
@@ -22,6 +21,7 @@ function loadTeams() {
                         <p>Privacidad: ${team.isPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
                         <button class="signup-button" data-team-id="${team.id}">Signup</button>
+                    </div>
                 `;
                 listaEquipos.appendChild(li);
             });
@@ -71,12 +71,12 @@ function fetchTeamDetails(teamId) {
 function displayTeamDetails(team, signupButton) {
     const teamDetails = document.getElementById("teamDetails");
     teamDetails.innerHTML = `
-    <h3>${team.name}</h3>
-    <p>Ubicación: ${team.location}</p>
-    <p>Deporte: ${team.sport.sportName}</p>
-    <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
-    <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
-  `;
+        <h3>${team.name}</h3>
+        <p>Ubicación: ${team.location}</p>
+        <p>Deporte: ${team.sport.sportName}</p>
+        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
+        <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
+    `;
 
     if (team.private) {
         signupButton.textContent = "Send Request";
@@ -102,11 +102,8 @@ function addSignupButtonListener(team, userId, signupButton) {
 }
 
 function sendRequest(team, userId) {
-
-    const teamCaptain = team.captainId
-    const teamId = team.id
-
-
+    const teamCaptain = team.captainId;
+    const teamId = team.id;
 
     fetch(`/api/invites/create`, {
         method: 'POST',
@@ -127,7 +124,7 @@ function sendRequest(team, userId) {
 }
 
 function createInviteNotification(invite) {
-    const inviteTeamId = invite.team
+    const inviteTeamId = invite.team;
     fetchTeamDetails(inviteTeamId)
         .then(team => {
             const message = `Te han invitado a unirte al siguiente equipo: ${team.name}.`;
@@ -152,10 +149,10 @@ function createInviteNotification(invite) {
         })
         .then(notification => {
             console.log('Notification created successfully:', notification);
+            displaySuccessMessage('Notification created successfully.');
         })
         .catch(error => console.error('Error:', error));
 }
-
 
 function createRequestInvitation(invite) {
     const inviteTeamId = invite.team;
@@ -163,13 +160,12 @@ function createRequestInvitation(invite) {
 
     Promise.all([fetchTeamDetails(inviteTeamId), fetchPlayerDetails(inviteFromId)])
         .then(([team, player]) => {
-            const playerName = player.name
-            const teamName = team.name
+            const playerName = player.name;
+            const teamName = team.name;
             const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
 
-            const notificationTo = invite.to
-
-            const inviteId = invite.id
+            const notificationTo = invite.to;
+            const inviteId = invite.id;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
@@ -191,10 +187,10 @@ function createRequestInvitation(invite) {
         })
         .then(notification => {
             console.log('Notification created successfully:', notification);
+            displaySuccessMessage('Request sent successfully.');
         })
         .catch(error => console.error('Error:', error));
 }
-
 
 function displayModal(modal, closeButton) {
     modal.style.display = "block";
@@ -220,12 +216,14 @@ function fetchPlayerDetails(playerId) {
         });
 }
 
-
-
 function displaySuccessMessage(message) {
     const successMessage = document.getElementById("successMessage");
     successMessage.textContent = message;
     successMessage.style.display = "block";
+
+    setTimeout(() => {
+        successMessage.style.display = "none";
+    }, 3000);
 }
 
 document.addEventListener("DOMContentLoaded", loadTeams);
