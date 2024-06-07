@@ -39,7 +39,7 @@ function loadTeams() {
         });
 }
 
-export function showSignupModal(teamId) {
+function showSignupModal(teamId) {
     const modal = document.getElementById("signupModal");
     const closeButton = modal.querySelector(".close");
     const signupButton = modal.querySelector("#sendInviteButton");
