@@ -23,6 +23,9 @@ public class TournamentRequest {
     @Column(nullable = false)
     private boolean denied;
 
+    @Column
+    private Long tournamentId;
+
 
     public TournamentRequest(){}
 
@@ -65,6 +68,14 @@ public class TournamentRequest {
 
     public void setDenied(boolean denied) {
         this.denied = denied;
+    }
+
+    public Long getTournamentId() {
+        return tournamentId;
+    }
+
+    public void setTournamentId(Long tournamentId) {
+        this.tournamentId = tournamentId;
     }
 
 

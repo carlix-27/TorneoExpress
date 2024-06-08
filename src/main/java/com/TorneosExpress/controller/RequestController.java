@@ -2,7 +2,7 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.InviteDto;
 import com.TorneosExpress.model.Invite;
-import com.TorneosExpress.service.InviteService;
+import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/invites")
-public class InviteController {
+public class RequestController {
+
+    private final RequestService requestService;
 
     @Autowired
-    private final InviteService inviteService;
-
-    @Autowired
-    public InviteController(InviteService inviteService) {
-        this.inviteService = inviteService;
+    public RequestController(RequestService requestService) {
+        this.requestService = requestService;
     }
 
     @PostMapping("/create")
@@ -25,12 +24,12 @@ public class InviteController {
         Long invite_from = inviteRequest.getInvite_from();
         Long invite_to = inviteRequest.getInvite_to();
         Long teamId = inviteRequest.getTeamId();
-        return inviteService.sendInvite(invite_from, invite_to, teamId);
+        return requestService.sendInvite(invite_from, invite_to, teamId);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Invite> getInviteById(@PathVariable Long id) {
-        Invite invite = inviteService.getInviteById(id);
+        Invite invite = requestService.getInviteById(id);
         if (invite != null) {
             return new ResponseEntity<>(invite, HttpStatus.OK);
         } else {
@@ -41,7 +40,7 @@ public class InviteController {
     @PostMapping("/accept/{inviteId}")
     public ResponseEntity<?> acceptInvite(@PathVariable Long inviteId) {
         try {
-            inviteService.acceptInvite(inviteId);
+            requestService.acceptInvite(inviteId);
             return ResponseEntity.ok().body("Invite accepted successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to accept invite.");
@@ -51,7 +50,7 @@ public class InviteController {
     @PostMapping("/deny/{inviteId}")
     public ResponseEntity<?> denyInvite(@PathVariable Long inviteId) {
         try {
-            inviteService.denyInvite(inviteId);
+            requestService.denyInvite(inviteId);
             return ResponseEntity.ok().body("Invite denied successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to deny invite.");

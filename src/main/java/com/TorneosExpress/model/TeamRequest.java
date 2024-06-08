@@ -15,6 +15,9 @@ public class TeamRequest {
     @Column(name = "TO_ID")
     private Long request_to;
 
+    @Column
+    private Long teamId;
+
     @Column(nullable = false)
     private boolean accepted;
 
@@ -63,5 +66,13 @@ public class TeamRequest {
 
     public void setDenied(boolean denied) {
         this.denied = denied;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 }

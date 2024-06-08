@@ -2,17 +2,23 @@ package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.repository.InviteRepository;
+import com.TorneosExpress.repository.TeamRequestRepository;
+import com.TorneosExpress.repository.TournamentRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class InviteService {
+public class RequestService {
 
     private final InviteRepository inviteRepository;
+    private final TeamRequestRepository teamRequestRepository;
+    private final TournamentRequestRepository tournamentRequestRepository;
 
     @Autowired
-    public InviteService(InviteRepository inviteRepository) {
+    public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TournamentRequestRepository tournamentRequestRepository) {
         this.inviteRepository = inviteRepository;
+        this.teamRequestRepository = teamRequestRepository;
+        this.tournamentRequestRepository = tournamentRequestRepository;
     }
 
     public Invite sendInvite(Long from, Long to, Long team) {
