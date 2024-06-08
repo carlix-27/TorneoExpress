@@ -12,11 +12,12 @@ import java.util.Optional;
 @Service
 public class PlayerService {
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
-    /*@Autowired
-    private TournamentService tournamentService;*/
+    @Autowired
+    public PlayerService(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
 
     public List<Player> getPlayerByName(String name) {
         return playerRepository.findByName(name);

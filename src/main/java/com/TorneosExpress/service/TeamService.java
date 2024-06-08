@@ -1,11 +1,8 @@
 package com.TorneosExpress.service;
 
-
-import com.TorneosExpress.dto.AccessRequest;
-
-
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,33 +12,33 @@ import java.util.List;
 @Service
 public class TeamService {
 
+  private final TeamRepository teamRepository;
+  private final PlayerRepository playerRepository;
+
   @Autowired
-  private TeamRepository teamRepository;
+  public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
+    this.teamRepository = teamRepository;
+    this.playerRepository = playerRepository;
+  }
 
   public Team findById(long id) {
     return teamRepository.findById(id);
   }
 
-  public String addPlayer(Long teamId, Player player) {
-    teamRepository.findById(teamId).ifPresent(team -> processRequest(team, player));
-    return "Error while joining team.";
-  }
 
-  private String processRequest(Team team, Player player) {
-    String returnMessage;
-    if (!isTeamPrivate(team)) {
-      team.addPlayer(player);
-      returnMessage = "Team joined successfully.";
-    } else {
-      team.addJoinRequest(player);
-      returnMessage = "Request sent successfully.";
+  public Team addPlayerToTeam(Long teamId, Long userId) {
+    Team team = teamRepository.findById(teamId)
+            .orElseThrow(() -> new RuntimeException("Team not found"));
+
+    Player player = playerRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    if (team.getPlayers().contains(player)) {
+      throw new RuntimeException("Player is already part of the team.");
     }
-    teamRepository.save(team);
-    return returnMessage;
-  }
 
-  private boolean isTeamPrivate(Team team) {
-    return team.isPrivate();
+    team.getPlayers().add(player);
+    return teamRepository.save(team);
   }
 
   public List<Team> findByCaptainId(long id) {
@@ -52,19 +49,8 @@ public class TeamService {
     return teamRepository.findByName(name);
   }
 
-  public List<Team> findAll() {
-    return teamRepository.findAll();
-  }
-
   public void deleteTeamById(long id) {
     teamRepository.deleteById(id);
-  }
-
-  public Team updateTeam(Team team) {
-    if (team.getId() == null || !teamRepository.existsById(team.getId())) {
-      return null; // Tournament not found
-    }
-    return teamRepository.save(team);
   }
 
   public Team save(Team team) {

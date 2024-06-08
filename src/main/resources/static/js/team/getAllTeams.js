@@ -12,13 +12,14 @@ function loadTeams() {
             listaEquipos.innerHTML = '';
 
             teams.forEach(team => {
+
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
                         <a href="loadTeam.html?id=${team.id}"><h3>${team.name}</h3></a>
                         <p>Ubicación: ${team.location}</p>
                         <p>Deporte: ${team.sport.sportName}</p>
-                        <p>Privacidad: ${team.isPrivate ? "Privado" : "Público"}</p>
+                        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
                         <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
                         <button class="signup-button" data-team-id="${team.id}">Signup</button>
                     </div>
@@ -89,20 +90,47 @@ function displayTeamDetails(team, signupButton) {
 
 function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
-        if (team.players.length < team.sport.num_players * 2) {
-            if (!team.players.includes(userId)) {
-                if (team.private) {
-                    sendTeamRequest(team, userId);
-                }
-                // agregar para unirse a equipo de una si es publico
-                else {}
-            } else {
-                console.log("Player is already part of the team.");
+        const teamPlayers = team.players
+        const teamSport = team.sport
+        const maxSize = teamSport.num_players * 2
+        const teamSize = teamPlayers.length
+        if (teamSize < maxSize) {
+            const teamIsPrivate = team.private
+            if (teamIsPrivate) {
+                sendTeamRequest(team, userId);
+            }
+            else {
+                joinPublicTeam(team, userId);
             }
         } else {
-            console.log("Maximum number of players reached.");
+            displaySuccessMessage("Maximum number of players reached.");
         }
     });
+}
+
+
+function joinPublicTeam(team, userId) {
+    fetch(`/api/teams/${team.id}/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userId: userId
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to join team: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            displaySuccessMessage("Joined team!.");
+        })
+        .catch(error => {
+            displayErrorMessage('Error joining the team.');
+        });
 }
 
 function sendTeamRequest(team, userId) {
@@ -161,7 +189,6 @@ function createRequestNotification(teamRequest) {
             return response.json();
         })
         .then(notification => {
-            console.log('Notification created successfully:', notification);
             displaySuccessMessage('Request sent successfully.');
         })
         .catch(error => console.error('Error:', error));
@@ -200,5 +227,16 @@ function displaySuccessMessage(message) {
         successMessage.style.display = "none";
     }, 3000);
 }
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}
+
 
 document.addEventListener("DOMContentLoaded", loadTeams);
