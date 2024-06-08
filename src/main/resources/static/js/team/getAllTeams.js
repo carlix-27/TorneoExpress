@@ -126,37 +126,50 @@ function joinPublicTeam(team, userId) {
             return response.json();
         })
         .then(data => {
-            displaySuccessMessage("Joined team!.");
+            displaySuccessMessage("Joined team successfully!");
         })
         .catch(error => {
-            displayErrorMessage('Error joining the team.');
+            displayErrorMessage('Error joining the team: ' + error.message);
         });
 }
 
-function sendTeamRequest(team, userId) {
-    const teamCaptain = team.captainId;
-    const teamId = team.id;
 
-    fetch(`/api/requests/team/send`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            requestFrom: userId,
-            requestTo: teamCaptain,
-            teamId: teamId,
-            accepted: false,
-            denied: false,
-            sent: true
+function sendTeamRequest(team, userId) {
+    fetchPlayerDetails(userId)
+        .then(playerDetails => {
+            const playerName = playerDetails.name;
+            const teamCaptain = team.captainId;
+            const teamId = team.id;
+
+            fetch(`/api/requests/team/send`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    requestFrom: userId,
+                    requestTo: teamCaptain,
+                    teamId: teamId,
+                    accepted: false,
+                    denied: false,
+                    sent: true,
+                    name: playerName
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to send team request: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(teamRequest => {
+                    createRequestNotification(teamRequest);
+                })
+                .catch(error => console.error('Error:', error));
         })
-    })
-        .then(response => response.json())
-        .then(teamRequest => {
-            createRequestNotification(teamRequest);
-        })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error fetching player details:', error));
 }
+
 
 function createRequestNotification(teamRequest) {
     const requestTeamId = teamRequest.teamId;

@@ -16,6 +16,9 @@ public class TeamRequest {
     private Long requestTo;
 
     @Column
+    private String name;
+
+    @Column
     private Long teamId;
 
     @Column(nullable = false)
@@ -30,10 +33,11 @@ public class TeamRequest {
 
     public TeamRequest(){}
 
-    public TeamRequest(Long requestFrom, Long requestTo, Long teamId) {
+    public TeamRequest(Long requestFrom, Long requestTo, Long teamId, String name) {
         this.requestFrom = requestFrom;
         this.requestTo = requestTo;
         this.teamId = teamId;
+        this.name = name;
         this.accepted = false;
         this.denied = false;
         this.sent = true;

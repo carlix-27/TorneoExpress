@@ -45,8 +45,8 @@ public class RequestService {
         inviteRepository.delete(invite);
     }
 
-    public TeamRequest sendTeamRequest(Long from, Long to, Long team) {
-        TeamRequest request = new TeamRequest(from, to, team);
+    public TeamRequest sendTeamRequest(Long from, Long to, Long team, String name) {
+        TeamRequest request = new TeamRequest(from, to, team, name);
         return teamRequestRepository.save(request);
     }
 
@@ -54,6 +54,9 @@ public class RequestService {
         return teamRequestRepository.findByrequestTo(toId);
     }
 
+    public List<TeamRequest> getRequestsByTeam(Long toId, Long teamId) {
+        return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
+    }
 
 
 }

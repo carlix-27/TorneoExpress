@@ -2,6 +2,7 @@ package com.TorneosExpress.model;
 import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.model.shop.Article;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,9 @@ public class Team {
   private Sport sport;
 
   @ManyToMany(mappedBy = "participatingTeams")
+  @JsonIgnore
   private List<Tournament> activeTournaments = new ArrayList<>();
+
 
   @ManyToMany
   @JoinTable(

@@ -8,19 +8,30 @@ public class TeamRequestDto {
     private Boolean accepted;
     private Boolean denied;
 
+    private String name;
+
     private Boolean sent;
 
-    public TeamRequestDto(Long requestFrom, Long requestTo, Long teamId) {
+    public TeamRequestDto(Long requestFrom, Long requestTo, Long teamId, String name) {
         this.requestFrom = requestFrom;
         this.requestTo = requestTo;
         this.teamId = teamId;
         this.accepted = false;
         this.denied = false;
         this.sent = true;
+        this.name = name;
     }
 
     public Long getRequestFrom() {
         return requestFrom;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setRequestFrom(Long requestFrom) {

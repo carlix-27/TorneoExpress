@@ -22,7 +22,7 @@ function fetchTeamRequests(userId, teamId){
         .then(playerDetails => {
             const playerName = playerDetails.name;
 
-            return fetch(`/api/requests/team/${teamId}/${userId}`)
+            return fetch(`/api/requests/team/${userId}/${teamId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);

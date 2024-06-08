@@ -5,7 +5,9 @@ import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,13 +30,13 @@ public class TeamService {
 
   public Team addPlayerToTeam(Long teamId, Long userId) {
     Team team = teamRepository.findById(teamId)
-            .orElseThrow(() -> new RuntimeException("Team not found"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found"));
 
     Player player = playerRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
     if (team.getPlayers().contains(player)) {
-      throw new RuntimeException("Player is already part of the team.");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Player is already part of the team.");
     }
 
     team.getPlayers().add(player);

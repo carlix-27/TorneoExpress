@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface TeamRequestRepository extends JpaRepository<TeamRequest, Long> {
     List<TeamRequest> findByrequestTo(Long requestTo);
+    List<TeamRequest> findByRequestToAndTeamId(Long toId, Long teamId);
 }

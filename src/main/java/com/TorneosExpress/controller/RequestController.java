@@ -66,7 +66,8 @@ public class RequestController {
         Long requestFromId = teamRequestDto.getRequestFrom();
         Long requestToId = teamRequestDto.getRequestTo();
         Long teamId = teamRequestDto.getTeamId();
-        return requestService.sendTeamRequest(requestFromId, requestToId, teamId);
+        String name = teamRequestDto.getName();
+        return requestService.sendTeamRequest(requestFromId, requestToId, teamId, name);
     }
 
     @GetMapping("/team/{toId}")
@@ -75,7 +76,7 @@ public class RequestController {
     }
 
     @GetMapping("/team/{toId}/{teamId}")
-    public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable String teamId) {
-        return requestService.getAllTeamRequestsByToId(toId);
+    public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
+        return requestService.getRequestsByTeam(toId, teamId);
     }
 }
