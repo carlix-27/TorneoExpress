@@ -24,4 +24,16 @@ public class InviteService {
         return inviteRepository.findById(id).orElse(null);
     }
 
+    public void acceptInvite(Long inviteId) throws Exception {
+        Invite invite = inviteRepository.findById(inviteId)
+                .orElseThrow(() -> new Exception("Invite not found"));
+        inviteRepository.delete(invite);
+    }
+
+    public void denyInvite(Long inviteId) throws Exception {
+        Invite invite = inviteRepository.findById(inviteId)
+                .orElseThrow(() -> new Exception("Invite not found"));
+        inviteRepository.delete(invite);
+    }
+
 }

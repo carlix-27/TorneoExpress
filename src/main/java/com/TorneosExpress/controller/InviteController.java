@@ -37,4 +37,24 @@ public class InviteController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/accept/{inviteId}")
+    public ResponseEntity<?> acceptInvite(@PathVariable Long inviteId) {
+        try {
+            inviteService.acceptInvite(inviteId);
+            return ResponseEntity.ok().body("Invite accepted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to accept invite.");
+        }
+    }
+
+    @PostMapping("/deny/{inviteId}")
+    public ResponseEntity<?> denyInvite(@PathVariable Long inviteId) {
+        try {
+            inviteService.denyInvite(inviteId);
+            return ResponseEntity.ok().body("Invite denied successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to deny invite.");
+        }
+    }
 }

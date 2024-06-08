@@ -19,9 +19,61 @@ function getActiveNotifications(userId) {
                 notificationElement.className = 'notification';
                 notificationElement.innerHTML = `
                     <p>${notification.message}</p>
+                    <button class="accept-button" data-invite-id="${notification.inviteId}">Accept</button>
+                    <button class="deny-button" data-invite-id="${notification.inviteId}">Deny</button>
                 `;
                 notificationsContainer.appendChild(notificationElement);
             });
+
+            // Attach event listeners to the accept and deny buttons
+            document.querySelectorAll('.accept-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    handleAcceptInvite(this.getAttribute('data-invite-id'));
+                });
+            });
+            document.querySelectorAll('.deny-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    handleDenyInvite(this.getAttribute('data-invite-id'));
+                });
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function handleAcceptInvite(inviteId) {
+    fetch(`/api/invites/accept/${inviteId}`, {
+        method: 'POST'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to accept invite: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Invite accepted successfully:', data);
+            // Refresh the notifications list
+            const userId = localStorage.getItem("userId");
+            getActiveNotifications(userId);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function handleDenyInvite(inviteId) {
+    fetch(`/api/invites/deny/${inviteId}`, {
+        method: 'POST'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to deny invite: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Invite denied successfully:', data);
+            // Refresh the notifications list
+            const userId = localStorage.getItem("userId");
+            getActiveNotifications(userId);
         })
         .catch(error => console.error('Error:', error));
 }
