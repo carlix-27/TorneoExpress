@@ -22,19 +22,14 @@ public class Notification {
     @Column(nullable = false)
     private boolean read;
 
-    @OneToOne
-    @JoinColumn(name = "invite_id", referencedColumnName = "id")
-    private Invite invite;
-
     public Notification() {
     }
 
-    public Notification(Long toId, String message, Invite invite) {
+    public Notification(Long toId, String message) {
         this.toId = toId;
         this.message = message;
         this.createdAt = LocalDateTime.now();
         this.read = false;
-        this.invite = invite;
     }
 
     // Getters and setters...
@@ -76,13 +71,5 @@ public class Notification {
 
     public void setRead(boolean read) {
         this.read = read;
-    }
-
-    public Invite getInvite() {
-        return invite;
-    }
-
-    public void setInvite(Invite invite) {
-        this.invite = invite;
     }
 }
