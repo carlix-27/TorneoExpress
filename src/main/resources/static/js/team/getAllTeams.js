@@ -111,9 +111,11 @@ function sendTeamRequest(team, userId) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            invite_from: userId,
-            invite_to: teamCaptain,
-            teamId: teamId
+            request_from: userId,
+            request_to: teamCaptain,
+            teamId: teamId,
+            accepted: false,
+            denied: false
         })
     })
         .then(response => response.json())

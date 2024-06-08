@@ -8,6 +8,14 @@ public class TeamRequestDto {
     private Boolean accepted;
     private Boolean denied;
 
+    public TeamRequestDto(Long request_from, Long request_to, Long teamId) {
+        this.request_from = request_from;
+        this.request_to = request_to;
+        this.teamId = teamId;
+        this.accepted = false;
+        this.denied = false;
+    }
+
     public Long getRequest_from() {
         return request_from;
     }

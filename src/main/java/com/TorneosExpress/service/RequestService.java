@@ -1,6 +1,7 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Invite;
+import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.repository.InviteRepository;
 import com.TorneosExpress.repository.TeamRequestRepository;
 import com.TorneosExpress.repository.TournamentRequestRepository;
@@ -41,5 +42,12 @@ public class RequestService {
                 .orElseThrow(() -> new Exception("Invite not found"));
         inviteRepository.delete(invite);
     }
+
+    public TeamRequest sendTeamRequest(Long from, Long to, Long team) {
+        TeamRequest request = new TeamRequest(from, to, team);
+        return teamRequestRepository.save(request);
+    }
+
+
 
 }

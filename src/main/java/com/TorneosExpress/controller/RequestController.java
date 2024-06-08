@@ -1,7 +1,9 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.InviteDto;
+import com.TorneosExpress.dto.TeamRequestDto;
 import com.TorneosExpress.model.Invite;
+import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,5 +57,13 @@ public class RequestController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to deny invite.");
         }
+    }
+
+    @PostMapping("/team/send")
+    public TeamRequest sendRequest(@RequestBody TeamRequestDto teamRequestDto) {
+        Long requestFromId = teamRequestDto.getRequest_from();
+        Long requestToId = teamRequestDto.getRequest_to();
+        Long teamId = teamRequestDto.getTeamId();
+        return requestService.sendTeamRequest(requestFromId, requestToId, teamId);
     }
 }
