@@ -73,4 +73,9 @@ public class RequestController {
     public List<TeamRequest> getAllTeamRequests(@PathVariable Long toId) {
         return requestService.getAllTeamRequestsByToId(toId);
     }
+
+    @GetMapping("/team/{toId}/{teamId}")
+    public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable String teamId) {
+        return requestService.getAllTeamRequestsByToId(toId);
+    }
 }
