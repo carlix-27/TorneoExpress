@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/invites")
+@RequestMapping("/api/requests")
 public class RequestController {
 
     private final RequestService requestService;
@@ -19,7 +19,7 @@ public class RequestController {
         this.requestService = requestService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/invite/send")
     public Invite sendInvite(@RequestBody InviteDto inviteRequest) {
         Long invite_from = inviteRequest.getInvite_from();
         Long invite_to = inviteRequest.getInvite_to();
@@ -27,7 +27,7 @@ public class RequestController {
         return requestService.sendInvite(invite_from, invite_to, teamId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/invite/{id}")
     public ResponseEntity<Invite> getInviteById(@PathVariable Long id) {
         Invite invite = requestService.getInviteById(id);
         if (invite != null) {
@@ -37,7 +37,7 @@ public class RequestController {
         }
     }
 
-    @PostMapping("/accept/{inviteId}")
+    @PostMapping("/invite/accept/{inviteId}")
     public ResponseEntity<?> acceptInvite(@PathVariable Long inviteId) {
         try {
             requestService.acceptInvite(inviteId);
@@ -47,7 +47,7 @@ public class RequestController {
         }
     }
 
-    @PostMapping("/deny/{inviteId}")
+    @PostMapping("/invite/deny/{inviteId}")
     public ResponseEntity<?> denyInvite(@PathVariable Long inviteId) {
         try {
             requestService.denyInvite(inviteId);

@@ -91,7 +91,7 @@ function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
         if (team.players.length < team.sport.num_players * 2) {
             if (!team.players.includes(userId)) {
-                sendRequest(team, userId);
+                sendTeamRequest(team, userId);
             } else {
                 console.log("Player is already part of the team.");
             }
@@ -101,11 +101,11 @@ function addSignupButtonListener(team, userId, signupButton) {
     });
 }
 
-function sendRequest(team, userId) {
+function sendTeamRequest(team, userId) {
     const teamCaptain = team.captainId;
     const teamId = team.id;
 
-    fetch(`/api/invites/create`, {
+    fetch(`/api/requests/team/send`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
