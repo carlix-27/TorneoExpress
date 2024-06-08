@@ -8,12 +8,15 @@ public class TeamRequestDto {
     private Boolean accepted;
     private Boolean denied;
 
+    private Boolean sent;
+
     public TeamRequestDto(Long request_from, Long request_to, Long teamId) {
         this.request_from = request_from;
         this.request_to = request_to;
         this.teamId = teamId;
         this.accepted = false;
         this.denied = false;
+        this.sent = true;
     }
 
     public Long getRequest_from() {
@@ -22,6 +25,14 @@ public class TeamRequestDto {
 
     public void setRequest_from(Long request_from) {
         this.request_from = request_from;
+    }
+
+    public Boolean getSent() {
+        return sent;
+    }
+
+    public void setSent(Boolean sent) {
+        this.sent = sent;
     }
 
     public Long getRequest_to() {

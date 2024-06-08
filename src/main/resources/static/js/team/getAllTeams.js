@@ -115,59 +115,28 @@ function sendTeamRequest(team, userId) {
             request_to: teamCaptain,
             teamId: teamId,
             accepted: false,
-            denied: false
+            denied: false,
+            sent: true
         })
     })
         .then(response => response.json())
-        .then(invite => {
-            createRequestInvitation(invite);
+        .then(teamRequest => {
+            createRequestNotification(teamRequest);
         })
         .catch(error => console.error('Error:', error));
 }
 
-function createInviteNotification(invite) {
-    const inviteTeamId = invite.team;
-    fetchTeamDetails(inviteTeamId)
-        .then(team => {
-            const message = `Te han invitado a unirte al siguiente equipo: ${team.name}.`;
+function createRequestNotification(teamRequest) {
+    const requestTeamId = teamRequest.teamId;
+    const requestFromId = teamRequest.request_from;
 
-            return fetch(`/api/notifications/create`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    toId: invite.to,
-                    message: message,
-                    inviteId: invite.id
-                })
-            });
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(notification => {
-            console.log('Notification created successfully:', notification);
-            displaySuccessMessage('Notification created successfully.');
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function createRequestInvitation(invite) {
-    const inviteTeamId = invite.team;
-    const inviteFromId = invite.from;
-
-    Promise.all([fetchTeamDetails(inviteTeamId), fetchPlayerDetails(inviteFromId)])
+    Promise.all([fetchTeamDetails(requestTeamId), fetchPlayerDetails(requestFromId)])
         .then(([team, player]) => {
             const playerName = player.name;
             const teamName = team.name;
             const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
 
-            const notificationTo = invite.to;
-            const inviteId = invite.id;
+            const notificationTo = teamRequest.request_to;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
@@ -177,8 +146,8 @@ function createRequestInvitation(invite) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
-                    inviteId: inviteId
                 })
+
             });
         })
         .then(response => {

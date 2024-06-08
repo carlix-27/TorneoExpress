@@ -24,6 +24,9 @@ public class TeamRequest {
     @Column(nullable = false)
     private boolean denied;
 
+    @Column
+    private boolean sent;
+
 
     public TeamRequest(){}
 
@@ -33,6 +36,7 @@ public class TeamRequest {
         this.teamId = teamId;
         this.accepted = false;
         this.denied = false;
+        this.sent = true;
     }
 
 
