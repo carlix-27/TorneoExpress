@@ -110,7 +110,7 @@ function addSignupButtonListener(team, userId, signupButton) {
 
 
 function joinPublicTeam(team, userId) {
-    fetch(`/api/teams/${team.id}/${userId}`, {
+    fetch(`/api/teams/add/${team.id}/${userId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
