@@ -19,8 +19,6 @@ function getActiveNotifications(userId) {
                 notificationElement.className = 'notification';
                 notificationElement.innerHTML = `
                     <p>${notification.message}</p>
-                    <button class="accept-button" data-invite-id="${notification.inviteId}">Accept</button>
-                    <button class="deny-button" data-invite-id="${notification.inviteId}">Deny</button>
                 `;
                 notificationsContainer.appendChild(notificationElement);
             });

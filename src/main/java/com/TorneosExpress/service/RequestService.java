@@ -8,6 +8,8 @@ import com.TorneosExpress.repository.TournamentRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RequestService {
 
@@ -46,6 +48,10 @@ public class RequestService {
     public TeamRequest sendTeamRequest(Long from, Long to, Long team) {
         TeamRequest request = new TeamRequest(from, to, team);
         return teamRequestRepository.save(request);
+    }
+
+    public List<TeamRequest> getAllTeamRequestsByToId(Long toId) {
+        return teamRequestRepository.findByrequestTo(toId);
     }
 
 

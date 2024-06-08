@@ -2,29 +2,29 @@ package com.TorneosExpress.dto;
 
 public class TeamRequestDto {
 
-    private Long request_from;
-    private Long request_to;
+    private Long requestFrom;
+    private Long requestTo;
     private Long teamId;
     private Boolean accepted;
     private Boolean denied;
 
     private Boolean sent;
 
-    public TeamRequestDto(Long request_from, Long request_to, Long teamId) {
-        this.request_from = request_from;
-        this.request_to = request_to;
+    public TeamRequestDto(Long requestFrom, Long requestTo, Long teamId) {
+        this.requestFrom = requestFrom;
+        this.requestTo = requestTo;
         this.teamId = teamId;
         this.accepted = false;
         this.denied = false;
         this.sent = true;
     }
 
-    public Long getRequest_from() {
-        return request_from;
+    public Long getRequestFrom() {
+        return requestFrom;
     }
 
-    public void setRequest_from(Long request_from) {
-        this.request_from = request_from;
+    public void setRequestFrom(Long requestFrom) {
+        this.requestFrom = requestFrom;
     }
 
     public Boolean getSent() {
@@ -35,12 +35,12 @@ public class TeamRequestDto {
         this.sent = sent;
     }
 
-    public Long getRequest_to() {
-        return request_to;
+    public Long getRequestTo() {
+        return requestTo;
     }
 
-    public void setRequest_to(Long request_to) {
-        this.request_to = request_to;
+    public void setRequestTo(Long requestTo) {
+        this.requestTo = requestTo;
     }
 
     public Long getTeamId() {

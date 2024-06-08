@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/requests")
 public class RequestController {
@@ -61,9 +63,14 @@ public class RequestController {
 
     @PostMapping("/team/send")
     public TeamRequest sendRequest(@RequestBody TeamRequestDto teamRequestDto) {
-        Long requestFromId = teamRequestDto.getRequest_from();
-        Long requestToId = teamRequestDto.getRequest_to();
+        Long requestFromId = teamRequestDto.getRequestFrom();
+        Long requestToId = teamRequestDto.getRequestTo();
         Long teamId = teamRequestDto.getTeamId();
         return requestService.sendTeamRequest(requestFromId, requestToId, teamId);
+    }
+
+    @GetMapping("/team/{toId}")
+    public List<TeamRequest> getAllTeamRequests(@PathVariable Long toId) {
+        return requestService.getAllTeamRequestsByToId(toId);
     }
 }

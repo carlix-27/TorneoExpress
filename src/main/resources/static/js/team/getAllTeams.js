@@ -91,7 +91,11 @@ function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
         if (team.players.length < team.sport.num_players * 2) {
             if (!team.players.includes(userId)) {
-                sendTeamRequest(team, userId);
+                if (team.private) {
+                    sendTeamRequest(team, userId);
+                }
+                // agregar para unirse a equipo de una si es publico
+                else {}
             } else {
                 console.log("Player is already part of the team.");
             }
@@ -111,8 +115,8 @@ function sendTeamRequest(team, userId) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            request_from: userId,
-            request_to: teamCaptain,
+            requestFrom: userId,
+            requestTo: teamCaptain,
             teamId: teamId,
             accepted: false,
             denied: false,
@@ -128,7 +132,7 @@ function sendTeamRequest(team, userId) {
 
 function createRequestNotification(teamRequest) {
     const requestTeamId = teamRequest.teamId;
-    const requestFromId = teamRequest.request_from;
+    const requestFromId = teamRequest.requestFrom;
 
     Promise.all([fetchTeamDetails(requestTeamId), fetchPlayerDetails(requestFromId)])
         .then(([team, player]) => {
@@ -136,7 +140,7 @@ function createRequestNotification(teamRequest) {
             const teamName = team.name;
             const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
 
-            const notificationTo = teamRequest.request_to;
+            const notificationTo = teamRequest.requestTo;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',

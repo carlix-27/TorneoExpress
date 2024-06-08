@@ -31,6 +31,7 @@ function cargarTorneos() {
             <p>Solicitudes de Participación: ${tournament.participationRequests.length}</p>
             <button onclick="editarTorneo(${tournament.id})">Editar</button>
             <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
+            <button onclick="manejarSolicitudes(${tournament.id})">Manejar Solicitudes</button>
         </div>
     `;
                 listaTorneos.appendChild(li);
@@ -43,10 +44,12 @@ function cargarTorneos() {
         });
 }
 
-// Función para editar un torneo
 function editarTorneo(torneoId) {
-    // Implementar la lógica para redireccionar a la página de edición del torneo
     window.location.href = `edit-tournament.html?id=${torneoId}`;
+}
+
+function manejarSolicitudes(torneoId){
+    window.location.href = `manejarSolicitudesEquipo.html?id=${torneoId}`;
 }
 
 // Función para borrar un torneo

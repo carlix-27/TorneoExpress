@@ -16,11 +16,15 @@ import java.util.List;
 @RequestMapping("/api/teams")
 public class TeamController {
 
-  @Autowired
-  TeamService teamService;
+  private final TeamService teamService;
+
+  private final PlayerService playerService;
 
   @Autowired
-  PlayerService playerService;
+  public TeamController(TeamService teamService, PlayerService playerService) {
+    this.teamService = teamService;
+    this.playerService = playerService;
+  }
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
 
