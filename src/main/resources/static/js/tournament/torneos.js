@@ -16,7 +16,7 @@ function fetchActiveTournaments() {
             tournaments.forEach(tournament => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <h3>${tournament.name}</h3>
+                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a> 
                     <p>Deporte: ${tournament.sport.sportName}</p>
                     <p>${tournament.private ? 'Privado' : 'Público'}</p>
                 `;
