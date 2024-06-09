@@ -121,15 +121,16 @@ function joinPublicTeam(team, userId) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to join team: ${response.status} ${response.statusText}`);
+                const statusError = response.statusText
+                throw new Error(`Error al unirse a equipo: ${statusError}`);
             }
             return response.json();
         })
         .then(data => {
-            displaySuccessMessage("Joined team successfully!");
+            displaySuccessMessage("Te has unido al equipo exitosamente!");
         })
         .catch(error => {
-            displayErrorMessage('Error joining the team: ' + error.message);
+            displayErrorMessage(error.message);
         });
 }
 
