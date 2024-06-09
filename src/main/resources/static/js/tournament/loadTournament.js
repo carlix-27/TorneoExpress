@@ -22,6 +22,7 @@ function loadTournament() {
                     <p>Inicio: ${tournament.startDate}</p>
                     <!-- <p>Equipos: ${tournament.participatingTeams}</p> -->
                     <p>Cantidad de equipos permitidos: ${tournament.maxTeams}</p>
+                    <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
                     <button id="join-button" type="submit">${tournament.private ? "Enviar solicitud" : "Unirse"}</button>
                 </div>
             `;
