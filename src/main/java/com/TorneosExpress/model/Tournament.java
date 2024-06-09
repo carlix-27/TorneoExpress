@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -76,15 +75,6 @@ public class Tournament {
           uniqueConstraints = @UniqueConstraint(columnNames = { "tournament_id", "team_id" })
   )
   private List<Team> participatingTeams = new ArrayList<>();
-
-  @ManyToMany
-  @JoinTable(
-          name = "tournament_requests",
-          joinColumns = @JoinColumn(name = "tournament_id"),
-          inverseJoinColumns = @JoinColumn(name = "team_id"),
-          uniqueConstraints = @UniqueConstraint(columnNames = { "tournament_id", "team_id" })
-  )
-  private List<Team> participationRequests = new ArrayList<>();
 
   public boolean isActive() {
     return isActive;
@@ -168,14 +158,6 @@ public class Tournament {
 
   public void setParticipatingTeams(List<Team> participatingTeams) {
     this.participatingTeams = participatingTeams;
-  }
-
-  public List<Team> getParticipationRequests() {
-    return participationRequests;
-  }
-
-  public void setParticipationRequests(List<Team> participationRequests) {
-    this.participationRequests = participationRequests;
   }
 
   public Long getId() {

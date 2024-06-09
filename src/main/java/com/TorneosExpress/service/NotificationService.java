@@ -1,6 +1,5 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.model.Notification;
 import com.TorneosExpress.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,12 @@ import java.util.List;
 @Service
 public class NotificationService {
 
+    private final NotificationRepository notificationRepository;
+
     @Autowired
-    private NotificationRepository notificationRepository;
+    public NotificationService(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
+    }
 
     public List<Notification> getUnreadNotifications(Long userId) {
         return notificationRepository.findByToIdAndReadFalse(userId);
@@ -28,8 +31,12 @@ public class NotificationService {
         notificationRepository.deleteById(notificationId);
     }
 
-    public Notification createNotification(Long toId, String message, Invite invite) {
-        Notification notification = new Notification(toId, message, invite);
+    public Notification createNotification(Long toId, String message) {
+        Notification notification = new Notification(toId, message);
         return notificationRepository.save(notification);
+    }
+
+    public List<Notification> getActiveNotificationsForUser(Long userId) {
+        return notificationRepository.findByToIdAndReadFalse(userId);
     }
 }

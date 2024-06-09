@@ -18,8 +18,12 @@ import java.util.UUID;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private final PlayerService playerService;
+
     @Autowired
-    private PlayerService playerService;
+    public AuthController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
@@ -40,7 +44,6 @@ public class AuthController {
                         player.getIs_Premium(),
                         player.getEnabled(),
                         player.getPassword(),
-                        player.getOwnedTeams(),
                         player.isIs_Captain()
                 ),
                 sessionId,
@@ -62,7 +65,6 @@ public class AuthController {
                 player.getIs_Premium(),
                 player.getEnabled(),
                 player.getPassword(),
-                player.getOwnedTeams(),
                 player.isIs_Captain()
         );
         return ResponseEntity.ok(playerDto);

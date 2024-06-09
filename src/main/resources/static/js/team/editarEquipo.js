@@ -1,4 +1,3 @@
-// Fetch team details by ID
 function fetchTeamDetails(teamId) {
     fetch(`/api/teams/${teamId}`)
         .then(response => {

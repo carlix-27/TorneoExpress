@@ -2,7 +2,7 @@ package com.TorneosExpress.model;
 import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.model.shop.Article;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class Team {
 
-  public Team(TeamDto teamDto) { // Todo. Para que te deje de aparecer null. Toquetea de acá!.
+  public Team(TeamDto teamDto) {
     this.id = teamDto.getId();
     this.name = teamDto.getName();
     this.location = teamDto.getLocation();
@@ -44,7 +44,9 @@ public class Team {
   private Sport sport;
 
   @ManyToMany(mappedBy = "participatingTeams")
+  @JsonIgnore
   private List<Tournament> activeTournaments = new ArrayList<>();
+
 
   @ManyToMany
   @JoinTable(
@@ -56,22 +58,12 @@ public class Team {
 
   @ManyToMany
   @JoinTable(
-      name = "team_players",
-      joinColumns = @JoinColumn(name = "team_id"),
-      inverseJoinColumns = @JoinColumn(name = "players_id")
-  )
-  private List<Player> joinRequests = new ArrayList<>();
-
-  @ManyToMany
-  @JoinTable(
           name = "team_articles",
           joinColumns = @JoinColumn(name = "team_id"),
           inverseJoinColumns = @JoinColumn(name = "articles_article_id")
   )
   private List<Article> articles = new ArrayList<>();
 
-  @ManyToMany(mappedBy = "participationRequests")
-  private List<Tournament> requestedTournaments = new ArrayList<>();
 
   public Team(Long captainId, String teamName, Sport sport, String teamLocation, boolean isPrivate) {
     this.name = teamName;
@@ -82,7 +74,6 @@ public class Team {
     this.captainId = captainId;
   }
 
-  /* Constructor for creating dummy teams on Fixture. */
   public Team(String name) {
     this.name = name;
   }
@@ -123,25 +114,16 @@ public class Team {
 
   public List<Tournament> getActiveTournaments() {
     return activeTournaments;
-  } // En los torneos donde ya estoy
+  }
 
   public List<Player> getPlayers() {
     return players;
   }
 
-  public List<Player> getJoinRequests() {
-    return joinRequests;
-  }
 
   public List<Article> getArticles() {
     return articles;
   }
-
-  public List<Tournament> getRequestedTournaments() {
-    return requestedTournaments;
-  } // Los torneos a los que envio solicitud
-
-  // Setters...
 
   public void setName(String name) {
     this.name = name;
@@ -179,16 +161,8 @@ public class Team {
     this.players = players;
   }
 
-  public void addJoinRequest(Player requester) {
-    this.joinRequests.add(requester);
-  }
-
   public void setArticles(List<Article> articles) {
     this.articles = articles;
-  }
-
-  public void setRequestedTournaments(List<Tournament> requestedTournaments) {
-    this.requestedTournaments = requestedTournaments;
   }
 
   public Sport getSport() {

@@ -8,10 +8,8 @@
     <script src="js/auth/checkRedirect.js"></script>
 </head>
 <body>
-<!-- Encabezado -->
     <header>
         <h1>Torneos Express - Equipos</h1>
-        <!-- Menú de navegación -->
         <nav>
             <ul>
                 <li><a href="home.html">Inicio</a></li>
@@ -20,32 +18,26 @@
         </nav>
     </header>
 
-<!-- Contenido de la página -->
     <section id="all-teams">
         <h2>Todos los equipos</h2>
         <ul id="lista-todos-equipos">
-            <!-- Los torneos se cargarán dinámicamente aquí -->
         </ul>
     </section>
 
-    <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Team Details</h2>
-            <div id="teamDetails">
-                <!-- Team details will be populated dynamically here -->
-            </div>
-            <button id="sendInviteButton">Send Invite</button>
+<div id="signupModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Team Details</h2>
+        <div id="teamDetails">
         </div>
-
-        <!-- Container for success message -->
-        <div id="successMessage" style="display: none;"></div>
-        <!-- Change the button text based on privacy -->
+        <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+        <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
         <button id="sendInviteButton" data-privacy="public">Sign Up</button>
-
+        <div></div>
     </div>
+</div>
 
-    <!-- Scripts -->
+
     <script src="js/team/getAllTeams.js"></script>
 
 

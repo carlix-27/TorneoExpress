@@ -12,10 +12,10 @@ public class PlayerDto {
     private Boolean isPremium;
     private Boolean isEnabled;
     private String password;
-    private List<Team> ownedTeams;
     private boolean isCaptain;
 
-    public PlayerDto(Long id, String name, String location, String email, Boolean isPremium, Boolean isEnabled, String password, List<Team> ownedTeams, boolean isCaptain) {
+    public PlayerDto(Long id, String name, String location, String email, Boolean isPremium, Boolean isEnabled, String password, boolean isCaptain) {
+
         this.id = id;
         this.name = name;
         this.location = location;
@@ -23,7 +23,6 @@ public class PlayerDto {
         this.isPremium = isPremium;
         this.isEnabled = isEnabled;
         this.password = password;
-        this.ownedTeams = ownedTeams;
         this.isCaptain = isCaptain;
     }
 
@@ -79,14 +78,6 @@ public class PlayerDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Team> getOwnedTeams() {
-        return ownedTeams;
-    }
-
-    public void setOwnedTeams(List<Team> ownedTeams) {
-        this.ownedTeams = ownedTeams;
     }
 
     public boolean isCaptain() {
