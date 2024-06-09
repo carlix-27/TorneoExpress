@@ -91,4 +91,20 @@ public class TeamRequest {
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isSent() {
+        return sent;
+    }
+
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
 }

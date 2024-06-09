@@ -4,60 +4,46 @@ function loadTeamRequests(teamId) {
         console.error("User ID not found in localStorage");
         return;
     }
+
+    // Solo fetch teamReque
     fetchTeamRequests(userId, teamId)
 }
 
-function fetchPlayerDetails(playerId) {
-    return fetch(`/api/user/players/${playerId}`)
+function fetchTeamRequests(userId, teamId){
+    return fetch(`/api/requests/team/${userId}/${teamId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);
             }
             return response.json();
-        });
-}
+        })
+        .then(requests => {
+            const requestsContainer = document.getElementById("team-requests");
+            requestsContainer.innerHTML = '';
 
-function fetchTeamRequests(userId, teamId){
-    fetchPlayerDetails(userId)
-        .then(playerDetails => {
-            const playerName = playerDetails.name;
+            requests.forEach(request => {
+                const requestElement = document.createElement('div');
+                const playerRequesting = request.name;
 
-            return fetch(`/api/requests/team/${userId}/${teamId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(requests => {
-                    const requestsContainer = document.getElementById("team-requests");
-                    requestsContainer.innerHTML = '';
-
-                    requests.forEach(request => {
-                        const requestElement = document.createElement('div');
-                        const playerRequesting = playerName;
-
-                        requestElement.className = 'request';
-                        requestElement.innerHTML = `
+                requestElement.className = 'request';
+                requestElement.innerHTML = `
                             <p>From: ${playerRequesting}</p>
                             <div class="button-container">
                                 <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
                                 <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
                             </div>
                         `;
-                        requestsContainer.appendChild(requestElement);
-                    });
+                requestsContainer.appendChild(requestElement);
+            });
 
-                    document.querySelectorAll('.accept-button').forEach(button => {
-                        button.addEventListener('click', handleAccept);
-                    });
+            document.querySelectorAll('.accept-button').forEach(button => {
+                button.addEventListener('click', handleAccept);
+            });
 
-                    document.querySelectorAll('.deny-button').forEach(button => {
-                        button.addEventListener('click', handleDeny);
-                    });
-                });
-        })
-        .catch(error => console.error('Error fetching player details:', error));
+            document.querySelectorAll('.deny-button').forEach(button => {
+                button.addEventListener('click', handleDeny);
+            });
+        });
 }
 
 
