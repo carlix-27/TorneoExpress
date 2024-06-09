@@ -1,10 +1,10 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Invite;
+import com.TorneosExpress.model.Player;
+import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.TeamRequest;
-import com.TorneosExpress.repository.InviteRepository;
-import com.TorneosExpress.repository.TeamRequestRepository;
-import com.TorneosExpress.repository.TournamentRequestRepository;
+import com.TorneosExpress.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,16 @@ public class RequestService {
 
     private final InviteRepository inviteRepository;
     private final TeamRequestRepository teamRequestRepository;
+    private final TeamRepository teamRepository;
+    private final PlayerRepository playerRepository;
     private final TournamentRequestRepository tournamentRequestRepository;
 
     @Autowired
-    public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TournamentRequestRepository tournamentRequestRepository) {
+    public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TeamRepository teamRepository, PlayerRepository playerRepository, TournamentRequestRepository tournamentRequestRepository) {
         this.inviteRepository = inviteRepository;
         this.teamRequestRepository = teamRequestRepository;
+        this.teamRepository = teamRepository;
+        this.playerRepository = playerRepository;
         this.tournamentRequestRepository = tournamentRequestRepository;
     }
 
@@ -57,6 +61,44 @@ public class RequestService {
     public List<TeamRequest> getRequestsByTeam(Long toId, Long teamId) {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
     }
+
+    public TeamRequest acceptTeamRequest(Long requestId) {
+        TeamRequest request = teamRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Team request not found"));
+
+        if (request.isAccepted() || request.isDenied()) {
+            throw new RuntimeException("Team request already processed");
+        }
+
+        request.setAccepted(true);
+        Team team = teamRepository.findById(request.getTeamId())
+                .orElseThrow(() -> new RuntimeException("Team not found"));
+
+        Player player = playerRepository.findById(request.getRequestFrom())
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+
+        team.getPlayers().add(player);
+        teamRepository.save(team);
+
+        teamRequestRepository.delete(request);
+
+        return request;
+    }
+
+    public TeamRequest denyTeamRequest(Long requestId) {
+        TeamRequest request = teamRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Team request not found"));
+
+        if (request.isAccepted() || request.isDenied()) {
+            throw new RuntimeException("Team request already processed");
+        }
+
+        request.setDenied(true);
+        teamRequestRepository.delete(request);
+
+        return request;
+    }
+
 
 
 }

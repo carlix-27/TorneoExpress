@@ -49,21 +49,22 @@ function fetchTeamRequests(userId, teamId){
 
 function handleAccept(event) {
     const requestId = event.target.getAttribute('data-request-id');
-    updateRequestStatus(requestId, true, false);
+    updateRequestStatus(requestId, true);
 }
 
 function handleDeny(event) {
     const requestId = event.target.getAttribute('data-request-id');
-    updateRequestStatus(requestId, false, true);
+    updateRequestStatus(requestId, false);
 }
 
-function updateRequestStatus(requestId, accepted, denied) {
-    fetch(`/api/requests/team/${requestId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ accepted, denied })
+function updateRequestStatus(requestId, accepted) {
+    const acceptUrl = `/api/requests/team/${requestId}/accept`;
+    const denyUrl = `/api/requests/team/${requestId}/deny`;
+
+    const url = accepted ? acceptUrl : denyUrl;
+
+    fetch(url, {
+        method: 'DELETE',
     })
         .then(response => {
             if (!response.ok) {
@@ -76,7 +77,6 @@ function updateRequestStatus(requestId, accepted, denied) {
         })
         .catch(error => console.error('Error:', error));
 }
-
 
 
 function getTeamIdFromUrl() {

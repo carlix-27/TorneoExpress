@@ -79,4 +79,15 @@ public class RequestController {
     public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
         return requestService.getRequestsByTeam(toId, teamId);
     }
+
+    @DeleteMapping("/team/{requestId}/accept")
+    public TeamRequest acceptRequest(@PathVariable Long requestId) {
+        return requestService.acceptTeamRequest(requestId);
+    }
+
+    @DeleteMapping("/team/{requestId}/deny")
+    public TeamRequest denyRequest(@PathVariable Long requestId) {
+        return requestService.denyTeamRequest(requestId);
+    }
+
 }
