@@ -12,11 +12,12 @@ import java.util.Optional;
 @Service
 public class PlayerService {
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
-    /*@Autowired
-    private TournamentService tournamentService;*/
+    @Autowired
+    public PlayerService(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
 
     public List<Player> getPlayerByName(String name) {
         return playerRepository.findByName(name);
@@ -59,16 +60,12 @@ public class PlayerService {
         return false;
     }
 
-    // Considero que aquí tiene que haber una lógica de realizar una solicitud, y procesarla.
-    /*public boolean requestTournamentAccess(Long playerId, Long tournamentId, Long teamId){
-        return tournamentService.processAccessRequest(tournamentId, playerId, teamId);
-    }*/
 
     public void upgradeToCaptain(Long userId){
         Optional<Player> optionalPlayer = playerRepository.findById(userId);
         if(optionalPlayer.isPresent()){
             Player player = optionalPlayer.get();
-            player.setIs_Captain(true); // Ahora cambié el estado que tenía en la db a True. Sos capitán!
+            player.setIs_Captain(true);
             playerRepository.save(player);
         }
     }

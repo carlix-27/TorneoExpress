@@ -1,67 +1,93 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.AccessRequest;
-import com.TorneosExpress.model.Player;
-import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
-import com.TorneosExpress.service.PlayerService;
-import com.TorneosExpress.service.TeamService;
-import com.TorneosExpress.service.TournamentService;
+import com.TorneosExpress.dto.InviteDto;
+import com.TorneosExpress.dto.TeamRequestDto;
+import com.TorneosExpress.model.Invite;
+import com.TorneosExpress.model.TeamRequest;
+import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-/*También ver si es posible chequear otras cosas
-* Si los capitanes o jugadores, cumplen los requisitos necesarios, etc. ¿Cómo veo esto?*/
 @RestController
+@RequestMapping("/api/requests")
 public class RequestController {
-    @Autowired
-    TournamentService tournamentService;
+
+    private final RequestService requestService;
 
     @Autowired
-    TeamService teamService;
+    public RequestController(RequestService requestService) {
+        this.requestService = requestService;
+    }
 
-    @Autowired
-    PlayerService playerService;
+    @PostMapping("/invite/send")
+    public Invite sendInvite(@RequestBody InviteDto inviteRequest) {
+        Long invite_from = inviteRequest.getInvite_from();
+        Long invite_to = inviteRequest.getInvite_to();
+        Long teamId = inviteRequest.getTeamId();
+        return requestService.sendInvite(invite_from, invite_to, teamId);
+    }
 
-
-    //ToDo
-    @PostMapping("/api/tournaments/{tournamentId}/access-request")
-    public ResponseEntity<?> requestTournamentAccess(@PathVariable Long tournamentId, @RequestBody AccessRequest request){
-        try{
-            tournamentService.processAccessRequest(tournamentId, request.getUserId(), request.getTeamId());
-            return ResponseEntity.ok().body("Solicitud enviada exitosamente !");
-        } catch (NullPointerException e){ // Casos de exception que tire los métodos.
-            return ResponseEntity.badRequest().body(request.getUserId() + " no encontrado");
-        } catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body("Tu equipo ya está en este torneo");
-        } catch (Exception e){
-            return ResponseEntity.status(500).body("Error interno del servidor: " + e.getMessage());
+    @GetMapping("/invite/{id}")
+    public ResponseEntity<Invite> getInviteById(@PathVariable Long id) {
+        Invite invite = requestService.getInviteById(id);
+        if (invite != null) {
+            return new ResponseEntity<>(invite, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
-
-    @PostMapping("/api/tournaments/{tournamentId}/enroll")
-    public ResponseEntity<?> accessToPublicTournament(@PathVariable Long tournamentId, @RequestBody AccessRequest request){ // mira como usar acá el tournamentId.
-        tournamentService.accessToPublicTournament(tournamentId, request.getUserId(), request.getTeamId());
-        return ResponseEntity.ok().body("Te has inscripto exitosamente al torneo");
+    @PostMapping("/invite/accept/{inviteId}")
+    public ResponseEntity<?> acceptInvite(@PathVariable Long inviteId) {
+        try {
+            requestService.acceptInvite(inviteId);
+            return ResponseEntity.ok().body("Invite accepted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to accept invite.");
+        }
     }
 
-    @PostMapping("/api/teams/{teamId}/access-request")
-    public ResponseEntity<?> requestTeamAccess(@PathVariable Long teamId, @PathVariable Long userId){
-        teamService.processAccessRequest(teamId, userId);
-        return ResponseEntity.ok().build();
+    @PostMapping("/invite/deny/{inviteId}")
+    public ResponseEntity<?> denyInvite(@PathVariable Long inviteId) {
+        try {
+            requestService.denyInvite(inviteId);
+            return ResponseEntity.ok().body("Invite denied successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to deny invite.");
+        }
+    }
+
+    @PostMapping("/team/send")
+    public TeamRequest sendRequest(@RequestBody TeamRequestDto teamRequestDto) {
+        Long requestFromId = teamRequestDto.getRequestFrom();
+        Long requestToId = teamRequestDto.getRequestTo();
+        Long teamId = teamRequestDto.getTeamId();
+        String name = teamRequestDto.getName();
+        return requestService.sendTeamRequest(requestFromId, requestToId, teamId, name);
+    }
+
+    @GetMapping("/team/{toId}")
+    public List<TeamRequest> getAllTeamRequests(@PathVariable Long toId) {
+        return requestService.getAllTeamRequestsByToId(toId);
+    }
+
+    @GetMapping("/team/{toId}/{teamId}")
+    public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
+        return requestService.getRequestsByTeam(toId, teamId);
+    }
+
+    @DeleteMapping("/team/{requestId}/accept")
+    public TeamRequest acceptRequest(@PathVariable Long requestId) {
+        return requestService.acceptTeamRequest(requestId);
+    }
+
+    @DeleteMapping("/team/{requestId}/deny")
+    public TeamRequest denyRequest(@PathVariable Long requestId) {
+        return requestService.denyTeamRequest(requestId);
     }
 
 }
-
-
-

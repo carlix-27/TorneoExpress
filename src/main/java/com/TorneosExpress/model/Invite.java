@@ -1,5 +1,6 @@
 package com.TorneosExpress.model;
 
+import com.TorneosExpress.dto.InviteDto;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,17 +11,11 @@ public class Invite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
-    private Team team;
+    @Column(name = "FROM_ID")
+    private Long invite_from;
 
-    @ManyToOne
-    @JoinColumn(name = "inviter_id", nullable = false)
-    private Player inviter;
-
-    @ManyToOne
-    @JoinColumn(name = "invitee_id", nullable = false)
-    private Player invitee;
+    @Column(name = "TO_ID")
+    private Long invite_to;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -28,13 +23,25 @@ public class Invite {
     @Column(nullable = false)
     private boolean accepted;
 
+    @Column
+    private Long team;
+
     public Invite() {
     }
 
-    public Invite(Team team, Player inviter, Player invitee) {
+    public Invite(Long from, Long invitee, Long team) {
+        this.invite_from = from;
+        this.invite_to = invitee;
         this.team = team;
-        this.inviter = inviter;
-        this.invitee = invitee;
+        this.createdAt = LocalDateTime.now();
+        this.accepted = false;
+    }
+
+    public Invite(InviteDto inviteDto){
+        this.id = inviteDto.getId();
+        this.invite_from = inviteDto.getInvite_from();
+        this.invite_to = inviteDto.getInvite_from();
+        this.team = inviteDto.getTeamId();
         this.createdAt = LocalDateTime.now();
         this.accepted = false;
     }
@@ -48,28 +55,20 @@ public class Invite {
         this.id = id;
     }
 
-    public Team getTeam() {
-        return team;
+    public Long getFrom() {
+        return invite_from;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setFrom(Long inviter) {
+        this.invite_from = inviter;
     }
 
-    public Player getInviter() {
-        return inviter;
+    public Long getTo() {
+        return invite_to;
     }
 
-    public void setInviter(Player inviter) {
-        this.inviter = inviter;
-    }
-
-    public Player getInvitee() {
-        return invitee;
-    }
-
-    public void setInvitee(Player invitee) {
-        this.invitee = invitee;
+    public void setTo(Long invitee) {
+        this.invite_to = invitee;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -86,5 +85,13 @@ public class Invite {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public Long getTeam() {
+        return team;
+    }
+
+    public void setTeam(Long team) {
+        this.team = team;
     }
 }

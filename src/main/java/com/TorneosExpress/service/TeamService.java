@@ -1,47 +1,49 @@
 package com.TorneosExpress.service;
 
-
-import com.TorneosExpress.dto.AccessRequest;
-
-
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
 public class TeamService {
 
+  private final TeamRepository teamRepository;
+  private final PlayerRepository playerRepository;
+
   @Autowired
-  private TeamRepository teamRepository;
+  public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
+    this.teamRepository = teamRepository;
+    this.playerRepository = playerRepository;
+  }
 
   public Team findById(long id) {
     return teamRepository.findById(id);
   }
 
-  public String addPlayer(Long teamId, Player player) {
-    teamRepository.findById(teamId).ifPresent(team -> processRequest(team, player));
-    return "Error while joining team.";
-  }
 
-  private String processRequest(Team team, Player player) {
-    String returnMessage;
-    if (!isTeamPrivate(team)) {
-      team.addPlayer(player);
-      returnMessage = "Team joined successfully.";
-    } else {
-      team.addJoinRequest(player);
-      returnMessage = "Request sent successfully.";
+  public Team addPlayerToTeam(Long teamId, Long userId) {
+    Team team = teamRepository.findById(teamId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Team not found"));
+
+    Player player = playerRepository.findById(userId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+    List<Player> players = team.getPlayers();
+    boolean playerIsInTeam = players.contains(player);
+
+    if (playerIsInTeam) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Player is already part of the team.");
     }
-    teamRepository.save(team);
-    return returnMessage;
-  }
 
-  private boolean isTeamPrivate(Team team) {
-    return team.isPrivate();
+    players.add(player);
+    return teamRepository.save(team);
   }
 
   public List<Team> findByCaptainId(long id) {
@@ -52,20 +54,8 @@ public class TeamService {
     return teamRepository.findByName(name);
   }
 
-  public List<Team> findAll() {
-    return teamRepository.findAll();
-  }
-
   public void deleteTeamById(long id) {
     teamRepository.deleteById(id);
-  }
-
-  public Team updateTeam(Team team) {
-    // Check if the tournament with given ID exists
-    if (team.getId() == null || !teamRepository.existsById(team.getId())) {
-      return null; // Tournament not found
-    }
-    return teamRepository.save(team);
   }
 
   public Team save(Team team) {
@@ -78,28 +68,6 @@ public class TeamService {
 
   public List<Team> getAllTeams() {
     return teamRepository.findAll();
-  }
-
-  public void invitePlayerToTeam(Long teamId, Long playerId, Long inviteeId) {
-    Team team = teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
-    if (team.isPrivate()) {
-      if (team.getCaptainId().equals(playerId)) {
-        sendInvite(inviteeId, team);
-      } else {
-        throw new RuntimeException("Only the captain can invite players to a private team");
-      }
-    } else {
-      sendInvite(inviteeId, team);
-    }
-  }
-
-  private void sendInvite(Long inviteeId, Team team) {
-    // Implement the logic to send the invite
-    System.out.println("Invite sent to player with ID: " + inviteeId + " for team: " + team.getName());
-  }
-
-  public void processAccessRequest(Long id, Long userId){
-
   }
 
 }

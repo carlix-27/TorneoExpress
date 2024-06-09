@@ -50,29 +50,13 @@ nav ul li a {
     text-decoration: none;
 }
 
-/* Estilos para el contenedor */
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
 /*  STYLES FOR EACH RESULT  */
 
 h2 {
     text-align: center;
 }
 
-/* Style for each team */
-#tournament-list li {
+#lista-torneos li {
     margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ccc;
@@ -83,20 +67,19 @@ h2 {
 
 
 /* Team name style */
-#tournament-list li h3 {
+#lista-torneos li h3 {
     margin: 0;
     font-size: 20px;
     color: #333;
 }
 
-/* Additional information style */
-#tournament-list li p {
+#lista-torneos li p {
     margin: 5px 0;
     font-size: 16px;
     color: #666;
 }
 
-#tournament-list li button {
+#lista-torneos li button {
     margin-top: 10px;
     padding: 8px 16px;
     border: none;
@@ -107,6 +90,6 @@ h2 {
 }
 
 /* Button hover style */
-#tournament-list li button:hover {
+#lista-torneos li button:hover {
     background-color: #342160;
 }
