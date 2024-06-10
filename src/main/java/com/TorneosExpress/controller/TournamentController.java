@@ -1,8 +1,10 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.AccessRequest;
+import com.TorneosExpress.dto.StatisticsDto;
 import com.TorneosExpress.dto.TournamentDto;
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.service.StatisticsService;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ public class TournamentController {
 
     @Autowired
     private TournamentService tournamentService;
+
+    @Autowired
+    private StatisticsService statisticsService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
@@ -77,6 +82,17 @@ public class TournamentController {
     @GetMapping("/active")
     public List<Tournament> getActiveTournaments() {
         return tournamentService.getActiveTournaments();
+    }
+
+
+    @PostMapping("/{tournamentId}/statistics")
+    public ResponseEntity<?> saveStatistics(@PathVariable Long tournamentId, @RequestBody StatisticsDto statisticsDto) {
+        boolean success = statisticsService.saveStatistics(tournamentId, statisticsDto);
+        if (success) {
+            return ResponseEntity.ok("Statistics saved successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving statistics.");
+        }
     }
 
 }

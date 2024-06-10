@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Agregar Estadisticas</title>
+    <title>Agregar Estadísticas</title>
+    <link rel="stylesheet" href="styles/agregarEstadisticas.css">
 </head>
 <body>
 
@@ -25,23 +26,28 @@
     }
 </script>
 
+<div class="container">
+    <!-- Partidos Activos -->
+    <div id="partidosActivos" class="section">
+        <h2>Partidos Activos</h2>
+        <ul>
+            <!-- Los partidos se agregarán aquí dinámicamente -->
+        </ul>
+    </div>
 
-<!--Partidos Activos-->
-<!-- Partidos Activos -->
-<ul id="partidosActivos">
-    <!-- Los partidos se agregarán aquí dinámicamente -->
-</ul>
-
-
-<!-- Formulario para agregar estadísticas -->
-<form id="formularioEstadisticas" style="display:none;">
-    <input type="text" placeholder="Resultado del Partido">
-    <input type="text" placeholder="Posesión del balón">
-    <input type="text" placeholder="Tiros al arco">
-    <input type="text" placeholder="Tiros a puerta">
-    <input type="text" placeholder="Faltas">
-    <button type="submit">Guardar</button>
-</form>
+    <!-- Formulario para agregar estadísticas -->
+    <div id="agregarEstadisticas" class="section">
+        <h2>Agregar Estadísticas</h2>
+        <form id="formularioEstadisticas">
+            <input type="text" placeholder="Resultado del Partido">
+            <input type="text" placeholder="Posesión del balón">
+            <input type="text" placeholder="Tiros al arco">
+            <input type="text" placeholder="Tiros a puerta">
+            <input type="text" placeholder="Faltas">
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+</div>
 
 </body>
 </html>
