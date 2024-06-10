@@ -31,11 +31,18 @@ function fetchActiveTournaments() {
                     <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
                     <p>Dificultad: ${tournament.difficulty}</p>
                     <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
-                    <button onclick="openModal('${tournamentName}', ${tournament.id})">Inscribirse</button>
+                   <button class="signup-button" data-tournament-id="${tournament.id}">Inscribirse</button>
                 `;
-
                 tournamentList.appendChild(listItem);
             });
+
+
+            document.querySelectorAll('.signup-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    showSignupModal(this.getAttribute('data-tournament-id'));
+                });
+            });
+
         })
         .catch(error => {
             console.error('Error:', error);
@@ -44,77 +51,208 @@ function fetchActiveTournaments() {
         });
 }
 
-// Open modal and populate it with user's teams
-function openModal(tournamentName, tournamentId) {
-    const modal = document.getElementById('teamSelectionModal');
-    const modalTournamentName = document.getElementById('modal-tournament-name');
-    const teamSelect = document.getElementById('team-select');
-    const joinButton = document.getElementById('join-tournament-button');
 
-    // Set tournament name and id
-    modalTournamentName.innerText = `Torneo: ${tournamentName}`;
-    joinButton.setAttribute('data-tournament-id', tournamentId);
-
-    // Fetch user's teams and populate select options
+function showSignupModal(tournamentId) {
+    const modal = document.getElementById("signupModal");
+    const closeButton = modal.querySelector(".close");
+    const signupButton = modal.querySelector("#sendInviteButton");
     const userId = localStorage.getItem("userId");
-    if (!userId) {
-        console.error("User ID not found in localStorage");
-        return;
-    }
 
-    fetch(`/api/teams/user/${userId}`)
-        .then(response => response.json())
-        .then(teams => {
-            teamSelect.innerHTML = '';
-            teams.forEach(team => {
-                const option = document.createElement('option');
-                option.value = team.id;
-                option.text = team.name;
-                teamSelect.appendChild(option);
-            });
+    fetchTournamentDetails(tournamentId)
+        .then(tournament => {
+            displayTournamentDetails(tournament, signupButton);
+            addSignupButtonListener(tournament, userId, signupButton);
+        })
+        .catch(error => {
+            console.error("Error:", error);
         });
 
-    modal.style.display = 'block';
+    displayModal(modal, closeButton);
 }
 
-// Close the modal
-function closeModal() {
-    document.getElementById('teamSelectionModal').style.display = 'none';
-}
-
-// Handle joining a tournament
-document.getElementById('join-tournament-button').addEventListener('click', () => {
-    const tournamentId = document.getElementById('join-tournament-button').getAttribute('data-tournament-id');
-    const teamId = document.getElementById('team-select').value;
-    const userId = localStorage.getItem("userId");
-
-    fetch(`/api/tournaments/${tournamentId}/join`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            teamId: teamId,
-            userId: userId
-        })
-    })
+function fetchTournamentDetails(tournamentId) {
+    return fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to join tournament: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
+
+function displayTournamentDetails(tournament, signupButton) {
+    const tournamentDetails = document.getElementById("tournamentDetails");
+
+    const tournamentName = tournament.name;
+    const tournamentSport = tournament.sport;
+    const tournamentSportName = tournamentSport.sportName;
+    const tournamentLocation = tournament.location;
+    const tournamentPrivacy = tournament.private;
+    const maxTeams = tournament.maxTeams;
+    const participatingTeams = tournament.participatingTeams;
+    const numOfParticipatingTeams = participatingTeams.length;
+
+
+    tournamentDetails.innerHTML = `
+        <h3>${tournamentName}</h3>
+        <p>Deporte: ${tournamentSportName}</p>
+        <p>Ubicación: ${tournamentLocation}</p>
+        <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
+        <p>Dificultad: ${tournament.difficulty}</p>
+        <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+    `;
+
+    if (tournament.private) {
+        signupButton.textContent = "Send Request";
+        signupButton.setAttribute("data-privacy", "private");
+    } else {
+        signupButton.textContent = "Sign Up";
+        signupButton.setAttribute("data-privacy", "public");
+    }
+}
+
+
+function addSignupButtonListener(tournament, teamId, userId, signupButton) {
+    signupButton.addEventListener("click", function() {
+        const participatingTeams = tournament.participatingTeams;
+        const maxTeams = tournament.maxTeams;
+        const numOfParticipatingTeams = participatingTeams.length;
+
+        if (numOfParticipatingTeams < maxTeams) {
+            const tournamentIsPrivate = tournament.private;
+
+            if (tournamentIsPrivate) {
+                sendTournamentRequest(tournament, teamId, userId);
+            } else {
+                joinPublicTournament(tournament, teamId, userId);
+            }
+        } else {
+            displayErrorMessage("The maximum number of participating teams has been reached.");
+        }
+    });
+}
+
+
+
+function sendTournamentRequest(tournament, teamId, userId) {
+    fetchTeamDetails(teamId)
+        .then(teamDetails => {
+            const teamCaptain = teamDetails.captainId;
+
+            fetch(`/api/requests/tournament/send`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    requestFrom: userId,
+                    requestTo: teamCaptain,
+                    tournamentId: tournament.id,
+                    accepted: false,
+                    denied: false,
+                    sent: true
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to send tournament request: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(tournamentRequest => {
+                    createRequestNotification(tournamentRequest);
+                })
+                .catch(error => console.error('Error:', error));
+        })
+        .catch(error => console.error('Error fetching team details:', error));
+}
+
+
+
+function createRequestNotification(tournamentRequest) {
+    const requestTournamentId = tournamentRequest.tournamentId;
+    const requestTeamId = tournamentRequest.teamId;
+
+    Promise.all([fetchTournamentDetails(requestTournamentId), fetchTeamDetails(requestTeamId)])
+        .then(([team, player]) => {
+            const playerName = player.name;
+            const teamName = team.name;
+            const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
+
+            const notificationTo = teamRequest.requestTo;
+
+            return fetch(`/api/notifications/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    toId: notificationTo,
+                    message: message,
+                })
+
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
-        .then(data => {
-            closeModal();
-            alert('Inscripción exitosa');
-            fetchActiveTournaments();
+        .then(notification => {
+            displaySuccessMessage('Request sent successfully.');
         })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error al inscribirse en el torneo.');
-        });
-});
+        .catch(error => console.error('Error:', error));
+}
 
-document.addEventListener("DOMContentLoaded", function() {
-    fetchActiveTournaments();
-});
+
+
+function displayModal(modal, closeButton) {
+    modal.style.display = "block";
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+
+
+
+function fetchTeamDetails(teamId) {
+    return fetch(`/api/teams/${teamId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
+
+
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+
+    setTimeout(() => {
+        successMessage.style.display = "none";
+    }, 3000);
+}
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}
+
+
+document.addEventListener("DOMContentLoaded", fetchActiveTournaments);

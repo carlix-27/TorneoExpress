@@ -20,6 +20,7 @@ public class TournamentRequest {
 
     @Column
     private String teamName;
+
     @Column
     private Long teamId;
 

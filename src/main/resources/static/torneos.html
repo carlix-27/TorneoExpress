@@ -1,29 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Torneos Activos</title>
-        <link rel="stylesheet" href="styles/torneos.css">
-        <script src="js/auth/checkRedirect.js"></script>
-
-        <style>
-            /* Styles for error and success messages */
-            #error-message,
-            #success-message {
-                color: red;
-                display: none;
-            }
-
-            .success {
-                color: green;
-            }
-        </style>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneos Activos</title>
+    <link rel="stylesheet" href="styles/torneos.css">
+    <script src="js/auth/checkRedirect.js"></script>
+</head>
     <body>
         <header>
             <h1>Torneos Express - Torneos</h1>
-            <!-- Menú de navegación -->
             <nav>
                 <ul>
                     <li><a href="home.html">Inicio</a></li>
@@ -32,26 +18,26 @@
             </nav>
         </header>
 
-        <div class="all-tournaments">
-            <h2>Torneos Activos</h2>
+
+        <section id="all-tournaments">
+            <h2>Todos los torneos activos</h2>
             <ul id="tournament-list">
-
-                <div id="teamSelectionModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-button" onclick="closeModal()">&times;</span>
-                        <h2>Seleccionar equipo</h2>
-                        <p id="modal-tournament-name"></p>
-                        <select id="team-select">
-                            <!-- Options will be populated dynamically -->
-                        </select>
-                        <button id="join-tournament-button">Inscribirse</button>
-                    </div>
-                </div>
-
             </ul>
-            <div id="error-message"></div>
-            <div id="success-message" class="success"></div>
+        </section>
+
+        <div id="signupModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Detalles del torneo:</h2>
+                <div id="tournamentDetails">
+                </div>
+                <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+                <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+                <button id="sendInviteButton" data-privacy="public">Sign Up</button>
+                <div></div>
+            </div>
         </div>
+
         <script src="js/tournament/torneos.js"></script>
     </body>
 </html>
