@@ -2,6 +2,7 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.AccessRequest;
 import com.TorneosExpress.dto.TournamentDto;
+import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,15 @@ public class TournamentController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(tournament);
+    }
+
+    @GetMapping("/{tournamentId}/calendar")
+    public ResponseEntity<Fixture> getTournamentCalendar(@PathVariable Long tournamentId) {
+        Fixture fixture = tournamentService.getTournamentCalendar(tournamentId);
+        if (fixture == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(fixture);
     }
 
     @PutMapping("/{tournamentId}")

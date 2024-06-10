@@ -28,14 +28,7 @@ function loadCalendar() {
                 calendar.innerHTML = `
                 <div id="result">
                     <h2>${tournament.name}</h2>
-                    <p>Ubicación: ${tournament.location}</p>
-                    <p>Dificultad: ${tournament.difficulty}</p>
-                    <p>Privacidad: ${tournament.private ? "Privado" : "Público"}</p>
-                    <p>Inicio: ${tournament.startDate}</p>
-                    <!-- <p>Equipos: ${tournament.participatingTeams}</p> -->
-                    <p>Cantidad de equipos permitidos: ${tournament.maxTeams}</p>
-                    <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
-                    <button id="join-button" type="submit">${tournament.private ? "Enviar solicitud" : "Unirse"}</button>
+                    
                 </div>
             `;
             }

@@ -1,5 +1,7 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.fixture.Fixture;
+import com.TorneosExpress.fixture.FixtureBuilder;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,14 @@ public class TournamentService {
     @Autowired
     public TournamentService(TournamentRepository tournamentRepository) {
         this.tournamentRepository = tournamentRepository;
+    }
+
+    public Fixture getTournamentCalendar(Long tournamentId) {
+        Tournament tournament = getTournamentById(tournamentId);
+        Fixture fixture = new FixtureBuilder(
+            tournamentId, tournament.getLocation(), tournament.getStartDate())
+            .build(tournament.getParticipatingTeams());
+        return fixture;
     }
 
     public List<Tournament> getTournamentsByUser(Long userId) {
