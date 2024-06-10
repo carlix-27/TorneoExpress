@@ -20,19 +20,31 @@ function cargarTorneos() {
 
             tournaments.forEach(tournament => {
                 const li = document.createElement("li");
+
+                const tournamentName = tournament.name
+                const tournamentSport = tournament.sport
+                const tournamentSportName = tournamentSport.sportName
+                const tournamentLocation = tournament.location
+                const tournamentPrivacy = tournament.private
+
+                const participatingTeams = tournament.participatingTeams
+                const numOfParticipatingTeams = participatingTeams.length
+
+                
                 li.innerHTML = `
-        <div>
-            <h3>${tournament.name}</h3>
-            <p>Deporte: ${tournament.sport.sportName}</p>
-            <p>Ubicación: ${tournament.location}</p>
-            <p>Privacidad: ${tournament.private ? "Privado" : "Público"}</p>
-            <p>Dificultad: ${tournament.difficulty}</p>
-            <p>Equipos Participantes: ${tournament.participatingTeams.length}</p>
-            <p>Solicitudes de Participación: ${tournament.participationRequests.length}</p>
-            <button onclick="editarTorneo(${tournament.id})">Editar</button>
-            <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
-            <button onclick="manejarSolicitudes(${tournament.id})">Manejar Solicitudes</button>
-        </div>
+                
+                
+                    <div>
+                    <h3>${tournamentName}</h3>
+                    <p>Deporte: ${tournamentSportName}</p>
+                    <p>Ubicación: ${tournamentLocation}</p>
+                    <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
+                    <p>Dificultad: ${tournament.difficulty}</p>
+                    <p>Equipos Participantes: ${numOfParticipatingTeams}</p>
+                    <button onclick="editarTorneo(${tournament.id})">Editar</button>
+                    <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
+                    <button onclick="manejarSolicitudes(${tournament.id})">Manejar Solicitudes</button>
+                </div>
     `;
                 listaTorneos.appendChild(li);
             });
