@@ -1,6 +1,6 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.AccessRequest;
+import com.TorneosExpress.dto.AddTeamRequest;
 import com.TorneosExpress.dto.TournamentDto;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -16,12 +17,15 @@ import java.util.List;
 @RequestMapping("/api/tournaments")
 public class TournamentController {
 
+    private final TournamentService tournamentService;
+
     @Autowired
-    private TournamentService tournamentService;
+    public TournamentController(TournamentService tournamentService) {
+        this.tournamentService = tournamentService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
-        // Check if tournament name is unique
         String requestName = request.getName();
         boolean tournamentNameUnique = tournamentService.isTournamentNameUnique(requestName);
         if (tournamentNameUnique) {
@@ -31,6 +35,18 @@ public class TournamentController {
             return ResponseEntity.ok(createdTournament);
         } else{
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
+        }
+    }
+
+
+    @PostMapping("/add/{tournamentId}/{teamId}")
+    public ResponseEntity<Tournament> addTeamToTournament(@PathVariable Long tournamentId, @RequestBody AddTeamRequest addTeamRequest) {
+        Long teamId = addTeamRequest.getTeamId();
+        try {
+            Tournament team = tournamentService.addTeamToTournament(tournamentId, teamId);
+            return new ResponseEntity<>(team, HttpStatus.CREATED);
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 

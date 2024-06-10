@@ -2,26 +2,32 @@ package com.TorneosExpress.dto;
 
 public class TournamentRequestDto {
 
-    private Long request_from;
-    private Long request_to;
+
+
+
+    private Long requestFrom;
+    private Long requestTo;
     private Long tournamentId;
     private Boolean accepted;
     private Boolean denied;
+    private String name;
+
+
 
     public Long getRequest_from() {
-        return request_from;
+        return requestFrom;
     }
 
     public void setRequest_from(Long request_from) {
-        this.request_from = request_from;
+        this.requestFrom = request_from;
     }
 
     public Long getRequest_to() {
-        return request_to;
+        return requestTo;
     }
 
     public void setRequest_to(Long request_to) {
-        this.request_to = request_to;
+        this.requestTo = request_to;
     }
 
     public Long getTournamentId() {
@@ -46,6 +52,14 @@ public class TournamentRequestDto {
 
     public void setDenied(Boolean denied) {
         this.denied = denied;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 

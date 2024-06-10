@@ -36,6 +36,18 @@
             <h2>Torneos Activos</h2>
             <ul id="tournament-list">
 
+                <div id="teamSelectionModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" onclick="closeModal()">&times;</span>
+                        <h2>Seleccionar equipo</h2>
+                        <p id="modal-tournament-name"></p>
+                        <select id="team-select">
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                        <button id="join-tournament-button">Inscribirse</button>
+                    </div>
+                </div>
+
             </ul>
             <div id="error-message"></div>
             <div id="success-message" class="success"></div>

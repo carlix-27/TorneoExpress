@@ -2,6 +2,7 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.InviteDto;
 import com.TorneosExpress.dto.TeamRequestDto;
+import com.TorneosExpress.dto.TournamentRequestDto;
 import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.service.RequestService;
@@ -62,12 +63,21 @@ public class RequestController {
     }
 
     @PostMapping("/team/send")
-    public TeamRequest sendRequest(@RequestBody TeamRequestDto teamRequestDto) {
+    public TeamRequest sendTeamRequest(@RequestBody TeamRequestDto teamRequestDto) {
         Long requestFromId = teamRequestDto.getRequestFrom();
         Long requestToId = teamRequestDto.getRequestTo();
         Long teamId = teamRequestDto.getTeamId();
         String name = teamRequestDto.getName();
         return requestService.sendTeamRequest(requestFromId, requestToId, teamId, name);
+    }
+
+    @PostMapping("/tournament/send")
+    public TeamRequest sendTournamentRequest(@RequestBody TournamentRequestDto teamRequestDto) {
+        Long requestFromId = teamRequestDto.getRequest_from();
+        Long requestToId = teamRequestDto.getRequest_to();
+        Long tournamentId = teamRequestDto.getTournamentId();
+        String name = teamRequestDto.getName();
+        return requestService.sendTeamRequest(requestFromId, requestToId, tournamentId, name);
     }
 
     @GetMapping("/team/{toId}")

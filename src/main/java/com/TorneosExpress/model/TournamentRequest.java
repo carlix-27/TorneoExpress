@@ -10,13 +10,18 @@ public class TournamentRequest {
     private Long id;
 
     @Column(name = "FROM_ID")
-    private Long request_from;
+    private Long requestFrom;
 
     @Column(name = "TO_ID")
-    private Long request_to;
+    private Long requestTo;
 
     @Column(nullable = false)
     private boolean accepted;
+
+    @Column
+    private String teamName;
+    @Column
+    private Long teamId;
 
     @Column(nullable = false)
     private boolean denied;
@@ -25,7 +30,15 @@ public class TournamentRequest {
     private Long tournamentId;
 
 
+
     public TournamentRequest(){}
+
+    public TournamentRequest(Long requestFrom, Long requestTo, Long teamId, String teamName) {
+        this.requestFrom = requestFrom;
+        this.requestTo = requestTo;
+        this.teamId = teamId;
+        this.teamName = teamName;
+    }
 
 
     public Long getId() {
@@ -36,20 +49,20 @@ public class TournamentRequest {
         this.id = id;
     }
 
-    public Long getRequest_from() {
-        return request_from;
+    public Long getRequestFrom() {
+        return requestFrom;
     }
 
-    public void setRequest_from(Long request_from) {
-        this.request_from = request_from;
+    public void setRequestFrom(Long request_from) {
+        this.requestFrom = request_from;
     }
 
-    public Long getRequest_to() {
-        return request_to;
+    public Long getRequestTo() {
+        return requestTo;
     }
 
-    public void setRequest_to(Long request_to) {
-        this.request_to = request_to;
+    public void setRequestTo(Long request_to) {
+        this.requestTo = request_to;
     }
 
     public boolean isAccepted() {

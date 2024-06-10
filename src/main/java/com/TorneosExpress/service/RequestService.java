@@ -1,9 +1,6 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.model.Invite;
-import com.TorneosExpress.model.Player;
-import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.TeamRequest;
+import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +12,9 @@ public class RequestService {
 
     private final InviteRepository inviteRepository;
     private final TeamRequestRepository teamRequestRepository;
+    private final TournamentRequestRepository tournamentRequestRepository;
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
-    private final TournamentRequestRepository tournamentRequestRepository;
 
     @Autowired
     public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TeamRepository teamRepository, PlayerRepository playerRepository, TournamentRequestRepository tournamentRequestRepository) {
@@ -54,12 +51,25 @@ public class RequestService {
         return teamRequestRepository.save(request);
     }
 
+    public TournamentRequest sendTournamentRequest(Long from, Long to, Long team, String teamName) {
+        TournamentRequest request = new TournamentRequest(from, to, team, teamName);
+        return tournamentRequestRepository.save(request);
+    }
+
     public List<TeamRequest> getAllTeamRequestsByToId(Long toId) {
         return teamRequestRepository.findByrequestTo(toId);
     }
 
+    public List<TournamentRequest> getAllTournamentRequestsByToId(Long toId) {
+        return tournamentRequestRepository.findByrequestTo(toId);
+    }
+
     public List<TeamRequest> getRequestsByTeam(Long toId, Long teamId) {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
+    }
+
+    public List<TournamentRequest> getRequestsByTournament(Long toId, Long teamId) {
+        return tournamentRequestRepository.findByRequestToAndTeamId(toId, teamId);
     }
 
     public TeamRequest acceptTeamRequest(Long requestId) {
