@@ -101,9 +101,10 @@ function addSignupButtonListener(tournament, userId, signupButton) {
         const numOfParticipatingTeams = participatingTeams.length;
         const tournamentCreator = tournament.creatorId
         const teamId = document.getElementById("teamSelect").value;
+        const user = localStorage.getItem("userId");
 
-        if (userId === tournamentCreator){
-            displayErrorMessage("cant play own tournament")
+        if (user === tournamentCreator.toString()){
+            displayErrorMessage("No te podes anotar a tu propio torneo.")
         }
 
         if (numOfParticipatingTeams < maxTeams) {
