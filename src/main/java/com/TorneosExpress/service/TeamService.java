@@ -35,11 +35,14 @@ public class TeamService {
     Player player = playerRepository.findById(userId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-    if (team.getPlayers().contains(player)) {
+    List<Player> players = team.getPlayers();
+    boolean playerIsInTeam = players.contains(player);
+
+    if (playerIsInTeam) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Player is already part of the team.");
     }
 
-    team.getPlayers().add(player);
+    players.add(player);
     return teamRepository.save(team);
   }
 

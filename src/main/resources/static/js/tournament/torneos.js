@@ -1,4 +1,3 @@
-// Función para obtener y mostrar todos los torneos activos
 function fetchActiveTournaments() {
     fetch('/api/tournaments/active')
         .then(response => {
@@ -10,29 +9,39 @@ function fetchActiveTournaments() {
         .then(tournaments => {
             const tournamentList = document.getElementById('tournament-list');
 
-            // Limpiar lista existente
+            // Clear existing list
             tournamentList.innerHTML = '';
 
             tournaments.forEach(tournament => {
+                const tournamentName = tournament.name;
+                const tournamentSport = tournament.sport;
+                const tournamentSportName = tournamentSport.sportName;
+                const tournamentLocation = tournament.location;
+                const tournamentPrivacy = tournament.private;
+                const maxTeams = tournament.maxTeams;
+                const participatingTeams = tournament.participatingTeams;
+                const numOfParticipatingTeams = participatingTeams.length;
+
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a> 
-                    <p>Deporte: ${tournament.sport.sportName}</p>
-                    <p>${tournament.private ? 'Privado' : 'Público'}</p>
+                    <p>Deporte: ${tournamentSportName}</p>
+                    <p>Ubicación: ${tournamentLocation}</p>
+                    <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
+                    <p>Dificultad: ${tournament.difficulty}</p>
+                    <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+                    <button class="signup-button" data-tournament-id="${tournament.id}">Inscribirse</button>
                 `;
-
-                // Creación del botón de inscripción
-                const enrollButton = document.createElement('button');
-                enrollButton.textContent = 'Inscribirse';
-                enrollButton.addEventListener('click', () => {
-                    enrollInTournament(tournament.id, tournament.private);
-                });
-
-                // Botón a la lista
-                listItem.appendChild(enrollButton);
-
                 tournamentList.appendChild(listItem);
             });
+
+
+            document.querySelectorAll('.signup-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    showSignupModal(this.getAttribute('data-tournament-id'));
+                });
+            });
+
         })
         .catch(error => {
             console.error('Error:', error);
@@ -41,137 +50,304 @@ function fetchActiveTournaments() {
         });
 }
 
-// .......................
-
-// Función para inscribirse en un torneo
-
-function enrollInTournament(tournamentId, isPrivate) { // Fijate que esté en private
+function showSignupModal(tournamentId) {
+    const modal = document.getElementById("signupModal");
+    const closeButton = modal.querySelector(".close");
+    const signupButton = modal.querySelector("#sendInviteButton");
     const userId = localStorage.getItem("userId");
-    const teamId = localStorage.getItem("teamId");
 
-    // Verificar si el usuario está en un equipo
-    checkIfUserIsCaptain(userId, function (isCaptain){
-        if(!isCaptain){
-            document.getElementById('error-message').innerText = "Debes ser capitán para poder unirte a un torneo.";
-            document.getElementById('error-message').style.color = 'red';
-            document.getElementById('error-message').style.display = 'block';
-            document.getElementById('success-message').style.display = 'none';
-        }
-    });
-
-    // Si el torneo es privado, mostrar un formulario de solicitud de acceso
-    if (isPrivate) {
-        const confirmation = confirm("Este torneo es privado. ¿Deseas enviar una solicitud de acceso?");
-        if (confirmation) {
-            sendAccessRequest(tournamentId, userId, teamId);
-        }
-
-    } else {
-        enrollUserInPublicTournament(tournamentId); // Si el torneo es público, el usuario puede inscribirse directamente
-    }
-}
+    fetchTournamentDetails(tournamentId)
+        .then(tournament => {
+            displayTournamentDetails(tournament, signupButton);
 
 
-// .......................
-
-// Función para enviar una solicitud de acceso
-
-function sendAccessRequest(tournamentId, userId, teamId) {
-    const requestPayload = {
-        userId: userId,
-        teamId: teamId
-    };
-
-    fetch(`/api/tournaments/${tournamentId}/access-request`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestPayload)
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log("Solicitud enviada exitosamente.");
-                document.getElementById('success-message').innerText = "Solicitud enviada exitosamente.";
-                document.getElementById('success-message').style.color = 'green';
-                document.getElementById('success-message').style.display = 'block';
-                document.getElementById('error-message').style.display = 'none';
-            } else {
-                throw new Error(`Error al enviar la solicitud: ${response.status} ${response.statusText}`);
-            }
+            fetchUserTeams(userId)
+                .then(teams => {
+                    populateTeamSelect(teams);
+                    addSignupButtonListener(tournament, userId, signupButton);
+                })
+                .catch(error => {
+                    console.error('Error fetching user teams:', error);
+                });
         })
         .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('error-message').innerText = "Error al enviar la solicitud.";
-            document.getElementById('error-message').style.color = 'red';
-            document.getElementById('error-message').style.display = 'block';
-            document.getElementById('success-message').style.display = 'none';
+            console.error("Error fetching tournament details:", error);
         });
+
+    displayModal(modal, closeButton);
 }
 
-// .......................
 
-// Función para inscribir al usuario en un torneo público
+function populateTeamSelect(teams) {
+    const teamSelect = document.getElementById('teamSelect');
 
-function enrollUserInPublicTournament(tournamentId) {
-    const userId = localStorage.getItem("userId");
-    const data = {
-        userId: userId,
-        tournamentId: tournamentId
-    }
+    teamSelect.innerHTML = '';
 
-    // Realizar una solicitud AJAX al backend para inscribir al usuario en el torneo público
-    fetch(`/api/tournaments/${tournamentId}/enroll`, {
+    teams.forEach(team => {
+        const option = document.createElement('option');
+        option.value = team.id;
+        option.textContent = team.name;
+        teamSelect.appendChild(option);
+    });
+}
+
+
+
+
+function addSignupButtonListener(tournament, userId, signupButton) {
+    signupButton.addEventListener("click", function() {
+        const participatingTeams = tournament.participatingTeams;
+        const maxTeams = tournament.maxTeams;
+        const numOfParticipatingTeams = participatingTeams.length;
+        const tournamentCreator = tournament.creatorId
+        const teamId = document.getElementById("teamSelect").value;
+        const user = localStorage.getItem("userId");
+
+        if (user === tournamentCreator.toString()){
+            displayErrorMessage("No te podes anotar a tu propio torneo.")
+        }
+
+        if (numOfParticipatingTeams < maxTeams) {
+
+            const tournamentIsPrivate = tournament.private;
+
+            if (tournamentIsPrivate) {
+                sendTournamentRequest(tournament, teamId, userId);
+                displaySuccessMessage("Exito al anotarse a torneo!")
+            } else {
+                joinPublicTournament(tournament, teamId);
+            }
+        } else {
+            displayErrorMessage("The maximum number of participating teams has been reached.");
+        }
+    });
+}
+
+function joinPublicTournament(tournament, teamId) {
+    const tournamentId = tournament.id;
+    const team = teamId
+    fetch(`/api/tournaments/add/${tournamentId}/${team}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        }
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to enroll user in public tournament: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to join tournament: ${response.status} ${response.statusText}`);
             }
-            document.getElementById('success-message').innerText = "Te has inscripto exitosamente en el torneo!";
-            document.getElementById('success-message').style.color = 'green';
-            document.getElementById('success-message').style.display = 'block';
-            document.getElementById('error-message').style.display = 'none';
-            fetchActiveTournaments(); // Aquí podrías realizar otras acciones, como recargar la lista de torneos activos
+            return response.json();
+        })
+        .then(data => {
+            console.log("Successfully joined tournament:", data);
+            displaySuccessMessage("Exito al anotarse a torneo!")
         })
         .catch(error => {
-            console.error('Error: ', error);
-            document.getElementById('error-message').innerText = "Hubo un error al inscribirse en el torneo. Por favor, intenta nuevamente más tarde.";
-            document.getElementById('error-message').style.color = 'red';
-            document.getElementById('error-message').style.display = 'block';
-            document.getElementById('success-message').style.display = 'none';
+            console.error('Error joining tournament:', error);
+            displayErrorMessage("Error al unirse a torneo")
         });
 }
 
-// .......................
 
-// Chequea si el usuario está en un equipo
 
-function checkIfUserIsCaptain(userId, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/api/user/${userId}/team-owner`, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            const isCaptain = response.is_Captain;
-            callback(isCaptain);
-        } else {
-            console.error(xhr.responseText);
-            callback(false); // Default to not in team if there's an error
-        }
-    };
-    xhr.send();
+function fetchUserTeams(userId) {
+    return fetch(`/api/teams/captain/${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch user teams: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
 }
 
-// .......................
+function fetchTournamentDetails(tournamentId) {
+    return fetch(`/api/tournaments/${tournamentId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
 
-// Punto de entrada cuando se carga la página
+
+function displayTournamentDetails(tournament, signupButton) {
+    const tournamentDetails = document.getElementById("tournamentDetails");
+
+    const tournamentName = tournament.name;
+    const tournamentSport = tournament.sport;
+    const tournamentSportName = tournamentSport.sportName;
+    const tournamentLocation = tournament.location;
+    const privateTournament = tournament.private;
+    const maxTeams = tournament.maxTeams;
+    const participatingTeams = tournament.participatingTeams;
+    const numOfParticipatingTeams = participatingTeams.length;
+
+
+    tournamentDetails.innerHTML = `
+        <h3>${tournamentName}</h3>
+        <p>Deporte: ${tournamentSportName}</p>
+        <p>Ubicación: ${tournamentLocation}</p>
+        <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
+        <p>Dificultad: ${tournament.difficulty}</p>
+        <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+    `;
+
+    if (privateTournament) {
+        signupButton.textContent = "Send Request";
+        signupButton.setAttribute("data-privacy", "private");
+    } else {
+        signupButton.textContent = "Sign Up";
+        signupButton.setAttribute("data-privacy", "public");
+    }
+}
+
+
+
+function sendTournamentRequest(tournament, teamId, userId) {
+    fetchTeamDetails(teamId)
+        .then(teamDetails => {
+            const teamCaptain = teamDetails.captainId;
+            const teamName = teamDetails.name;
+            const tournamentId = tournament.id
+            fetchPlayerDetails(teamCaptain)
+                .then(playerDetails => {
+
+
+                    const senderName = playerDetails.name;
+
+                    return fetch(`/api/requests/tournament/send`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            requestFrom: userId,
+                            requestTo: teamCaptain,
+                            teamId: teamId,
+                            tournamentId: tournamentId,
+                            teamName: teamName,
+                            accepted: false,
+                            denied: false,
+                            sent: true,
+                            name: senderName
+                        })
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to send tournament request: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(tournamentRequest => {
+                    createRequestNotification(tournamentRequest);
+                })
+                .catch(error => console.error('Error:', error));
+        })
+        .catch(error => console.error('Error fetching team details:', error));
+}
+
+
+
+
+function createRequestNotification(tournamentRequest) {
+    const requestTournamentId = tournamentRequest.tournamentId;
+    const requestTeamId = tournamentRequest.teamId;
+
+    Promise.all([fetchTournamentDetails(requestTournamentId), fetchTeamDetails(requestTeamId)])
+        .then(([team, player]) => {
+            const playerName = player.name;
+            const teamName = team.name;
+            const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
+
+            const notificationTo = teamRequest.requestTo;
+
+            return fetch(`/api/notifications/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    toId: notificationTo,
+                    message: message,
+                })
+
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(notification => {
+            displaySuccessMessage('Request sent successfully.');
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
+
+function displayModal(modal, closeButton) {
+    modal.style.display = "block";
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+
+
+function fetchPlayerDetails(playerId) {
+    return fetch(`/api/user/players/${playerId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
+
+
+
+function fetchTeamDetails(teamId) {
+    return fetch(`/api/teams/${teamId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
+
+
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+
+    setTimeout(() => {
+        successMessage.style.display = "none";
+    }, 3000);
+}
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}
+
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetchActiveTournaments();
+    fetchActiveTournaments(); // Llamar a la función para cargar los torneos activos
 });

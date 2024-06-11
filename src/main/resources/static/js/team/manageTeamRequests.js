@@ -4,80 +4,67 @@ function loadTeamRequests(teamId) {
         console.error("User ID not found in localStorage");
         return;
     }
+
+    // Solo fetch teamReque
     fetchTeamRequests(userId, teamId)
 }
 
-function fetchPlayerDetails(playerId) {
-    return fetch(`/api/user/players/${playerId}`)
+function fetchTeamRequests(userId, teamId){
+    return fetch(`/api/requests/team/${userId}/${teamId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);
             }
             return response.json();
-        });
-}
+        })
+        .then(requests => {
+            const requestsContainer = document.getElementById("team-requests");
+            requestsContainer.innerHTML = '';
 
-function fetchTeamRequests(userId, teamId){
-    fetchPlayerDetails(userId)
-        .then(playerDetails => {
-            const playerName = playerDetails.name;
+            requests.forEach(request => {
+                const requestElement = document.createElement('div');
+                const playerRequesting = request.name;
 
-            return fetch(`/api/requests/team/${userId}/${teamId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(requests => {
-                    const requestsContainer = document.getElementById("team-requests");
-                    requestsContainer.innerHTML = '';
-
-                    requests.forEach(request => {
-                        const requestElement = document.createElement('div');
-                        const playerRequesting = playerName;
-
-                        requestElement.className = 'request';
-                        requestElement.innerHTML = `
+                requestElement.className = 'request';
+                requestElement.innerHTML = `
                             <p>From: ${playerRequesting}</p>
                             <div class="button-container">
                                 <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
                                 <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
                             </div>
                         `;
-                        requestsContainer.appendChild(requestElement);
-                    });
+                requestsContainer.appendChild(requestElement);
+            });
 
-                    document.querySelectorAll('.accept-button').forEach(button => {
-                        button.addEventListener('click', handleAccept);
-                    });
+            document.querySelectorAll('.accept-button').forEach(button => {
+                button.addEventListener('click', handleAccept);
+            });
 
-                    document.querySelectorAll('.deny-button').forEach(button => {
-                        button.addEventListener('click', handleDeny);
-                    });
-                });
-        })
-        .catch(error => console.error('Error fetching player details:', error));
+            document.querySelectorAll('.deny-button').forEach(button => {
+                button.addEventListener('click', handleDeny);
+            });
+        });
 }
 
 
 function handleAccept(event) {
     const requestId = event.target.getAttribute('data-request-id');
-    updateRequestStatus(requestId, true, false);
+    updateRequestStatus(requestId, true);
 }
 
 function handleDeny(event) {
     const requestId = event.target.getAttribute('data-request-id');
-    updateRequestStatus(requestId, false, true);
+    updateRequestStatus(requestId, false);
 }
 
-function updateRequestStatus(requestId, accepted, denied) {
-    fetch(`/api/requests/team/${requestId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ accepted, denied })
+function updateRequestStatus(requestId, accepted) {
+    const acceptUrl = `/api/requests/team/${requestId}/accept`;
+    const denyUrl = `/api/requests/team/${requestId}/deny`;
+
+    const url = accepted ? acceptUrl : denyUrl;
+
+    fetch(url, {
+        method: 'DELETE',
     })
         .then(response => {
             if (!response.ok) {
@@ -90,7 +77,6 @@ function updateRequestStatus(requestId, accepted, denied) {
         })
         .catch(error => console.error('Error:', error));
 }
-
 
 
 function getTeamIdFromUrl() {

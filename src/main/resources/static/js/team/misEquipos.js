@@ -17,17 +17,15 @@ function loadTeams() {
             listaEquipos.innerHTML = "";
 
             teams.forEach(team => {
-
-                const teamId = team.id
-                const teamPrivate = team.private
-                const teamLocation = team.location
-                const teamName = team.name
-                const teamPlayers = team.players
-                const numberOfPlayersInTeam = teamPlayers.length
-                const teamSport = team.sport
-                const sportNumOfPlayers = teamSport.num_players
-                const maxNumberOfPlayersPerTeam = sportNumOfPlayers * 2
-
+                const teamId = team.id;
+                const teamPrivate = team.private;
+                const teamLocation = team.location;
+                const teamName = team.name;
+                const teamPlayers = team.players;
+                const numberOfPlayersInTeam = teamPlayers.length;
+                const teamSport = team.sport;
+                const sportNumOfPlayers = teamSport.num_players;
+                const maxNumberOfPlayersPerTeam = sportNumOfPlayers * 2;
 
                 const li = document.createElement("li");
                 li.innerHTML = `
@@ -38,8 +36,7 @@ function loadTeams() {
                         <p>Jugadores inscritos: ${numberOfPlayersInTeam} / ${maxNumberOfPlayersPerTeam}</p>
                         <button onclick="editarEquipo(${teamId})">Editar</button>
                         <button onclick="borrarEquipo(${teamId})">Borrar</button>
-                        <button onclick="manejarSolicitudes(${teamId})">Manejar Solicitudes</button>
-                       
+                        ${teamPrivate ? `<button onclick="manejarSolicitudes(${teamId})">Manejar Solicitudes</button>` : ''}
                     </div>
                 `;
                 listaEquipos.appendChild(li);
@@ -50,6 +47,7 @@ function loadTeams() {
             // Handle error, show message to user
         });
 }
+
 
 function editarEquipo(teamId) {
     window.location.href = `editar-equipo.html?id=${teamId}`;

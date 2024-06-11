@@ -2,8 +2,10 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.InviteDto;
 import com.TorneosExpress.dto.TeamRequestDto;
+import com.TorneosExpress.dto.TournamentRequestDto;
 import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.model.TeamRequest;
+import com.TorneosExpress.model.TournamentRequest;
 import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,12 +64,22 @@ public class RequestController {
     }
 
     @PostMapping("/team/send")
-    public TeamRequest sendRequest(@RequestBody TeamRequestDto teamRequestDto) {
+    public TeamRequest sendTeamRequest(@RequestBody TeamRequestDto teamRequestDto) {
         Long requestFromId = teamRequestDto.getRequestFrom();
         Long requestToId = teamRequestDto.getRequestTo();
         Long teamId = teamRequestDto.getTeamId();
         String name = teamRequestDto.getName();
         return requestService.sendTeamRequest(requestFromId, requestToId, teamId, name);
+    }
+
+    @PostMapping("/tournament/send")
+    public TournamentRequest sendTournamentRequest(@RequestBody TournamentRequestDto teamRequestDto) {
+        Long requestFromId = teamRequestDto.getRequest_from();
+        Long requestToId = teamRequestDto.getRequest_to();
+        Long teamId = teamRequestDto.getTeamId();
+        String teamName = teamRequestDto.getTeamName();
+        Long tournamentId = teamRequestDto.getTournamentId();
+        return requestService.sendTournamentRequest(requestFromId, requestToId, teamId, teamName, tournamentId, teamName);
     }
 
     @GetMapping("/team/{toId}")
@@ -79,4 +91,15 @@ public class RequestController {
     public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
         return requestService.getRequestsByTeam(toId, teamId);
     }
+
+    @DeleteMapping("/team/{requestId}/accept")
+    public TeamRequest acceptRequest(@PathVariable Long requestId) {
+        return requestService.acceptTeamRequest(requestId);
+    }
+
+    @DeleteMapping("/team/{requestId}/deny")
+    public TeamRequest denyRequest(@PathVariable Long requestId) {
+        return requestService.denyTeamRequest(requestId);
+    }
+
 }

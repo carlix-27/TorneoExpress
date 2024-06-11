@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 
 @RestController
@@ -33,10 +35,16 @@ public class TeamController {
   }
 
   @PostMapping("/add/{teamId}/{userId}")
-  public Team addPlayerToTeam(@PathVariable Long teamId, @RequestBody AddPlayerRequest addPlayerRequest) {
+  public ResponseEntity<Team> addPlayerToTeam(@PathVariable Long teamId, @RequestBody AddPlayerRequest addPlayerRequest) {
     Long userId = addPlayerRequest.getUserId();
-    return teamService.addPlayerToTeam(teamId, userId);
+    try {
+      Team team = teamService.addPlayerToTeam(teamId, userId);
+      return new ResponseEntity<>(team, HttpStatus.CREATED);
+    } catch (ResponseStatusException ex) {
+      return ResponseEntity.status(500).body(null);
+    }
   }
+
 
   @GetMapping("/user/{userId}")
   public ResponseEntity<List<Team>> getTeamsByUser(@PathVariable Long userId) {
@@ -74,5 +82,11 @@ public class TeamController {
     }
     return ResponseEntity.ok(team);
   }
+
+  @GetMapping("/captain/{userId}")
+  public List<Team> getTeamsByCaptainId(@PathVariable Long userId) {
+    return teamService.findByCaptainId(userId);
+  }
+
 
 }
