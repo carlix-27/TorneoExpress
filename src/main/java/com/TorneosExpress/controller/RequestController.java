@@ -8,8 +8,6 @@ import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.model.TournamentRequest;
 import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,40 +25,27 @@ public class RequestController {
 
     @PostMapping("/invite/send")
     public Invite sendInvite(@RequestBody InviteDto inviteRequest) {
-        Long invite_from = inviteRequest.getInvite_from();
-        Long invite_to = inviteRequest.getInvite_to();
+        Long invite_from = inviteRequest.getInviteFrom();
+        Long invite_to = inviteRequest.getInviteTo();
         Long teamId = inviteRequest.getTeamId();
         return requestService.sendInvite(invite_from, invite_to, teamId);
     }
 
     @GetMapping("/invite/{id}")
-    public ResponseEntity<Invite> getInviteById(@PathVariable Long id) {
-        Invite invite = requestService.getInviteById(id);
-        if (invite != null) {
-            return new ResponseEntity<>(invite, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public List<Invite> getInvitesById(@PathVariable Long id) {
+        List<Invite> invites = requestService.getInvitesById(id);
+        return invites;
     }
 
-    @PostMapping("/invite/accept/{inviteId}")
-    public ResponseEntity<?> acceptInvite(@PathVariable Long inviteId) {
-        try {
-            requestService.acceptInvite(inviteId);
-            return ResponseEntity.ok().body("Invite accepted successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to accept invite.");
-        }
+    @DeleteMapping("/invite/accept/{inviteId}")
+    public Invite acceptInvite(@PathVariable Long inviteId) throws Exception {
+        return  requestService.acceptInvite(inviteId);
     }
 
-    @PostMapping("/invite/deny/{inviteId}")
-    public ResponseEntity<?> denyInvite(@PathVariable Long inviteId) {
-        try {
-            requestService.denyInvite(inviteId);
-            return ResponseEntity.ok().body("Invite denied successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to deny invite.");
-        }
+
+    @DeleteMapping("/invite/deny/{inviteId}")
+    public Invite denyInvite(@PathVariable Long inviteId) throws Exception {
+        return requestService.denyInvite(inviteId);
     }
 
     @PostMapping("/team/send")
@@ -82,24 +67,38 @@ public class RequestController {
         return requestService.sendTournamentRequest(requestFromId, requestToId, teamId, teamName, tournamentId, teamName);
     }
 
-    @GetMapping("/team/{toId}")
-    public List<TeamRequest> getAllTeamRequests(@PathVariable Long toId) {
-        return requestService.getAllTeamRequestsByToId(toId);
-    }
 
     @GetMapping("/team/{toId}/{teamId}")
     public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
         return requestService.getRequestsByTeam(toId, teamId);
     }
 
+
+    @GetMapping("/tournament/{toId}/{tournamentId}")
+    public List<TournamentRequest> getTournamentRequests(@PathVariable Long toId, @PathVariable Long tournamentId) {
+        List<TournamentRequest> requests = requestService.getRequestsByTournament(toId, tournamentId);
+        return requests;
+    }
+
     @DeleteMapping("/team/{requestId}/accept")
-    public TeamRequest acceptRequest(@PathVariable Long requestId) {
+    public TeamRequest acceptTeamRequest(@PathVariable Long requestId) {
         return requestService.acceptTeamRequest(requestId);
     }
 
     @DeleteMapping("/team/{requestId}/deny")
-    public TeamRequest denyRequest(@PathVariable Long requestId) {
+    public TeamRequest denyTeamRequest(@PathVariable Long requestId) {
         return requestService.denyTeamRequest(requestId);
+    }
+
+
+    @DeleteMapping("/tournament/{requestId}/accept")
+    public TournamentRequest acceptTournamentRequest(@PathVariable Long requestId) {
+        return requestService.acceptTournamentRequest(requestId);
+    }
+
+    @DeleteMapping("/tournament/{requestId}/deny")
+    public TournamentRequest denyTournamentRequest(@PathVariable Long requestId) {
+        return requestService.denyTournamentRequest(requestId);
     }
 
 }

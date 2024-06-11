@@ -1,7 +1,10 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.FixtureDto;
+import com.TorneosExpress.dto.MatchDto;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
+import com.TorneosExpress.model.Match.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.TeamRepository;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +30,30 @@ public class TournamentService {
         this.teamRepository = teamRepository;
     }
 
-    public Fixture getTournamentCalendar(Long tournamentId) {
+    public FixtureDto getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture = new FixtureBuilder(
             tournamentId, tournament.getLocation(), tournament.getStartDate())
             .build(tournament.getParticipatingTeams());
-        return fixture;
+        FixtureDto fixtureDto = new FixtureDto();
+        fixtureDto.setMatches(convertToDtoFormat(fixture.getMatches()));
+        return fixtureDto;
+    }
+
+    private List<MatchDto> convertToDtoFormat(List<Match> matches) {
+        List<MatchDto> matchDtos = new ArrayList<>();
+        for (Match match : matches) {
+            MatchDto matchDto = new MatchDto();
+            matchDto.setMatchId(match.getMatch_id());
+            matchDto.setDate(match.getDate());
+            matchDto.setLocation(match.getMatch_location());
+            matchDto.setTeam1_id(match.getTeam1_id());
+            matchDto.setTeam2_id(match.getTeam2_id());
+            matchDto.setTeamName1(match.getTeamName1());
+            matchDto.setTeamName2(match.getTeamName2());
+            matchDtos.add(matchDto);
+        }
+        return matchDtos;
     }
 
     public List<Tournament> getTournamentsByUser(Long userId) {

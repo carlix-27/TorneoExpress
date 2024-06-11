@@ -18,8 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 public class PlayerController {
 
-    @Autowired
-    private PlayerService playerService;
+    private final PlayerService playerService;
 
     @Autowired
     public PlayerController(PlayerService playerService) {
