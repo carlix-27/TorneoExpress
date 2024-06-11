@@ -47,12 +47,11 @@ function fetchFixture(id, tournament, calendarListHTML) {
         .then(fixture => {
             calendarListHTML.innerHTML = `
                 <div id="result">
-                    <h2>${tournament.name}</h2>
+                    <h2>${tournament.name} - Calendario</h2>
                     
                 </div>
             `;
 
-            /* Usar DTO para traer bien los datos. */
             fixture.matches.forEach(match => {
                 const location = match.location;
                 const date = match.date;

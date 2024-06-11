@@ -96,8 +96,8 @@ h2 {
     color: #666;
 }
 
-#calendar-result li button {
-    margin-top: 10px;
+#back-button {
+    margin: 10px;
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
@@ -107,7 +107,7 @@ h2 {
 }
 
 /* Button hover style */
-#calendar-result li button:hover {
+#back-button button:hover {
     background-color: #342160;
 }
 
