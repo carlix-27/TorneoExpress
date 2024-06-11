@@ -29,6 +29,7 @@ public class Invite {
     @Column
     private Long team;
 
+
     public Invite() {
     }
 

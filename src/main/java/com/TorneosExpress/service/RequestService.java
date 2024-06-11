@@ -32,21 +32,40 @@ public class RequestService {
         return inviteRepository.save(invite);
     }
 
-    public Invite getInviteById(Long id) {
-        return inviteRepository.findById(id).orElse(null);
+    public List<Invite> getInvitesById(Long id) {
+        return inviteRepository.findByInviteTo(id);
     }
 
-    public void acceptInvite(Long inviteId) throws Exception {
+    public Invite acceptInvite(Long inviteId) throws Exception {
         Invite invite = inviteRepository.findById(inviteId)
                 .orElseThrow(() -> new Exception("Invite not found"));
+
+        invite.setAccepted(true);
+
+        Team team = teamRepository.findById(invite.getTeam())
+                .orElseThrow(() -> new RuntimeException("Team not found"));
+
+        Player player = playerRepository.findById(invite.getInviteTo())
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+
+        team.getPlayers().add(player);
+        teamRepository.save(team);
+
         inviteRepository.delete(invite);
+        return invite;
     }
 
-    public void denyInvite(Long inviteId) throws Exception {
+    public Invite denyInvite(Long inviteId) throws Exception {
         Invite invite = inviteRepository.findById(inviteId)
                 .orElseThrow(() -> new Exception("Invite not found"));
+
+
+        invite.setDenied(true);
         inviteRepository.delete(invite);
+
+        return invite;
     }
+
 
     public TeamRequest sendTeamRequest(Long from, Long to, Long team, String name) {
         TeamRequest request = new TeamRequest(from, to, team, name);
@@ -61,6 +80,10 @@ public class RequestService {
 
     public List<TeamRequest> getRequestsByTeam(Long toId, Long teamId) {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
+    }
+
+    public List<Invite> getInvites(Long toId) {
+        return inviteRepository.findByInviteTo(toId);
     }
 
     public List<TournamentRequest> getRequestsByTournament(Long toId, Long teamId) {
