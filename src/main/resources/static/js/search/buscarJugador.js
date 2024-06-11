@@ -1,12 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("find-player-form");
     const playerList = document.getElementById("lista-jugadores");
+    const playerId = localStorage.getItem("userId");
 
     function getAllPlayers() {
         fetch(`/api/user/players`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch active tournaments: ${response.status} ${response.statusText}`);
+                    throw new Error(`Failed to fetch players: ${response.status} ${response.statusText}`);
                 }
                 return response.json();
             })
@@ -20,34 +21,26 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderPlayers(players) {
         playerList.innerHTML = ""; // Clear previous results
 
-        players.forEach(function (player) {
+        players.forEach(player => {
             const listItem = document.createElement("li");
             listItem.textContent = player.name + " - " + player.location;
 
             // Create invite button
             const inviteButton = document.createElement("button");
             inviteButton.textContent = "Invite";
-            inviteButton.addEventListener("click", function () {
-                showInviteModal(player);
-            });
+            inviteButton.addEventListener("click", () => showInviteModal(player));
 
             // Append invite button to player list item
             listItem.appendChild(inviteButton);
-
             playerList.appendChild(listItem);
         });
     }
 
-    function filterPlayers(event){
+    function filterPlayers(event) {
         event.preventDefault();
-
-        console.log("Filtering players...");
 
         const playerName = form.querySelector("#playerName").value.trim().toLowerCase();
         const playerLocation = form.querySelector("#playerLocation").value.trim().toLowerCase();
-
-        console.log("Name:", playerName);
-        console.log("Location:", playerLocation);
 
         fetch(`/api/user/players`)
             .then(response => {
@@ -57,24 +50,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(players => {
-                console.log("Fetched players: " + players);
-
-                const filteredPlayers = players.filter(function (player) {
+                const filteredPlayers = players.filter(player => {
                     const lowercasePlayerName = player.name.toLowerCase();
-                    console.log("LowercasePlayerName: ", lowercasePlayerName);
-                    const lowercaseLocation = player.location.toLowerCase(); // Corrected this line
-                    console.log("LowercasePlayerLocation: ", lowercaseLocation);
-
-                    const nameMatches = lowercasePlayerName.includes(playerName.toLowerCase()) || playerName === "";
-                    console.log("Name Matches? : ", nameMatches);
-
-                    const locationMatches = lowercaseLocation.includes(playerLocation.toLowerCase()) || playerLocation === ""; // Corrected this line
-                    console.log("Location Matches? : ", locationMatches);
-
+                    const lowercaseLocation = player.location.toLowerCase();
+                    const nameMatches = lowercasePlayerName.includes(playerName) || playerName === "";
+                    const locationMatches = lowercaseLocation.includes(playerLocation) || playerLocation === "";
                     return nameMatches && locationMatches;
                 });
-
-                console.log("Filtered Players: ", filteredPlayers);
                 renderPlayers(filteredPlayers);
             })
             .catch(error => {
@@ -82,34 +64,87 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // Function to show invite modal
-    // Function to show invite modal
+    function fetchTeamDetails(teamId) {
+        return fetch(`/api/teams/${teamId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            });
+    }
+
+    function createInviteNotification(invite) {
+        const requestTeamId = invite.team;
+
+        fetchTeamDetails(requestTeamId)
+            .then(team => {
+                const teamName = team.name;
+                const message = `El equipo: ${teamName} te ha invitado a unirse a su equipo.`;
+                const notificationTo = invite.inviteTo;
+
+                return fetch(`/api/notifications/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        toId: notificationTo,
+                        message: message,
+                    })
+                });
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(notification => {
+                displaySuccessMessage('Invite sent successfully.');
+            })
+            .catch(error => {
+                displayErrorMessage('Failed to send invite.');
+                console.error('Error:', error);
+            });
+    }
+
+    function displaySuccessMessage(message) {
+        const successMessageDiv = document.getElementById("successMessage");
+        successMessageDiv.textContent = message;
+        successMessageDiv.style.display = "block";
+
+        setTimeout(() => {
+            successMessageDiv.style.display = "none";
+        }, 5000);
+    }
+
+    function displayErrorMessage(message) {
+        const errorMessageDiv = document.getElementById("errorMessage");
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.style.display = "block";
+
+        setTimeout(() => {
+            errorMessageDiv.style.display = "none";
+        }, 5000);
+    }
+
     function showInviteModal(player) {
         const modal = document.getElementById("inviteModal");
         const closeButton = document.getElementsByClassName("close")[0];
         const sendInviteButton = document.getElementById("sendInviteButton");
         const teamSelect = document.getElementById("teamInput");
 
-        // Display modal
         modal.style.display = "block";
-
-        // Set player name in modal header
         document.querySelector(".modal-content h2").textContent = `Invite ${player.name} to Team`;
 
-        // Close modal when the close button is clicked
-        closeButton.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // Close modal when user clicks outside the modal
-        window.onclick = function(event) {
-            if (event.target == modal) {
+        closeButton.onclick = () => modal.style.display = "none";
+        window.onclick = event => {
+            if (event.target === modal) {
                 modal.style.display = "none";
             }
-        }
+        };
 
-        // Fetch teams for the current user and populate the dropdown
-        const playerId = localStorage.getItem("userId");
         fetch(`/api/user/${playerId}/teams`)
             .then(response => {
                 if (!response.ok) {
@@ -118,56 +153,70 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(teams => {
-                // Clear previous options
                 teamSelect.innerHTML = "<option value=''>Select Team</option>";
-
-                // Populate the dropdown menu with the fetched teams
                 teams.forEach(team => {
                     const option = document.createElement("option");
-                    option.value = team.id; // Assuming the team ID is used as the value
-                    option.textContent = team.name; // Assuming the team name is displayed in the dropdown
+                    option.value = team.id;
+                    option.textContent = team.name;
                     teamSelect.appendChild(option);
                 });
             })
-            .catch(error => {
-                console.error('Error fetching teams:', error);
-                // Handle the error, display a message to the user
-            });
+            .catch(error => console.error('Error fetching teams:', error));
 
-        // Send invite when the send invite button is clicked
-        sendInviteButton.onclick = function() {
+        sendInviteButton.onclick = () => {
             const teamId = teamSelect.value;
             if (teamId) {
-                // Check if the team is private and the current user is the captain
-                const isPrivate = true; // You need to retrieve this information from your backend
-                const isCaptain = true; // You need to retrieve this information from your backend
+                fetchTeamDetails(teamId).then(team => {
+                    const teamCaptain = team.captainId;
+                    const isPrivate = team.isPrivate;
+                    const isCaptain = playerId === teamCaptain;
 
-                if (isPrivate && !isCaptain) {
-                    alert("You are not the captain of this private team. You cannot invite players.");
-                } else {
-                    sendInvite(player, teamId);
-                    modal.style.display = "none"; // Close modal after sending invite
-                }
+                    if (isPrivate && !isCaptain) {
+                        displayErrorMessage("You are not the captain of this private team. You cannot invite players.");
+                    } else {
+                        sendInvite(player.id, teamId);
+                    }
+                });
             } else {
-                alert("Please select a team.");
+                displayErrorMessage("Please select a team.");
             }
-        }
+        };
     }
 
+    function sendInvite(playerId, teamId) {
+        fetchTeamDetails(teamId)
+            .then(team => {
+                const teamCaptain = team.captainId;
 
-
-// Function to show invite popup
-    function sendInvite(player, team) {
-        // Code to send invite
-        // You can make a fetch request to your backend to send the invite
-
-        // Example code:
-        console.log(`Invite ${player.name} to team ${team}`);
+                fetch("/api/requests/invite/send", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        inviteFrom: teamCaptain,
+                        inviteTo: playerId,
+                        teamId: team.id,
+                        accepted: false,
+                        denied: false,
+                        sent: true,
+                        name: team.name
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to send invite request: ${response.status} ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(invite => {
+                        createInviteNotification(invite);
+                    })
+                    .catch(error => console.error('Error:', error));
+            })
+            .catch(error => console.error('Error fetching team details:', error));
     }
-
 
     form.addEventListener("submit", filterPlayers);
-
-    // Fetch active tournaments when the page loads
     getAllPlayers();
 });

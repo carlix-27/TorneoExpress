@@ -5,34 +5,36 @@ import java.time.LocalDateTime;
 public class InviteDto {
 
     private Long id;
-    private Long invite_from;
-    private Long invite_to;
+    private Long inviteFrom;
+    private Long inviteTo;
     private Long teamId;
+    private Boolean accepted;
+    private Boolean denied;
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public InviteDto() {
     }
 
-    public InviteDto(Long invite_from, Long invite_to, Long teamId) {
-        this.invite_from = invite_from;
-        this.invite_to = invite_to;
+    public InviteDto(Long inviteFrom, Long invite_to, Long teamId) {
+        this.inviteFrom = inviteFrom;
+        this.inviteTo = invite_to;
         this.teamId = teamId;
     }
 
-    public Long getInvite_from() {
-        return invite_from;
+    public Long getInviteFrom() {
+        return inviteFrom;
     }
 
-    public void setInvite_from(Long invite_from) {
-        this.invite_from = invite_from;
+    public void setInviteFrom(Long inviteFrom) {
+        this.inviteFrom = inviteFrom;
     }
 
-    public Long getInvite_to() {
-        return invite_to;
+    public Long getInviteTo() {
+        return inviteTo;
     }
 
-    public void setInvite_to(Long invite_to) {
-        this.invite_to = invite_to;
+    public void setInviteTo(Long inviteTo) {
+        this.inviteTo = inviteTo;
     }
 
     public Long getTeamId() {
@@ -57,5 +59,21 @@ public class InviteDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public Boolean getDenied() {
+        return denied;
+    }
+
+    public void setDenied(Boolean denied) {
+        this.denied = denied;
     }
 }
