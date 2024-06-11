@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -68,6 +69,35 @@ public class TeamService {
 
   public List<Team> getAllTeams() {
     return teamRepository.findAll();
+  }
+
+  public List<Player> getPlayersOfTeam(Long teamId) {
+    Optional<Team> team = teamRepository.findById(teamId);
+    if (team.isPresent()) {
+      return team.get().getPlayers();
+    } else {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+    }
+  }
+
+  public Team removePlayerFromTeam(Long teamId, Long userId) {
+    Team team = teamRepository.findById(teamId)
+            .orElseThrow(() -> new  ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    Player player = playerRepository.findById(userId)
+            .orElseThrow(() -> new  ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+    List<Player> players = team.getPlayers();
+    boolean canRemovePlayer = players.remove(player);
+
+    if (canRemovePlayer) {
+      player.getTeams().remove(team);
+      playerRepository.save(player);
+      teamRepository.save(team);
+    } else {
+      throw new IllegalArgumentException("Player is not a member of the team");
+    }
+
+    return team;
   }
 
 }

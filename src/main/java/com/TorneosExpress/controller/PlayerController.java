@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.ShortPlayerDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
@@ -27,6 +28,12 @@ public class PlayerController {
     @GetMapping("/players/{id}")
     public Optional<Player> getPlayerById(@PathVariable Long id) {
         return playerService.getPlayerById(id);
+    }
+
+    // Este get, va a servir para informarme sobre lo que me interesa del Player en la sección de visualizar equipos, en este caso solo el id y el name
+    @GetMapping("/playersData/{id}")
+    public ResponseEntity<ShortPlayerDto> getPlayerNameById(@PathVariable Long id){
+        return null; // Todo
     }
 
     @GetMapping("/{userId}/premium")
