@@ -24,7 +24,7 @@ function fetchActiveTournaments() {
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <h3>${tournamentName}</h3>
+                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a> 
                     <p>Deporte: ${tournamentSportName}</p>
                     <p>Ubicación: ${tournamentLocation}</p>
                     <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
