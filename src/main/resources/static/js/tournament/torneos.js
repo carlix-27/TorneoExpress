@@ -238,7 +238,7 @@ function sendTournamentRequest(tournament, teamId, userId) {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`Failed to send tournament request: ${response.status} ${response.statusText}`);
+                        displayErrorMessage("Error al inscribirse al torneo.")
                     }
                     return response.json();
                 })
