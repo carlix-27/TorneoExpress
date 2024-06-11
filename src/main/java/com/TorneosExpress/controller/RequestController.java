@@ -90,7 +90,8 @@ public class RequestController {
 
     @GetMapping("/tournament/{toId}/{tournamentId}")
     public List<TournamentRequest> getTournamentRequests(@PathVariable Long toId, @PathVariable Long tournamentId) {
-        return requestService.getRequestsByTournament(toId, tournamentId);
+        List<TournamentRequest> requests = requestService.getRequestsByTournament(toId, tournamentId);
+        return requests;
     }
 
     @DeleteMapping("/team/{requestId}/accept")

@@ -64,7 +64,8 @@ public class RequestService {
     }
 
     public List<TournamentRequest> getRequestsByTournament(Long toId, Long teamId) {
-        return tournamentRequestRepository.findByRequestToAndTeamId(toId, teamId);
+        List<TournamentRequest> requests = tournamentRequestRepository.findByRequestToAndTournamentId(toId, teamId);
+        return requests;
     }
 
     public TeamRequest acceptTeamRequest(Long requestId) {

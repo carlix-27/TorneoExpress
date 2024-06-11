@@ -12,24 +12,25 @@ function loadTournamentRequests(tournamentId) {
 
 
 function fetchTournamentRequests(userId, tournamentId){
-    return fetch(`/api/requests/tournament/${userId}/${teamId}`)
+    return fetch(`/api/requests/tournament/${userId}/${tournamentId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to fetch tournament requests: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(requests => {
-            const requestsContainer = document.getElementById("team-requests");
+            const requestsContainer = document.getElementById("tournament-requests");
+
             requestsContainer.innerHTML = '';
 
             requests.forEach(request => {
                 const requestElement = document.createElement('div');
-                const playerRequesting = request.name;
+                const teamRequesting = request.teamName;
 
                 requestElement.className = 'request';
                 requestElement.innerHTML = `
-                            <p>From: ${playerRequesting}</p>
+                            <p>From: ${teamRequesting}</p>
                             <div class="button-container">
                                 <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
                                 <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
@@ -89,9 +90,9 @@ function getTournamentFromUrl() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const tournamentId = getTeamIdFromUrl();
+    const tournamentId = getTournamentFromUrl();
     if (tournamentId) {
-        loadTeamRequests(tournamentId);
+        loadTournamentRequests(tournamentId);
     } else {
         console.error('Team ID not found in URL');
     }
