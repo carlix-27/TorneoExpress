@@ -30,6 +30,7 @@ public class TeamController {
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
     Team createdTeam = teamService.createTeam(new Team(teamRequest));
+    teamService.addPlayerToTeam(createdTeam.getId(), teamRequest.getCaptainId());
     playerService.upgradeToCaptain(teamRequest.getCaptainId());
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
