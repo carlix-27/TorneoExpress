@@ -113,7 +113,6 @@ function addSignupButtonListener(tournament, userId, signupButton) {
 
             if (tournamentIsPrivate) {
                 sendTournamentRequest(tournament, teamId, userId);
-                displaySuccessMessage("Exito al anotarse a torneo!")
             } else {
                 joinPublicTournament(tournament, teamId);
             }
@@ -207,10 +206,13 @@ function displayTournamentDetails(tournament, signupButton) {
 function sendTournamentRequest(tournament, teamId, userId) {
     fetchTeamDetails(teamId)
         .then(teamDetails => {
-            const teamCaptain = teamDetails.captainId;
+
             const teamName = teamDetails.name;
             const tournamentId = tournament.id
-            fetchPlayerDetails(teamCaptain)
+            const tournamentCreator = tournament.creatorId
+            const userFrom = userId
+
+            fetchPlayerDetails(userFrom)
                 .then(playerDetails => {
 
 
@@ -222,8 +224,8 @@ function sendTournamentRequest(tournament, teamId, userId) {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            requestFrom: userId,
-                            requestTo: teamCaptain,
+                            requestFrom: userFrom,
+                            requestTo: tournamentCreator,
                             teamId: teamId,
                             tournamentId: tournamentId,
                             teamName: teamName,
@@ -241,6 +243,7 @@ function sendTournamentRequest(tournament, teamId, userId) {
                     return response.json();
                 })
                 .then(tournamentRequest => {
+                    displaySuccessMessage("Exito al anotarse a torneo!")
                     createRequestNotification(tournamentRequest);
                 })
                 .catch(error => console.error('Error:', error));
@@ -256,12 +259,12 @@ function createRequestNotification(tournamentRequest) {
     const requestTeamId = tournamentRequest.teamId;
 
     Promise.all([fetchTournamentDetails(requestTournamentId), fetchTeamDetails(requestTeamId)])
-        .then(([team, player]) => {
-            const playerName = player.name;
-            const teamName = team.name;
-            const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
+        .then(([tournament, team]) => {
+            const tournamentName = tournament.name;
+            const teamName = tournament.name;
+            const message = `${teamName} ha solicitado unirse al siguiente torneo: ${tournamentName}.`;
 
-            const notificationTo = teamRequest.requestTo;
+            const notificationTo = tournamentRequest.requestTo;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
