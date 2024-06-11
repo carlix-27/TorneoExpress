@@ -1,10 +1,13 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.AccessRequest;
+import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.StatisticsDto;
 import com.TorneosExpress.dto.TournamentDto;
+import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.StatisticsService;
+import com.TorneosExpress.service.TeamService;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,9 @@ public class TournamentController {
 
     @Autowired
     private StatisticsService statisticsService;
+
+    @Autowired
+    private TeamService teamService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
@@ -93,6 +99,13 @@ public class TournamentController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving statistics.");
         }
+    }
+
+    @GetMapping("{tournamentId}/teams")
+    public ResponseEntity<List<ShortTeamDto>> getTeamsByTournamentId(@PathVariable Long userId, @PathVariable Long tournamentId){
+        List<ShortTeamDto> teams = teamService.findByCaptainId(userId).stream().map(Team::ShortTeamDto).toList();
+        return ResponseEntity.ok().body(teams);
+
     }
 
 }

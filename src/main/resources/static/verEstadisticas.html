@@ -43,12 +43,14 @@
 
 <div id="functions">
   <button id="agregarEstadisticas">Agregar Estadísticas</button>
+  <button id="terminarTorneo">Terminar Torneo</button>
 </div>
+
 
 <!-- Elemento oculto para almacenar el ID del torneo -->
 <input type="hidden" id="tournamentId">
 
-<!-- Incluir el script para manejar la redirección -->
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -66,5 +68,9 @@
     });
   });
 </script>
+
+
+<script src="js/tournament/endTournament.js"></script>
+
 </body>
 </html>
