@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TournamentRequestRepository extends JpaRepository<TournamentRequest, Long> {
     List<TournamentRequest> findByrequestTo(Long requestTo);
-    List<TournamentRequest> findByRequestToAndTeamId(Long toId, Long teamId);
+    List<TournamentRequest> findByRequestToAndTournamentId(Long toId, Long tournamentId);
 }

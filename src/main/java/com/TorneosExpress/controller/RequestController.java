@@ -82,24 +82,37 @@ public class RequestController {
         return requestService.sendTournamentRequest(requestFromId, requestToId, teamId, teamName, tournamentId, teamName);
     }
 
-    @GetMapping("/team/{toId}")
-    public List<TeamRequest> getAllTeamRequests(@PathVariable Long toId) {
-        return requestService.getAllTeamRequestsByToId(toId);
-    }
 
     @GetMapping("/team/{toId}/{teamId}")
     public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
         return requestService.getRequestsByTeam(toId, teamId);
     }
 
+    @GetMapping("/tournament/{toId}/{tournamentId}")
+    public List<TournamentRequest> getTournamentRequests(@PathVariable Long toId, @PathVariable Long tournamentId) {
+        List<TournamentRequest> requests = requestService.getRequestsByTournament(toId, tournamentId);
+        return requests;
+    }
+
     @DeleteMapping("/team/{requestId}/accept")
-    public TeamRequest acceptRequest(@PathVariable Long requestId) {
+    public TeamRequest acceptTeamRequest(@PathVariable Long requestId) {
         return requestService.acceptTeamRequest(requestId);
     }
 
     @DeleteMapping("/team/{requestId}/deny")
-    public TeamRequest denyRequest(@PathVariable Long requestId) {
+    public TeamRequest denyTeamRequest(@PathVariable Long requestId) {
         return requestService.denyTeamRequest(requestId);
+    }
+
+
+    @DeleteMapping("/tournament/{requestId}/accept")
+    public TournamentRequest acceptTournamentRequest(@PathVariable Long requestId) {
+        return requestService.acceptTournamentRequest(requestId);
+    }
+
+    @DeleteMapping("/tournament/{requestId}/deny")
+    public TournamentRequest denyTournamentRequest(@PathVariable Long requestId) {
+        return requestService.denyTournamentRequest(requestId);
     }
 
 }

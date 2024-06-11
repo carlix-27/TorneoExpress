@@ -23,10 +23,13 @@ function cargarTorneos() {
                 const tournamentSport = tournament.sport
                 const tournamentSportName = tournamentSport.sportName
                 const tournamentLocation = tournament.location
-                const tournamentPrivacy = tournament.private
+                const privateTournament = tournament.private
+
+                const tournamentId = tournament.id;
 
                 const participatingTeams = tournament.participatingTeams
                 const numOfParticipatingTeams = participatingTeams.length
+                const maxTeams = tournament.maxTeams;
 
 
                 li.innerHTML = `
@@ -37,12 +40,12 @@ function cargarTorneos() {
                     <h3>${tournamentName}</h3>
                     <p>Deporte: ${tournamentSportName}</p>
                     <p>Ubicación: ${tournamentLocation}</p>
-                    <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
+                    <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
                     <p>Dificultad: ${tournament.difficulty}</p>
-                    <p>Equipos Participantes: ${numOfParticipatingTeams}</p>
+                    <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams} </p>
                     <button onclick="editarTorneo(${tournament.id})">Editar</button>
                     <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
-                    <button onclick="manejarSolicitudes(${tournament.id})">Manejar Solicitudes</button>
+                    ${privateTournament ? `<button onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes</button>` : ''}
                 </div>
                 
                 `;
@@ -61,7 +64,7 @@ function editarTorneo(torneoId) {
 }
 
 function manejarSolicitudes(torneoId){
-    window.location.href = `manejarSolicitudesEquipo.html?id=${torneoId}`;
+    window.location.href = `manejarSolicitudesTorneo.html?id=${torneoId}`;
 }
 
 function borrarTorneo(torneoId) {
