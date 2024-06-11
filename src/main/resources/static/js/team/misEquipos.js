@@ -30,7 +30,7 @@ function loadTeams() {
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
-                        <h3>${teamName}</h3>
+                        <a  href="visualizarJugadoresEquipo.html?id=${team.id}"><h3>${teamName}</h3></a>
                         <p>Ubicación: ${teamLocation}</p>
                         <p>Privacidad: ${teamPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores inscritos: ${numberOfPlayersInTeam} / ${maxNumberOfPlayersPerTeam}</p>
