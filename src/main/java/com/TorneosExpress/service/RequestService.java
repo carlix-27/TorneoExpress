@@ -14,15 +14,17 @@ public class RequestService {
     private final TeamRequestRepository teamRequestRepository;
     private final TournamentRequestRepository tournamentRequestRepository;
     private final TeamRepository teamRepository;
+    private final TournamentRepository tournamentRepository;
     private final PlayerRepository playerRepository;
 
     @Autowired
-    public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TeamRepository teamRepository, PlayerRepository playerRepository, TournamentRequestRepository tournamentRequestRepository) {
+    public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TeamRepository teamRepository, PlayerRepository playerRepository, TournamentRequestRepository tournamentRequestRepository, TournamentRepository tournamentRepository) {
         this.inviteRepository = inviteRepository;
         this.teamRequestRepository = teamRequestRepository;
         this.teamRepository = teamRepository;
         this.playerRepository = playerRepository;
         this.tournamentRequestRepository = tournamentRequestRepository;
+        this.tournamentRepository = tournamentRepository;
     }
 
     public Invite sendInvite(Long from, Long to, Long team) {
@@ -56,13 +58,6 @@ public class RequestService {
         return tournamentRequestRepository.save(request);
     }
 
-    public List<TeamRequest> getAllTeamRequestsByToId(Long toId) {
-        return teamRequestRepository.findByrequestTo(toId);
-    }
-
-    public List<TournamentRequest> getAllTournamentRequestsByToId(Long toId) {
-        return tournamentRequestRepository.findByrequestTo(toId);
-    }
 
     public List<TeamRequest> getRequestsByTeam(Long toId, Long teamId) {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
@@ -95,6 +90,32 @@ public class RequestService {
         return request;
     }
 
+
+    public TournamentRequest acceptTournamentRequest(Long requestId) {
+        TournamentRequest request = tournamentRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Team request not found"));
+
+        if (request.isAccepted() || request.isDenied()) {
+            throw new RuntimeException("Team request already processed");
+        }
+
+        request.setAccepted(true);
+        Tournament tournament = tournamentRepository.findById(request.getTeamId())
+                .orElseThrow(() -> new RuntimeException("Team not found"));
+
+        Team team = teamRepository.findById(request.getRequestFrom())
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+
+        tournament.getParticipatingTeams().add(team);
+
+
+        tournamentRepository.save(tournament);
+
+        tournamentRequestRepository.delete(request);
+
+        return request;
+    }
+
     public TeamRequest denyTeamRequest(Long requestId) {
         TeamRequest request = teamRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Team request not found"));
@@ -105,6 +126,21 @@ public class RequestService {
 
         request.setDenied(true);
         teamRequestRepository.delete(request);
+
+        return request;
+    }
+
+
+    public TournamentRequest denyTournamentRequest(Long requestId) {
+        TournamentRequest request = tournamentRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Team request not found"));
+
+        if (request.isAccepted() || request.isDenied()) {
+            throw new RuntimeException("Team request already processed");
+        }
+
+        request.setDenied(true);
+        tournamentRequestRepository.delete(request);
 
         return request;
     }
