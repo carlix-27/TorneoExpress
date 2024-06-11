@@ -117,7 +117,7 @@ function addSignupButtonListener(tournament, userId, signupButton) {
                 joinPublicTournament(tournament, teamId);
             }
         } else {
-            displayErrorMessage("The maximum number of participating teams has been reached.");
+            displayErrorMessage("Error al inscribirse: Numero maximo de equipos.");
         }
     });
 }
@@ -285,7 +285,7 @@ function createRequestNotification(tournamentRequest) {
             return response.json();
         })
         .then(notification => {
-            displaySuccessMessage('Request sent successfully.');
+            displaySuccessMessage('Solicitud mandada con exito.');
         })
         .catch(error => console.error('Error:', error));
 }
