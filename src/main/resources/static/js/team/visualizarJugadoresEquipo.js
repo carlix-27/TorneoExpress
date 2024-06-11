@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${player.name}</td>
                 <td>
                     <button class="action-button view-button" data-player-id="${player.id}">Ver</button>
-                    <button class="action-button remove-button" data-player-id="${player.id}">Eliminar</button>
+                    <button class="action-button remove-button" data-player-id="${player.id}">Expulsar</button>
                 </td>
             `;
             playersTableBody.appendChild(row);
@@ -53,9 +53,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function handleRemovePlayer(event) {
         const playerId = event.target.getAttribute('data-player-id');
-        // Implement remove player functionality here
+
+        fetch(`/api/teams/${teamId}/${playerId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to remove player: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(() => {
+                displaySuccessMessage('Removed player');
+                fetchPlayersOfTeam(teamId);
+            })
+            .catch(error => console.error('Error:', error));
         console.log(`Remove player with ID: ${playerId}`);
     }
+
+
+    function displaySuccessMessage(message) {
+        const successMessage = document.getElementById("successMessage");
+        successMessage.textContent = message;
+        successMessage.style.display = "block";
+
+        setTimeout(() => {
+            successMessage.style.display = "none";
+        }, 3000);
+    }
+
+    function displayErrorMessage(message) {
+        const errorMessage = document.getElementById("errorMessage");
+        errorMessage.textContent = message;
+        errorMessage.style.display = "block";
+
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 3000);
+    }
+
+
 
     function getTeamIdFromURL() {
         const queryString = window.location.search;

@@ -80,4 +80,24 @@ public class TeamService {
     }
   }
 
+  public Team removePlayerFromTeam(Long teamId, Long userId) {
+    Team team = teamRepository.findById(teamId)
+            .orElseThrow(() -> new  ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    Player player = playerRepository.findById(userId)
+            .orElseThrow(() -> new  ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+    List<Player> players = team.getPlayers();
+    boolean canRemovePlayer = players.remove(player);
+
+    if (canRemovePlayer) {
+      player.getTeams().remove(team);
+      playerRepository.save(player);
+      teamRepository.save(team);
+    } else {
+      throw new IllegalArgumentException("Player is not a member of the team");
+    }
+
+    return team;
+  }
+
 }

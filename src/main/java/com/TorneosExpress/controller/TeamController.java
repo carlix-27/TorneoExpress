@@ -93,8 +93,13 @@ public class TeamController {
   @GetMapping("/all/{teamId}")
   public List<Player> getPlayersOfTeam(@PathVariable Long teamId){
     return teamService.getPlayersOfTeam(teamId);
-
   }
+
+  @DeleteMapping("{teamId}/{userId}")
+  public Team deletePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long userId) {
+    return teamService.removePlayerFromTeam(teamId, userId);
+  }
+
 
 
 }
