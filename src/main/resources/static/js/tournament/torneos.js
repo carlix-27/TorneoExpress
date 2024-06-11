@@ -261,7 +261,7 @@ function createRequestNotification(tournamentRequest) {
     Promise.all([fetchTournamentDetails(requestTournamentId), fetchTeamDetails(requestTeamId)])
         .then(([tournament, team]) => {
             const tournamentName = tournament.name;
-            const teamName = tournament.name;
+            const teamName = team.name;
             const message = `${teamName} ha solicitado unirse al siguiente torneo: ${tournamentName}.`;
 
             const notificationTo = tournamentRequest.requestTo;
