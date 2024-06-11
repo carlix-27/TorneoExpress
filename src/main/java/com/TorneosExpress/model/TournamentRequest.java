@@ -15,30 +15,36 @@ public class TournamentRequest {
     @Column(name = "TO_ID")
     private Long requestTo;
 
-    @Column(nullable = false)
-    private boolean accepted;
+    @Column
+    private Long teamId;
 
     @Column
     private String teamName;
 
     @Column
-    private Long teamId;
+    private Long tournamentId;
+
+
+    @Column(nullable = false)
+    private boolean accepted;
+
 
     @Column(nullable = false)
     private boolean denied;
 
-    @Column
-    private Long tournamentId;
 
 
 
     public TournamentRequest(){}
 
-    public TournamentRequest(Long requestFrom, Long requestTo, Long teamId, String teamName) {
+    public TournamentRequest(Long requestFrom, Long requestTo, Long teamId, String teamName, Long tournamentId) {
         this.requestFrom = requestFrom;
         this.requestTo = requestTo;
         this.teamId = teamId;
         this.teamName = teamName;
+        this.tournamentId = tournamentId;
+        this.accepted = false;
+        this.denied = false;
     }
 
 
@@ -88,6 +94,22 @@ public class TournamentRequest {
 
     public void setTournamentId(Long tournamentId) {
         this.tournamentId = tournamentId;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 

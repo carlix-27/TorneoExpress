@@ -179,21 +179,32 @@ function sendTournamentRequest(tournament, teamId, userId) {
     fetchTeamDetails(teamId)
         .then(teamDetails => {
             const teamCaptain = teamDetails.captainId;
+            const teamName = teamDetails.name;
+            const tournamentId = tournament.id
+            fetchPlayerDetails(teamCaptain)
+                .then(playerDetails => {
 
-            fetch(`/api/requests/tournament/send`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    requestFrom: userId,
-                    requestTo: teamCaptain,
-                    tournamentId: tournament.id,
-                    accepted: false,
-                    denied: false,
-                    sent: true
+
+                    const senderName = playerDetails.name;
+
+                    return fetch(`/api/requests/tournament/send`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            requestFrom: userId,
+                            requestTo: teamCaptain,
+                            teamId: teamId,
+                            tournamentId: tournamentId,
+                            teamName: teamName,
+                            accepted: false,
+                            denied: false,
+                            sent: true,
+                            name: senderName
+                        })
+                    });
                 })
-            })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Failed to send tournament request: ${response.status} ${response.statusText}`);
@@ -207,6 +218,7 @@ function sendTournamentRequest(tournament, teamId, userId) {
         })
         .catch(error => console.error('Error fetching team details:', error));
 }
+
 
 
 
@@ -260,6 +272,17 @@ function displayModal(modal, closeButton) {
             modal.style.display = "none";
         }
     };
+}
+
+
+function fetchPlayerDetails(playerId) {
+    return fetch(`/api/user/players/${playerId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
 }
 
 

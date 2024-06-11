@@ -51,8 +51,8 @@ public class RequestService {
         return teamRequestRepository.save(request);
     }
 
-    public TournamentRequest sendTournamentRequest(Long from, Long to, Long team, String teamName) {
-        TournamentRequest request = new TournamentRequest(from, to, team, teamName);
+    public TournamentRequest sendTournamentRequest(Long from, Long to, Long team, String teamName, Long tournamentId, String name) {
+        TournamentRequest request = new TournamentRequest(from, to, team, teamName, tournamentId);
         return tournamentRequestRepository.save(request);
     }
 
