@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.FixtureDto;
 import com.TorneosExpress.dto.SportDto;
 import com.TorneosExpress.dto.TournamentDto;
 import com.TorneosExpress.fixture.Fixture;
@@ -73,8 +74,8 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/calendar")
-    public ResponseEntity<Fixture> getTournamentCalendar(@PathVariable Long tournamentId) {
-        Fixture fixture = tournamentService.getTournamentCalendar(tournamentId);
+    public ResponseEntity<FixtureDto> getTournamentCalendar(@PathVariable Long tournamentId) {
+        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
         if (fixture == null) {
             return ResponseEntity.notFound().build();
         }
