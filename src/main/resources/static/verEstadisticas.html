@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Visualizar estadísticas</title>
+  <meta charset="UTF-8">
+  <title>Visualizar estadísticas</title>
   <script src="js/auth/checkRedirect.js"></script>
-    <link rel="stylesheet" href="styles/verEstadisticas.css">
+  <link rel="stylesheet" href="styles/verEstadisticas.css">
 </head>
 <body>
 
@@ -26,7 +26,6 @@
   }
 </script>
 
-
 <!-- Mostrar equipos participantes y Fixture -->
 
 <!-- Tabla de Equipos-->
@@ -46,7 +45,26 @@
   <button id="agregarEstadisticas">Agregar Estadísticas</button>
 </div>
 
-<!-- Incluir el archivo JavaScript para manejar la redirección -->
-<script src="js/tournament/agregarEstadisticas.js"></script>
+<!-- Elemento oculto para almacenar el ID del torneo -->
+<input type="hidden" id="tournamentId">
+
+<!-- Incluir el script para manejar la redirección -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tournamentId = urlParams.get('id');
+    if (tournamentId) {
+      document.getElementById('tournamentId').value = tournamentId;
+    }
+
+    document.getElementById('agregarEstadisticas').addEventListener('click', function() {
+      if (tournamentId) {
+        window.location.href = `agregarEstadisticas.html?id=${tournamentId}`;
+      } else {
+        alert('No se encontró el ID del torneo.');
+      }
+    });
+  });
+</script>
 </body>
 </html>

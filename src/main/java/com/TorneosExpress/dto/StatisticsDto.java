@@ -2,10 +2,7 @@ package com.TorneosExpress.dto;
 
 public class StatisticsDto {
     private String resultadoPartido;
-    private String posesionBalon;
-    private String tirosAlArco;
-    private String tirosAPuerta;
-    private String faltas;
+    private String ganador;
 
     // Getters y setters
     public String getResultadoPartido() {
@@ -16,35 +13,11 @@ public class StatisticsDto {
         this.resultadoPartido = resultadoPartido;
     }
 
-    public String getPosesionBalon() {
-        return posesionBalon;
+    public String getGanador(){
+        return ganador;
     }
 
-    public void setPosesionBalon(String posesionBalon) {
-        this.posesionBalon = posesionBalon;
-    }
-
-    public String getTirosAlArco() {
-        return tirosAlArco;
-    }
-
-    public void setTirosAlArco(String tirosAlArco) {
-        this.tirosAlArco = tirosAlArco;
-    }
-
-    public String getTirosAPuerta() {
-        return tirosAPuerta;
-    }
-
-    public void setTirosAPuerta(String tirosAPuerta) {
-        this.tirosAPuerta = tirosAPuerta;
-    }
-
-    public String getFaltas() {
-        return faltas;
-    }
-
-    public void setFaltas(String faltas) {
-        this.faltas = faltas;
+    public void setGanador(String ganador){
+        this.ganador = ganador;
     }
 }

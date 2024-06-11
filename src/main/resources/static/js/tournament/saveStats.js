@@ -1,76 +1,38 @@
-// Este código está para poder guardar los cambios de los resultados y demás en la base de datos
-
-// Función para cargar el ID del torneo almacenado en localStorage
-function loadTournamentId() {
-    return localStorage.getItem("tournamentId");
-}
-
-function loadUserId() {
-    return localStorage.getItem("userId");
-}
-
-async function getTournamentsByUserId(userId) {
-    try {
-        const response = await fetch(`/api/tournaments/user/${userId}`);
-        if (response.ok) {
-            const tournaments = await response.json();
-            return tournaments;
-        } else {
-            console.error('Error fetching tournaments');
-            return null;
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        return null;
-    }
-}
-
-async function loadTournaments() {
-    const userId = loadUserId();
-    if (!userId) {
-        alert('No user ID found.');
-        return;
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener el ID del torneo de la URL y almacenarlo en el elemento oculto
+    const urlParams = new URLSearchParams(window.location.search);
+    const tournamentId = urlParams.get('id');
+    if (tournamentId) {
+        document.getElementById('tournamentId').value = tournamentId;
     }
 
-    const tournaments = await getTournamentsByUserId(userId);
-    if (tournaments && tournaments.length > 0) {
-        const torneoSelect = document.getElementById('torneoSelect');
-        tournaments.forEach((tournament, index) => {
-            const option = document.createElement('option');
-            option.value = tournament.id;
-            option.text = tournament.name;
-            torneoSelect.appendChild(option);
-        });
+    // Obtener el formulario y agregar el manejador de eventos
+    const formularioEstadisticas = document.getElementById('formularioEstadisticas');
+    if (formularioEstadisticas) {
+        formularioEstadisticas.addEventListener('submit', saveStats);
     } else {
-        alert('No tournaments found for user.');
+        console.error('No se encontró el formulario con el ID formularioEstadisticas');
     }
-}
-
-document.addEventListener('DOMContentLoaded', loadTournaments);
+});
 
 async function saveStats(event) {
     event.preventDefault();
 
-    const torneoSelect = document.getElementById('torneoSelect');
-    const tournamentId = torneoSelect.value;
-    console.log(`Esto es lo que estoy obteniendo del select ${tournamentId}`);
+    // Obtener el ID del torneo del elemento oculto en la página
+    const tournamentId = document.getElementById('tournamentId').value;
+    console.log(`Esto es lo que estoy obteniendo del elemento oculto ${tournamentId}`);
     if (!tournamentId) {
         alert('No tournament ID found.');
         return;
     }
 
     const resultadoPartido = document.querySelector('input[name="resultadoPartido"]').value;
-    const posesionBalon = document.querySelector('input[name="posesionBalon"]').value;
-    const tirosAlArco = document.querySelector('input[name="tirosAlArco"]').value;
-    const tirosAPuerta = document.querySelector('input[name="tirosAPuerta"]').value;
-    const faltas = document.querySelector('input[name="faltas"]').value;
+    const ganador = document.querySelector('input[name="ganador"]').value;
+
 
     const data = {
         resultadoPartido: resultadoPartido,
-        posesionBalon: posesionBalon,
-        tirosAlArco: tirosAlArco,
-        tirosAPuerta: tirosAPuerta,
-        faltas: faltas
+        ganador: ganador
     };
 
     try {
@@ -103,5 +65,3 @@ async function saveStats(event) {
         document.getElementById('success-message').style.display = 'none';
     }
 }
-
-document.getElementById('formularioEstadisticas').addEventListener('submit', saveStats);

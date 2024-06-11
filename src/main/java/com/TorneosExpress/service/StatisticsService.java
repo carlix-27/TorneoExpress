@@ -30,11 +30,7 @@ public class StatisticsService {
         Statistics statistics = new Statistics();
         statistics.setShortTournamentDto(shortTournamentDto);
         statistics.setResultadoPartido(statisticsDto.getResultadoPartido());
-        statistics.setPosesionBalon(statisticsDto.getPosesionBalon());
-        statistics.setTirosAlArco(statisticsDto.getTirosAlArco());
-        statistics.setTirosAPuerta(statisticsDto.getTirosAPuerta());
-        statistics.setFaltas(statisticsDto.getFaltas());
-
+        statistics.setGanador(statisticsDto.getGanador());
         statisticsRepository.save(statistics);
         return true;
     }
