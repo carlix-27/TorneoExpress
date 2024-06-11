@@ -8,6 +8,25 @@ public class MatchDto {
   private Long team2_id;
   private String location;
   private LocalDate date;
+  private String teamName1;
+
+  public String getTeamName2() {
+    return teamName2;
+  }
+
+  public void setTeamName2(String teamName2) {
+    this.teamName2 = teamName2;
+  }
+
+  public String getTeamName1() {
+    return teamName1;
+  }
+
+  public void setTeamName1(String teamName1) {
+    this.teamName1 = teamName1;
+  }
+
+  private String teamName2;
 
   public Long getMatchId() {
     return matchId;

@@ -56,8 +56,8 @@ function fetchFixture(id, tournament, calendarListHTML) {
             fixture.matches.forEach(match => {
                 const location = match.location;
                 const date = match.date;
-                const team1 = match.team1_id; // fetch team
-                const team2 = match.team2_id; // fetch team
+                const team1 = match.teamName1; // fetch team
+                const team2 = match.teamName2; // fetch team
 
                 const listItem = document.createElement('li');
 

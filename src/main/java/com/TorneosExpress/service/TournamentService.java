@@ -49,6 +49,8 @@ public class TournamentService {
             matchDto.setLocation(match.getMatch_location());
             matchDto.setTeam1_id(match.getTeam1_id());
             matchDto.setTeam2_id(match.getTeam2_id());
+            matchDto.setTeamName1(match.getTeamName1());
+            matchDto.setTeamName2(match.getTeamName2());
             matchDtos.add(matchDto);
         }
         return matchDtos;
