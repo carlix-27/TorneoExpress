@@ -1,6 +1,5 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.AddTeamRequest;
 import com.TorneosExpress.dto.TournamentDto;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
@@ -40,10 +39,9 @@ public class TournamentController {
 
 
     @PostMapping("/add/{tournamentId}/{teamId}")
-    public ResponseEntity<Tournament> addTeamToTournament(@PathVariable Long tournamentId, @RequestBody AddTeamRequest addTeamRequest) {
-        Long teamId = addTeamRequest.getTeamId();
+    public ResponseEntity<Tournament> addTeamToTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
         try {
-            Tournament team = tournamentService.addTeamToTournament(tournamentId, teamId);
+            Tournament team = tournamentService.addTeamToTournament(teamId, tournamentId);
             return new ResponseEntity<>(team, HttpStatus.CREATED);
         } catch (ResponseStatusException ex) {
             return ResponseEntity.status(500).body(null);

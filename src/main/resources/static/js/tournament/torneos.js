@@ -113,14 +113,42 @@ function addSignupButtonListener(tournament, userId, signupButton) {
 
             if (tournamentIsPrivate) {
                 sendTournamentRequest(tournament, teamId, userId);
+                displaySuccessMessage("Exito al anotarse a torneo!")
             } else {
-                joinPublicTournament(tournament, teamId, userId);
+                joinPublicTournament(tournament, teamId);
             }
         } else {
             displayErrorMessage("The maximum number of participating teams has been reached.");
         }
     });
 }
+
+function joinPublicTournament(tournament, teamId) {
+    const tournamentId = tournament.id;
+    const team = teamId
+    fetch(`/api/tournaments/add/${tournamentId}/${team}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to join tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Successfully joined tournament:", data);
+            displaySuccessMessage("Exito al anotarse a torneo!")
+        })
+        .catch(error => {
+            console.error('Error joining tournament:', error);
+            displayErrorMessage("Error al unirse a torneo")
+        });
+}
+
+
 
 function fetchUserTeams(userId) {
     return fetch(`/api/teams/captain/${userId}`)
