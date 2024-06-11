@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -68,6 +69,15 @@ public class TeamService {
 
   public List<Team> getAllTeams() {
     return teamRepository.findAll();
+  }
+
+  public List<Player> getPlayersOfTeam(Long teamId) {
+    Optional<Team> team = teamRepository.findById(teamId);
+    if (team.isPresent()) {
+      return team.get().getPlayers();
+    } else {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+    }
   }
 
 }

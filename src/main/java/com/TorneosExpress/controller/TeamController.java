@@ -1,6 +1,7 @@
 package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.AddPlayerRequest;
 import com.TorneosExpress.dto.TeamDto;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
@@ -87,6 +88,12 @@ public class TeamController {
   @GetMapping("/captain/{userId}")
   public List<Team> getTeamsByCaptainId(@PathVariable Long userId) {
     return teamService.findByCaptainId(userId);
+  }
+
+  @GetMapping("/all/{teamId}")
+  public List<Player> getPlayersOfTeam(@PathVariable Long teamId){
+    return teamService.getPlayersOfTeam(teamId);
+
   }
 
 
