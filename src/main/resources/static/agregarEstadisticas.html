@@ -4,6 +4,32 @@
     <meta charset="UTF-8">
     <title>Agregar Estadísticas</title>
     <link rel="stylesheet" href="styles/agregarEstadisticas.css">
+
+
+    <style>
+        /* Styles for error and success messages */
+        #error-message,
+        #success-message {
+            color: red;
+            display: none;
+        }
+
+        .success {
+            color: green;
+        }
+
+        /* Styles for back button */
+        .back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -39,15 +65,21 @@
     <div id="agregarEstadisticas" class="section">
         <h2>Agregar Estadísticas</h2>
         <form id="formularioEstadisticas">
-            <input type="text" placeholder="Resultado del Partido">
-            <input type="text" placeholder="Posesión del balón">
-            <input type="text" placeholder="Tiros al arco">
-            <input type="text" placeholder="Tiros a puerta">
-            <input type="text" placeholder="Faltas">
+            <select id="torneoSelect">
+                <!-- Los torneos se agregarán aquí dinámicamente, veamos como funciona, creo que es mucho bochinche. -->
+            </select>
+            <input type="text" name="resultadoPartido" placeholder="Resultado del Partido">
+            <input type="text" name="posesionBalon" placeholder="Posesión del balón">
+            <input type="text" name="tirosAlArco" placeholder="Tiros al arco">
+            <input type="text" name="tirosAPuerta" placeholder="Tiros a puerta">
+            <input type="text" name="faltas" placeholder="Faltas">
             <button type="submit">Guardar</button>
         </form>
+        <div id="success-message" class="success">Estadísticas agregadas con éxito</div>
+        <div id="error-message" class="error">Hubo un problema al agregar las estadísticas</div>
     </div>
 </div>
 
+<script src="js/tournament/saveStats.js"></script>
 </body>
 </html>

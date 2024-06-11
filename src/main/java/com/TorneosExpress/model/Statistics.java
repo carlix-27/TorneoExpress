@@ -15,12 +15,25 @@ public class Statistics {
     /*@ManyToOne // Fijate acá de laburar con Dtos, a lo mejor laburar con la entidad entera puede traer demasiados problemas!
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;*/
-    private ShortTournamentDto shortTournamentDto;
+    @ManyToOne
+    @JoinColumn(name = "tournament_id", nullable = false)
+    private Tournament tournament;
+
     private String resultadoPartido;
     private String posesionBalon;
     private String tirosAlArco;
     private String tirosAPuerta;
     private String faltas;
+
+    public void setTournament(Tournament tournament){
+        this.tournament = tournament;
+    }
+
+    public void setShortTournamentDto(ShortTournamentDto shortTournamentDto){
+        this.tournament = new Tournament();
+        this.tournament.setId(shortTournamentDto.getId());
+        this.tournament.setName(shortTournamentDto.getName());
+    }
 
     // Getters y setters
     public Long getId() {
@@ -38,12 +51,12 @@ public class Statistics {
     /*public void setTournament(Tournament tournament) {
         this.tournament = tournament;
     }*/
-    public ShortTournamentDto getTournament(){
-        return shortTournamentDto;
+    public Tournament getTournament(){
+        return tournament;
     }
 
-    public void setShortTournamentDto(ShortTournamentDto shortTournamentDto){
-        this.shortTournamentDto = shortTournamentDto;
+    public void setShortTournamentDto(Tournament tournament){
+        this.tournament = tournament;
     }
 
 
