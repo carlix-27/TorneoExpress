@@ -83,4 +83,10 @@ public class TeamController {
     return ResponseEntity.ok(team);
   }
 
+  @GetMapping("/captain/{userId}")
+  public List<Team> getTeamsByCaptainId(@PathVariable Long userId) {
+    return teamService.findByCaptainId(userId);
+  }
+
+
 }

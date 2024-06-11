@@ -1,4 +1,3 @@
-// Fetch active tournaments and display them with a join button
 function fetchActiveTournaments() {
     fetch('/api/tournaments/active')
         .then(response => {
@@ -31,7 +30,7 @@ function fetchActiveTournaments() {
                     <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
                     <p>Dificultad: ${tournament.difficulty}</p>
                     <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
-                   <button class="signup-button" data-tournament-id="${tournament.id}">Inscribirse</button>
+                    <button class="signup-button" data-tournament-id="${tournament.id}">Inscribirse</button>
                 `;
                 tournamentList.appendChild(listItem);
             });
@@ -51,7 +50,6 @@ function fetchActiveTournaments() {
         });
 }
 
-
 function showSignupModal(tournamentId) {
     const modal = document.getElementById("signupModal");
     const closeButton = modal.querySelector(".close");
@@ -61,13 +59,76 @@ function showSignupModal(tournamentId) {
     fetchTournamentDetails(tournamentId)
         .then(tournament => {
             displayTournamentDetails(tournament, signupButton);
-            addSignupButtonListener(tournament, userId, signupButton);
+
+
+            fetchUserTeams(userId)
+                .then(teams => {
+                    populateTeamSelect(teams);
+                    addSignupButtonListener(tournament, userId, signupButton);
+                })
+                .catch(error => {
+                    console.error('Error fetching user teams:', error);
+                });
         })
         .catch(error => {
-            console.error("Error:", error);
+            console.error("Error fetching tournament details:", error);
         });
 
     displayModal(modal, closeButton);
+}
+
+
+function populateTeamSelect(teams) {
+    const teamSelect = document.getElementById('teamSelect');
+
+    teamSelect.innerHTML = '';
+
+    teams.forEach(team => {
+        const option = document.createElement('option');
+        option.value = team.id;
+        option.textContent = team.name;
+        teamSelect.appendChild(option);
+    });
+}
+
+
+
+
+function addSignupButtonListener(tournament, userId, signupButton) {
+    signupButton.addEventListener("click", function() {
+        const participatingTeams = tournament.participatingTeams;
+        const maxTeams = tournament.maxTeams;
+        const numOfParticipatingTeams = participatingTeams.length;
+        const tournamentCreator = tournament.creatorId
+        const teamId = document.getElementById("teamSelect").value;
+
+        if (userId === tournamentCreator){
+            displayErrorMessage("cant play own tournament")
+        }
+
+        if (numOfParticipatingTeams < maxTeams) {
+
+            const tournamentIsPrivate = tournament.private;
+
+            if (tournamentIsPrivate) {
+                sendTournamentRequest(tournament, teamId, userId);
+            } else {
+                joinPublicTournament(tournament, teamId, userId);
+            }
+        } else {
+            displayErrorMessage("The maximum number of participating teams has been reached.");
+        }
+    });
+}
+
+function fetchUserTeams(userId) {
+    return fetch(`/api/teams/captain/${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch user teams: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
 }
 
 function fetchTournamentDetails(tournamentId) {
@@ -80,6 +141,7 @@ function fetchTournamentDetails(tournamentId) {
         });
 }
 
+
 function displayTournamentDetails(tournament, signupButton) {
     const tournamentDetails = document.getElementById("tournamentDetails");
 
@@ -87,7 +149,7 @@ function displayTournamentDetails(tournament, signupButton) {
     const tournamentSport = tournament.sport;
     const tournamentSportName = tournamentSport.sportName;
     const tournamentLocation = tournament.location;
-    const tournamentPrivacy = tournament.private;
+    const privateTournament = tournament.private;
     const maxTeams = tournament.maxTeams;
     const participatingTeams = tournament.participatingTeams;
     const numOfParticipatingTeams = participatingTeams.length;
@@ -97,39 +159,18 @@ function displayTournamentDetails(tournament, signupButton) {
         <h3>${tournamentName}</h3>
         <p>Deporte: ${tournamentSportName}</p>
         <p>Ubicación: ${tournamentLocation}</p>
-        <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
+        <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
         <p>Dificultad: ${tournament.difficulty}</p>
         <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
     `;
 
-    if (tournament.private) {
+    if (privateTournament) {
         signupButton.textContent = "Send Request";
         signupButton.setAttribute("data-privacy", "private");
     } else {
         signupButton.textContent = "Sign Up";
         signupButton.setAttribute("data-privacy", "public");
     }
-}
-
-
-function addSignupButtonListener(tournament, teamId, userId, signupButton) {
-    signupButton.addEventListener("click", function() {
-        const participatingTeams = tournament.participatingTeams;
-        const maxTeams = tournament.maxTeams;
-        const numOfParticipatingTeams = participatingTeams.length;
-
-        if (numOfParticipatingTeams < maxTeams) {
-            const tournamentIsPrivate = tournament.private;
-
-            if (tournamentIsPrivate) {
-                sendTournamentRequest(tournament, teamId, userId);
-            } else {
-                joinPublicTournament(tournament, teamId, userId);
-            }
-        } else {
-            displayErrorMessage("The maximum number of participating teams has been reached.");
-        }
-    });
 }
 
 
@@ -255,4 +296,6 @@ function displayErrorMessage(message) {
 }
 
 
-document.addEventListener("DOMContentLoaded", fetchActiveTournaments);
+document.addEventListener("DOMContentLoaded", function() {
+    fetchActiveTournaments(); // Llamar a la función para cargar los torneos activos
+});
