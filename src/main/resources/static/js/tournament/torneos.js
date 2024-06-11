@@ -117,7 +117,7 @@ function addSignupButtonListener(tournament, userId, signupButton) {
                 joinPublicTournament(tournament, teamId);
             }
         } else {
-            displayErrorMessage("The maximum number of participating teams has been reached.");
+            displayErrorMessage("Error al inscribirse: Numero maximo de equipos.");
         }
     });
 }
@@ -238,7 +238,7 @@ function sendTournamentRequest(tournament, teamId, userId) {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`Failed to send tournament request: ${response.status} ${response.statusText}`);
+                        displayErrorMessage("Error al inscribirse al torneo.")
                     }
                     return response.json();
                 })
@@ -261,7 +261,7 @@ function createRequestNotification(tournamentRequest) {
     Promise.all([fetchTournamentDetails(requestTournamentId), fetchTeamDetails(requestTeamId)])
         .then(([tournament, team]) => {
             const tournamentName = tournament.name;
-            const teamName = tournament.name;
+            const teamName = team.name;
             const message = `${teamName} ha solicitado unirse al siguiente torneo: ${tournamentName}.`;
 
             const notificationTo = tournamentRequest.requestTo;
@@ -285,7 +285,7 @@ function createRequestNotification(tournamentRequest) {
             return response.json();
         })
         .then(notification => {
-            displaySuccessMessage('Request sent successfully.');
+            displaySuccessMessage('Solicitud mandada con exito.');
         })
         .catch(error => console.error('Error:', error));
 }

@@ -1,6 +1,7 @@
 package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.AddPlayerRequest;
 import com.TorneosExpress.dto.TeamDto;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
@@ -30,6 +31,7 @@ public class TeamController {
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
     Team createdTeam = teamService.createTeam(new Team(teamRequest));
+    teamService.addPlayerToTeam(createdTeam.getId(), teamRequest.getCaptainId());
     playerService.upgradeToCaptain(teamRequest.getCaptainId());
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
@@ -87,6 +89,17 @@ public class TeamController {
   public List<Team> getTeamsByCaptainId(@PathVariable Long userId) {
     return teamService.findByCaptainId(userId);
   }
+
+  @GetMapping("/all/{teamId}")
+  public List<Player> getPlayersOfTeam(@PathVariable Long teamId){
+    return teamService.getPlayersOfTeam(teamId);
+  }
+
+  @DeleteMapping("{teamId}/{userId}")
+  public Team deletePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long userId) {
+    return teamService.removePlayerFromTeam(teamId, userId);
+  }
+
 
 
 }
