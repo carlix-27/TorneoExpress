@@ -1,9 +1,7 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.FixtureDto;
-import com.TorneosExpress.dto.SportDto;
 import com.TorneosExpress.dto.TournamentDto;
-import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tournaments")
@@ -81,41 +78,7 @@ public class TournamentController {
         }
         return ResponseEntity.ok(fixture);
     }
-
-    /*
-    * @GetMapping("/active")
-    public ResponseEntity<List<ActiveTournamentsDto>> getActiveTournaments() {
-        // Manejarlos con la información que me interesa utilizando Dtos
-        // Debería tener en cuenta los siguientes datos que me interesan de los torneos activos
-        /*id
-        * name
-        * deporte
-        * Si es público o no
-        * Básicamente debo informar lo que debería verse 
-    List<Tournament> activeTournaments = tournamentService.getActiveTournaments();
-    List<ActiveTournamentsDto> activeTournamentsDtoList = activeTournaments.stream()
-        .map(tournament -> {
-            SportDto sportDto = new SportDto(
-                tournament.getSport().getSportId(),
-                tournament.getSport().getSportName(),
-                tournament.getSport().getNum_players()
-            );
-
-            TournamentDto tournamentDto = new TournamentDto(
-                tournament.getId(),
-                tournament.getCreatorId(),
-                tournament.getName(),
-                tournament.getLocation(),
-                tournament.getSport(),
-                tournament.isPrivate(),
-                tournament.getDifficulty(),
-                tournament.isActive()
-            );
-            return new ActiveTournamentsDto(tournamentDto, sportDto);
-        })
-        .collect(Collectors.toList());
-        return ResponseEntity.ok(activeTournamentsDtoList);
-}*/
+    
 
     @PutMapping("/{tournamentId}")
     public ResponseEntity<Tournament> updateTournament(@PathVariable Long tournamentId,

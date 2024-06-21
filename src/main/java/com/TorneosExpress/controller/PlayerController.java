@@ -1,6 +1,5 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.ShortPlayerDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
@@ -30,12 +29,6 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
-    // Este get, va a servir para informarme sobre lo que me interesa del Player en la sección de visualizar equipos, en este caso solo el id y el name
-    @GetMapping("/playersData/{id}")
-    public ResponseEntity<ShortPlayerDto> getPlayerNameById(@PathVariable Long id){
-        return null; // Todo
-    }
-
     @GetMapping("/{userId}/premium")
     public ResponseEntity<Map<String, Boolean>> checkPremiumStatus(@PathVariable Long userId) {
         boolean isPremium = playerService.isPremiumUser(userId);
@@ -43,7 +36,6 @@ public class PlayerController {
         response.put("isPremium", isPremium);
         return ResponseEntity.ok().body(response);
     }
-
 
     @GetMapping("/{userId}/team-owner")
     public ResponseEntity<?> checkIfUserIsCaptain(@PathVariable Long userId){
@@ -68,7 +60,7 @@ public class PlayerController {
             return ResponseEntity.ok().body(true);
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upgrade player to Premium"); // Return an error message if failed
+                    .body("Failed to upgrade player to Premium");
         }
     }
 

@@ -33,8 +33,7 @@ public class RequestController {
 
     @GetMapping("/invite/{id}")
     public List<Invite> getInvitesById(@PathVariable Long id) {
-        List<Invite> invites = requestService.getInvitesById(id);
-        return invites;
+        return requestService.getInvitesById(id);
     }
 
     @DeleteMapping("/invite/accept/{inviteId}")
@@ -76,8 +75,7 @@ public class RequestController {
 
     @GetMapping("/tournament/{toId}/{tournamentId}")
     public List<TournamentRequest> getTournamentRequests(@PathVariable Long toId, @PathVariable Long tournamentId) {
-        List<TournamentRequest> requests = requestService.getRequestsByTournament(toId, tournamentId);
-        return requests;
+        return requestService.getRequestsByTournament(toId, tournamentId);
     }
 
     @DeleteMapping("/team/{requestId}/accept")

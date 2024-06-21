@@ -2,25 +2,25 @@ package com.TorneosExpress.controller;
 
 
 import com.TorneosExpress.dto.CreateSportRequest;
-import com.TorneosExpress.dto.DeleteSportRequest;
 import com.TorneosExpress.dto.SportDto;
-import com.TorneosExpress.dto.UpdateSportRequest;
 import com.TorneosExpress.model.Sport;
-import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/sports")
 public class SportController {
 
+    private final SportService sportService;
+
     @Autowired
-    private SportService sportService;
+    public SportController(SportService sportService) {
+        this.sportService = sportService;
+    }
 
     @GetMapping("")
     public List<Sport> getAllSports(){
@@ -60,7 +60,6 @@ public class SportController {
 
         return ResponseEntity.ok(updatedSportEntity);
     }
-
 
 
     @DeleteMapping("/delete/{id}")
