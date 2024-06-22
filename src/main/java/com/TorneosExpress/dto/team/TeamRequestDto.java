@@ -1,4 +1,4 @@
-package com.TorneosExpress.dto;
+package com.TorneosExpress.dto.team;
 
 public class TeamRequestDto {
 

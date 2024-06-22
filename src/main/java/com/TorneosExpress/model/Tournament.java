@@ -1,6 +1,6 @@
 package com.TorneosExpress.model;
 
-import com.TorneosExpress.dto.TournamentDto;
+import com.TorneosExpress.dto.tournament.TournamentDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

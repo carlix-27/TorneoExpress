@@ -1,8 +1,8 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.InviteDto;
-import com.TorneosExpress.dto.TeamRequestDto;
-import com.TorneosExpress.dto.TournamentRequestDto;
+import com.TorneosExpress.dto.request.InviteDto;
+import com.TorneosExpress.dto.team.TeamRequestDto;
+import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.model.TournamentRequest;

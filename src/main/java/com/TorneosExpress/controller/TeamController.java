@@ -1,5 +1,5 @@
 package com.TorneosExpress.controller;
-import com.TorneosExpress.dto.TeamDto;
+import com.TorneosExpress.dto.team.TeamDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;

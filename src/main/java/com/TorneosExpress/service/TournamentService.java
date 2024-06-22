@@ -1,7 +1,7 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.dto.FixtureDto;
-import com.TorneosExpress.dto.MatchDto;
+import com.TorneosExpress.dto.tournament.FixtureDto;
+import com.TorneosExpress.dto.tournament.MatchDto;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
 import com.TorneosExpress.model.Match.Match;

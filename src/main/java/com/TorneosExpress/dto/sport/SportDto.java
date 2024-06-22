@@ -1,4 +1,4 @@
-package com.TorneosExpress.dto;
+package com.TorneosExpress.dto.sport;
 
 public class SportDto {
     private Long id;

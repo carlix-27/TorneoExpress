@@ -1,4 +1,4 @@
-package com.TorneosExpress.dto;
+package com.TorneosExpress.dto.tournament;
 
 import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;

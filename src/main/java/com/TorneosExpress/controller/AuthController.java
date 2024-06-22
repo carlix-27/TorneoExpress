@@ -1,9 +1,9 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.request.LoginRequest;
-import com.TorneosExpress.dto.RegisterRequest;
+import com.TorneosExpress.dto.auth.LoginRequest;
+import com.TorneosExpress.dto.auth.RegisterRequest;
 import com.TorneosExpress.model.Player;
-import com.TorneosExpress.dto.PlayerDto;
+import com.TorneosExpress.dto.auth.PlayerDto;
 import com.TorneosExpress.service.PlayerService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

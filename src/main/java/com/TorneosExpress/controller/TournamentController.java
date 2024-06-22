@@ -1,7 +1,7 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.FixtureDto;
-import com.TorneosExpress.dto.TournamentDto;
+import com.TorneosExpress.dto.tournament.FixtureDto;
+import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.TorneosExpress.dto.request;
+package com.TorneosExpress.dto.auth;
 
 public record LoginRequest(String email, String password) {
 
