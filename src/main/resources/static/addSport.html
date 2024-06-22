@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos Express - Torneo - Agregar Deporte</title>
+
     <link rel="stylesheet" href="styles/sport/addSport.css">
     <link rel="stylesheet" href="styles/messages.css">
     <link rel="stylesheet" href="styles/backButton.css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="js/sport/addSport.js"></script>
+
+    <script type="module">
+        import { addSport } from './js/sport/addSport.js';
+        window.addSport = addSport;
+    </script>
     <script src="js/auth/checkRedirect.js"></script>
 </head>
 <body>
@@ -27,8 +32,10 @@
         <a href="home.html" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
         <h2>Agregar Deporte</h2>
     </div>
-    <div id="error-message" class="error-message" style="display: none;"></div>
-    <div id="success-message" class="success" style="display: none;"></div>
+
+    <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+    <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+
     <form id="add-sport-form">
         <div class="form-group">
             <label for="sport-name">Nombre:</label>
