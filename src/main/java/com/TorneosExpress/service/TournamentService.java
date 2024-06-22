@@ -99,7 +99,6 @@ public class TournamentService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team is already participating in the tournament.");
         }
 
-        // Check if the tournament has reached its maximum number of teams
         if (participatingTeams.size() >= tournament.getMaxTeams()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tournament is full.");
         }

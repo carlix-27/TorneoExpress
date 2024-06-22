@@ -1,7 +1,7 @@
 package com.TorneosExpress.controller;
 
 
-import com.TorneosExpress.dto.CreateSportRequest;
+import com.TorneosExpress.dto.request.CreateSportRequest;
 import com.TorneosExpress.dto.SportDto;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.service.SportService;
@@ -35,8 +35,8 @@ public class SportController {
     @PostMapping("/create")
     public ResponseEntity<SportDto> createSport(@RequestBody CreateSportRequest request){
 
-        String requestName = request.getName();
-        int requestNumPlayers = request.getNum_players();
+        String requestName = request.name();
+        int requestNumPlayers = request.num_players();
 
         Sport createdSport =  sportService.createSport(requestName, requestNumPlayers);
 

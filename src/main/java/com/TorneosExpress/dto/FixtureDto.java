@@ -1,7 +1,5 @@
 package com.TorneosExpress.dto;
 
-import com.TorneosExpress.model.Match.Match;
-
 import java.util.List;
 
 public class FixtureDto {

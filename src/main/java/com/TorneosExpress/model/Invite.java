@@ -1,6 +1,5 @@
 package com.TorneosExpress.model;
 
-import com.TorneosExpress.dto.InviteDto;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -41,14 +40,6 @@ public class Invite {
         this.accepted = false;
     }
 
-    public Invite(InviteDto inviteDto){
-        this.id = inviteDto.getId();
-        this.inviteFrom = inviteDto.getInviteFrom();
-        this.inviteTo = inviteDto.getInviteFrom();
-        this.team = inviteDto.getTeamId();
-        this.createdAt = LocalDateTime.now();
-        this.accepted = false;
-    }
 
     // Getters and setters...
     public Long getId() {

@@ -25,9 +25,11 @@ public class RequestController {
 
     @PostMapping("/invite/send")
     public Invite sendInvite(@RequestBody InviteDto inviteRequest) {
-        Long invite_from = inviteRequest.getInviteFrom();
-        Long invite_to = inviteRequest.getInviteTo();
-        Long teamId = inviteRequest.getTeamId();
+
+        Long invite_from = inviteRequest.inviteFrom();
+        Long invite_to = inviteRequest.inviteTo();
+        Long teamId = inviteRequest.teamId();
+
         return requestService.sendInvite(invite_from, invite_to, teamId);
     }
 

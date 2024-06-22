@@ -1,6 +1,6 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.LoginRequest;
+import com.TorneosExpress.dto.request.LoginRequest;
 import com.TorneosExpress.dto.RegisterRequest;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.dto.PlayerDto;
@@ -26,8 +26,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Long> login(@RequestBody LoginRequest request) {
 
-        String requestEmail = request.getEmail();
-        String requestPassword = request.getPassword();
+        String requestEmail = request.email();
+        String requestPassword = request.password();
 
         Player player = playerService.login(requestEmail, requestPassword);
 
