@@ -4,7 +4,6 @@ import com.TorneosExpress.dto.LoginRequest;
 import com.TorneosExpress.dto.RegisterRequest;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.dto.PlayerDto;
-import com.TorneosExpress.response.LoginResponse;
 import com.TorneosExpress.service.PlayerService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,31 +24,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        Player player = playerService.login(request.getEmail(), request.getPassword());
+    public ResponseEntity<Long> login(@RequestBody LoginRequest request) {
+
+        String requestEmail = request.getEmail();
+        String requestPassword = request.getPassword();
+
+        Player player = playerService.login(requestEmail, requestPassword);
+
         if (player == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        String sessionId = UUID.randomUUID().toString();
         Long userId = player.getId();
 
-        LoginResponse response = new LoginResponse(
-                new PlayerDto(
-                        player.getId(),
-                        player.getName(),
-                        player.getLocation(),
-                        player.getEmail(),
-                        player.getIs_Premium(),
-                        player.getEnabled(),
-                        player.getPassword(),
-                        player.isIs_Captain()
-                ),
-                sessionId,
-                userId
-        );
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 
 

@@ -1,11 +1,8 @@
 package com.TorneosExpress.dto;
 
-import com.TorneosExpress.model.Team;
-
-import java.util.List;
 
 public class PlayerDto {
-    private Long id;
+    private final Long id;
     private String name;
     private String location;
     private String email;
@@ -15,7 +12,6 @@ public class PlayerDto {
     private boolean isCaptain;
 
     public PlayerDto(Long id, String name, String location, String email, Boolean isPremium, Boolean isEnabled, String password, boolean isCaptain) {
-
         this.id = id;
         this.name = name;
         this.location = location;
@@ -26,7 +22,6 @@ public class PlayerDto {
         this.isCaptain = isCaptain;
     }
 
-    // Getters and setters
 
     public Long getId() {
         return id;

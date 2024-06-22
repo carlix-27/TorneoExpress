@@ -1,6 +1,7 @@
 package com.TorneosExpress.dto;
 
 public class CreateSportRequest {
+
     private String name;
     private int num_players;
 

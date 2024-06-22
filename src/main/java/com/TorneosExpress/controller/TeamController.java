@@ -1,5 +1,4 @@
 package com.TorneosExpress.controller;
-import com.TorneosExpress.dto.AddPlayerRequest;
 import com.TorneosExpress.dto.TeamDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
@@ -37,8 +36,7 @@ public class TeamController {
   }
 
   @PostMapping("/add/{teamId}/{userId}")
-  public ResponseEntity<Team> addPlayerToTeam(@PathVariable Long teamId, @RequestBody AddPlayerRequest addPlayerRequest) {
-    Long userId = addPlayerRequest.getUserId();
+  public ResponseEntity<Team> addPlayerToTeam(@PathVariable Long teamId, @PathVariable Long userId) {
     try {
       Team team = teamService.addPlayerToTeam(teamId, userId);
       return new ResponseEntity<>(team, HttpStatus.CREATED);

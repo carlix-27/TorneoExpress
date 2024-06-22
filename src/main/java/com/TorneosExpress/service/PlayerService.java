@@ -38,9 +38,15 @@ public class PlayerService {
 
     public Player login(String email, String password) {
         Player player = playerRepository.findByemail(email);
-        if (player == null || !player.getPassword().equals(password)) {
+
+        String playerPassword = player.getPassword();
+
+        boolean correctPassword = playerPassword.equals(password);
+
+        if (!correctPassword) {
             return null;
         }
+
         return player;
     }
 
