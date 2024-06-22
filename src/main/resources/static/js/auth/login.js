@@ -8,23 +8,22 @@ function login() {
         password: password
     };
 
-
     const xhr = new XMLHttpRequest();
 
     xhr.open('POST', '/api/auth/login', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
+
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             console.log(response);
 
-            if (response.userID === undefined) {
+            if (response === undefined) {
                 console.error("userID is undefined in the response.");
                 return;
             }
 
-            localStorage.setItem("sessionId", response.sessionId);
-            localStorage.setItem("userId", response.userID);
+            localStorage.setItem("userId", response);
 
             redirectToHome();
         } else {

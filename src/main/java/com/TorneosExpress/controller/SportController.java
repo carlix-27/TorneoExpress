@@ -34,7 +34,12 @@ public class SportController {
 
     @PostMapping("/create")
     public ResponseEntity<SportDto> createSport(@RequestBody CreateSportRequest request){
-        Sport createdSport =  sportService.createSport(request.getName(), request.getNum_players());
+
+        String requestName = request.getName();
+        int requestNumPlayers = request.getNum_players();
+
+        Sport createdSport =  sportService.createSport(requestName, requestNumPlayers);
+
         SportDto sportDto = new SportDto(
                 createdSport.getSportId(),
                 createdSport.getSportName(),
