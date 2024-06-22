@@ -1,5 +1,4 @@
 /* CSS for the horizontal navbar */
-
 nav ul li:last-child {
     margin-right: 0;
 }
@@ -62,36 +61,23 @@ nav ul li a {
     box-sizing: border-box;
 }
 
-.create-sport-box h2 {
-    margin: 0 0 20px;
-    padding: 0;
-    text-align: center;
-    font-size: 24px;
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
 }
 
-body {
-    font-family: Arial, sans-serif;
+.header-row h2 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.create-sport-box h2 {
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
-}
-
-/************* NEW **************/
-.create-sport-box {
-    width: 80%;
-    margin: 20px auto;
-    background: #ffffff;
-    color: #333;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-}
-
-.create-sport-box h2 {
-    margin: 0 0 20px;
-    padding: 0;
-    text-align: center;
     font-size: 24px;
 }
 
@@ -114,7 +100,6 @@ body {
     border-radius: 5px;
     box-sizing: border-box;
 }
-
 
 .form-group input[type="number"],
 .form-group select {
