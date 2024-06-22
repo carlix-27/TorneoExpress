@@ -1,6 +1,5 @@
 package com.TorneosExpress.model;
 import com.TorneosExpress.dto.team.TeamDto;
-import com.TorneosExpress.model.shop.Article;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

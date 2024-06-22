@@ -1,6 +1,6 @@
 package com.TorneosExpress.fixture;
 
-import com.TorneosExpress.model.Match.Match;
+import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import java.time.LocalDate;

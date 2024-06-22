@@ -10,8 +10,8 @@
         <class>com.TorneosExpress.model.Team</class>
         <class>com.TorneosExpress.model.Tournament</class>
         <class>com.TorneosExpress.model.Ranking</class>
-        <class>com.TorneosExpress.model.Match.Match</class>
-        <class>com.TorneosExpress.model.shop.Article</class>
+        <class>com.TorneosExpress.model.Match</class>
+        <class>com.TorneosExpress.model.Article</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>

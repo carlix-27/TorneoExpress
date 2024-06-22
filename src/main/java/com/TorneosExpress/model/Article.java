@@ -1,4 +1,4 @@
-package com.TorneosExpress.model.shop;
+package com.TorneosExpress.model;
 
 import jakarta.persistence.*;
 

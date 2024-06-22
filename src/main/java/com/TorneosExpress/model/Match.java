@@ -1,6 +1,5 @@
-package com.TorneosExpress.model.Match;
+package com.TorneosExpress.model;
 
-import com.TorneosExpress.model.Team;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 

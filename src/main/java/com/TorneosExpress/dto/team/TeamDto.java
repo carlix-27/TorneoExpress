@@ -3,7 +3,7 @@ package com.TorneosExpress.dto.team;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.model.Player;
-import com.TorneosExpress.model.shop.Article;
+import com.TorneosExpress.model.Article;
 
 import java.util.List;
 

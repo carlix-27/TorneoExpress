@@ -4,7 +4,7 @@ import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.MatchDto;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
-import com.TorneosExpress.model.Match.Match;
+import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.TeamRepository;
