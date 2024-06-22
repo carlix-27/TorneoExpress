@@ -1,8 +1,8 @@
 package com.TorneosExpress.controller;
 
 
-import com.TorneosExpress.dto.request.CreateSportRequest;
-import com.TorneosExpress.dto.SportDto;
+import com.TorneosExpress.dto.sport.CreateSportRequest;
+import com.TorneosExpress.dto.sport.SportDto;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
