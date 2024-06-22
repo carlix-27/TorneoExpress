@@ -2,6 +2,8 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
+import com.TorneosExpress.model.Difficulty;
+import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +28,20 @@ public class TournamentController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
+
         String requestName = request.getName();
+
         boolean tournamentNameUnique = tournamentService.isTournamentNameUnique(requestName);
+
         if (tournamentNameUnique) {
+
             Tournament tournament = new Tournament(request);
             Tournament createdTournament = tournamentService.createTournament(tournament);
             createdTournament.setActive(true);
             return ResponseEntity.ok(createdTournament);
+
         } else{
+
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
         }
     }
@@ -88,11 +96,17 @@ public class TournamentController {
             return ResponseEntity.notFound().build();
         }
 
-        existingTournament.setName(updatedTournament.getName());
-        existingTournament.setSport(updatedTournament.getSport());
-        existingTournament.setLocation(updatedTournament.getLocation());
-        existingTournament.setPrivate(updatedTournament.isPrivate());
-        existingTournament.setDifficulty(updatedTournament.getDifficulty());
+        String updatedTournamentName = updatedTournament.getName();
+        Sport updatedTournamentSport = updatedTournament.getSport();
+        String updatedTournamentLocation = updatedTournament.getLocation();
+        boolean updatedTournamentPrivate = updatedTournament.isPrivate();
+        Difficulty updatedTournamentDifficulty = updatedTournament.getDifficulty();
+
+        existingTournament.setName(updatedTournamentName);
+        existingTournament.setSport(updatedTournamentSport);
+        existingTournament.setLocation(updatedTournamentLocation);
+        existingTournament.setPrivate(updatedTournamentPrivate);
+        existingTournament.setDifficulty(updatedTournamentDifficulty);
 
         Tournament updatedTournamentEntity = tournamentService.updateTournament(existingTournament);
         return ResponseEntity.ok(updatedTournamentEntity);
