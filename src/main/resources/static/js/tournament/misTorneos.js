@@ -33,23 +33,19 @@ function cargarTorneos() {
 
 
                 li.innerHTML = `
-                
-                <div>
-                
-                    <div>
-                    <h3>${tournamentName}</h3>
-                    <p>Deporte: ${tournamentSportName}</p>
-                    <p>Ubicación: ${tournamentLocation}</p>
-                    <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
-                    <p>Dificultad: ${tournament.difficulty}</p>
-                    <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams} </p>
-                    <button onclick="editarTorneo(${tournament.id})">Editar</button>
-                    <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
-                    ${privateTournament ? `<button onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes</button>` : ''}
-                </div>
-                
-                `;
 
+        <div>
+            <a href="verEstadisticas.html?id=${tournament.id}"><h3>${tournament.name}</h3></a>
+            <p>Deporte: ${tournament.sport.sportName}</p>
+            <p>Ubicación: ${tournament.location}</p>
+            <p>Privacidad: ${tournament.private ? "Privado" : "Público"}</p>
+            <p>Dificultad: ${tournament.difficulty}</p>
+            <p>Equipos Participantes: ${tournament.participatingTeams.length}</p>
+            <button onclick="editarTorneo(${tournament.id})">Editar</button>
+            <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
+            <button onclick="manejarSolicitudes(${tournament.id})">Manejar Solicitudes</button>
+        </div>
+    `;
                 listaTorneos.appendChild(li);
             });
 

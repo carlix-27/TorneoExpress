@@ -1,10 +1,13 @@
 package com.TorneosExpress.controller;
 
+
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.service.StatisticsService;
+import com.TorneosExpress.service.TeamService;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,12 @@ public class TournamentController {
     public TournamentController(TournamentService tournamentService) {
         this.tournamentService = tournamentService;
     }
+
+    @Autowired
+    private StatisticsService statisticsService;
+
+    @Autowired
+    private TeamService teamService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
@@ -116,6 +125,24 @@ public class TournamentController {
     @GetMapping("/active")
     public List<Tournament> getActiveTournaments() {
         return tournamentService.getActiveTournaments();
+    }
+
+
+    @PostMapping("/{tournamentId}/statistics")
+    public ResponseEntity<?> saveStatistics(@PathVariable Long tournamentId, @RequestBody StatisticsDto statisticsDto) {
+        boolean success = statisticsService.saveStatistics(tournamentId, statisticsDto);
+        if (success) {
+            return ResponseEntity.ok("Statistics saved successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving statistics.");
+        }
+    }
+
+    @GetMapping("{tournamentId}/teams")
+    public ResponseEntity<List<ShortTeamDto>> getTeamsByTournamentId(@PathVariable Long userId, @PathVariable Long tournamentId){
+        List<ShortTeamDto> teams = teamService.findByCaptainId(userId).stream().map(Team::ShortTeamDto).toList();
+        return ResponseEntity.ok().body(teams);
+
     }
 
 }
