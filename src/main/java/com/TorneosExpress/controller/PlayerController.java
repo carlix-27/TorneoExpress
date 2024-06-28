@@ -17,8 +17,7 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 public class PlayerController {
 
-    @Autowired
-    private PlayerService playerService;
+    private final PlayerService playerService;
 
     @Autowired
     public PlayerController(PlayerService playerService) {
@@ -37,7 +36,6 @@ public class PlayerController {
         response.put("isPremium", isPremium);
         return ResponseEntity.ok().body(response);
     }
-
 
     @GetMapping("/{userId}/team-owner")
     public ResponseEntity<?> checkIfUserIsCaptain(@PathVariable Long userId){
@@ -62,7 +60,7 @@ public class PlayerController {
             return ResponseEntity.ok().body(true);
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upgrade player to Premium"); // Return an error message if failed
+                    .body("Failed to upgrade player to Premium");
         }
     }
 

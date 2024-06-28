@@ -1,24 +1,22 @@
-function addSport() {
+import {displaySuccessMessage} from "../display/displaySuccessMessage.js";
+import {displayErrorMessage} from "../display/displayErrorMessage.js";
+
+export function addSport() {
     const sportName = document.getElementById('sport-name').value;
     const num_players = document.getElementById('num_players').value;
     const userId = localStorage.getItem("userId");
 
-    // Todo -> Otra cosa a chequear, sería el ingreso de números negativos!
 
-    // Check if sport name or number of players is empty
     if (!sportName.trim()) {
-        document.getElementById('error-message').innerText = "Sport name cannot be blank.";
-        document.getElementById('error-message').style.display = 'block';
+        displayErrorMessage("Nombre del deporte no puede estar vació.")
         return;
     }
 
     if (!num_players.trim()) {
-        document.getElementById('error-message').innerText = "Please specify number of players";
-        document.getElementById('error-message').style.display = 'block';
+        displayErrorMessage("Por favor especificar numero de jugadores")
         return;
     }
 
-    // Check if user is premium
     checkPremiumStatus(userId, function (isPremium){
         if (isPremium) {
             const createSportRequest = {
@@ -35,17 +33,10 @@ function addSport() {
                     const response = JSON.parse(xhr.responseText);
                     console.log('Deporte creado: ', response);
 
-                    // Display success message in green
-                    document.getElementById('success-message').innerText = "Sport created successfully!";
-                    document.getElementById('success-message').style.color = 'green';
-                    document.getElementById('success-message').style.display = 'block';
-                    document.getElementById('error-message').style.display = 'none';
+                    displaySuccessMessage("Deporte creado con éxito")
                     document.getElementById('add-sport-form').reset();
                 } else if (xhr.status === 500) {
-                    document.getElementById('error-message').innerText = "Sport name must be unique. Please choose a different name.";
-                    document.getElementById('error-message').style.color = 'red';
-                    document.getElementById('error-message').style.display = 'block';
-                    document.getElementById('success-message').style.display = 'none';
+                    displayErrorMessage("Nombre del deporte debe ser único")
                 } else {
                     console.error("Error:", xhr.status, xhr.responseText);
                 }
@@ -53,7 +44,7 @@ function addSport() {
 
             xhr.send(JSON.stringify(createSportRequest));
         } else {
-            window.location.href = "buy_premium.html"; // Redirect to buy premium page
+            window.location.href = "buy_premium.html";
         }
     });
 }
@@ -69,7 +60,7 @@ function checkPremiumStatus(userId, callback){
             callback(isPremium);
         } else {
             console.error(xhr.responseText);
-            callback(false); // Default to not premium if there's an error
+            callback(false);
         }
     };
     xhr.send();

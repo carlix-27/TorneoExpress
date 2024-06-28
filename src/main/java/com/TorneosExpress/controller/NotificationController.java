@@ -1,6 +1,6 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.NotificationDto;
+import com.TorneosExpress.dto.request.NotificationDto;
 import com.TorneosExpress.model.Notification;
 import com.TorneosExpress.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;

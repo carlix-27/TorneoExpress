@@ -1,26 +1,26 @@
 package com.TorneosExpress.controller;
 
 
-import com.TorneosExpress.dto.CreateSportRequest;
-import com.TorneosExpress.dto.DeleteSportRequest;
-import com.TorneosExpress.dto.SportDto;
-import com.TorneosExpress.dto.UpdateSportRequest;
+import com.TorneosExpress.dto.sport.CreateSportRequest;
+import com.TorneosExpress.dto.sport.SportDto;
 import com.TorneosExpress.model.Sport;
-import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/sports")
 public class SportController {
 
+    private final SportService sportService;
+
     @Autowired
-    private SportService sportService;
+    public SportController(SportService sportService) {
+        this.sportService = sportService;
+    }
 
     @GetMapping("")
     public List<Sport> getAllSports(){
@@ -34,7 +34,12 @@ public class SportController {
 
     @PostMapping("/create")
     public ResponseEntity<SportDto> createSport(@RequestBody CreateSportRequest request){
-        Sport createdSport =  sportService.createSport(request.getName(), request.getNum_players());
+
+        String requestName = request.name();
+        int requestNumPlayers = request.num_players();
+
+        Sport createdSport =  sportService.createSport(requestName, requestNumPlayers);
+
         SportDto sportDto = new SportDto(
                 createdSport.getSportId(),
                 createdSport.getSportName(),
@@ -60,7 +65,6 @@ public class SportController {
 
         return ResponseEntity.ok(updatedSportEntity);
     }
-
 
 
     @DeleteMapping("/delete/{id}")

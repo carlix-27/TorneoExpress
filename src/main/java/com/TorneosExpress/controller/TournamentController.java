@@ -1,10 +1,10 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.AccessRequest;
-import com.TorneosExpress.dto.ShortTeamDto;
-import com.TorneosExpress.dto.StatisticsDto;
-import com.TorneosExpress.dto.TournamentDto;
-import com.TorneosExpress.model.Team;
+
+import com.TorneosExpress.dto.tournament.FixtureDto;
+import com.TorneosExpress.dto.tournament.TournamentDto;
+import com.TorneosExpress.model.Difficulty;
+import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.StatisticsService;
 import com.TorneosExpress.service.TeamService;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -21,8 +22,12 @@ import java.util.List;
 @RequestMapping("/api/tournaments")
 public class TournamentController {
 
+    private final TournamentService tournamentService;
+
     @Autowired
-    private TournamentService tournamentService;
+    public TournamentController(TournamentService tournamentService) {
+        this.tournamentService = tournamentService;
+    }
 
     @Autowired
     private StatisticsService statisticsService;
@@ -32,16 +37,32 @@ public class TournamentController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
-        // Check if tournament name is unique
+
         String requestName = request.getName();
+
         boolean tournamentNameUnique = tournamentService.isTournamentNameUnique(requestName);
+
         if (tournamentNameUnique) {
+
             Tournament tournament = new Tournament(request);
             Tournament createdTournament = tournamentService.createTournament(tournament);
             createdTournament.setActive(true);
             return ResponseEntity.ok(createdTournament);
+
         } else{
+
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
+        }
+    }
+
+
+    @PostMapping("/add/{tournamentId}/{teamId}")
+    public ResponseEntity<Tournament> addTeamToTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
+        try {
+            Tournament team = tournamentService.addTeamToTournament(teamId, tournamentId);
+            return new ResponseEntity<>(team, HttpStatus.CREATED);
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -66,6 +87,16 @@ public class TournamentController {
         return ResponseEntity.ok(tournament);
     }
 
+    @GetMapping("/{tournamentId}/calendar")
+    public ResponseEntity<FixtureDto> getTournamentCalendar(@PathVariable Long tournamentId) {
+        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
+        if (fixture == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(fixture);
+    }
+    
+
     @PutMapping("/{tournamentId}")
     public ResponseEntity<Tournament> updateTournament(@PathVariable Long tournamentId,
                                                        @RequestBody Tournament updatedTournament) {
@@ -74,11 +105,17 @@ public class TournamentController {
             return ResponseEntity.notFound().build();
         }
 
-        existingTournament.setName(updatedTournament.getName());
-        existingTournament.setSport(updatedTournament.getSport());
-        existingTournament.setLocation(updatedTournament.getLocation());
-        existingTournament.setPrivate(updatedTournament.isPrivate());
-        existingTournament.setDifficulty(updatedTournament.getDifficulty());
+        String updatedTournamentName = updatedTournament.getName();
+        Sport updatedTournamentSport = updatedTournament.getSport();
+        String updatedTournamentLocation = updatedTournament.getLocation();
+        boolean updatedTournamentPrivate = updatedTournament.isPrivate();
+        Difficulty updatedTournamentDifficulty = updatedTournament.getDifficulty();
+
+        existingTournament.setName(updatedTournamentName);
+        existingTournament.setSport(updatedTournamentSport);
+        existingTournament.setLocation(updatedTournamentLocation);
+        existingTournament.setPrivate(updatedTournamentPrivate);
+        existingTournament.setDifficulty(updatedTournamentDifficulty);
 
         Tournament updatedTournamentEntity = tournamentService.updateTournament(existingTournament);
         return ResponseEntity.ok(updatedTournamentEntity);

@@ -1,6 +1,6 @@
 package com.TorneosExpress.controller;
-import com.TorneosExpress.dto.AddPlayerRequest;
-import com.TorneosExpress.dto.TeamDto;
+import com.TorneosExpress.dto.team.TeamDto;
+import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
@@ -30,13 +30,13 @@ public class TeamController {
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
     Team createdTeam = teamService.createTeam(new Team(teamRequest));
+    teamService.addPlayerToTeam(createdTeam.getId(), teamRequest.getCaptainId());
     playerService.upgradeToCaptain(teamRequest.getCaptainId());
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
 
   @PostMapping("/add/{teamId}/{userId}")
-  public ResponseEntity<Team> addPlayerToTeam(@PathVariable Long teamId, @RequestBody AddPlayerRequest addPlayerRequest) {
-    Long userId = addPlayerRequest.getUserId();
+  public ResponseEntity<Team> addPlayerToTeam(@PathVariable Long teamId, @PathVariable Long userId) {
     try {
       Team team = teamService.addPlayerToTeam(teamId, userId);
       return new ResponseEntity<>(team, HttpStatus.CREATED);
@@ -82,5 +82,22 @@ public class TeamController {
     }
     return ResponseEntity.ok(team);
   }
+
+  @GetMapping("/captain/{userId}")
+  public List<Team> getTeamsByCaptainId(@PathVariable Long userId) {
+    return teamService.findByCaptainId(userId);
+  }
+
+  @GetMapping("/all/{teamId}")
+  public List<Player> getPlayersOfTeam(@PathVariable Long teamId){
+    return teamService.getPlayersOfTeam(teamId);
+  }
+
+  @DeleteMapping("{teamId}/{userId}")
+  public Team deletePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long userId) {
+    return teamService.removePlayerFromTeam(teamId, userId);
+  }
+
+
 
 }

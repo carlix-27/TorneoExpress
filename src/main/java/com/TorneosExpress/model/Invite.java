@@ -1,6 +1,5 @@
 package com.TorneosExpress.model;
 
-import com.TorneosExpress.dto.InviteDto;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,10 +11,10 @@ public class Invite {
     private Long id;
 
     @Column(name = "FROM_ID")
-    private Long invite_from;
+    private Long inviteFrom;
 
     @Column(name = "TO_ID")
-    private Long invite_to;
+    private Long inviteTo;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -24,27 +23,23 @@ public class Invite {
     private boolean accepted;
 
     @Column
+    private boolean denied;
+
+    @Column
     private Long team;
+
 
     public Invite() {
     }
 
     public Invite(Long from, Long invitee, Long team) {
-        this.invite_from = from;
-        this.invite_to = invitee;
+        this.inviteFrom = from;
+        this.inviteTo = invitee;
         this.team = team;
         this.createdAt = LocalDateTime.now();
         this.accepted = false;
     }
 
-    public Invite(InviteDto inviteDto){
-        this.id = inviteDto.getId();
-        this.invite_from = inviteDto.getInvite_from();
-        this.invite_to = inviteDto.getInvite_from();
-        this.team = inviteDto.getTeamId();
-        this.createdAt = LocalDateTime.now();
-        this.accepted = false;
-    }
 
     // Getters and setters...
     public Long getId() {
@@ -56,19 +51,19 @@ public class Invite {
     }
 
     public Long getFrom() {
-        return invite_from;
+        return inviteFrom;
     }
 
     public void setFrom(Long inviter) {
-        this.invite_from = inviter;
+        this.inviteFrom = inviter;
     }
 
     public Long getTo() {
-        return invite_to;
+        return inviteTo;
     }
 
     public void setTo(Long invitee) {
-        this.invite_to = invitee;
+        this.inviteTo = invitee;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -93,5 +88,29 @@ public class Invite {
 
     public void setTeam(Long team) {
         this.team = team;
+    }
+
+    public Long getInviteFrom() {
+        return inviteFrom;
+    }
+
+    public void setInviteFrom(Long inviteFrom) {
+        this.inviteFrom = inviteFrom;
+    }
+
+    public Long getInviteTo() {
+        return inviteTo;
+    }
+
+    public void setInviteTo(Long inviteTo) {
+        this.inviteTo = inviteTo;
+    }
+
+    public boolean isDenied() {
+        return denied;
+    }
+
+    public void setDenied(boolean denied) {
+        this.denied = denied;
     }
 }

@@ -1,3 +1,20 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
 /* CSS for the horizontal navbar */
 
 nav ul li:last-child {
@@ -48,4 +65,71 @@ nav ul li {
 nav ul li a {
     color: #fff;
     text-decoration: none;
+}
+
+/* HEADER STYLES */
+
+main {
+    padding: 20px 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.product-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.product-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+    height: 350px; /* Set a fixed height for uniformity */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-item img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    max-height: 200px; /* Adjust based on desired max height */
+    object-fit: cover;
+}
+
+.product-item h3 {
+    margin: 0;
+}
+
+.product-item p {
+    font-size: 18px;
+    color: #333;
+}
+
+.product-item button {
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    align-self: center;
+    background-color: #3d1f7f;
+    border: 0;
+    padding: 10px 15px;
+}
+
+.product-item button:hover {
+    background-color: #342160;
 }
