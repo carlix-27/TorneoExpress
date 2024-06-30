@@ -1,4 +1,6 @@
 package com.TorneosExpress.model;
+import com.TorneosExpress.dto.ShortTeamDto;
+import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.team.TeamDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -170,5 +172,9 @@ public class Team {
 
   public void setSport(Sport sport) {
     this.sport = sport;
+  }
+
+  public ShortTeamDto shortTeamDto(){
+    return new ShortTeamDto(this.id, this.name);
   }
 }

@@ -30,6 +30,12 @@ public class TournamentService {
         this.teamRepository = teamRepository;
     }
 
+    public List<Team> getTeamsOfTournament(Long tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
+        return tournament.getParticipatingTeams();
+    }
+
     public FixtureDto getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture = new FixtureBuilder(

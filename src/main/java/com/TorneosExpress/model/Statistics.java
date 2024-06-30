@@ -1,7 +1,7 @@
 package com.TorneosExpress.model;
 
 import com.TorneosExpress.dto.ShortTournamentDto;
-import com.TorneosExpress.dto.TournamentDto;
+import com.TorneosExpress.dto.tournament.TournamentDto;
 import jakarta.persistence.*;
 
 @Entity

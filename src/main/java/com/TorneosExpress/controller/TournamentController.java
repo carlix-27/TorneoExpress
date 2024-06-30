@@ -1,10 +1,13 @@
 package com.TorneosExpress.controller;
 
 
+import com.TorneosExpress.dto.ShortTeamDto;
+import com.TorneosExpress.dto.StatisticsDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
+import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.StatisticsService;
 import com.TorneosExpress.service.TeamService;
@@ -17,12 +20,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tournaments")
 public class TournamentController {
 
     private final TournamentService tournamentService;
+
+    private Tournament tournament;
 
     @Autowired
     public TournamentController(TournamentService tournamentService) {
@@ -139,10 +145,11 @@ public class TournamentController {
     }
 
     @GetMapping("{tournamentId}/teams")
-    public ResponseEntity<List<ShortTeamDto>> getTeamsByTournamentId(@PathVariable Long userId, @PathVariable Long tournamentId){
-        List<ShortTeamDto> teams = teamService.findByCaptainId(userId).stream().map(Team::ShortTeamDto).toList();
+    public ResponseEntity<List<ShortTeamDto>> getTeamsOfTournament(@PathVariable Long tournamentId) {
+        List<ShortTeamDto> teams = tournamentService.getTeamsOfTournament(tournamentId).stream()
+                .map(Team::shortTeamDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok().body(teams);
-
     }
 
 }
