@@ -1,7 +1,11 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.MatchDto;
+import com.TorneosExpress.dto.tournament.ShortMatchDto;
+import com.TorneosExpress.fixture.ActiveMatchFixture;
+import com.TorneosExpress.fixture.ActiveMatchesFixtureBuilder;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
 import com.TorneosExpress.model.Match;
@@ -36,6 +40,33 @@ public class TournamentService {
         return tournament.getParticipatingTeams();
     }
 
+    public ActiveMatchesFixtureDto getActiveMatches(Long tournamentId){ // TODO
+        Tournament tournament = getTournamentById(tournamentId);
+        if(tournament == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
+        }
+
+        ActiveMatchFixture fixture = new ActiveMatchesFixtureBuilder(tournamentId).build(tournament.getParticipatingTeams());
+
+        ActiveMatchesFixtureDto activeMatchesFixtureDto = new ActiveMatchesFixtureDto();
+        activeMatchesFixtureDto.setMatches(convertToShortMatchDto(fixture.getMatches()));
+
+        return activeMatchesFixtureDto;
+    }
+
+    private List<ShortMatchDto> convertToShortMatchDto(List<Match> activeMatches) {
+        List<ShortMatchDto> dtoActiveMatches = new ArrayList<>();
+        for(Match match: activeMatches){
+            ShortMatchDto shortMatchDto = new ShortMatchDto();
+            shortMatchDto.setTeam1_id(match.getTeam1_id());
+            shortMatchDto.setTeam2_id(match.getTeam2_id());
+            shortMatchDto.setTeamName1(match.getTeamName1());
+            shortMatchDto.setTeamName2(match.getTeamName2());
+            dtoActiveMatches.add(shortMatchDto);
+        }
+        return dtoActiveMatches;
+    }
+
     public FixtureDto getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture = new FixtureBuilder(
@@ -61,6 +92,9 @@ public class TournamentService {
         }
         return matchDtos;
     }
+
+
+
 
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorId(userId);

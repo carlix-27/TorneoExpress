@@ -19,6 +19,7 @@ public class FixtureBuilder {
     this.startDate = startDate;
   }
 
+
   public Fixture build(List<Team> teams) {
     return new Fixture(calculateMatchCalendar(teams));
   }

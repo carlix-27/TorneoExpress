@@ -3,6 +3,7 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.StatisticsDto;
+import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.TorneosExpress.model.Difficulty;
@@ -150,6 +151,15 @@ public class TournamentController {
                 .map(Team::shortTeamDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(teams);
+    }
+
+    @GetMapping("/{tournamentId}/activeMatches")
+    public ResponseEntity<ActiveMatchesFixtureDto> getActiveMatches(@PathVariable Long tournamentId) {
+        ActiveMatchesFixtureDto activeMatches = tournamentService.getActiveMatches(tournamentId);
+        if (activeMatches == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(activeMatches);
     }
 
 }
