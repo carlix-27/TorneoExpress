@@ -1,17 +1,18 @@
 package com.TorneosExpress.fixture;
 
-import com.TorneosExpress.model.Match;
+import com.TorneosExpress.dto.ActiveMatch;
+
 
 import java.util.List;
 
 public class ActiveMatchFixture {
-    private List<Match> matches;
+    private List<ActiveMatch> matches;
 
-    public ActiveMatchFixture(List<Match> matches) {
+    public ActiveMatchFixture(List<ActiveMatch> matches) {
         this.matches = matches;
     }
 
-    public List<Match> getMatches() {
+    public List<ActiveMatch> getMatches() {
         return matches;
     }
 }

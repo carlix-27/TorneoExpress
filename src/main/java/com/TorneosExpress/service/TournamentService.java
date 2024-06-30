@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.MatchDto;
@@ -54,12 +55,12 @@ public class TournamentService {
         return activeMatchesFixtureDto;
     }
 
-    private List<ShortMatchDto> convertToShortMatchDto(List<Match> activeMatches) {
+    private List<ShortMatchDto> convertToShortMatchDto(List<ActiveMatch> activeMatches) {
         List<ShortMatchDto> dtoActiveMatches = new ArrayList<>();
-        for(Match match: activeMatches){
+        for(ActiveMatch match: activeMatches){
             ShortMatchDto shortMatchDto = new ShortMatchDto();
-            shortMatchDto.setTeam1_id(match.getTeam1_id());
-            shortMatchDto.setTeam2_id(match.getTeam2_id());
+            shortMatchDto.setTeam1_id(match.getTeam1Id());
+            shortMatchDto.setTeam2_id(match.getTeam2Id());
             shortMatchDto.setTeamName1(match.getTeamName1());
             shortMatchDto.setTeamName2(match.getTeamName2());
             dtoActiveMatches.add(shortMatchDto);

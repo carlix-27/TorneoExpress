@@ -41,12 +41,6 @@ public class Match {
     this.teamName2 = team2.getName();
   }
 
-  public Match(Team team1, Team team2, Long tournament_id, String score){
-    this.team1_id = team1.getId();
-    this.team2_id = team2.getId();
-    this.tournament_id = tournament_id;
-    this.score = score;
-  }
 
   @Override
   public String toString() {

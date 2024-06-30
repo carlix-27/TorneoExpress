@@ -1,6 +1,6 @@
 package com.TorneosExpress.fixture;
 
-import com.TorneosExpress.model.Match;
+import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.model.Team;
 
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ public class ActiveMatchesFixtureBuilder {
     }
 
     public ActiveMatchFixture build(List<Team> teams) {
-        List<Match> activeMatches = calculateActiveMatches(teams);
+        List<ActiveMatch> activeMatches = calculateActiveMatches(teams);
         return new ActiveMatchFixture(activeMatches);
     }
 
-    private List<Match> calculateActiveMatches(List<Team> teams) {
-        List<Match> matches = new ArrayList<>();
+    private List<ActiveMatch> calculateActiveMatches(List<Team> teams) {
+        List<ActiveMatch> matches = new ArrayList<>();
         int numTeams = teams.size();
 
         // Generate matches only between participating teams
@@ -28,7 +28,7 @@ public class ActiveMatchesFixtureBuilder {
             for (int j = i + 1; j < numTeams; j++) {
                 Team team1 = teams.get(i);
                 Team team2 = teams.get(j);
-                matches.add(new Match(team1, team2, tournamentId, "To be played."));
+                matches.add(new ActiveMatch(team1, team2, tournamentId, "To be played."));
             }
         }
 
