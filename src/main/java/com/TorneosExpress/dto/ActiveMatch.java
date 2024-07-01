@@ -10,6 +10,7 @@ public class ActiveMatch {
     private final Long tournament_id;
     private String teamName1;
     private String teamName2;
+    private String status;
 
 
     public ActiveMatch(Long match_id, Long team1_id, Long team2_id, Long tournament_id, String teamName1, String teamName2){
@@ -20,6 +21,7 @@ public class ActiveMatch {
         this.teamName1 = teamName1;
         this.teamName2 = teamName2;
     }
+
 
     public Long getTeam1Id(){
         return team1_id;

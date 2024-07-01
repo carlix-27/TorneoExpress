@@ -3,6 +3,8 @@ package com.TorneosExpress.fixture;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.repository.MatchRepository;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +14,8 @@ public class FixtureBuilder {
   private final Long tournamentId;
   private final String location;
   private final LocalDate startDate;
+
+  MatchRepository matchRepository;
 
   public FixtureBuilder(Long tournamentId, String location, LocalDate startDate) {
     this.tournamentId = tournamentId;
@@ -49,8 +53,9 @@ public class FixtureBuilder {
       Team team1 = teamsCopy.get(i);
       Team team2 = teamsCopy.get(numTeams - i - 1);
       if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
-        matches.add(new Match(
-            team1, team2, tournamentId, location, matchDate, "To be played."));
+        Match match = new Match(team1, team2, tournamentId, location, matchDate, "To be played.");
+        matches.add(match);
+        matchRepository.save(match); // Add to db info about matches.
       }
     }
   }
