@@ -135,16 +135,6 @@ public class TournamentController {
     }
 
 
-    /* @PostMapping("/{tournamentId}/statistics")
-    public ResponseEntity<?> saveStatistics(@PathVariable Long tournamentId, @RequestBody StatisticsDto statisticsDto) {
-        boolean success = statisticsService.saveStatistics(tournamentId, statisticsDto);
-        if (success) {
-            return ResponseEntity.ok("Statistics saved successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving statistics.");
-        }
-    }*/
-
     @GetMapping("{tournamentId}/teams")
     public ResponseEntity<List<ShortTeamDto>> getTeamsOfTournament(@PathVariable Long tournamentId) {
         List<ShortTeamDto> teams = tournamentService.getTeamsOfTournament(tournamentId).stream()

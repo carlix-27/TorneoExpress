@@ -67,6 +67,7 @@ public class TournamentService {
         List<ShortMatchDto> dtoActiveMatches = new ArrayList<>();
         for(ActiveMatch match: activeMatches){
             ShortMatchDto shortMatchDto = new ShortMatchDto();
+            shortMatchDto.setMatchId(match.getMatchId());
             shortMatchDto.setTeam1_id(match.getTeam1Id());
             shortMatchDto.setTeam2_id(match.getTeam2Id());
             shortMatchDto.setTeamName1(match.getTeamName1());

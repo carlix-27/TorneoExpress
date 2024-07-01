@@ -11,6 +11,7 @@ function loadActiveMatches() {
             return response.json();
         })
         .then(activeMatches => {
+            console.log("ActiveMatches: ", activeMatches);
             const activeMatchesList = document.getElementById("match-result");
             const partidoSelector = document.getElementById("partidoSelector");
             activeMatchesList.innerHTML = ''; // Limpiar la lista actual de partidos activos
@@ -22,9 +23,10 @@ function loadActiveMatches() {
 
                 // Agregqr contenido al selector
                 const option = document.createElement('option');
-                option.value = match.id;
+                option.value = match.matchId;
                 option.textContent = `${team1} VS ${team2}`;
                 partidoSelector.appendChild(option);
+                console.log("Desde loadActiveMatches, está: ", option);
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
