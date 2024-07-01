@@ -51,7 +51,7 @@ public class ActiveMatchesFixtureBuilder {
     }
 
     // Mini Test
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Sport futbol = new Sport();
         List<Team> teams = new ArrayList<>();
         teams.add(new Team(1L, "test1", futbol, "pilar", false));
@@ -67,7 +67,7 @@ public class ActiveMatchesFixtureBuilder {
         ActiveMatchFixture activeMatchFixture = amb.build(teams);
 
         activeMatchFixture.getMatches().forEach(System.out::println);
-    }
+    }*/
 }
 
 
