@@ -26,6 +26,7 @@ async function saveStats(event) {
         return;
     }
 
+    const matchId = document.querySelector('#partidoSelector').value;
     const resultadoPartido = document.querySelector('input[name="resultadoPartido"]').value;
     const ganador = document.querySelector('input[name="ganador"]').value;
 
@@ -36,7 +37,7 @@ async function saveStats(event) {
     };
 
     try {
-        const response = await fetch(`/api/tournaments/${tournamentId}/statistics`, {
+        const response = await fetch(`/api/${tournamentId}/${matchId}/statistics`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

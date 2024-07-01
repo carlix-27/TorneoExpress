@@ -1,7 +1,9 @@
 package com.TorneosExpress.model;
 
+import com.TorneosExpress.dto.ActiveMatch;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Entity
 public class Match {
@@ -119,5 +121,11 @@ public class Match {
 
   public void setScore(String score) {
     this.score = score;
+  }
+
+
+  // TODO
+  public ActiveMatch toActiveMatch(){
+    return new ActiveMatch(this.match_id, this.team1_id, this.team2_id, this.tournament_id, this.teamName1, this.teamName2);
   }
 }

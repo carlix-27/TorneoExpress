@@ -1,7 +1,7 @@
 package com.TorneosExpress.model;
 
+import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.dto.ShortTournamentDto;
-import com.TorneosExpress.dto.tournament.TournamentDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +19,11 @@ public class Statistics {
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
 
+    @ManyToOne
+    @JoinColumn(name = "match_id", nullable = false)
+    private Match match;
+
+
     private String resultadoPartido;
     private String ganador;
 
@@ -33,6 +38,10 @@ public class Statistics {
         this.tournament.setName(shortTournamentDto.getName());
     }
 
+    public void setActiveMatch(ActiveMatch activeMatch){
+        this.match = new Match();
+        this.match.setMatch_id(activeMatch.getMatchId());
+    }
     // Getters y setters
     public Long getId() {
         return id;
