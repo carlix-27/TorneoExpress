@@ -2,8 +2,10 @@ package com.TorneosExpress.fixture;
 
 import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.model.Match;
+import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +13,11 @@ public class ActiveMatchesFixtureBuilder {
 
     private final Long tournamentId;
 
-    private Fixture fixture;
+    private final Fixture fixture;
 
-    public ActiveMatchesFixtureBuilder(Long tournamentId){
+    public ActiveMatchesFixtureBuilder(Long tournamentId, Fixture fixture){
         this.tournamentId = tournamentId;
+        this.fixture = fixture;
     }
 
     public ActiveMatchFixture build(List<Team> teams) {
@@ -46,4 +49,26 @@ public class ActiveMatchesFixtureBuilder {
 
         return matches;
     }
+
+    // Mini Test
+    public static void main(String[] args) {
+        Sport futbol = new Sport();
+        List<Team> teams = new ArrayList<>();
+        teams.add(new Team(1L, "test1", futbol, "pilar", false));
+        teams.add(new Team(2L, "test2", futbol, "pilar", false));
+        teams.add(new Team(3L, "test3", futbol, "pilar", true));
+        teams.add(new Team(4L, "test4", futbol, "pilar", false));
+        teams.add(new Team(5L, "test5", futbol, "pilar", false));
+
+        FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now());
+        Fixture fixture = fb.build(teams);
+
+        ActiveMatchesFixtureBuilder amb = new ActiveMatchesFixtureBuilder(3L, fixture);
+        ActiveMatchFixture activeMatchFixture = amb.build(teams);
+
+        activeMatchFixture.getMatches().forEach(System.out::println);
+    }
 }
+
+
+

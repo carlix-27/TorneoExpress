@@ -12,6 +12,7 @@ import com.TorneosExpress.fixture.FixtureBuilder;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,13 @@ public class TournamentService {
 
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
+    private final MatchRepository matchRepository;
 
     @Autowired
-    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository) {
+    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository) {
         this.tournamentRepository = tournamentRepository;
         this.teamRepository = teamRepository;
+        this.matchRepository = matchRepository;
     }
 
     public List<Team> getTeamsOfTournament(Long tournamentId) {
@@ -47,10 +50,15 @@ public class TournamentService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
         }
 
-        ActiveMatchFixture fixture = new ActiveMatchesFixtureBuilder(tournamentId).build(tournament.getParticipatingTeams());
+        // Crear una instancia de FixtureBuilder y construir el Fixture
+        Fixture fixture = new FixtureBuilder(
+                tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                .build(tournament.getParticipatingTeams());
+
+        ActiveMatchFixture activeMatchFixture = new ActiveMatchesFixtureBuilder(tournamentId, fixture).build(tournament.getParticipatingTeams());
 
         ActiveMatchesFixtureDto activeMatchesFixtureDto = new ActiveMatchesFixtureDto();
-        activeMatchesFixtureDto.setMatches(convertToShortMatchDto(fixture.getMatches()));
+        activeMatchesFixtureDto.setMatches(convertToShortMatchDto(activeMatchFixture.getMatches()));
 
         return activeMatchesFixtureDto;
     }
@@ -71,7 +79,7 @@ public class TournamentService {
     public FixtureDto getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture = new FixtureBuilder(
-            tournamentId, tournament.getLocation(), tournament.getStartDate())
+            tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
             .build(tournament.getParticipatingTeams());
         FixtureDto fixtureDto = new FixtureDto();
         fixtureDto.setMatches(convertToDtoFormat(fixture.getMatches()));
