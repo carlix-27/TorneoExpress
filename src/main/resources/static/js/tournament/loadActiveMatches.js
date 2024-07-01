@@ -12,11 +12,19 @@ function loadActiveMatches() {
         })
         .then(activeMatches => {
             const activeMatchesList = document.getElementById("match-result");
+            const partidoSelector = document.getElementById("partidoSelector");
             activeMatchesList.innerHTML = ''; // Limpiar la lista actual de partidos activos
+            partidoSelector.innerHTML = '<option value="">Seleccione un partido</option>';
 
             activeMatches.matches.forEach(match => {
                 const team1 = match.teamName1;
                 const team2 = match.teamName2;
+
+                // Agregqr contenido al selector
+                const option = document.createElement('option');
+                option.value = match.id;
+                option.textContent = `${team1} VS ${team2}`;
+                partidoSelector.appendChild(option);
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
