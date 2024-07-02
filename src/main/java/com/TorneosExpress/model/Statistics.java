@@ -19,13 +19,23 @@ public class Statistics {
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
 
-    @ManyToOne
-    @JoinColumn(name = "match_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "matchId", nullable = false)
     private Match match;
 
 
     private String resultadoPartido;
     private String ganador;
+
+
+    // Getters y setters
+    public Long getMatchId(){
+        return match.getMatch_id();
+    }
+
+    public Long getTournamentId(){
+        return tournament.getId();
+    }
 
 
     public void setTournament(Tournament tournament){

@@ -49,25 +49,6 @@ public class ActiveMatchesFixtureBuilder {
 
         return matches;
     }
-
-    // Mini Test
-    /*public static void main(String[] args) {
-        Sport futbol = new Sport();
-        List<Team> teams = new ArrayList<>();
-        teams.add(new Team(1L, "test1", futbol, "pilar", false));
-        teams.add(new Team(2L, "test2", futbol, "pilar", false));
-        teams.add(new Team(3L, "test3", futbol, "pilar", true));
-        teams.add(new Team(4L, "test4", futbol, "pilar", false));
-        teams.add(new Team(5L, "test5", futbol, "pilar", false));
-
-        FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now());
-        Fixture fixture = fb.build(teams);
-
-        ActiveMatchesFixtureBuilder amb = new ActiveMatchesFixtureBuilder(3L, fixture);
-        ActiveMatchFixture activeMatchFixture = amb.build(teams);
-
-        activeMatchFixture.getMatches().forEach(System.out::println);
-    }*/
 }
 
 

@@ -54,4 +54,9 @@ public class StatisticsService {
         statisticsRepository.save(statistics);
         return true;
     }
+
+    public StatisticsDto getStatistics(Long match_id){
+        Statistics statistics = statisticsRepository.findByMatch_matchId(match_id);
+        return new StatisticsDto(statistics.getResultadoPartido(), statistics.getGanador());
+    }
 }

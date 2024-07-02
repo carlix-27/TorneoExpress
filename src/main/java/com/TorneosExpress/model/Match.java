@@ -12,7 +12,7 @@ public class Match {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long match_id;
+  private Long matchId;
 
   @Column
   private Long team1_id;
@@ -68,11 +68,11 @@ public class Match {
   }
 
   public Long getMatch_id() {
-    return match_id;
+    return matchId;
   }
 
-  public void setMatch_id(Long match_id) {
-    this.match_id = match_id;
+  public void setMatch_id(Long matchId) {
+    this.matchId= matchId;
   }
 
   public Long getTeam1_id() {
@@ -126,6 +126,6 @@ public class Match {
 
   // TODO
   public ActiveMatch toActiveMatch(){
-    return new ActiveMatch(this.match_id, this.team1_id, this.team2_id, this.tournament_id, this.teamName1, this.teamName2);
+    return new ActiveMatch(this.matchId, this.team1_id, this.team2_id, this.tournament_id, this.teamName1, this.teamName2);
   }
 }

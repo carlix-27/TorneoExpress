@@ -1,10 +1,7 @@
 package com.TorneosExpress.dto;
 
-import com.TorneosExpress.model.Match;
-import com.TorneosExpress.model.Team;
-
 public class ActiveMatch {
-    private final Long match_id;
+    private final Long matchId;
     private final Long team1_id;
     private final Long team2_id;
     private final Long tournament_id;
@@ -13,8 +10,8 @@ public class ActiveMatch {
     private String status;
 
 
-    public ActiveMatch(Long match_id, Long team1_id, Long team2_id, Long tournament_id, String teamName1, String teamName2){
-        this.match_id = match_id;
+    public ActiveMatch(Long matchId, Long team1_id, Long team2_id, Long tournament_id, String teamName1, String teamName2){
+        this.matchId = matchId;
         this.team1_id = team1_id;
         this.team2_id = team2_id;
         this.tournament_id = tournament_id;
@@ -39,7 +36,7 @@ public class ActiveMatch {
         return teamName2;
     }
 
-    public Long getMatchId(){ return match_id; }
+    public Long getMatchId(){ return matchId; }
 
     public Long getTournamentId(){return tournament_id;}
 

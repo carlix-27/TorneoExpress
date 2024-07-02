@@ -15,12 +15,22 @@ public class MatchController {
     private StatisticsService statisticsService;
 
     @PostMapping("/{tournamentId}/{match_id}/statistics")
-    public ResponseEntity<?> saveStatistics(@PathVariable Long match_id, @PathVariable Long tournamentId, @RequestBody StatisticsDto statisticsDto) {
-        boolean success = statisticsService.saveStatistics(match_id, tournamentId, statisticsDto);
-        if (success) {
-            return ResponseEntity.ok("Statistics saved successfully.");
+        public ResponseEntity<?> saveStatistics(@PathVariable Long match_id, @PathVariable Long tournamentId, @RequestBody StatisticsDto statisticsDto) {
+            boolean success = statisticsService.saveStatistics(match_id, tournamentId, statisticsDto);
+            if (success) {
+                return ResponseEntity.ok("Statistics saved successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving statistics.");
+            }
+        }
+
+    @GetMapping("/{matchId}/getStatistics")
+    public ResponseEntity<?> getStatistics(@PathVariable Long matchId){
+        StatisticsDto statisticsDto = statisticsService.getStatistics(matchId);
+        if (statisticsDto != null) {
+            return ResponseEntity.ok(statisticsDto);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving statistics.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Statistics not found.");
         }
     }
 

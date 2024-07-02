@@ -43,7 +43,7 @@ function loadActiveMatches() {
             function handleViewMatchStats(event) {
                 const matchId = event.target.getAttribute('data-match-id');
                 // Implement view stats functionality here
-                viewMatchStats(matchId, tournamentId);
+                viewMatchStats(matchId);
             }
 
             // Opcional: Agregar un mensaje si no hay partidos activos
@@ -63,8 +63,8 @@ function loadActiveMatches() {
 document.addEventListener("DOMContentLoaded", loadActiveMatches);
 
 // Función para mostrar las estadísticas de un partido
-function viewMatchStats(matchId, tournamentId){ // Seguro voy a necesitar el tournamentId, fijate como lo hiciste con SaveStats
-    fetch(`/api/matches/${tournamentId}/${matchId}/statistics`)
+function viewMatchStats(matchId){ // Seguro voy a necesitar el tournamentId, fijate como lo hiciste con SaveStats
+    fetch(`/api/matches/${matchId}/getStatistics`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch match statistics: ${response.status} ${response.statusText}`);

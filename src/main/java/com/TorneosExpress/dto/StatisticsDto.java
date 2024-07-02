@@ -4,6 +4,13 @@ public class StatisticsDto {
     private String resultadoPartido;
     private String ganador;
 
+    public StatisticsDto(String resultadoPartido, String ganador){
+        this.resultadoPartido = resultadoPartido;
+        this.ganador = ganador;
+    }
+
+    public StatisticsDto(){}
+
     // Getters y setters
     public String getResultadoPartido() {
         return resultadoPartido;
