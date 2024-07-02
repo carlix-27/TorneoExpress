@@ -27,7 +27,6 @@ async function saveStats(event) {
     }
 
     const matchId = document.querySelector('#partidoSelector').value;
-    console.log(matchId);
     const resultadoPartido = document.querySelector('input[name="resultadoPartido"]').value;
     const ganador = document.querySelector('input[name="ganador"]').value;
 

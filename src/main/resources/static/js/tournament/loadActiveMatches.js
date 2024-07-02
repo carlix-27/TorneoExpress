@@ -11,7 +11,6 @@ function loadActiveMatches() {
             return response.json();
         })
         .then(activeMatches => {
-            console.log("ActiveMatches: ", activeMatches);
             const activeMatchesList = document.getElementById("match-result");
             const partidoSelector = document.getElementById("partidoSelector");
             activeMatchesList.innerHTML = ''; // Limpiar la lista actual de partidos activos
@@ -26,14 +25,26 @@ function loadActiveMatches() {
                 option.value = match.matchId;
                 option.textContent = `${team1} VS ${team2}`;
                 partidoSelector.appendChild(option);
-                console.log("Desde loadActiveMatches, está: ", option);
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <p>${team1} VS ${team2}</p>
+                    <td>${team1} VS ${team2}</td>
+                    <td>
+                        <button class="action-button view-button" data-match-id="${match.matchId}">Ver Estadísticas</button>
+                    </td>
                 `;
                 activeMatchesList.appendChild(listItem);
             });
+
+            document.querySelectorAll('.view-button').forEach(button => {
+                button.addEventListener('click', handleViewMatchStats);
+            });
+
+            function handleViewMatchStats(event) {
+                const matchId = event.target.getAttribute('data-match-id');
+                // Implement view stats functionality here
+                viewMatchStats(matchId, tournamentId);
+            }
 
             // Opcional: Agregar un mensaje si no hay partidos activos
             if (activeMatches.matches.length === 0) {
@@ -51,6 +62,30 @@ function loadActiveMatches() {
 // Al cargar la página, cargar los partidos activos del torneo
 document.addEventListener("DOMContentLoaded", loadActiveMatches);
 
+// Función para mostrar las estadísticas de un partido
+function viewMatchStats(matchId, tournamentId){ // Seguro voy a necesitar el tournamentId, fijate como lo hiciste con SaveStats
+    fetch(`/api/matches/${tournamentId}/${matchId}/statistics`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch match statistics: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(stats => {
+            // Mostrar las estadísticas en la página
+            const statsContainer = document.getElementById('stats-container');
+            statsContainer.innerHTML = `
+                <h3>Estadísticas del partido ${matchId}</h3>
+                <p>Resultado: ${stats.resultadoPartido}</p>
+                <p>Ganador: ${stats.ganador}</p>
+                <!-- Agregar más estadísticas según sea necesario -->
+            `;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Manejar el error, mostrar un mensaje al usuario, etc.
+        });
+}
 
 
 
