@@ -13,14 +13,27 @@ function loadTeams() {
 
             teams.forEach(team => {
 
+                const {
+                    location: teamLocation,
+                    sport: teamSport,
+                    name,
+                    private: isPrivate,
+                    players,
+                }
+                = team
+
+                const sport = teamSport.sportName
+                const playersInTeam = players.length
+                const maxPlayers = teamSport.num_players * 2
+
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
-                        <a href="loadTeam.html?id=${team.id}"><h3>${team.name}</h3></a>
-                        <p>Ubicación: ${team.location}</p>
-                        <p>Deporte: ${team.sport.sportName}</p>
-                        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
-                        <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
+                        <a href="loadTeam.html?id=${team.id}"><h3>${name}</h3></a>
+                        <p>Ubicación: ${teamLocation}</p>
+                        <p>Deporte: ${sport}</p>
+                        <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
+                        <p>Jugadores anotados: ${playersInTeam} / ${maxPlayers}</p>
                         <button class="signup-button" data-team-id="${team.id}">Signup</button>
                     </div>
                 `;
@@ -71,15 +84,30 @@ function fetchTeamDetails(teamId) {
 
 function displayTeamDetails(team, signupButton) {
     const teamDetails = document.getElementById("teamDetails");
+
+    const {
+        location: teamLocation,
+        sport: teamSport,
+        name,
+        private: isPrivate,
+        players,
+    }
+        = team
+
+    const sportName = teamSport.name
+    const playersInTeam = players.length
+    const maxPlayers = teamSport.num_players * 2
+
+
     teamDetails.innerHTML = `
-        <h3>${team.name}</h3>
-        <p>Ubicación: ${team.location}</p>
-        <p>Deporte: ${team.sport.sportName}</p>
-        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
-        <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
+        <h3>${name}</h3>
+        <p>Ubicación: ${teamLocation}</p>
+        <p>Deporte: ${sportName}</p>
+        <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
+        <p>Jugadores inscritos: ${playersInTeam} / ${maxPlayers}</p>
     `;
 
-    if (team.private) {
+    if (isPrivate) {
         signupButton.textContent = "Send Request";
         signupButton.setAttribute("data-privacy", "private");
     } else {
@@ -90,13 +118,19 @@ function displayTeamDetails(team, signupButton) {
 
 function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
-        const teamPlayers = team.players
-        const teamSport = team.sport
-        const maxSize = teamSport.num_players * 2
-        const teamSize = teamPlayers.length
-        if (teamSize < maxSize) {
-            const teamIsPrivate = team.private
-            if (teamIsPrivate) {
+
+        const {
+            sport: teamSport,
+            private: isPrivate,
+            players,
+        }
+        = team
+
+        const playersInTeam = players.length
+        const maxPlayers = teamSport.num_players * 2
+
+        if (playersInTeam < maxPlayers) {
+            if (isPrivate) {
                 sendTeamRequest(team, userId);
             }
             else {
@@ -198,10 +232,8 @@ function createRequestNotification(teamRequest) {
             if (!response.ok) {
                 throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
             }
+            displaySuccessMessage('Request sent successfully.')
             return response.json();
-        })
-        .then(notification => {
-            displaySuccessMessage('Request sent successfully.');
         })
         .catch(error => console.error('Error:', error));
 }
