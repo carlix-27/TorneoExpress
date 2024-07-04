@@ -37,7 +37,7 @@ function cargarTorneos() {
                 <div>
                 
                     <div>
-                    <h3>${tournamentName}</h3>
+                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a> 
                     <p>Deporte: ${tournamentSportName}</p>
                     <p>Ubicación: ${tournamentLocation}</p>
                     <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
