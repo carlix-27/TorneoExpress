@@ -20,9 +20,8 @@ function loadTournament() {
             const isPrivate = tournament.private
             const startDate = tournament.startDate
             const teams = tournament.participatingTeams;
-            const teamsList = teams.map(team => `<li>${team.name}</li>`).join('');
+            const teamsList = teams.map(team => `<li><a href="loadTeam.html?id=${team.id}">${team.name}</a></li>`).join('');
             const maxTeams = tournament.maxTeams
-
 
 
             tournamentList.innerHTML = `
