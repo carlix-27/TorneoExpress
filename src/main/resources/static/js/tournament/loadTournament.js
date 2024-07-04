@@ -19,7 +19,8 @@ function loadTournament() {
             const difficulty = tournament.difficulty
             const isPrivate = tournament.private
             const startDate = tournament.startDate
-            const teams = tournament.participatingTeams.map(team => team.name).join(', ');
+            const teams = tournament.participatingTeams;
+            const teamsList = teams.map(team => `<li>${team.name}</li>`).join('');
             const maxTeams = tournament.maxTeams
 
 
@@ -31,10 +32,9 @@ function loadTournament() {
                     <p>Dificultad: ${difficulty}</p>
                     <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
                     <p>Inicio: ${startDate}</p>
-                    
-                    <p>Equipos: ${teams}</p>
-                   
-                    <p>Numero maximo de equipos: ${maxTeams}</p>
+                    <p>Número máximo de equipos: ${maxTeams}</p>
+                    <p>Equipos anotados:</p>
+                    <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
                     <button id="join-button" type="submit">${isPrivate ? "Enviar solicitud" : "Unirse"}</button>
                 </div>
