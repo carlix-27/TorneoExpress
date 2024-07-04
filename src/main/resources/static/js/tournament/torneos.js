@@ -59,12 +59,13 @@ function showSignupModal(tournamentId) {
     const signupButton = modal.querySelector("#sendInviteButton");
     const userId = localStorage.getItem("userId");
 
+
     fetchTournamentDetails(tournamentId)
         .then(tournament => {
+
+            const tournamentSport = tournament.sport
             displayTournamentDetails(tournament, signupButton);
-
-
-            fetchUserTeams(userId)
+            fetchUserTeams(tournamentSport, userId)
                 .then(teams => {
                     populateTeamSelect(teams);
                     addSignupButtonListener(tournament, userId, signupButton);
@@ -150,15 +151,36 @@ function joinPublicTournament(tournament, teamId) {
 
 
 
-function fetchUserTeams(userId) {
+function fetchUserTeams(tournamentSport, userId) {
     return fetch(`/api/teams/captain/${userId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch user teams: ${response.status} ${response.statusText}`);
+                throw new Error(`Error al conseguir equipos del jugador: ${response.status} ${response.statusText}`);
             }
             return response.json();
+        })
+        .then(teams => {
+
+            console.log('Tournament Sport:', tournamentSport.sportId);
+            console.log('Fetched Teams:', teams);
+
+            const filteredTeams = teams.filter(team => {
+                const teamSport = team.sport
+                console.log('Team Sport:', teamSport);
+                return team.sport.sportId === tournamentSport.sportId;
+            });
+
+            console.log('Filtered Teams:', filteredTeams);
+            return filteredTeams;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayErrorMessage("Error al conseguir equipos del jugador");
+            return [];
         });
 }
+
+
 
 function fetchTournamentDetails(tournamentId) {
     return fetch(`/api/tournaments/${tournamentId}`)
@@ -191,10 +213,10 @@ function displayTournamentDetails(tournament, signupButton) {
     `;
 
     if (privateTournament) {
-        signupButton.textContent = "Send Request";
+        signupButton.textContent = "Mandar Solicitud";
         signupButton.setAttribute("data-privacy", "private");
     } else {
-        signupButton.textContent = "Sign Up";
+        signupButton.textContent = "Anotarse";
         signupButton.setAttribute("data-privacy", "public");
     }
 }
