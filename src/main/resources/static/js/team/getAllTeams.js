@@ -1,7 +1,3 @@
-import {displaySuccessMessage} from "../display/displaySuccessMessage";
-import {displayErrorMessage} from "../display/displayErrorMessage";
-
-
 function loadTeams() {
     fetch(`/api/teams/all`)
         .then(response => {
@@ -128,10 +124,8 @@ function joinPublicTeam(team, userId) {
                 const statusError = response.statusText
                 throw new Error(`Error al unirse a equipo: ${statusError}`);
             }
-            return response.json();
-        })
-        .then(data => {
             displaySuccessMessage("Te has unido al equipo exitosamente!");
+            return response.json();
         })
         .catch(error => {
             displayErrorMessage(error.message);
@@ -236,9 +230,16 @@ function fetchPlayerDetails(playerId) {
         });
 }
 
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+}
 
-
-
-
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+}
 
 document.addEventListener("DOMContentLoaded", loadTeams);

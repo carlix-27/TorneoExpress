@@ -9,22 +9,25 @@ function fetchActiveTournaments() {
         .then(tournaments => {
             const tournamentList = document.getElementById('tournament-list');
 
-            // Clear existing list
             tournamentList.innerHTML = '';
 
             tournaments.forEach(tournament => {
-                const tournamentName = tournament.name;
-                const tournamentSport = tournament.sport;
+
+                const {
+                    name: tournamentName,
+                    sport: tournamentSport,
+                    location: tournamentLocation,
+                    private: tournamentPrivacy,
+                    maxTeams,
+                    participatingTeams
+                } = tournament;
+
                 const tournamentSportName = tournamentSport.sportName;
-                const tournamentLocation = tournament.location;
-                const tournamentPrivacy = tournament.private;
-                const maxTeams = tournament.maxTeams;
-                const participatingTeams = tournament.participatingTeams;
                 const numOfParticipatingTeams = participatingTeams.length;
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a> 
+                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a> 
                     <p>Deporte: ${tournamentSportName}</p>
                     <p>Ubicación: ${tournamentLocation}</p>
                     <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
@@ -96,8 +99,8 @@ function populateTeamSelect(teams) {
 
 function addSignupButtonListener(tournament, userId, signupButton) {
     signupButton.addEventListener("click", function() {
-        const participatingTeams = tournament.participatingTeams;
-        const maxTeams = tournament.maxTeams;
+
+        const {participatingTeams, maxTeams} = tournament;
         const numOfParticipatingTeams = participatingTeams.length;
         const tournamentCreator = tournament.creatorId
         const teamId = document.getElementById("teamSelect").value;
@@ -108,8 +111,7 @@ function addSignupButtonListener(tournament, userId, signupButton) {
         }
 
         if (numOfParticipatingTeams < maxTeams) {
-
-            const tournamentIsPrivate = tournament.private;
+            const {private: tournamentIsPrivate} = tournament;
 
             if (tournamentIsPrivate) {
                 sendTournamentRequest(tournament, teamId, userId);
@@ -117,15 +119,14 @@ function addSignupButtonListener(tournament, userId, signupButton) {
                 joinPublicTournament(tournament, teamId);
             }
         } else {
-            displayErrorMessage("Error al inscribirse: Numero maximo de equipos.");
+            displayErrorMessage("Error al inscribirse: Numero máximo de equipos.");
         }
     });
 }
 
 function joinPublicTournament(tournament, teamId) {
     const tournamentId = tournament.id;
-    const team = teamId
-    fetch(`/api/tournaments/add/${tournamentId}/${team}`, {
+    fetch(`/api/tournaments/add/${tournamentId}/${teamId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -139,7 +140,7 @@ function joinPublicTournament(tournament, teamId) {
         })
         .then(data => {
             console.log("Successfully joined tournament:", data);
-            displaySuccessMessage("Exito al anotarse a torneo!")
+            displaySuccessMessage("Éxito al anotarse a torneo!")
         })
         .catch(error => {
             console.error('Error joining tournament:', error);
@@ -176,10 +177,7 @@ function displayTournamentDetails(tournament, signupButton) {
     const tournamentName = tournament.name;
     const tournamentSport = tournament.sport;
     const tournamentSportName = tournamentSport.sportName;
-    const tournamentLocation = tournament.location;
-    const privateTournament = tournament.private;
-    const maxTeams = tournament.maxTeams;
-    const participatingTeams = tournament.participatingTeams;
+    const {location: tournamentLocation, private: privateTournament, maxTeams, participatingTeams} = tournament;
     const numOfParticipatingTeams = participatingTeams.length;
 
 
@@ -243,7 +241,7 @@ function sendTournamentRequest(tournament, teamId, userId) {
                     return response.json();
                 })
                 .then(tournamentRequest => {
-                    displaySuccessMessage("Exito al anotarse a torneo!")
+                    displaySuccessMessage("Éxito al anotarse a torneo!")
                     createRequestNotification(tournamentRequest);
                 })
                 .catch(error => console.error('Error:', error));
@@ -282,17 +280,15 @@ function createRequestNotification(tournamentRequest) {
             if (!response.ok) {
                 throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
             }
+            displaySuccessMessage('Solicitud mandada con éxito.');
             return response.json();
-        })
-        .then(notification => {
-            displaySuccessMessage('Solicitud mandada con exito.');
         })
         .catch(error => console.error('Error:', error));
 }
 
 
 
-function displayModal(modal, closeButton) {
+const displayModal = (modal, closeButton) => {
     modal.style.display = "block";
 
     closeButton.onclick = function() {
@@ -304,7 +300,7 @@ function displayModal(modal, closeButton) {
             modal.style.display = "none";
         }
     };
-}
+};
 
 
 function fetchPlayerDetails(playerId) {
@@ -330,7 +326,7 @@ function fetchTeamDetails(teamId) {
 }
 
 
-function displaySuccessMessage(message) {
+const displaySuccessMessage = message => {
     const successMessage = document.getElementById("successMessage");
     successMessage.textContent = message;
     successMessage.style.display = "block";
@@ -338,7 +334,7 @@ function displaySuccessMessage(message) {
     setTimeout(() => {
         successMessage.style.display = "none";
     }, 3000);
-}
+};
 
 function displayErrorMessage(message) {
     const errorMessage = document.getElementById("errorMessage");
