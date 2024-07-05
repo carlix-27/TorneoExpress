@@ -111,3 +111,15 @@ nav ul li a {
 .form-group button[type="submit"]:hover {
     background: #342160;
 }
+
+.back-button {
+    display: block;
+    margin-bottom: 20px;
+    color: #3d1f7f;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.back-button:hover {
+    text-decoration: underline;
+}

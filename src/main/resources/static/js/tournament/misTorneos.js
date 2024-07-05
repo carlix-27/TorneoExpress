@@ -64,6 +64,7 @@ function editarTorneo(torneoId) {
     window.location.href = `edit-tournament.html?id=${torneoId}`;
 }
 
+
 function manejarSolicitudes(torneoId){
     window.location.href = `manejarSolicitudesTorneo.html?id=${torneoId}`;
 }
