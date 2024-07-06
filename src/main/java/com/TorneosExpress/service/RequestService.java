@@ -120,25 +120,34 @@ public class RequestService {
         TournamentRequest request = tournamentRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Team request not found"));
 
-        if (request.isAccepted() || request.isDenied()) {
-            throw new RuntimeException("Team request already processed");
-        }
+        checkAlreadyHandled(request);
 
         request.setAccepted(true);
-        Tournament tournament = tournamentRepository.findById(request.getTeamId())
+
+        Long tournamentId = request.getTournamentId();
+        Long teamRequesting = request.getTeamId();
+
+        Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Team not found"));
 
-        Team team = teamRepository.findById(request.getRequestFrom())
+        Team team = teamRepository.findById(teamRequesting)
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-        tournament.getParticipatingTeams().add(team);
-
+        List<Team> participatingTeams = tournament.getParticipatingTeams();
+        participatingTeams.add(team);
 
         tournamentRepository.save(tournament);
 
         tournamentRequestRepository.delete(request);
 
         return request;
+    }
+
+    private void checkAlreadyHandled(TournamentRequest request) {
+        boolean requestAlreadyHandled = request.isAccepted() || request.isDenied();
+        if (requestAlreadyHandled) {
+            throw new RuntimeException("Team request already processed");
+        }
     }
 
     public TeamRequest denyTeamRequest(Long requestId) {
