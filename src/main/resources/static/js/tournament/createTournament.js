@@ -72,7 +72,7 @@ function createTournament() {
                     document.getElementById('create-tournament-form').reset();
                 } else if (xhr.status === 409) {
                     // Conflict - Tournament name must be unique
-                    document.getElementById('error-message').innerText = "El nombre del torneo debe ser único, por favor elegir un nuevo nombre.";
+                    document.getElementById('error-message').innerText = "El nombre del torneo debe ser ú nico, por favor elegir un nuevo nombre.";
                     document.getElementById('error-message').style.color = 'red';
                     document.getElementById('error-message').style.display = 'block';
                     document.getElementById('success-message').style.display = 'none';

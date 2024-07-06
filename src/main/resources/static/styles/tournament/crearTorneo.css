@@ -1,4 +1,11 @@
-/* CSS for the horizontal navbar */
+/* Styles for the back button */
+.back-button {
+    display: block;
+    margin-bottom: 20px;
+    color: #3d1f7f;
+    text-decoration: none;
+    font-size: 18px;
+}
 
 nav ul li:last-child {
     margin-right: 0;
@@ -50,15 +57,16 @@ nav ul li a {
     text-decoration: none;
 }
 
-/*  STYLES FOR EACH RESULT  */
+/* Styles for each result */
 
 h2 {
     text-align: center;
 }
 
-/* STYLES FOR FORM */
+/* Styles for form */
 
 .create-tournament-box {
+    position: relative; /* Ensure that the back button is positioned relative to this box */
     width: 80%;
     margin: 20px auto;
     background: #ffffff;
@@ -112,5 +120,3 @@ h2 {
 .form-group button[type="button"]:hover {
     background: #342160;
 }
-
-
