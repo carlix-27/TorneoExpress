@@ -8,7 +8,11 @@ import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.StatisticsRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Service
 public class StatisticsService {
@@ -46,17 +50,33 @@ public class StatisticsService {
             return false;
         }
 
-        Statistics statistics = new Statistics();
-        statistics.setShortTournamentDto(shortTournamentDto);
-        statistics.setActiveMatch(activeMatch);
-        statistics.setResultadoPartido(statisticsDto.getResultadoPartido());
-        statistics.setGanador(statisticsDto.getGanador());
-        statisticsRepository.save(statistics);
+        Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_tournamentId(match_id, tournamentId);
+
+        if(existingStatisticsOptional.isPresent()){
+            // Actualizar estadisticas existentes
+            Statistics existingStatistics = existingStatisticsOptional.get();
+            existingStatistics.setResultadoPartido(statisticsDto.getResultadoPartido());
+            existingStatistics.setGanador(statisticsDto.getGanador());
+        } else{
+            // Crear nuevas estadisticas
+            Statistics statistics = new Statistics();
+            statistics.setShortTournamentDto(shortTournamentDto);
+            statistics.setActiveMatch(activeMatch);
+            statistics.setResultadoPartido(statisticsDto.getResultadoPartido());
+            statistics.setGanador(statisticsDto.getGanador());
+            statisticsRepository.save(statistics);
+        }
+
         return true;
     }
 
     public StatisticsDto getStatistics(Long match_id){
         Statistics statistics = statisticsRepository.findByMatch_matchId(match_id);
+
+        if(statistics == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las estadisticas de este partido no existen todavia.");
+        }
+
         return new StatisticsDto(statistics.getResultadoPartido(), statistics.getGanador());
     }
 }
