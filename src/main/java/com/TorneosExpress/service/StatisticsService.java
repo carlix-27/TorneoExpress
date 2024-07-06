@@ -57,6 +57,8 @@ public class StatisticsService {
             Statistics existingStatistics = existingStatisticsOptional.get();
             existingStatistics.setResultadoPartido(statisticsDto.getResultadoPartido());
             existingStatistics.setGanador(statisticsDto.getGanador());
+            statisticsRepository.save(existingStatistics); // Se sobreescribe la informacion (se edita de alguna forma)
+            // Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
         } else{
             // Crear nuevas estadisticas
             Statistics statistics = new Statistics();
