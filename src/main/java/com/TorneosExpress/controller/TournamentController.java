@@ -146,12 +146,13 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/activeMatches")
-    public ResponseEntity<Map<String, ActiveMatchesFixtureDto>> getActiveMatches(@PathVariable Long tournamentId) {
+    public ResponseEntity<ActiveMatchesFixtureDto> getActiveMatches(@PathVariable Long tournamentId) {
         ActiveMatchesFixtureDto activeMatches = tournamentService.getActiveMatches(tournamentId);
         if (activeMatches == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(Collections.singletonMap("matches", activeMatches));
+        System.out.println(activeMatches.getMatches().toString());
+        return ResponseEntity.ok(activeMatches);
     }
 
 }
