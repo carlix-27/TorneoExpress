@@ -50,7 +50,7 @@ public class StatisticsService {
             return false;
         }
 
-        Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_tournamentId(match_id, tournamentId);
+        Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_Id(match_id, tournamentId);
 
         if(existingStatisticsOptional.isPresent()){
             // Actualizar estadisticas existentes

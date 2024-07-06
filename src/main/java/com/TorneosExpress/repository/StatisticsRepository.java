@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     Statistics findByMatch_matchId(Long matchId);
-    Optional<Statistics> findByMatch_matchIdAndTournament_tournamentId(Long matchId, Long tournamentId);
+    Optional<Statistics> findByMatch_matchIdAndTournament_Id(Long matchId, Long tournamentId);
 }
