@@ -1,8 +1,8 @@
-function fetchAndPopulateSports() {
+function fetchAndPopulateSports(selectedSport) {
     fetch('/api/sports')
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch sports: ${response.status} ${response.statusText}`);
+                console.log(`Failed to fetch sports: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
@@ -11,15 +11,17 @@ function fetchAndPopulateSports() {
             sportSelect.innerHTML = ''; // Clear existing options
 
             const defaultOption = document.createElement('option');
-            defaultOption.value = ''; // Set value as needed
-            defaultOption.textContent = 'Select Sport';
+            defaultOption.value = selectedSport.sportId;
+            defaultOption.textContent = selectedSport.sportName;
             sportSelect.appendChild(defaultOption);
 
             data.forEach(sport => {
-                const option = document.createElement('option');
-                option.value = sport.sportId;
-                option.textContent = sport.sportName;
-                sportSelect.appendChild(option);
+                if (sport.sportId !== selectedSport.sportId) {
+                    const option = document.createElement('option');
+                    option.value = sport.sportId;
+                    option.textContent = sport.sportName;
+                    sportSelect.appendChild(option);
+                }
             });
         })
         .catch(error => {
@@ -38,12 +40,14 @@ function fetchTournamentDetails(tournamentId) {
         .then(tournament => {
             document.getElementById('tournament-id').value = tournament.id;
             document.getElementById('tournament-name').value = tournament.name;
-            document.getElementById('sport').value = tournament.sport.id;
             document.getElementById('location').value = tournament.location;
             document.getElementById('difficulty').value = tournament.difficulty;
 
             const privacyCheckbox = document.getElementById('privacy');
             privacyCheckbox.checked = tournament.isPrivate;
+
+            // Fetch sports and set the selected sport
+            fetchAndPopulateSports(tournament.sport);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -63,7 +67,7 @@ function updateTournament(event) {
     const updatedTournament = {
         id: tournamentId,
         name: name,
-        sport: { sportId: sportId},
+        sport: { sportId: sportId },
         location: location,
         isPrivate: isPrivate,
         difficulty: difficulty
@@ -78,7 +82,7 @@ function updateTournament(event) {
     })
         .then(response => {
             if (!response.ok) {
-                displayErrorMessage("Error al actualizar el torneo")
+                displayErrorMessage("Error al actualizar el torneo");
             }
             displaySuccessMessage("Torneo actualizado con éxito");
         })
@@ -103,12 +107,11 @@ function getTournamentIdFromUrl() {
     return urlParams.get('id');
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const tournamentId = getTournamentIdFromUrl();
+
     if (tournamentId) {
         fetchTournamentDetails(tournamentId);
-
-        fetchAndPopulateSports();
 
         const editForm = document.getElementById('edit-tournament-form');
         editForm.addEventListener('submit', updateTournament);
