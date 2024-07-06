@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +73,8 @@ public class RequestService {
         return teamRequestRepository.save(request);
     }
 
-    public TournamentRequest sendTournamentRequest(Long from, Long to, Long team, String teamName, Long tournamentId, String name) {
-        TournamentRequest request = new TournamentRequest(from, to, team, teamName, tournamentId);
+    public TournamentRequest sendTournamentRequest(TournamentRequestDto tournamentRequestDto) {
+        TournamentRequest request = new TournamentRequest(tournamentRequestDto);
         return tournamentRequestRepository.save(request);
     }
 

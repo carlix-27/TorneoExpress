@@ -224,6 +224,7 @@ function displayTournamentDetails(tournament, signupButton) {
 
 
 function sendTournamentRequest(tournament, teamId, userId) {
+
     fetchTeamDetails(teamId)
         .then(teamDetails => {
 
@@ -234,7 +235,6 @@ function sendTournamentRequest(tournament, teamId, userId) {
 
             fetchPlayerDetails(userFrom)
                 .then(playerDetails => {
-
 
                     const senderName = playerDetails.name;
 
@@ -270,7 +270,6 @@ function sendTournamentRequest(tournament, teamId, userId) {
         })
         .catch(error => console.error('Error fetching team details:', error));
 }
-
 
 
 

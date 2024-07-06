@@ -59,13 +59,8 @@ public class RequestController {
     }
 
     @PostMapping("/tournament/send")
-    public TournamentRequest sendTournamentRequest(@RequestBody TournamentRequestDto teamRequestDto) {
-        Long requestFromId = teamRequestDto.getRequest_from();
-        Long requestToId = teamRequestDto.getRequest_to();
-        Long teamId = teamRequestDto.getTeamId();
-        String teamName = teamRequestDto.getTeamName();
-        Long tournamentId = teamRequestDto.getTournamentId();
-        return requestService.sendTournamentRequest(requestFromId, requestToId, teamId, teamName, tournamentId, teamName);
+    public TournamentRequest sendTournamentRequest(@RequestBody TournamentRequestDto tournamentRequestDto) {
+        return requestService.sendTournamentRequest(tournamentRequestDto);
     }
 
 
