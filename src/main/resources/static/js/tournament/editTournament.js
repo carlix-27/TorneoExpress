@@ -61,7 +61,10 @@ function updateTournament(event) {
     const name = document.getElementById('tournament-name').value;
     const sportId = document.getElementById('sport').value;
     const location = document.getElementById('location').value;
-    const isPrivate = document.getElementById('privacy').checked;
+    const isTournamentPrivate = document.getElementById('privacy').checked;
+
+    console.log(isTournamentPrivate)
+
     const difficulty = document.getElementById('difficulty').value;
 
     const updatedTournament = {
@@ -69,9 +72,11 @@ function updateTournament(event) {
         name: name,
         sport: { sportId: sportId },
         location: location,
-        isPrivate: isPrivate,
+        isPrivate: isTournamentPrivate,
         difficulty: difficulty
     };
+
+    console.log(updatedTournament)
 
     fetch(`/api/tournaments/${tournamentId}`, {
         method: 'PUT',
