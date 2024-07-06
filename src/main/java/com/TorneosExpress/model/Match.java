@@ -123,9 +123,4 @@ public class Match {
     this.score = score;
   }
 
-
-  // TODO
-  public ActiveMatch toActiveMatch(){
-    return new ActiveMatch(this.matchId, this.team1_id, this.team2_id, this.tournament_id, this.teamName1, this.teamName2);
-  }
 }

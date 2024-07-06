@@ -3,6 +3,7 @@ function loadActiveMatches() {
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');
 
+
     fetch(`/api/tournaments/${tournamentId}/activeMatches`)
         .then(response => {
             if (!response.ok) {
@@ -13,24 +14,29 @@ function loadActiveMatches() {
         .then(activeMatches => {
             const activeMatchesList = document.getElementById("match-result");
             const partidoSelector = document.getElementById("partidoSelector");
-            activeMatchesList.innerHTML = ''; // Limpiar la lista actual de partidos activos
             partidoSelector.innerHTML = '<option value="">Seleccione un partido</option>';
 
-            activeMatches.matches.forEach(match => {
+            console.log('ActiveMatches: ',activeMatches.matches);
+
+            activeMatches.matches.forEach(match => { // FIXME: No entiendo porque aca se aumenta el valor del matchId.
                 const team1 = match.teamName1;
                 const team2 = match.teamName2;
+                const matchId = match.matchId; //getMatchIDWithAssociatedStatistics(match, tournamentId); // Punto de control accediendo al punto previo a modificarse.
 
-                // Agregqr contenido al selector
+                // Esto me permite, realizar otro partido, en el que puedo agregar el dato que quiera.
                 const option = document.createElement('option');
                 option.value = match.matchId;
                 option.textContent = `${team1} VS ${team2}`;
-                partidoSelector.appendChild(option);
 
-                const listItem = document.createElement('li');
+                // Agregqr contenido al selector
+                partidoSelector.appendChild(option);
+                console.log('Option: ', option);
+
+                const listItem = document.createElement('li'); // TODO: el data-match-id, debe estar asociado a cada partido.
                 listItem.innerHTML = `
                     <td>${team1} VS ${team2}</td>
                     <td>
-                        <button class="action-button view-button" data-match-id="${match.matchId}">Ver Estadísticas</button>
+                        <button class="action-button view-button" data-match-id="${matchId}">Ver Estadísticas</button>
                     </td>
                 `;
                 activeMatchesList.appendChild(listItem);
@@ -45,7 +51,6 @@ function loadActiveMatches() {
                 // Implement view stats functionality here
                 viewMatchStats(matchId);
             }
-
             // Opcional: Agregar un mensaje si no hay partidos activos
             if (activeMatches.matches.length === 0) {
                 activeMatchesList.innerHTML = `
@@ -64,6 +69,7 @@ document.addEventListener("DOMContentLoaded", loadActiveMatches);
 
 // Función para mostrar las estadísticas de un partido
 function viewMatchStats(matchId){ // Seguro voy a necesitar el tournamentId, fijate como lo hiciste con SaveStats
+    console.log('Match ID: ', matchId);
     fetch(`/api/matches/${matchId}/getStatistics`)
         .then(response => {
             if (!response.ok) {
@@ -87,8 +93,17 @@ function viewMatchStats(matchId){ // Seguro voy a necesitar el tournamentId, fij
         });
 }
 
+function getMatchIDWithAssociatedStatistics(match, tournamentId){
+    fetch(`api/matches/${tournamentId}/${match.matchId}/getMatchId`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch match statistics: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
 
 
+}
 
 
 

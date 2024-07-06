@@ -9,7 +9,7 @@ public class Statistics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long statisticsId;
 
 
     /*@ManyToOne // Fijate acá de laburar con Dtos, a lo mejor laburar con la entidad entera puede traer demasiados problemas!
@@ -54,11 +54,11 @@ public class Statistics {
     }
     // Getters y setters
     public Long getId() {
-        return id;
+        return statisticsId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long statisticsId) {
+        this.statisticsId = statisticsId;
     }
 
     /*public Tournament getTournament() {

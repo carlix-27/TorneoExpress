@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -144,12 +146,12 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/activeMatches")
-    public ResponseEntity<ActiveMatchesFixtureDto> getActiveMatches(@PathVariable Long tournamentId) {
+    public ResponseEntity<Map<String, ActiveMatchesFixtureDto>> getActiveMatches(@PathVariable Long tournamentId) {
         ActiveMatchesFixtureDto activeMatches = tournamentService.getActiveMatches(tournamentId);
         if (activeMatches == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(activeMatches);
+        return ResponseEntity.ok(Collections.singletonMap("matches", activeMatches));
     }
 
 }

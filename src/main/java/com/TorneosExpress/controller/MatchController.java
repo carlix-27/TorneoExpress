@@ -34,4 +34,9 @@ public class MatchController {
         }
     }
 
+    @GetMapping("/{tournamentId}/{matchId}/getMatchId")
+    public Long getMatchId(@PathVariable Long matchId, @PathVariable Long tournamentId){
+        return statisticsService.getIdOfMatchWithAssociatedStatistics(matchId, tournamentId);
+    }
+
 }

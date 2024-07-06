@@ -58,7 +58,7 @@ public class StatisticsService {
             existingStatistics.setResultadoPartido(statisticsDto.getResultadoPartido());
             existingStatistics.setGanador(statisticsDto.getGanador());
             statisticsRepository.save(existingStatistics); // Se sobreescribe la informacion (se edita de alguna forma)
-            // Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
+            // TODO: Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
         } else{
             // Crear nuevas estadisticas
             Statistics statistics = new Statistics();
@@ -80,5 +80,14 @@ public class StatisticsService {
         }
 
         return new StatisticsDto(statistics.getResultadoPartido(), statistics.getGanador());
+    }
+
+    public Long getIdOfMatchWithAssociatedStatistics(Long match_id, Long tournament_id){
+        Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_Id(match_id, tournament_id);
+        if(existingStatisticsOptional.isPresent()){
+            Statistics existingStatistics = existingStatisticsOptional.get();
+            return existingStatistics.getMatchId();
+        }
+        return null;
     }
 }
