@@ -2,9 +2,7 @@ package com.TorneosExpress.controller;
 
 
 import com.TorneosExpress.dto.ShortTeamDto;
-import com.TorneosExpress.dto.StatisticsDto;
 import com.TorneosExpress.dto.team.TeamPointsDto;
-import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
@@ -12,8 +10,6 @@ import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
-import com.TorneosExpress.service.StatisticsService;
-import com.TorneosExpress.service.TeamService;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,18 +27,10 @@ public class TournamentController {
 
     private final TournamentService tournamentService;
 
-    private Tournament tournament;
-
     @Autowired
     public TournamentController(TournamentService tournamentService) {
         this.tournamentService = tournamentService;
     }
-
-    @Autowired
-    private StatisticsService statisticsService;
-
-    @Autowired
-    private TeamService teamService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
