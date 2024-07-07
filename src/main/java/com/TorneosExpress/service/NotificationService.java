@@ -39,4 +39,12 @@ public class NotificationService {
     public List<Notification> getActiveNotificationsForUser(Long userId) {
         return notificationRepository.findByToIdAndReadFalse(userId);
     }
+
+    public List<Notification> getNotificationsToUser(Long userId) {
+        return notificationRepository.findByToId(userId);
+    }
+
+    public void markNotificationsAsRead(Long userId) {
+        notificationRepository.markAllAsReadByToId(userId);
+    }
 }

@@ -46,5 +46,15 @@ public class NotificationController {
         return notificationService.getActiveNotificationsForUser(userId);
     }
 
+    @GetMapping("/{userId}")
+    public List<Notification> getAllNotifications(@PathVariable Long userId) {
+        return notificationService.getNotificationsToUser(userId);
+    }
+
+    @PostMapping("/markRead/{userId}")
+    public void markNotificationsAsRead(@PathVariable Long userId) {
+        notificationService.markNotificationsAsRead(userId);
+    }
+
 
 }

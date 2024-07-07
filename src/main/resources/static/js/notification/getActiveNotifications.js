@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
-    getActiveNotifications(userId);
+    getNotifications(userId);
 });
 
-function getActiveNotifications(userId) {
-    fetch(`/api/notifications/active/${userId}`)
+function getNotifications(userId) {
+    fetch(`/api/notifications/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`);
@@ -12,66 +12,43 @@ function getActiveNotifications(userId) {
             return response.json();
         })
         .then(notifications => {
-            const notificationsContainer = document.getElementById('notifications');
-            notificationsContainer.innerHTML = ''; // Clear any existing notifications
+            const unreadContainer = document.getElementById('unread-notifications');
+            const readContainer = document.getElementById('read-notifications');
+
+            unreadContainer.innerHTML = ''; // Clear any existing notifications
+            readContainer.innerHTML = ''; 
+
             notifications.forEach(notification => {
                 const notificationElement = document.createElement('div');
                 notificationElement.className = 'notification';
                 notificationElement.innerHTML = `
                     <p>${notification.message}</p>
                 `;
-                notificationsContainer.appendChild(notificationElement);
+
+                if (!notification.read) {
+                    unreadContainer.appendChild(notificationElement);
+                } else {
+                    readContainer.appendChild(notificationElement);
+                }
             });
 
-            // Attach event listeners to the accept and deny buttons
-            document.querySelectorAll('.accept-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    handleAcceptInvite(this.getAttribute('data-invite-id'));
-                });
-            });
-            document.querySelectorAll('.deny-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    handleDenyInvite(this.getAttribute('data-invite-id'));
-                });
-            });
+            markNotificationsAsRead(userId);
         })
         .catch(error => console.error('Error:', error));
 }
 
-function handleAcceptInvite(inviteId) {
-    fetch(`/api/invites/accept/${inviteId}`, {
+function markNotificationsAsRead(userId) {
+    fetch(`/api/notifications/markRead/${userId}`, {
         method: 'POST'
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to accept invite: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to mark notifications as read: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Invite accepted successfully:', data);
-            // Refresh the notifications list
-            const userId = localStorage.getItem("userId");
-            getActiveNotifications(userId);
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function handleDenyInvite(inviteId) {
-    fetch(`/api/invites/deny/${inviteId}`, {
-        method: 'POST'
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to deny invite: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Invite denied successfully:', data);
-            // Refresh the notifications list
-            const userId = localStorage.getItem("userId");
-            getActiveNotifications(userId);
+            console.log('All notifications marked as read successfully:', data);
         })
         .catch(error => console.error('Error:', error));
 }
