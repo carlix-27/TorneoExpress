@@ -1,6 +1,5 @@
 package com.TorneosExpress.model;
 import com.TorneosExpress.dto.ShortTeamDto;
-import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.team.TeamDto;
 
 import com.TorneosExpress.dto.team.TeamPointsDto;
@@ -185,9 +184,10 @@ public class Team {
   }
 
 
-  public int getMaxPlayers(){
+  public int getMaxPlayers() {
     Sport sport = getSport();
     return sport.getNum_players() * 2;
+  }
 
   public ShortTeamDto shortTeamDto(){
     return new ShortTeamDto(this.id, this.name);
