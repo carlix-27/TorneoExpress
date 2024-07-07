@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RequestService {
@@ -35,6 +36,10 @@ public class RequestService {
 
     public List<Invite> getInvitesById(Long id) {
         return inviteRepository.findByInviteTo(id);
+    }
+
+    public Optional<Invite> getInvite(Long id) {
+        return inviteRepository.findById(id);
     }
 
     public Invite acceptInvite(Long inviteId) {

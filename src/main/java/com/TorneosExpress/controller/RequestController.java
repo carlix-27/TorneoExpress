@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/requests")
@@ -41,7 +42,10 @@ public class RequestController {
         return requestService.getInvitesById(id);
     }
 
-
+    @GetMapping("/invite/details/{requestId}")
+    public Optional<Invite> getInvite(@PathVariable Long requestId) {
+        return requestService.getInvite(requestId);
+    }
 
 
     @DeleteMapping("/invite/deny/{inviteId}")

@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error('Error:', error));
     }
 
-
     function fetchTeamDetails(teamId) {
         return fetch(`/api/teams/${teamId}`)
             .then(response => {
@@ -84,12 +83,24 @@ document.addEventListener("DOMContentLoaded", function () {
         const denyUrl = `/api/requests/invite/deny/${requestId}`;
         const url = accepted ? acceptUrl : denyUrl;
 
+        if (accepted){
+            console.log(accepted)
+            fetchRequestDetails(requestId)
+                .then(invite => {
+                    console.log(invite)
+                    sendConfirmationNotification(invite);
+                })
+                .catch(error => {
+                    console.error('Error fetching request details:', error);
+                });
+        }
+
         fetch(url, {
             method: 'DELETE',
         })
             .then(response => {
                 if (!response.ok) {
-                    if (response.status === 500){
+                    if (response.status === 500) {
                         return response.text().then(errorMessage => {
                             throw new Error(errorMessage);
                         });
@@ -106,24 +117,84 @@ document.addEventListener("DOMContentLoaded", function () {
                 displaySuccessMessage(accepted ? 'Invitación a equipo aceptada' : 'Invitación a equipo rechazada', 'success');
             })
             .catch(error => {
-                console.log(error.message)
+                console.log(error.message);
                 displayErrorMessage(error.message);
             });
     }
+
+    function fetchRequestDetails(requestId) {
+        return fetch(`/api/requests/invite/details/${requestId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch request details: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error fetching request details:', error);
+                throw error; // Re-throw the error to handle it further if needed
+            });
+    }
+
+    function sendConfirmationNotification(invite) {
+        console.log(invite)
+        const requestTeamId = invite.team;
+        const user = invite.inviteTo
+
+        Promise.all([fetchTeamDetails(requestTeamId), fetchPlayerDetails(user)])
+            .then(([team, player]) => {
+
+                const teamName = team.name;
+                const playerName = player.name
+
+                const message = `${playerName} ha aceptado tu invitacion al equipo ${teamName}.`;
+                const notificationFrom = invite.inviteFrom;
+
+                return fetch(`/api/notifications/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        toId: notificationFrom,
+                        message: message,
+                    })
+                });
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error sending confirmation notification:', error);
+            });
+    }
+
+    function fetchPlayerDetails(playerId) {
+        return fetch(`/api/user/players/${playerId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            });
+    }
+
+    function displaySuccessMessage(message) {
+        const successMessage = document.getElementById("successMessage");
+        successMessage.textContent = message;
+        successMessage.style.display = "block";
+    }
+
+    function displayErrorMessage(message) {
+        const errorMessage = document.getElementById("errorMessage");
+        errorMessage.textContent = message;
+        errorMessage.style.display = "block";
+
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 3000);
+    }
 });
-
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-}
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
