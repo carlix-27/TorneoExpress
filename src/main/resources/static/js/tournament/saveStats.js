@@ -27,12 +27,23 @@ async function saveStats(event) {
     }
 
     const matchId = document.querySelector('#partidoSelector').value;
-    const resultadoPartido = document.querySelector('input[name="resultadoPartido"]').value;
+
+    const team1Score = document.querySelector('input[name="team1Score"]').value;
+    const team2Score = document.querySelector('input[name="team2Score"]').value;
+
     const ganador = document.querySelector('input[name="ganador"]').value;
 
+    // Validar que los puntajes sean números válidos
+    if (!isValidScore(team1Score) || !isValidScore(team2Score)) {
+        document.getElementById('error-message').innerText = "Ingrese puntajes validos para los equipos";
+        document.getElementById('error-message').style.color = 'red';
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'none';
+    }
 
     const data = {
-        resultadoPartido: resultadoPartido,
+        team1Score: parseInt(team1Score),
+        team2Score: parseInt(team2Score),
         ganador: ganador
     };
 
@@ -65,4 +76,10 @@ async function saveStats(event) {
         document.getElementById('error-message').style.display = 'block';
         document.getElementById('success-message').style.display = 'none';
     }
+}
+
+
+// Función auxiliar para validar puntajes válidos (números enteros)
+function isValidScore(score) {
+    return !isNaN(parseInt(score)) && isFinite(score) && parseInt(score) >= 0;
 }

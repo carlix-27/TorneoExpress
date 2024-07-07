@@ -82,7 +82,7 @@ function viewMatchStats(matchId){ // Seguro voy a necesitar el tournamentId, fij
             const statsContainer = document.getElementById('stats-container');
             statsContainer.innerHTML = `
                 <h3>Estadísticas del partido ${matchId}</h3>
-                <p>Resultado: ${stats.resultadoPartido}</p>
+                <p>Resultado: ${stats.team1Score} a ${stats.team2Score}</p>
                 <p>Ganador: ${stats.ganador}</p>
                 <!-- Agregar más estadísticas según sea necesario -->
             `;
