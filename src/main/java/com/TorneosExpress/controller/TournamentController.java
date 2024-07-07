@@ -64,6 +64,17 @@ public class TournamentController {
         }
     }
 
+    @PostMapping("/endTournament")
+    public ResponseEntity<?> endTournament(@RequestBody TournamentDto request) { // TODO
+        String requestName = request.getName();
+        boolean tournamentNameUnique = tournamentService.isTournamentNameUnique(requestName);
+        if (tournamentNameUnique) {
+            Tournament tournament = new Tournament(request);
+
+        } else{
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
+        }
+    }
 
     @PostMapping("/add/{tournamentId}/{teamId}")
     public ResponseEntity<Tournament> addTeamToTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
@@ -151,7 +162,6 @@ public class TournamentController {
         if (activeMatches == null) {
             return ResponseEntity.notFound().build();
         }
-        System.out.println(activeMatches.getMatches().toString());
         return ResponseEntity.ok(activeMatches);
     }
 

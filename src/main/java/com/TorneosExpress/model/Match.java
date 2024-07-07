@@ -32,6 +32,10 @@ public class Match {
   @Column
   private String score;
 
+  /*@OneToOne
+  @JoinColumn(name = "statisticsId", nullable = false)
+  private Statistics statistics;*/
+
   public Match(Team team1, Team team2, Long tournament_id, String match_location, LocalDate date, String score) {
     this.score = score;
     this.date = date;
@@ -122,5 +126,22 @@ public class Match {
   public void setScore(String score) {
     this.score = score;
   }
+
+  // Statistics Data
+  /*public Long getStatisticId(){ // Con este dato, al igual que con el resultado partido y ganador, voy a poder reconstruir la estadistica que quiero mostrar!
+    return statistics.getId();
+  }
+
+  public void setStatisticId(Long statisticId){
+    this.statistics.setId(statisticId);
+  }
+
+  public String getResultadoPartidoOfMatch(){
+    return statistics.getResultadoPartido();
+  }
+
+  public String getGanadorOfMatch(){
+    return statistics.getGanador();
+  }*/
 
 }

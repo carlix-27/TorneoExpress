@@ -1,5 +1,7 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.StatisticsOfMatchDto;
+import com.TorneosExpress.service.MatchService;
 import com.TorneosExpress.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,9 @@ public class MatchController {
 
     @Autowired
     private StatisticsService statisticsService;
+
+    @Autowired
+    private MatchService matchService;
 
     @PostMapping("/{tournamentId}/{match_id}/statistics")
         public ResponseEntity<?> saveStatistics(@PathVariable Long match_id, @PathVariable Long tournamentId, @RequestBody StatisticsDto statisticsDto) {
@@ -34,9 +39,15 @@ public class MatchController {
         }
     }
 
-    @GetMapping("/{tournamentId}/{matchId}/getMatchId")
-    public Long getMatchId(@PathVariable Long matchId, @PathVariable Long tournamentId){
-        return statisticsService.getIdOfMatchWithAssociatedStatistics(matchId, tournamentId);
-    }
+    /*@GetMapping("/{statisticsId}/getStatisticsOfMatch") // TODO: Ver como puedo acceder al id de la estadistica.
+    public ResponseEntity<?> getStatisticsOfMatchWithStatisticsId(@PathVariable Long statisticsId){
+        StatisticsOfMatchDto statisticsOfMatchDto = matchService.getStatisticsOfMatch(statisticsId);
+        // Aca vamos a usar el MatchService
+        if(statisticsOfMatchDto != null) {
+            return ResponseEntity.ok(statisticsOfMatchDto);
+        } else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Statistics not found.");
+        }
+    }*/
 
 }

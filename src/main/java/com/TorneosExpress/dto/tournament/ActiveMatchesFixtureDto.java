@@ -12,4 +12,5 @@ public class ActiveMatchesFixtureDto {
     public void setMatches(List<ShortMatchDto> matches) {
         this.matches = matches;
     }
+
 }
