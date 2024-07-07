@@ -16,7 +16,7 @@ function getNotifications(userId) {
             const readContainer = document.getElementById('read-notifications');
 
             unreadContainer.innerHTML = ''; // Clear any existing notifications
-            readContainer.innerHTML = ''; 
+            readContainer.innerHTML = '';
 
             notifications.forEach(notification => {
                 const notificationElement = document.createElement('div');

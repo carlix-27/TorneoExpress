@@ -5,46 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos Express - Home</title>
     <link rel="stylesheet" href="styles/home.css">
-    <script src="js/tournament/createTournamentRedirect.js"></script> <!-- Include the script file -->
+    <script src="js/tournament/createTournamentRedirect.js"></script>
     <script src="js/sport/createSportRedirect.js"></script>
     <script src="js/auth/checkRedirect.js"></script>
-    <script src="js/auth/checkRedirect.js"></script>
+    <script src="js/notification/notificationBell.js"></script>
 </head>
 <body>
 
-<!-- Encabezado -->
 <header>
     <h1>Torneos Express</h1>
-    <!-- Menú de navegación -->
     <nav>
-        <ul>
-            <li><a href="home.html">Torneos</a></li>
-            <li><a href="equipo.html">Equipos</a></li>
-            <li><a href="tienda.html">Tienda</a></li>
-            <li><a href="buscar.html">Buscar</a> </li>
-            <li><a href="notifications.html">Notificaciones</a> </li>
-            <!-- Logout Button -->
-            <li><a id="logout-link" href="#">Cerrar Sesión</a></li>
-        </ul>
+        <div class="nav-container">
+            <ul>
+                <li><a href="home.html">Torneos</a></li>
+                <li><a href="equipo.html">Equipos</a></li>
+                <li><a href="tienda.html">Tienda</a></li>
+                <li><a href="buscar.html">Buscar</a></li>
+                <li><a id="logout-link" href="#">Cerrar Sesión</a></li>
+            </ul>
+            <button class="button" onclick="window.location.href='notifications.html'">
+                <svg class="bell" viewBox="0 0 448 512">
+                    <path id="bell-path" d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path>
+                </svg>
+                <span id="notification-text">Notificaciones</span>
+                <span id="unread-count" style="display: none;"></span>
+                <div class="arrow">›</div>
+            </button>
+        </div>
     </nav>
 </header>
 
-<!-- Sección de Bienvenida -->
 <section id="bienvenida">
     <h2>Bienvenido a Torneos Express</h2>
     <p>Descubre los torneos más emocionantes y únete a la comunidad.</p>
 </section>
 
-
-<!-- Sección de Torneos -->
 <section id="torneos">
     <h2>Torneos</h2>
-    <!-- Aquí puedes agregar contenido relacionado con los torneos -->
     <ul id="tournament-options">
         <li><a href="#" onclick="redirectToCreateTournament()">Crear Torneo</a></li>
-        <li><a href="misTorneos.html">Ver Mis Torneos</a></li> <!-- Nuevo enlace -->
-        <li><a href="torneos.html">Ver Todos los Torneos</a></li> <!-- Nuevo enlace -->
-        <li><a href="historial.html">Historial</a></li> <!-- Nuevo enlace -->
+        <li><a href="misTorneos.html">Ver Mis Torneos</a></li>
+        <li><a href="torneos.html">Ver Todos los Torneos</a></li>
+        <li><a href="historial.html">Historial</a></li>
     </ul>
 </section>
 
@@ -52,33 +54,11 @@
 
 <section id="deportes">
     <h2>Deportes</h2>
-    <!-- Aquí puedes agregar contenido relacionado con los torneos -->
     <ul id="sport-options">
         <li><a href="#" onclick="createSportRedirect()">Agregar Deporte</a></li>
-        <li><a href="deportes.html">Ver Deportes</a></li> <!-- Nuevo enlace -->
+        <li><a href="deportes.html">Ver Deportes</a></li>
     </ul>
 </section>
-
-
-<!-- Logout Script -->
-<script>
-
-    // Function to handle logout confirmation
-    function confirmLogout() {
-        // Display confirmation dialog
-        const logoutConfirmed = window.confirm('Do you want to logout?');
-
-        // If user confirms, proceed with logout
-        if (logoutConfirmed) {
-            localStorage.removeItem("userId"); // Remove userId from localStorage
-            window.location.href = "login.html";
-        }
-    }
-
-    // Call confirmLogout function when logout link is clicked
-    document.getElementById("logout-link").addEventListener("click", confirmLogout);
-
-</script>
 
 </body>
 </html>
