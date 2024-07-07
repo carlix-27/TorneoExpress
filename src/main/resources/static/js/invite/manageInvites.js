@@ -89,13 +89,41 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Failed to update request: ${response.status} ${response.statusText}`);
+                    if (response.status === 500){
+                        return response.text().then(errorMessage => {
+                            throw new Error(errorMessage);
+                        });
+                    } else {
+                        return response.json().then(error => {
+                            throw new Error(error.message || 'Failed to update request');
+                        });
+                    }
                 }
                 return response.json();
             })
             .then(() => {
                 loadTeamInvites();
+                displaySuccessMessage(accepted ? 'Invitación a equipo aceptada' : 'Invitación a equipo rechazada', 'success');
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.log(error.message)
+                displayErrorMessage(error.message);
+            });
     }
 });
+
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+}
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}

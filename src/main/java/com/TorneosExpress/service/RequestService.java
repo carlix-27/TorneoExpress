@@ -37,9 +37,9 @@ public class RequestService {
         return inviteRepository.findByInviteTo(id);
     }
 
-    public Invite acceptInvite(Long inviteId) throws Exception {
+    public Invite acceptInvite(Long inviteId) {
         Invite invite = inviteRepository.findById(inviteId)
-                .orElseThrow(() -> new Exception("Invite not found"));
+                .orElseThrow(() -> new RuntimeException("Invite not found"));
 
         invite.setAccepted(true);
 
@@ -49,9 +49,24 @@ public class RequestService {
         Player player = playerRepository.findById(invite.getInviteTo())
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-        team.getPlayers().add(player);
-        teamRepository.save(team);
 
+        List<Player> teamPlayers = team.getPlayers();
+
+        boolean playerAlreadyInTeam = teamPlayers.contains(player);
+        if (playerAlreadyInTeam) {
+            throw new RuntimeException("El jugador ya pertenece al equipo");
+        }
+
+        int numOfPlayersInTeam = teamPlayers.size();
+        int maxPlayers = team.getMaxPlayers();
+
+        boolean teamFull = numOfPlayersInTeam == maxPlayers;
+        if (teamFull){
+            throw new RuntimeException("El equipo ya esta en capacidad maxima");
+        }
+
+        teamPlayers.add(player);
+        teamRepository.save(team);
         inviteRepository.delete(invite);
         return invite;
     }

@@ -41,10 +41,7 @@ public class RequestController {
         return requestService.getInvitesById(id);
     }
 
-    @DeleteMapping("/invite/accept/{inviteId}")
-    public Invite acceptInvite(@PathVariable Long inviteId) throws Exception {
-        return  requestService.acceptInvite(inviteId);
-    }
+
 
 
     @DeleteMapping("/invite/deny/{inviteId}")
@@ -94,6 +91,16 @@ public class RequestController {
         return requestService.denyTeamRequest(requestId);
     }
 
+    @DeleteMapping("/invite/accept/{inviteId}")
+    public ResponseEntity<?> acceptInvite(@PathVariable Long inviteId) {
+        try {
+            Invite invite = requestService.acceptInvite(inviteId);
+            return ResponseEntity.ok(invite);
+        } catch (RuntimeException e) {
+            String localizedMessage = e.getLocalizedMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(localizedMessage);
+        }
+    }
 
 
     @DeleteMapping("/tournament/{requestId}/accept")
