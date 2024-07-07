@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial - Torneos Express</title>
+
+    <script src="js/auth/checkRedirect.js"></script>
+</head>
+<body>
+
+<!-- Encabezado -->
+<header>
+    <h1>Historial</h1>
+    <!-- Menú de navegación -->
+    <nav>
+        <ul>
+            <li><a href="home.html">Inicio</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Contenido de la página -->
+<section id="historial">
+    <h2>Historial de Torneos</h2>
+    <ul id="lista-torneos">
+        <!-- Los torneos se cargarán dinámicamente aquí -->
+    </ul>
+</section>
+
+
+<!-- Elemento oculto para almacenar el ID del torneo -->
+<input type="hidden" id="tournamentId">
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tournamentId = urlParams.get('id');
+        if (tournamentId) {
+            document.getElementById('tournamentId').value = tournamentId;
+        }
+
+        document.getElementById('participantes').addEventListener('click', function() {
+            if (tournamentId) {
+                window.location.href = `participantes.html?id=${tournamentId}`;
+            } else {
+                alert('No se encontró el ID del torneo.');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

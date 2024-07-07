@@ -21,14 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Data: ", data);
                     if (data.success) {
                         // Display success message in green
                         document.getElementById('success-message').innerText = "Torneo terminado con éxito";
                         document.getElementById('success-message').style.color = 'green';
                         document.getElementById('success-message').style.display = 'block';
                         document.getElementById('error-message').style.display = 'none';
-                        window.location.href = `verEstadisticas.html?id=${tournamentId}`;
+                        //window.location.href = `verEstadisticas.html?id=${tournamentId}`;
                     } else {
                         document.getElementById('error-message').innerText = "Hubo un problema al terminar el torneo";
                         document.getElementById('error-message').style.color = 'red';

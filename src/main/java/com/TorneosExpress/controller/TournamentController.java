@@ -76,8 +76,8 @@ public class TournamentController {
     }
 
     @GetMapping("/history") // TODO
-    public ResponseEntity<?> getTournamentHistory() { // Te devuelve los torneos que dejamos inactivos. La clave esta en chequear si isActive es false. y devolver esos.
-        return null;
+    public List<Tournament> getTournamentHistory() { // Te devuelve los torneos que dejamos inactivos. La clave esta en chequear si isActive es false. y devolver esos.
+        return tournamentService.getInactiveTournaments();
     }
 
     @PostMapping("/add/{tournamentId}/{teamId}")

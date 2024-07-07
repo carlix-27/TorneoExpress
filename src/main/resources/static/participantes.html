@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial</title>
+</head>
+<body>
+
+<header>
+    <h1>Torneos Express</h1>
+    <!-- Menú de navegación -->
+    <nav>
+        <ul>
+            <li><a href="home.html">Inicio</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Mostrar equipos participantes -->
+
+<div class="container">
+
+    <div id="equipos" class="section">
+    <!-- Tabla de Equipos-->
+    <table id="equipoPuntajeTable">
+        <thead>
+        <tr>
+            <th>Nombre del Equipo</th>
+            <th>Puntaje</th>
+        </tr>
+        </thead>
+        <tbody id="tablaContenido">
+        <!-- Filas se agregarán aquí dinámicamente -->
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Partidos Activos -->
+    <div id="partidosActivos" class="section">
+        <h2>Partidos</h2>
+        <ul id="match-result">
+            <!-- Los partidos se agregarán aquí dinámicamente -->
+        </ul>
+        <div id="stats-container">
+            <!-- Las estadísticas del partido seleccionado se mostrarán aquí -->
+        </div>
+    </div>
+</div>
+
+<!-- Elemento oculto para almacenar el ID del torneo -->
+<input type="hidden" id="tournamentId">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener el ID del torneo de la URL y almacenarlo en el elemento oculto
+        const urlParams = new URLSearchParams(window.location.search);
+        const tournamentId = urlParams.get('id');
+        if (tournamentId) {
+            document.getElementById('tournamentId').value = tournamentId;
+        }
+    });
+</script>
+
+<script src="js/tournament/getTeamsOfTournament.js"></script>
+<script src="js/tournament/loadActiveMatches.js"></script>
+</body>
+</html>

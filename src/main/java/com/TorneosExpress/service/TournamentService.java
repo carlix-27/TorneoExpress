@@ -137,6 +137,10 @@ public class TournamentService {
         return tournamentRepository.findByisActiveTrue();
     }
 
+    public List<Tournament> getInactiveTournaments(){
+        return tournamentRepository.findByisActiveFalse();
+    }
+
     public Tournament addTeamToTournament(Long teamId, Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
