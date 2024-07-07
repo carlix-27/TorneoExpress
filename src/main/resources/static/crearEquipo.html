@@ -10,10 +10,8 @@
 
 <body>
 
-<!-- Encabezado -->
 <header>
     <h1>Torneos Express - Equipos</h1>
-    <!-- Menú de navegación -->
     <nav>
         <ul>
             <li><a href="home.html">Inicio</a></li>
@@ -27,11 +25,8 @@
     <a href="javascript: goBack()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
     <h2>Crear Equipo</h2>
 
-    <!-- Check for success message parameter -->
-    <div id="success-message" style="color: green; margin-bottom: 10px; display: none;">Team created successfully.</div>
-
-    <!-- Error message div -->
-    <div id="error-message" style="color: red; margin-bottom: 10px; display: none;">Error while creating team.</div>
+    <div id="successMessage" style="display:none; color: green;"></div>
+    <div id="errorMessage" style="display:none; color: red;"></div>
 
     <form id="add-team-form">
         <div class="form-group">
@@ -42,7 +37,6 @@
         <div class="form-group">
             <label for="sport">Deporte:</label>
             <select id="sport" name="sport" required>
-                <!-- Sport options will be dynamically populated -->
             </select>
         </div>
 
@@ -66,16 +60,14 @@
     function goBack() {
         window.history.back();
     }
-    // Fetch sports and populate dropdown on page load
     document.addEventListener("DOMContentLoaded", function() {
         fetchSports();
     });
 </script>
-<!-- Logout Script -->
 <script>
     function logout() {
-        localStorage.removeItem("userId"); // Remove userId from localStorage
-        window.location.href = "login.html"; // Redirect to login page after logout
+        localStorage.removeItem("userId");
+        window.location.href = "login.html";
     }
 </script>
 </body>

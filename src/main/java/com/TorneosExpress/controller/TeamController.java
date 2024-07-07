@@ -2,7 +2,6 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.team.TeamDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,10 @@ public class TeamController {
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
-    Team createdTeam = teamService.createTeam(new Team(teamRequest));
+
+    Team team = new Team(teamRequest);
+
+    Team createdTeam = teamService.createTeam(team);
     teamService.addPlayerToTeam(createdTeam.getId(), teamRequest.getCaptainId());
     playerService.upgradeToCaptain(teamRequest.getCaptainId());
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
