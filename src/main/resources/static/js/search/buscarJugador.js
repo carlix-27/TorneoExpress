@@ -100,11 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 return response.json();
             })
-            .then(notification => {
-                displaySuccessMessage('Invite sent successfully.');
-            })
             .catch(error => {
-                displayErrorMessage('Failed to send invite.');
                 console.error('Error:', error);
             });
     }
@@ -172,13 +168,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     const isCaptain = playerId === teamCaptain;
 
                     if (isPrivate && !isCaptain) {
-                        displayErrorMessage("You are not the captain of this private team. You cannot invite players.");
+                        displayErrorMessage("No eres el capitan del equipo.");
                     } else {
                         sendInvite(player.id, teamId);
                     }
                 });
             } else {
-                displayErrorMessage("Please select a team.");
+                displayErrorMessage("Por favor elegir un equipo.");
             }
         };
     }
@@ -210,6 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         return response.json();
                     })
                     .then(invite => {
+                        displaySuccessMessage("Invitación mandada.")
                         createInviteNotification(invite);
                     })
                     .catch(error => console.error('Error:', error));

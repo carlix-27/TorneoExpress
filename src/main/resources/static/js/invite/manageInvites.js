@@ -22,28 +22,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 const requestsContainer = document.getElementById("team-invites");
                 requestsContainer.innerHTML = '';
 
+                const list = document.createElement('ul');
+
                 const teamDetailsPromises = invites.map(request => {
-
                     const teamId = request.team;
-
                     return fetchTeamDetails(teamId).then(team => ({ request, team }));
                 });
 
-                Promise.all(teamDetailsPromises).then(results => {
+                return Promise.all(teamDetailsPromises).then(results => {
                     results.forEach(({ request, team }) => {
-                        const requestElement = document.createElement('div');
+                        const requestElement = document.createElement('li');
                         const teamName = team.name;
 
-                        requestElement.className = 'request';
                         requestElement.innerHTML = `
-                            <p>From: ${teamName}</p>
-                            <div class="button-container">
-                                <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
-                                <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
-                            </div>
-                        `;
-                        requestsContainer.appendChild(requestElement);
+                        <p>From: ${teamName}</p>
+                        <div class="button-container">
+                            <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
+                            <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
+                        </div>
+                    `;
+                        list.appendChild(requestElement);
                     });
+
+                    requestsContainer.appendChild(list);
 
                     document.querySelectorAll('.accept-button').forEach(button => {
                         button.addEventListener('click', handleAccept);
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error('Error:', error));
     }
+
 
     function fetchTeamDetails(teamId) {
         return fetch(`/api/teams/${teamId}`)
