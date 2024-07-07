@@ -85,7 +85,7 @@ function updateRequestStatus(requestId, accepted) {
         })
         .then(() => {
             loadTournamentRequests(getTournamentFromUrl());
-            displaySuccessMessage(accepted ? 'Request accepted successfully' : 'Request denied successfully', 'success');
+            displaySuccessMessage(accepted ? 'Solicitud aceptada' : 'Solicitud rechazada', 'success');
         })
         .catch(error => {
             console.error('Error:', error);
