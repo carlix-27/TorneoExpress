@@ -9,7 +9,7 @@ function loadTeamRequests(teamId) {
     fetchTeamRequests(userId, teamId)
 }
 
-function fetchTeamRequests(userId, teamId){
+function fetchTeamRequests(userId, teamId) {
     return fetch(`/api/requests/team/${userId}/${teamId}`)
         .then(response => {
             if (!response.ok) {
@@ -19,30 +19,39 @@ function fetchTeamRequests(userId, teamId){
         })
         .then(requests => {
             const requestsContainer = document.getElementById("team-requests");
-            requestsContainer.innerHTML = '';
+            requestsContainer.innerHTML = ''; // Limpiar el contenedor antes de renderizar
+
+            const list = document.createElement('ul');
 
             requests.forEach(request => {
-                const requestElement = document.createElement('div');
+                const listItem = document.createElement('li');
+
                 const playerRequesting = request.name;
 
-                requestElement.className = 'request';
-                requestElement.innerHTML = `
-                            <p>From: ${playerRequesting}</p>
-                            <div class="button-container">
-                                <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
-                                <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
-                            </div>
-                        `;
-                requestsContainer.appendChild(requestElement);
+                listItem.innerHTML = `
+                    <p>From: ${playerRequesting}</p>
+                    <div class="button-container">
+                        <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
+                        <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
+                    </div>
+                `;
+                list.appendChild(listItem);
             });
 
-            document.querySelectorAll('.accept-button').forEach(button => {
+            requestsContainer.appendChild(list);
+
+            // Agregar listeners a los botones de aceptar y denegar
+            list.querySelectorAll('.accept-button').forEach(button => {
                 button.addEventListener('click', handleAccept);
             });
 
-            document.querySelectorAll('.deny-button').forEach(button => {
+            list.querySelectorAll('.deny-button').forEach(button => {
                 button.addEventListener('click', handleDeny);
             });
+        })
+        .catch(error => {
+            console.error('Error fetching team requests:', error);
+            // Manejar el error si es necesario
         });
 }
 
@@ -68,14 +77,42 @@ function updateRequestStatus(requestId, accepted) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to update request: ${response.status} ${response.statusText}`);
+                if (response.status === 500){
+                    return response.text().then(errorMessage => {
+                        throw new Error(errorMessage);
+                    });
+                } else {
+                    return response.json().then(error => {
+                        throw new Error(error.message || 'Failed to update request');
+                    });
+                }
             }
             return response.json();
         })
         .then(() => {
-            loadTeamRequests();
+            loadTeamRequests(getTeamIdFromUrl());
+            displaySuccessMessage(accepted ? 'Solicitud aceptada' : 'Solicitud rechazada', 'success');
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.log(error.message)
+            displayErrorMessage(error.message);
+        });
+}
+
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+}
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
 }
 
 

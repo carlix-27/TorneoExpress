@@ -1,5 +1,6 @@
 package com.TorneosExpress.model;
 
+import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -32,10 +33,17 @@ public class TournamentRequest {
     @Column(nullable = false)
     private boolean denied;
 
-
-
-
     public TournamentRequest(){}
+
+    public TournamentRequest(TournamentRequestDto tournamentRequestDto){
+        this.requestFrom = tournamentRequestDto.getRequestFrom();
+        this.requestTo = tournamentRequestDto.getRequestTo();
+        this.teamId = tournamentRequestDto.getTeamId();
+        this.teamName = tournamentRequestDto.getTeamName();
+        this.tournamentId = tournamentRequestDto.getTournamentId();
+        this.accepted = tournamentRequestDto.getAccepted();
+        this.denied = tournamentRequestDto.getDenied();
+    }
 
     public TournamentRequest(Long requestFrom, Long requestTo, Long teamId, String teamName, Long tournamentId) {
         this.requestFrom = requestFrom;

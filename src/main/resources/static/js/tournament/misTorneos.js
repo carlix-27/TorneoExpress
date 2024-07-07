@@ -19,17 +19,18 @@ function cargarTorneos() {
             tournaments.forEach(tournament => {
                 const li = document.createElement("li");
 
-                const tournamentName = tournament.name
-                const tournamentSport = tournament.sport
-                const tournamentSportName = tournamentSport.sportName
-                const tournamentLocation = tournament.location
-                const privateTournament = tournament.private
+                const {
+                    name: tournamentName,
+                    sport: tournamentSport,
+                    location: tournamentLocation,
+                    private: privateTournament,
+                    id: tournamentId,
+                    participatingTeams
+                } = tournament
 
-                const tournamentId = tournament.id;
-
-                const participatingTeams = tournament.participatingTeams
                 const numOfParticipatingTeams = participatingTeams.length
                 const maxTeams = tournament.maxTeams;
+                const sportName = tournamentSport.sportName
 
 
                 li.innerHTML = `
@@ -37,8 +38,8 @@ function cargarTorneos() {
                 <div>
                 
                     <div>
-                    <h3>${tournamentName}</h3>
-                    <p>Deporte: ${tournamentSportName}</p>
+                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a> 
+                    <p>Deporte: ${sportName}</p>
                     <p>Ubicación: ${tournamentLocation}</p>
                     <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
                     <p>Dificultad: ${tournament.difficulty}</p>
@@ -62,6 +63,7 @@ function cargarTorneos() {
 function editarTorneo(torneoId) {
     window.location.href = `edit-tournament.html?id=${torneoId}`;
 }
+
 
 function manejarSolicitudes(torneoId){
     window.location.href = `manejarSolicitudesTorneo.html?id=${torneoId}`;
