@@ -14,5 +14,7 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
 
     List<Tournament> findByisActiveTrue();
 
+    List<Tournament> findByisActiveFalse();
+
 
 }

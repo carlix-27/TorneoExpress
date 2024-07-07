@@ -1,5 +1,7 @@
 package com.TorneosExpress.model;
 
+
+import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import jakarta.persistence.*;
 
@@ -176,6 +178,10 @@ public class Tournament {
 
   public Long getCreatorId() {
     return creatorId;
+  }
+
+  public ShortTournamentDto toShortDto(){
+    return new ShortTournamentDto(this.Id, this.name);
   }
 
 }

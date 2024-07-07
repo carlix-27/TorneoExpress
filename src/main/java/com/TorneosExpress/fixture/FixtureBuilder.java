@@ -3,6 +3,9 @@ package com.TorneosExpress.fixture;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.repository.MatchRepository;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +15,15 @@ public class FixtureBuilder {
   private final Long tournamentId;
   private final String location;
   private final LocalDate startDate;
+  private final MatchRepository matchRepository;
 
-  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate) {
+  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate, MatchRepository matchRepository) {
     this.tournamentId = tournamentId;
     this.location = location;
     this.startDate = startDate;
+    this.matchRepository = matchRepository;
   }
+
 
   public Fixture build(List<Team> teams) {
     return new Fixture(calculateMatchCalendar(teams));
@@ -48,15 +54,16 @@ public class FixtureBuilder {
       Team team1 = teamsCopy.get(i);
       Team team2 = teamsCopy.get(numTeams - i - 1);
       if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
-        matches.add(new Match(
-            team1, team2, tournamentId, location, matchDate, "To be played."));
+        Match match = new Match(team1, team2, tournamentId, location, matchDate, "To be played.");
+        matches.add(match);
+        matchRepository.save(match); // Add to db info about matches.
       }
     }
   }
 
 
 
-  public static void main(String[] args) {
+  /*public static void main(String[] args) {
     Sport futbol = new Sport();
     List<Team> teams = new ArrayList<>();
     teams.add(new Team(1L, "test1", futbol, "pilar", false));
@@ -65,10 +72,10 @@ public class FixtureBuilder {
     teams.add(new Team(4L, "test4", futbol, "pilar", false));
     teams.add(new Team(5L, "test5", futbol, "pilar", false));
 
-    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now());
+    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now(), matchRepository);
     Fixture fixture = fb.build(teams);
     fixture.getMatches().forEach(System.out::println);
     /* Fixture should contain N(N-1)/2 matches, N being the amount of teams. */
-  }
+  /*}*/
 
 }

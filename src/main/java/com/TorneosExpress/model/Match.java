@@ -1,7 +1,9 @@
 package com.TorneosExpress.model;
 
+import com.TorneosExpress.dto.ActiveMatch;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Entity
 public class Match {
@@ -10,7 +12,7 @@ public class Match {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long match_id;
+  private Long matchId;
 
   @Column
   private Long team1_id;
@@ -30,6 +32,10 @@ public class Match {
   @Column
   private String score;
 
+  /*@OneToOne
+  @JoinColumn(name = "statisticsId", nullable = false)
+  private Statistics statistics;*/
+
   public Match(Team team1, Team team2, Long tournament_id, String match_location, LocalDate date, String score) {
     this.score = score;
     this.date = date;
@@ -40,6 +46,7 @@ public class Match {
     this.teamName1 = team1.getName();
     this.teamName2 = team2.getName();
   }
+
 
   @Override
   public String toString() {
@@ -65,11 +72,11 @@ public class Match {
   }
 
   public Long getMatch_id() {
-    return match_id;
+    return matchId;
   }
 
-  public void setMatch_id(Long match_id) {
-    this.match_id = match_id;
+  public void setMatch_id(Long matchId) {
+    this.matchId= matchId;
   }
 
   public Long getTeam1_id() {
@@ -119,4 +126,22 @@ public class Match {
   public void setScore(String score) {
     this.score = score;
   }
+
+  // Statistics Data
+  /*public Long getStatisticId(){ // Con este dato, al igual que con el resultado partido y ganador, voy a poder reconstruir la estadistica que quiero mostrar!
+    return statistics.getId();
+  }
+
+  public void setStatisticId(Long statisticId){
+    this.statistics.setId(statisticId);
+  }
+
+  public String getResultadoPartidoOfMatch(){
+    return statistics.getResultadoPartido();
+  }
+
+  public String getGanadorOfMatch(){
+    return statistics.getGanador();
+  }*/
+
 }
