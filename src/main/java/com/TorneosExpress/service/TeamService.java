@@ -43,7 +43,8 @@ public class TeamService {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Player is already part of the team.");
     }
 
-    if (players.size() == team.getMaxPlayers()){
+    int teamMaxPlayers = team.getMaxPlayers();
+    if (players.size() == teamMaxPlayers){
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Numero máximo de jugadores en el equipo");
     }
 
