@@ -42,14 +42,6 @@
         if (tournamentId) {
             document.getElementById('tournamentId').value = tournamentId;
         }
-
-        document.getElementById('participantes').addEventListener('click', function() {
-            if (tournamentId) {
-                window.location.href = `participantes.html?id=${tournamentId}`;
-            } else {
-                alert('No se encontró el ID del torneo.');
-            }
-        });
     });
 </script>
 

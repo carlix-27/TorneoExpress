@@ -14,7 +14,6 @@ nav ul li a:hover {
     background-color: #333333;
 }
 
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -49,11 +48,10 @@ nav ul li a {
     text-decoration: none;
 }
 
-
 /* Estilos para la tabla */
 table {
-    width: 80%;
-    margin: 20px auto;
+    width: 100%;
+    margin: 20px 0;
     border-collapse: collapse;
     box-shadow: 0 2px 3px rgba(0,0,0,0.1);
     background-color: #fff;
@@ -89,12 +87,9 @@ table th {
     font-weight: bold;
 }
 
-
 .container {
-    display: flex;
-    justify-content: space-between;
+    display: block;
     margin: 20px;
-    gap: 20px;
 }
 
 .section {
@@ -102,7 +97,7 @@ table th {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    flex: 1;
+    margin-top: 20px;
 }
 
 .section h2 {

@@ -30,7 +30,7 @@ function cargarHistorialTorneos() {
                 li.innerHTML = `
 
         <div>
-            <a href="historial.html?id=${tournament.id}"><h3>${tournament.name}</h3></a>
+            <h3>${tournament.name}</h3>
             <p>Deporte: ${tournament.sport.sportName}</p>
             <p>Ubicación: ${tournament.location}</p>
             <p>Privacidad: ${tournament.private ? "Privado" : "Público"}</p>
