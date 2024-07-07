@@ -185,9 +185,10 @@ public class Team {
   }
 
 
-  public int getMaxPlayers(){
+  public int getMaxPlayers() {
     Sport sport = getSport();
     return sport.getNum_players() * 2;
+  }
 
   public ShortTeamDto shortTeamDto(){
     return new ShortTeamDto(this.id, this.name);
