@@ -50,7 +50,6 @@ function cargarTorneos() {
                 </div>
                 
                 `;
-
                 listaTorneos.appendChild(li);
             });
 

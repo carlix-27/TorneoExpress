@@ -1,0 +1,95 @@
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333333;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/*  STYLES FOR EACH RESULT  */
+
+h2 {
+    text-align: center;
+}
+
+#lista-torneos li {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-right: 30px;
+}
+
+
+/* Team name style */
+#lista-torneos li h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+#lista-torneos li p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+#lista-torneos li button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3d1f7f;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Button hover style */
+#lista-torneos li button:hover {
+    background-color: #342160;
+}

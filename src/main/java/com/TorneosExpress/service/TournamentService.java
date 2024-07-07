@@ -1,12 +1,18 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.ActiveMatch;
+import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.MatchDto;
+import com.TorneosExpress.dto.tournament.ShortMatchDto;
+import com.TorneosExpress.fixture.ActiveMatchFixture;
+import com.TorneosExpress.fixture.ActiveMatchesFixtureBuilder;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +29,59 @@ public class TournamentService {
 
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
+    private final MatchRepository matchRepository;
 
     @Autowired
-    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository) {
+    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository) {
         this.tournamentRepository = tournamentRepository;
         this.teamRepository = teamRepository;
+        this.matchRepository = matchRepository;
+    }
+
+    public List<Team> getTeamsOfTournament(Long tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
+        return tournament.getParticipatingTeams();
+    }
+
+
+    public ActiveMatchesFixtureDto getActiveMatches(Long tournamentId){ // TODO
+        Tournament tournament = getTournamentById(tournamentId);
+        if(tournament == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
+        }
+
+        // Crear una instancia de FixtureBuilder y construir el Fixture
+        Fixture fixture = new FixtureBuilder(
+                tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                .build(tournament.getParticipatingTeams());
+
+        ActiveMatchFixture activeMatchFixture = new ActiveMatchesFixtureBuilder(tournamentId, fixture).build(tournament.getParticipatingTeams());
+
+        ActiveMatchesFixtureDto activeMatchesFixtureDto = new ActiveMatchesFixtureDto();
+        activeMatchesFixtureDto.setMatches(convertToShortMatchDto(activeMatchFixture.getMatches()));
+
+        return activeMatchesFixtureDto;
+    }
+
+    private List<ShortMatchDto> convertToShortMatchDto(List<ActiveMatch> activeMatches) {
+        List<ShortMatchDto> dtoActiveMatches = new ArrayList<>();
+        for(ActiveMatch match: activeMatches){
+            ShortMatchDto shortMatchDto = new ShortMatchDto();
+            shortMatchDto.setMatchId(match.getMatchId());
+            shortMatchDto.setTeam1_id(match.getTeam1Id());
+            shortMatchDto.setTeam2_id(match.getTeam2Id());
+            shortMatchDto.setTeamName1(match.getTeamName1());
+            shortMatchDto.setTeamName2(match.getTeamName2());
+            dtoActiveMatches.add(shortMatchDto);
+        }
+        return dtoActiveMatches;
     }
 
     public FixtureDto getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture = new FixtureBuilder(
-            tournamentId, tournament.getLocation(), tournament.getStartDate())
+            tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
             .build(tournament.getParticipatingTeams());
         FixtureDto fixtureDto = new FixtureDto();
         fixtureDto.setMatches(convertToDtoFormat(fixture.getMatches()));
@@ -55,6 +103,9 @@ public class TournamentService {
         }
         return matchDtos;
     }
+
+
+
 
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorId(userId);
@@ -85,6 +136,10 @@ public class TournamentService {
 
     public List<Tournament> getActiveTournaments() {
         return tournamentRepository.findByisActiveTrue();
+    }
+
+    public List<Tournament> getInactiveTournaments(){
+        return tournamentRepository.findByisActiveFalse();
     }
 
     public Tournament addTeamToTournament(Long teamId, Long tournamentId) {
