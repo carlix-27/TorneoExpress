@@ -3,6 +3,7 @@ package com.TorneosExpress.service;
 import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.StatisticsDto;
+import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.TorneosExpress.model.Statistics;
 import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.StatisticsRepository;
@@ -55,8 +56,12 @@ public class StatisticsService {
         if(existingStatisticsOptional.isPresent()){
             // Actualizar estadisticas existentes
             Statistics existingStatistics = existingStatisticsOptional.get();
-            existingStatistics.setResultadoPartido(statisticsDto.getResultadoPartido());
-            existingStatistics.setGanador(statisticsDto.getGanador());
+            existingStatistics.setTeam1Score(statisticsDto.getTeam1Score());
+            existingStatistics.setTeam2Score(statisticsDto.getTeam2Score());
+            TeamWinnerPointsDto teamWinner = statisticsDto.getGanador();
+            int points = determinarPuntos(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
+            teamWinner.setMatchPoints(points);
+            existingStatistics.setGanador(teamWinner);
             statisticsRepository.save(existingStatistics); // Se sobreescribe la informacion (se edita de alguna forma)
             // TODO: Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
         } else{
@@ -64,13 +69,26 @@ public class StatisticsService {
             Statistics statistics = new Statistics();
             statistics.setShortTournamentDto(shortTournamentDto);
             statistics.setActiveMatch(activeMatch);
-            statistics.setResultadoPartido(statisticsDto.getResultadoPartido());
+            statistics.setTeam1Score(statisticsDto.getTeam1Score());
+            statistics.setTeam2Score(statisticsDto.getTeam2Score());
             statistics.setGanador(statisticsDto.getGanador());
             statisticsRepository.save(statistics);
         }
 
         return true;
     }
+
+
+    private int determinarPuntos(int team1Score, int team2Score) {
+        if (team1Score > team2Score) {
+            return 30;
+        } else if (team1Score == team2Score) {
+            return 15;
+        } else {
+            return 0;
+        }
+    }
+
 
     public StatisticsDto getStatistics(Long match_id){
         Statistics statistics = statisticsRepository.findByMatch_matchId(match_id);
@@ -79,8 +97,10 @@ public class StatisticsService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las estadisticas de este partido no existen todavia.");
         }
 
-        return new StatisticsDto(statistics.getResultadoPartido(), statistics.getGanador());
+        return new StatisticsDto(statistics.getGanador().teamWinnerPointsDto(), statistics.getTeam1Score(), statistics.getTeam2Score());
     }
+
+
 
     public Long getIdOfMatchWithAssociatedStatistics(Long match_id, Long tournament_id){
         Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_Id(match_id, tournament_id);

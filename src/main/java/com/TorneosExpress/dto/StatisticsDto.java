@@ -1,30 +1,43 @@
 package com.TorneosExpress.dto;
 
-public class StatisticsDto {
-    private String resultadoPartido;
-    private String ganador;
+import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 
-    public StatisticsDto(String resultadoPartido, String ganador){
-        this.resultadoPartido = resultadoPartido;
+public class StatisticsDto {
+    private TeamWinnerPointsDto ganador;
+    private int team1Score;
+    private int team2Score;
+
+    public StatisticsDto(TeamWinnerPointsDto ganador, int team1Score, int team2Score){
         this.ganador = ganador;
+        this.team1Score = team1Score;
+        this.team2Score = team2Score;
     }
 
     public StatisticsDto(){}
 
     // Getters y setters
-    public String getResultadoPartido() {
-        return resultadoPartido;
-    }
 
-    public void setResultadoPartido(String resultadoPartido) {
-        this.resultadoPartido = resultadoPartido;
-    }
-
-    public String getGanador(){
+    public TeamWinnerPointsDto getGanador(){
         return ganador;
     }
 
-    public void setGanador(String ganador){
+    public void setGanador(TeamWinnerPointsDto ganador){
         this.ganador = ganador;
+    }
+
+    public int getTeam1Score() {
+        return team1Score;
+    }
+
+    public void setTeam1Score(int team1Score) {
+        this.team1Score = team1Score;
+    }
+
+    public int getTeam2Score() {
+        return team2Score;
+    }
+
+    public void setTeam2Score(int team2Score) {
+        this.team2Score = team2Score;
     }
 }

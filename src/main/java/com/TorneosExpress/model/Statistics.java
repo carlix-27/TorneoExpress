@@ -2,6 +2,7 @@ package com.TorneosExpress.model;
 
 import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.dto.ShortTournamentDto;
+import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +12,6 @@ public class Statistics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statisticsId;
 
-
-    /*@ManyToOne // Fijate acá de laburar con Dtos, a lo mejor laburar con la entidad entera puede traer demasiados problemas!
-    @JoinColumn(name = "tournament_id", nullable = false)
-    private Tournament tournament;*/
     @ManyToOne
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
@@ -24,8 +21,12 @@ public class Statistics {
     private Match match;
 
 
-    private String resultadoPartido;
-    private String ganador;
+    private Integer team1Score;
+    private Integer team2Score;
+
+    @OneToOne
+    @JoinColumn(name = "id", nullable = false)
+    private Team ganador;
 
 
     // Getters y setters
@@ -61,13 +62,7 @@ public class Statistics {
         this.statisticsId = statisticsId;
     }
 
-    /*public Tournament getTournament() {
-        return tournament;
-    }*/
 
-    /*public void setTournament(Tournament tournament) {
-        this.tournament = tournament;
-    }*/
     public Tournament getTournament(){
         return tournament;
     }
@@ -76,21 +71,32 @@ public class Statistics {
         this.tournament = tournament;
     }
 
-
-    public String getResultadoPartido() {
-        return resultadoPartido;
+    public Integer getTeam1Score(){
+        return team1Score;
     }
 
-    public void setResultadoPartido(String resultadoPartido) {
-        this.resultadoPartido = resultadoPartido;
+    public void setTeam1Score(Integer team1Score) {
+        this.team1Score = team1Score;
     }
 
+    public Integer getTeam2Score(){
+        return team2Score;
+    }
 
-    public String getGanador(){
+    public void setTeam2Score(Integer team2Score) {
+        this.team2Score = team2Score;
+    }
+
+    // TODO: Tene cuidado con esto, castealo a TeamDto, cualquier cosa. Sino puede provocarse el infinitiveRecursion
+
+    public Team getGanador(){
         return ganador;
     }
 
-    public void setGanador(String ganador){
-        this.ganador = ganador;
+
+    public void setGanador(TeamWinnerPointsDto ganadorDto) {
+        this.ganador = new Team();
+        this.ganador.setId(ganadorDto.getId());
+        this.ganador.setName(ganadorDto.getName());
     }
 }
