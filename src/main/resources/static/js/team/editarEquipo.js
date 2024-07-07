@@ -58,14 +58,12 @@ function updateTeam(event) {
         });
 }
 
-// Function to get tournament ID from URL query parameter
 function getTeamIdFromUrl() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get('id');
 }
 
-// Entry point when the page loads
 document.addEventListener("DOMContentLoaded", function() {
     const teamId = getTeamIdFromUrl();
     if (teamId) {

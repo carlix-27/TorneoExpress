@@ -66,7 +66,6 @@ function showSignupModal(teamId) {
         })
         .catch(error => {
             console.error("Error:", error);
-            // Handle error, show message to user
         });
 
     displayModal(modal, closeButton);
@@ -259,6 +258,50 @@ function createTeamNotification(teamRequest) {
             return response.json();
         })
         .catch(error => console.error('Error:', error));
+}
+
+function displayModal(modal, closeButton) {
+    modal.style.display = "block";
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+
+function fetchPlayerDetails(playerId) {
+    return fetch(`/api/user/players/${playerId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
+
+const displaySuccessMessage = message => {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+
+    setTimeout(() => {
+        successMessage.style.display = "none";
+    }, 3000);
+};
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
 }
 
 document.addEventListener("DOMContentLoaded", loadTeams);
