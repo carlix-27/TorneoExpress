@@ -68,12 +68,18 @@ function updateRequestStatus(requestId, accepted) {
     })
         .then(response => {
             if (!response.ok) {
+                if (response.status === 500){
+                    return response.text().then(errorMessage => {
+                        throw new Error(errorMessage);
+                    });
+                }
                 throw new Error(`Failed to update request: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(() => {
             loadTeamRequests();
+            displaySuccessMessage(accepted ? 'Solicitud aceptada' : 'Solicitud rechazada', 'success');
         })
         .catch(error => console.error('Error:', error));
 }
