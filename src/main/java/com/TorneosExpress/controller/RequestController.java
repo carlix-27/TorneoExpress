@@ -8,7 +8,10 @@ import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.model.TournamentRequest;
 import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 
@@ -76,8 +79,14 @@ public class RequestController {
     }
 
     @DeleteMapping("/team/{requestId}/accept")
-    public TeamRequest acceptTeamRequest(@PathVariable Long requestId) {
-        return requestService.acceptTeamRequest(requestId);
+    public ResponseEntity<?> acceptTeamRequest(@PathVariable Long requestId) {
+        try {
+            TeamRequest request = requestService.acceptTeamRequest(requestId);
+            return ResponseEntity.ok(request);
+        } catch (RuntimeException e){
+            String localizedMessage = e.getLocalizedMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(localizedMessage);
+        }
     }
 
     @DeleteMapping("/team/{requestId}/deny")
@@ -86,10 +95,18 @@ public class RequestController {
     }
 
 
+
     @DeleteMapping("/tournament/{requestId}/accept")
-    public TournamentRequest acceptTournamentRequest(@PathVariable Long requestId) {
-        return requestService.acceptTournamentRequest(requestId);
+    public ResponseEntity<?> acceptTournamentRequest(@PathVariable Long requestId) {
+        try {
+            TournamentRequest request = requestService.acceptTournamentRequest(requestId);
+            return ResponseEntity.ok(request);
+        } catch (RuntimeException e) {
+            String localizedMessage = e.getLocalizedMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(localizedMessage);
+        }
     }
+
 
     @DeleteMapping("/tournament/{requestId}/deny")
     public TournamentRequest denyTournamentRequest(@PathVariable Long requestId) {

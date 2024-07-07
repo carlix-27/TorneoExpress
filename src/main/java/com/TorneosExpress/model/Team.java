@@ -171,4 +171,9 @@ public class Team {
   public void setSport(Sport sport) {
     this.sport = sport;
   }
+
+  public int getMaxPlayers(){
+    Sport sport = getSport();
+    return sport.getNum_players() * 2;
+  }
 }

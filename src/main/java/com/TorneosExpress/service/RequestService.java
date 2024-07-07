@@ -83,13 +83,8 @@ public class RequestService {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
     }
 
-    public List<Invite> getInvites(Long toId) {
-        return inviteRepository.findByInviteTo(toId);
-    }
-
     public List<TournamentRequest> getRequestsByTournament(Long toId, Long teamId) {
-        List<TournamentRequest> requests = tournamentRequestRepository.findByRequestToAndTournamentId(toId, teamId);
-        return requests;
+        return tournamentRequestRepository.findByRequestToAndTournamentId(toId, teamId);
     }
 
     public TeamRequest acceptTeamRequest(Long requestId) {
@@ -101,13 +96,29 @@ public class RequestService {
         }
 
         request.setAccepted(true);
+
         Team team = teamRepository.findById(request.getTeamId())
                 .orElseThrow(() -> new RuntimeException("Team not found"));
 
         Player player = playerRepository.findById(request.getRequestFrom())
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-        team.getPlayers().add(player);
+
+        List<Player> teamPlayers = team.getPlayers();
+
+        boolean playerIsAlreadyInTeam = teamPlayers.contains(player);
+        if (playerIsAlreadyInTeam) {
+            throw new RuntimeException("El jugador ya pertenece al equipo");
+        }
+
+        int numOfPlayers = teamPlayers.size();
+        int maxPlayers = team.getMaxPlayers();
+
+        if (numOfPlayers == maxPlayers){
+            throw new RuntimeException("Numero máximo de jugadores en el equipo");
+        }
+
+        teamPlayers.add(player);
         teamRepository.save(team);
 
         teamRequestRepository.delete(request);
@@ -134,6 +145,15 @@ public class RequestService {
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
         List<Team> participatingTeams = tournament.getParticipatingTeams();
+
+        if (participatingTeams.contains(team)) {
+            throw new RuntimeException("El equipo ya esta participando");
+        }
+
+        if (participatingTeams.size() == tournament.getMaxTeams()){
+            throw new RuntimeException("Se llego al numero máximo de equipos para este torneo");
+        }
+
         participatingTeams.add(team);
 
         tournamentRepository.save(tournament);
