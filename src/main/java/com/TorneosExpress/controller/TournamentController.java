@@ -64,16 +64,20 @@ public class TournamentController {
         }
     }
 
-    @PostMapping("/endTournament")
-    public ResponseEntity<?> endTournament(@RequestBody TournamentDto request) { // TODO
-        String requestName = request.getName();
-        boolean tournamentNameUnique = tournamentService.isTournamentNameUnique(requestName);
-        if (tournamentNameUnique) {
-            Tournament tournament = new Tournament(request);
-
-        } else{
+    @PutMapping("{tournamentId}/endTournament")
+    public ResponseEntity<?> endTournament(@PathVariable Long tournamentId) { // TODO
+        Tournament tournament = tournamentService.getTournamentById(tournamentId);
+        if(tournament == null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
+        } else{
+            tournament.setActive(false);
+            return ResponseEntity.ok(tournamentService.updateTournament(tournament)); // Guarda los datos del torneo finalizado. Actualiza el estado de active a false.
         }
+    }
+
+    @GetMapping("/history") // TODO
+    public ResponseEntity<?> getTournamentHistory() { // Te devuelve los torneos que dejamos inactivos. La clave esta en chequear si isActive es false. y devolver esos.
+        return null;
     }
 
     @PostMapping("/add/{tournamentId}/{teamId}")

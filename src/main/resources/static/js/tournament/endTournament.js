@@ -9,45 +9,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Confirmar finalización del torneo
         if (confirm('¿Estás seguro de que deseas terminar el torneo? Esta acción es irreversible.')) {
-            // Obtener datos del puntaje
-            const equiposPuntaje = obtenerPuntajesDeTabla();
-
             // Enviar datos al servidor para finalizar el torneo
-            fetch('api/finishTournament', {
-                method: 'POST',
+            fetch(`/api/tournaments/${tournamentId}/endTournament`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     tournamentId: tournamentId,
-                    equiposPuntaje: equiposPuntaje
                 })
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Data: ", data);
                     if (data.success) {
-                        alert('El torneo ha terminado exitosamente.');
+                        // Display success message in green
+                        document.getElementById('success-message').innerText = "Torneo terminado con éxito";
+                        document.getElementById('success-message').style.color = 'green';
+                        document.getElementById('success-message').style.display = 'block';
+                        document.getElementById('error-message').style.display = 'none';
                         window.location.href = `verEstadisticas.html?id=${tournamentId}`;
                     } else {
-                        alert('Hubo un error al terminar el torneo. Por favor, intenta de nuevo.');
+                        document.getElementById('error-message').innerText = "Hubo un problema al terminar el torneo";
+                        document.getElementById('error-message').style.color = 'red';
+                        document.getElementById('error-message').style.display = 'block';
+                        document.getElementById('success-message').style.display = 'none';
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Hubo un error al terminar el torneo. Por favor, intenta de nuevo.');
+                    document.getElementById('error-message').innerText = "Error al terminar el torneo";
+                    document.getElementById('error-message').style.color = 'red';
+                    document.getElementById('error-message').style.display = 'block';
+                    document.getElementById('success-message').style.display = 'none';
                 });
         }
     });
-
-    function obtenerPuntajesDeTabla() {
-        const filas = document.querySelectorAll('#tablaContenido tr');
-        const equiposPuntaje = [];
-        filas.forEach(fila => {
-            const columnas = fila.querySelectorAll('td');
-            const nombreEquipo = columnas[0].innerText;
-            const puntaje = parseInt(columnas[1].innerText);
-            equiposPuntaje.push({ nombreEquipo, puntaje });
-        });
-        return equiposPuntaje;
-    }
 });

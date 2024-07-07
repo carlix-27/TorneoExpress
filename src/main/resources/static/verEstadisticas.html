@@ -5,6 +5,31 @@
   <title>Visualizar estadísticas</title>
   <script src="js/auth/checkRedirect.js"></script>
   <link rel="stylesheet" href="styles/verEstadisticas.css">
+
+  <style>
+    /* Styles for error and success messages */
+    #error-message,
+    #success-message {
+      color: red;
+      display: none;
+    }
+
+    .success {
+      color: green;
+    }
+
+    /* Styles for back button */
+    .back-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
@@ -50,6 +75,9 @@
 <!-- Elemento oculto para almacenar el ID del torneo -->
 <input type="hidden" id="tournamentId">
 
+<!-- Mensajes de éxito y error -->
+<div id="success-message" class="success"></div>
+<div id="error-message"></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
