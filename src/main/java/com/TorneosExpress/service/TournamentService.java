@@ -44,6 +44,7 @@ public class TournamentService {
         return tournament.getParticipatingTeams();
     }
 
+
     public ActiveMatchesFixtureDto getActiveMatches(Long tournamentId){ // TODO
         Tournament tournament = getTournamentById(tournamentId);
         if(tournament == null){

@@ -3,6 +3,7 @@ import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.team.TeamDto;
 
+import com.TorneosExpress.dto.team.TeamPointsDto;
 import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -197,5 +198,9 @@ public class Team {
 
   public TeamWinnerPointsDto teamWinnerPointsDto(){
     return new TeamWinnerPointsDto(this.id, this.name, this.matchPoints);
+  }
+
+  public TeamPointsDto teamPointsDto(){
+    return new TeamPointsDto(this.matchPoints);
   }
 }

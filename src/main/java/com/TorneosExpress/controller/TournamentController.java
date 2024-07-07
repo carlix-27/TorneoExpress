@@ -3,6 +3,8 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.StatisticsDto;
+import com.TorneosExpress.dto.team.TeamPointsDto;
+import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
@@ -152,10 +154,18 @@ public class TournamentController {
     }
 
 
-    @GetMapping("{tournamentId}/teams")
+    @GetMapping("/{tournamentId}/teams")
     public ResponseEntity<List<ShortTeamDto>> getTeamsOfTournament(@PathVariable Long tournamentId) {
         List<ShortTeamDto> teams = tournamentService.getTeamsOfTournament(tournamentId).stream()
                 .map(Team::shortTeamDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(teams);
+    }
+
+    @GetMapping("/{tournamentId}/teamsScore")
+    public ResponseEntity<List<TeamPointsDto>> getTeamsScoreOfTournament(@PathVariable Long tournamentId) {
+        List<TeamPointsDto> teams = tournamentService.getTeamsOfTournament(tournamentId).stream()
+                .map(Team::teamPointsDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(teams);
     }
