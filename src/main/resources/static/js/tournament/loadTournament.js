@@ -35,41 +35,11 @@ function loadTournament() {
                     <p>Equipos anotados:</p>
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
-                    <button id="join-button" type="submit">${isPrivate ? "Enviar solicitud" : "Unirse"}</button>
                 </div>
             `;
-
-            const joinButton = document.getElementById("join-button");
-            joinButton.addEventListener("click", () => {
-                joinTournament(tournamentId);
-            });
         })
         .catch(error => {
             console.error('Error:', error);
-        });
-}
-
-
-function joinTournament(tournamentId) {
-    fetch(`/api/tournaments/${tournamentId}/join`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ playerId : localStorage.getItem("userId")} )
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to join team: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert('Request to join the tournament was successful!');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to join the tournament. Please try again.');
         });
 }
 
