@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,9 @@ public class RequestService {
         return inviteRepository.findByInviteTo(id);
     }
 
-    public Invite acceptInvite(Long inviteId) throws Exception {
+    public Invite acceptInvite(Long inviteId) {
         Invite invite = inviteRepository.findById(inviteId)
-                .orElseThrow(() -> new Exception("Invite not found"));
+                .orElseThrow(() -> new RuntimeException("Invite not found"));
 
         invite.setAccepted(true);
 
@@ -48,9 +49,24 @@ public class RequestService {
         Player player = playerRepository.findById(invite.getInviteTo())
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-        team.getPlayers().add(player);
-        teamRepository.save(team);
 
+        List<Player> teamPlayers = team.getPlayers();
+
+        boolean playerAlreadyInTeam = teamPlayers.contains(player);
+        if (playerAlreadyInTeam) {
+            throw new RuntimeException("El jugador ya pertenece al equipo");
+        }
+
+        int numOfPlayersInTeam = teamPlayers.size();
+        int maxPlayers = team.getMaxPlayers();
+
+        boolean teamFull = numOfPlayersInTeam == maxPlayers;
+        if (teamFull){
+            throw new RuntimeException("El equipo ya esta en capacidad maxima");
+        }
+
+        teamPlayers.add(player);
+        teamRepository.save(team);
         inviteRepository.delete(invite);
         return invite;
     }
@@ -72,8 +88,8 @@ public class RequestService {
         return teamRequestRepository.save(request);
     }
 
-    public TournamentRequest sendTournamentRequest(Long from, Long to, Long team, String teamName, Long tournamentId, String name) {
-        TournamentRequest request = new TournamentRequest(from, to, team, teamName, tournamentId);
+    public TournamentRequest sendTournamentRequest(TournamentRequestDto tournamentRequestDto) {
+        TournamentRequest request = new TournamentRequest(tournamentRequestDto);
         return tournamentRequestRepository.save(request);
     }
 
@@ -82,13 +98,8 @@ public class RequestService {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
     }
 
-    public List<Invite> getInvites(Long toId) {
-        return inviteRepository.findByInviteTo(toId);
-    }
-
     public List<TournamentRequest> getRequestsByTournament(Long toId, Long teamId) {
-        List<TournamentRequest> requests = tournamentRequestRepository.findByRequestToAndTournamentId(toId, teamId);
-        return requests;
+        return tournamentRequestRepository.findByRequestToAndTournamentId(toId, teamId);
     }
 
     public TeamRequest acceptTeamRequest(Long requestId) {
@@ -100,13 +111,29 @@ public class RequestService {
         }
 
         request.setAccepted(true);
+
         Team team = teamRepository.findById(request.getTeamId())
                 .orElseThrow(() -> new RuntimeException("Team not found"));
 
         Player player = playerRepository.findById(request.getRequestFrom())
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-        team.getPlayers().add(player);
+
+        List<Player> teamPlayers = team.getPlayers();
+
+        boolean playerIsAlreadyInTeam = teamPlayers.contains(player);
+        if (playerIsAlreadyInTeam) {
+            throw new RuntimeException("El jugador ya pertenece al equipo");
+        }
+
+        int numOfPlayers = teamPlayers.size();
+        int maxPlayers = team.getMaxPlayers();
+
+        if (numOfPlayers == maxPlayers){
+            throw new RuntimeException("Numero máximo de jugadores en el equipo");
+        }
+
+        teamPlayers.add(player);
         teamRepository.save(team);
 
         teamRequestRepository.delete(request);
@@ -119,25 +146,43 @@ public class RequestService {
         TournamentRequest request = tournamentRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Team request not found"));
 
-        if (request.isAccepted() || request.isDenied()) {
-            throw new RuntimeException("Team request already processed");
-        }
+        checkAlreadyHandled(request);
 
         request.setAccepted(true);
-        Tournament tournament = tournamentRepository.findById(request.getTeamId())
+
+        Long tournamentId = request.getTournamentId();
+        Long teamRequesting = request.getTeamId();
+
+        Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Team not found"));
 
-        Team team = teamRepository.findById(request.getRequestFrom())
+        Team team = teamRepository.findById(teamRequesting)
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-        tournament.getParticipatingTeams().add(team);
+        List<Team> participatingTeams = tournament.getParticipatingTeams();
 
+        if (participatingTeams.contains(team)) {
+            throw new RuntimeException("El equipo ya esta participando");
+        }
+
+        if (participatingTeams.size() == tournament.getMaxTeams()){
+            throw new RuntimeException("Se llego al numero máximo de equipos para este torneo");
+        }
+
+        participatingTeams.add(team);
 
         tournamentRepository.save(tournament);
 
         tournamentRequestRepository.delete(request);
 
         return request;
+    }
+
+    private void checkAlreadyHandled(TournamentRequest request) {
+        boolean requestAlreadyHandled = request.isAccepted() || request.isDenied();
+        if (requestAlreadyHandled) {
+            throw new RuntimeException("Team request already processed");
+        }
     }
 
     public TeamRequest denyTeamRequest(Long requestId) {

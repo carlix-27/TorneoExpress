@@ -126,6 +126,7 @@ public class TournamentController {
     @PutMapping("/{tournamentId}")
     public ResponseEntity<Tournament> updateTournament(@PathVariable Long tournamentId,
                                                        @RequestBody Tournament updatedTournament) {
+
         Tournament existingTournament = tournamentService.getTournamentById(tournamentId);
         if (existingTournament == null) {
             return ResponseEntity.notFound().build();

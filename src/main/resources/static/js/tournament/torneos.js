@@ -1,3 +1,5 @@
+let signupButtonListenerAdded = false;
+
 function fetchActiveTournaments() {
     fetch('/api/tournaments/active')
         .then(response => {
@@ -9,22 +11,25 @@ function fetchActiveTournaments() {
         .then(tournaments => {
             const tournamentList = document.getElementById('tournament-list');
 
-            // Clear existing list
             tournamentList.innerHTML = '';
 
             tournaments.forEach(tournament => {
-                const tournamentName = tournament.name;
-                const tournamentSport = tournament.sport;
+
+                const {
+                    name: tournamentName,
+                    sport: tournamentSport,
+                    location: tournamentLocation,
+                    private: tournamentPrivacy,
+                    maxTeams,
+                    participatingTeams
+                } = tournament;
+
                 const tournamentSportName = tournamentSport.sportName;
-                const tournamentLocation = tournament.location;
-                const tournamentPrivacy = tournament.private;
-                const maxTeams = tournament.maxTeams;
-                const participatingTeams = tournament.participatingTeams;
                 const numOfParticipatingTeams = participatingTeams.length;
 
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
-                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a> 
+                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a> 
                     <p>Deporte: ${tournamentSportName}</p>
                     <p>Ubicación: ${tournamentLocation}</p>
                     <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
@@ -34,7 +39,6 @@ function fetchActiveTournaments() {
                 `;
                 tournamentList.appendChild(listItem);
             });
-
 
             document.querySelectorAll('.signup-button').forEach(button => {
                 button.addEventListener('click', function () {
@@ -58,10 +62,10 @@ function showSignupModal(tournamentId) {
 
     fetchTournamentDetails(tournamentId)
         .then(tournament => {
+
+            const tournamentSport = tournament.sport
             displayTournamentDetails(tournament, signupButton);
-
-
-            fetchUserTeams(userId)
+            fetchUserTeams(tournamentSport, userId)
                 .then(teams => {
                     populateTeamSelect(teams);
                     addSignupButtonListener(tournament, userId, signupButton);
@@ -77,7 +81,6 @@ function showSignupModal(tournamentId) {
     displayModal(modal, closeButton);
 }
 
-
 function populateTeamSelect(teams) {
     const teamSelect = document.getElementById('teamSelect');
 
@@ -91,25 +94,26 @@ function populateTeamSelect(teams) {
     });
 }
 
-
-
-
 function addSignupButtonListener(tournament, userId, signupButton) {
-    signupButton.addEventListener("click", function() {
-        const participatingTeams = tournament.participatingTeams;
-        const maxTeams = tournament.maxTeams;
+    if (signupButtonListenerAdded) {
+        signupButton.removeEventListener("click", signupButtonClickHandler);
+    }
+
+    signupButtonClickHandler = function() {
+
+        const {participatingTeams, maxTeams} = tournament;
         const numOfParticipatingTeams = participatingTeams.length;
-        const tournamentCreator = tournament.creatorId
+        const tournamentCreator = tournament.creatorId;
         const teamId = document.getElementById("teamSelect").value;
         const user = localStorage.getItem("userId");
 
         if (user === tournamentCreator.toString()){
-            displayErrorMessage("No te podes anotar a tu propio torneo.")
+            displayErrorMessage("No te podes anotar a tu propio torneo.");
+            return;
         }
 
         if (numOfParticipatingTeams < maxTeams) {
-
-            const tournamentIsPrivate = tournament.private;
+            const {private: tournamentIsPrivate} = tournament;
 
             if (tournamentIsPrivate) {
                 sendTournamentRequest(tournament, teamId, userId);
@@ -117,15 +121,17 @@ function addSignupButtonListener(tournament, userId, signupButton) {
                 joinPublicTournament(tournament, teamId);
             }
         } else {
-            displayErrorMessage("Error al inscribirse: Numero maximo de equipos.");
+            displayErrorMessage("Error al inscribirse: Numero máximo de equipos.");
         }
-    });
+    };
+
+    signupButton.addEventListener("click", signupButtonClickHandler);
+    signupButtonListenerAdded = true;
 }
 
 function joinPublicTournament(tournament, teamId) {
     const tournamentId = tournament.id;
-    const team = teamId
-    fetch(`/api/tournaments/add/${tournamentId}/${team}`, {
+    fetch(`/api/tournaments/add/${tournamentId}/${teamId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -139,23 +145,40 @@ function joinPublicTournament(tournament, teamId) {
         })
         .then(data => {
             console.log("Successfully joined tournament:", data);
-            displaySuccessMessage("Exito al anotarse a torneo!")
+            displaySuccessMessage("Éxito al anotarse a torneo!");
         })
         .catch(error => {
             console.error('Error joining tournament:', error);
-            displayErrorMessage("Error al unirse a torneo")
+            displayErrorMessage("Error al unirse a torneo");
         });
 }
 
-
-
-function fetchUserTeams(userId) {
+function fetchUserTeams(tournamentSport, userId) {
     return fetch(`/api/teams/captain/${userId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch user teams: ${response.status} ${response.statusText}`);
+                throw new Error(`Error al conseguir equipos del jugador: ${response.status} ${response.statusText}`);
             }
             return response.json();
+        })
+        .then(teams => {
+
+            console.log('Tournament Sport:', tournamentSport.sportId);
+            console.log('Fetched Teams:', teams);
+
+            const filteredTeams = teams.filter(team => {
+                const teamSport = team.sport
+                console.log('Team Sport:', teamSport);
+                return team.sport.sportId === tournamentSport.sportId;
+            });
+
+            console.log('Filtered Teams:', filteredTeams);
+            return filteredTeams;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayErrorMessage("Error al conseguir equipos del jugador");
+            return [];
         });
 }
 
@@ -169,19 +192,14 @@ function fetchTournamentDetails(tournamentId) {
         });
 }
 
-
 function displayTournamentDetails(tournament, signupButton) {
     const tournamentDetails = document.getElementById("tournamentDetails");
 
     const tournamentName = tournament.name;
     const tournamentSport = tournament.sport;
     const tournamentSportName = tournamentSport.sportName;
-    const tournamentLocation = tournament.location;
-    const privateTournament = tournament.private;
-    const maxTeams = tournament.maxTeams;
-    const participatingTeams = tournament.participatingTeams;
+    const {location: tournamentLocation, private: privateTournament, maxTeams, participatingTeams} = tournament;
     const numOfParticipatingTeams = participatingTeams.length;
-
 
     tournamentDetails.innerHTML = `
         <h3>${tournamentName}</h3>
@@ -193,28 +211,25 @@ function displayTournamentDetails(tournament, signupButton) {
     `;
 
     if (privateTournament) {
-        signupButton.textContent = "Send Request";
+        signupButton.textContent = "Mandar Solicitud";
         signupButton.setAttribute("data-privacy", "private");
     } else {
-        signupButton.textContent = "Sign Up";
+        signupButton.textContent = "Anotarse";
         signupButton.setAttribute("data-privacy", "public");
     }
 }
-
-
 
 function sendTournamentRequest(tournament, teamId, userId) {
     fetchTeamDetails(teamId)
         .then(teamDetails => {
 
             const teamName = teamDetails.name;
-            const tournamentId = tournament.id
-            const tournamentCreator = tournament.creatorId
-            const userFrom = userId
+            const tournamentId = tournament.id;
+            const tournamentCreator = tournament.creatorId;
+            const userFrom = userId;
 
             fetchPlayerDetails(userFrom)
                 .then(playerDetails => {
-
 
                     const senderName = playerDetails.name;
 
@@ -238,21 +253,18 @@ function sendTournamentRequest(tournament, teamId, userId) {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        displayErrorMessage("Error al inscribirse al torneo.")
+                        displayErrorMessage("Error al inscribirse al torneo.");
                     }
                     return response.json();
                 })
                 .then(tournamentRequest => {
-                    displaySuccessMessage("Exito al anotarse a torneo!")
+                    displaySuccessMessage("Solicitud mandada");
                     createRequestNotification(tournamentRequest);
                 })
                 .catch(error => console.error('Error:', error));
         })
         .catch(error => console.error('Error fetching team details:', error));
 }
-
-
-
 
 function createRequestNotification(tournamentRequest) {
     const requestTournamentId = tournamentRequest.tournamentId;
@@ -284,15 +296,10 @@ function createRequestNotification(tournamentRequest) {
             }
             return response.json();
         })
-        .then(notification => {
-            displaySuccessMessage('Solicitud mandada con exito.');
-        })
         .catch(error => console.error('Error:', error));
 }
 
-
-
-function displayModal(modal, closeButton) {
+const displayModal = (modal, closeButton) => {
     modal.style.display = "block";
 
     closeButton.onclick = function() {
@@ -304,8 +311,7 @@ function displayModal(modal, closeButton) {
             modal.style.display = "none";
         }
     };
-}
-
+};
 
 function fetchPlayerDetails(playerId) {
     return fetch(`/api/user/players/${playerId}`)
@@ -317,8 +323,6 @@ function fetchPlayerDetails(playerId) {
         });
 }
 
-
-
 function fetchTeamDetails(teamId) {
     return fetch(`/api/teams/${teamId}`)
         .then(response => {
@@ -329,8 +333,7 @@ function fetchTeamDetails(teamId) {
         });
 }
 
-
-function displaySuccessMessage(message) {
+const displaySuccessMessage = message => {
     const successMessage = document.getElementById("successMessage");
     successMessage.textContent = message;
     successMessage.style.display = "block";
@@ -338,7 +341,7 @@ function displaySuccessMessage(message) {
     setTimeout(() => {
         successMessage.style.display = "none";
     }, 3000);
-}
+};
 
 function displayErrorMessage(message) {
     const errorMessage = document.getElementById("errorMessage");
@@ -349,7 +352,6 @@ function displayErrorMessage(message) {
         errorMessage.style.display = "none";
     }, 3000);
 }
-
 
 document.addEventListener("DOMContentLoaded", function() {
     fetchActiveTournaments(); // Llamar a la función para cargar los torneos activos

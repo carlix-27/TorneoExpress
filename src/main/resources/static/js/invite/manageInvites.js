@@ -22,28 +22,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 const requestsContainer = document.getElementById("team-invites");
                 requestsContainer.innerHTML = '';
 
+                const list = document.createElement('ul');
+
                 const teamDetailsPromises = invites.map(request => {
-
                     const teamId = request.team;
-
                     return fetchTeamDetails(teamId).then(team => ({ request, team }));
                 });
 
-                Promise.all(teamDetailsPromises).then(results => {
+                return Promise.all(teamDetailsPromises).then(results => {
                     results.forEach(({ request, team }) => {
-                        const requestElement = document.createElement('div');
+                        const requestElement = document.createElement('li');
                         const teamName = team.name;
 
-                        requestElement.className = 'request';
                         requestElement.innerHTML = `
-                            <p>From: ${teamName}</p>
-                            <div class="button-container">
-                                <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
-                                <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
-                            </div>
-                        `;
-                        requestsContainer.appendChild(requestElement);
+                        <p>From: ${teamName}</p>
+                        <div class="button-container">
+                            <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
+                            <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
+                        </div>
+                    `;
+                        list.appendChild(requestElement);
                     });
+
+                    requestsContainer.appendChild(list);
 
                     document.querySelectorAll('.accept-button').forEach(button => {
                         button.addEventListener('click', handleAccept);
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error('Error:', error));
     }
+
 
     function fetchTeamDetails(teamId) {
         return fetch(`/api/teams/${teamId}`)
@@ -87,13 +89,41 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Failed to update request: ${response.status} ${response.statusText}`);
+                    if (response.status === 500){
+                        return response.text().then(errorMessage => {
+                            throw new Error(errorMessage);
+                        });
+                    } else {
+                        return response.json().then(error => {
+                            throw new Error(error.message || 'Failed to update request');
+                        });
+                    }
                 }
                 return response.json();
             })
             .then(() => {
                 loadTeamInvites();
+                displaySuccessMessage(accepted ? 'Invitación a equipo aceptada' : 'Invitación a equipo rechazada', 'success');
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.log(error.message)
+                displayErrorMessage(error.message);
+            });
     }
 });
+
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+}
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}

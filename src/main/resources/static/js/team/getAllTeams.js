@@ -1,7 +1,3 @@
-import {displaySuccessMessage} from "../display/displaySuccessMessage";
-import {displayErrorMessage} from "../display/displayErrorMessage";
-
-
 function loadTeams() {
     fetch(`/api/teams/all`)
         .then(response => {
@@ -17,15 +13,28 @@ function loadTeams() {
 
             teams.forEach(team => {
 
+                const {
+                    location: teamLocation,
+                    sport: teamSport,
+                    name,
+                    private: isPrivate,
+                    players,
+                }
+                = team
+
+                const sport = teamSport.sportName
+                const playersInTeam = players.length
+                const maxPlayers = teamSport.num_players * 2
+
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
-                        <a href="loadTeam.html?id=${team.id}"><h3>${team.name}</h3></a>
-                        <p>Ubicación: ${team.location}</p>
-                        <p>Deporte: ${team.sport.sportName}</p>
-                        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
-                        <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
-                        <button class="signup-button" data-team-id="${team.id}">Signup</button>
+                        <a href="loadTeam.html?id=${team.id}"><h3>${name}</h3></a>
+                        <p>Ubicación: ${teamLocation}</p>
+                        <p>Deporte: ${sport}</p>
+                        <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
+                        <p>Jugadores anotados: ${playersInTeam} / ${maxPlayers}</p>
+                        <button class="signup-button" data-team-id="${team.id}">Inscribirse</button>
                     </div>
                 `;
                 listaEquipos.appendChild(li);
@@ -57,7 +66,6 @@ function showSignupModal(teamId) {
         })
         .catch(error => {
             console.error("Error:", error);
-            // Handle error, show message to user
         });
 
     displayModal(modal, closeButton);
@@ -75,32 +83,53 @@ function fetchTeamDetails(teamId) {
 
 function displayTeamDetails(team, signupButton) {
     const teamDetails = document.getElementById("teamDetails");
+
+    const {
+        location: teamLocation,
+        sport: teamSport,
+        name,
+        private: isPrivate,
+        players,
+    }
+        = team
+
+    const sportName = teamSport.name
+    const playersInTeam = players.length
+    const maxPlayers = teamSport.num_players * 2
+
+
     teamDetails.innerHTML = `
-        <h3>${team.name}</h3>
-        <p>Ubicación: ${team.location}</p>
-        <p>Deporte: ${team.sport.sportName}</p>
-        <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
-        <p>Jugadores inscritos: ${team.players.length} / ${team.sport.num_players * 2}</p>
+        <h3>${name}</h3>
+        <p>Ubicación: ${teamLocation}</p>
+        <p>Deporte: ${sportName}</p>
+        <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
+        <p>Jugadores inscritos: ${playersInTeam} / ${maxPlayers}</p>
     `;
 
-    if (team.private) {
-        signupButton.textContent = "Send Request";
+    if (isPrivate) {
+        signupButton.textContent = "Mandar solicitud";
         signupButton.setAttribute("data-privacy", "private");
     } else {
-        signupButton.textContent = "Sign Up";
+        signupButton.textContent = "Anotarse";
         signupButton.setAttribute("data-privacy", "public");
     }
 }
 
 function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
-        const teamPlayers = team.players
-        const teamSport = team.sport
-        const maxSize = teamSport.num_players * 2
-        const teamSize = teamPlayers.length
-        if (teamSize < maxSize) {
-            const teamIsPrivate = team.private
-            if (teamIsPrivate) {
+
+        const {
+            sport: teamSport,
+            private: isPrivate,
+            players,
+        }
+        = team
+
+        const playersInTeam = players.length
+        const maxPlayers = teamSport.num_players * 2
+
+        if (playersInTeam < maxPlayers) {
+            if (isPrivate) {
                 sendTeamRequest(team, userId);
             }
             else {
@@ -128,10 +157,21 @@ function joinPublicTeam(team, userId) {
                 const statusError = response.statusText
                 throw new Error(`Error al unirse a equipo: ${statusError}`);
             }
+            fetchPlayerDetails(userId).then(playerDetails => {
+                const teamRequest ={
+                    requestFrom: userId,
+                    requestTo: team.captainId,
+                    teamId: team.id,
+                    accepted: false,
+                    denied: false,
+                    sent: true,
+                    name: playerDetails.name
+                }
+
+                displaySuccessMessage("Te has unido al equipo exitosamente!");
+                createTeamNotification(teamRequest)
+            })
             return response.json();
-        })
-        .then(data => {
-            displaySuccessMessage("Te has unido al equipo exitosamente!");
         })
         .catch(error => {
             displayErrorMessage(error.message);
@@ -168,7 +208,8 @@ function sendTeamRequest(team, userId) {
                     return response.json();
                 })
                 .then(teamRequest => {
-                    createRequestNotification(teamRequest);
+                    displaySuccessMessage("Solicitud mandada con éxito")
+                    createTeamNotification(teamRequest);
                 })
                 .catch(error => console.error('Error:', error));
         })
@@ -176,7 +217,7 @@ function sendTeamRequest(team, userId) {
 }
 
 
-function createRequestNotification(teamRequest) {
+function createTeamNotification(teamRequest) {
     const requestTeamId = teamRequest.teamId;
     const requestFromId = teamRequest.requestFrom;
 
@@ -184,7 +225,17 @@ function createRequestNotification(teamRequest) {
         .then(([team, player]) => {
             const playerName = player.name;
             const teamName = team.name;
-            const message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
+
+            const isTeamPrivate = team.isPrivate
+
+            let message
+
+            if (isTeamPrivate){
+                message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
+            }
+            else {
+                message = `${playerName} se ha unido a tu equipo: ${teamName}`;
+            }
 
             const notificationTo = teamRequest.requestTo;
 
@@ -205,9 +256,6 @@ function createRequestNotification(teamRequest) {
                 throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
             }
             return response.json();
-        })
-        .then(notification => {
-            displaySuccessMessage('Request sent successfully.');
         })
         .catch(error => console.error('Error:', error));
 }
@@ -236,9 +284,24 @@ function fetchPlayerDetails(playerId) {
         });
 }
 
+const displaySuccessMessage = message => {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
 
+    setTimeout(() => {
+        successMessage.style.display = "none";
+    }, 3000);
+};
 
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
 
-
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}
 
 document.addEventListener("DOMContentLoaded", loadTeams);

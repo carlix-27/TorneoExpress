@@ -8,7 +8,10 @@ import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.model.TournamentRequest;
 import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 
@@ -38,10 +41,7 @@ public class RequestController {
         return requestService.getInvitesById(id);
     }
 
-    @DeleteMapping("/invite/accept/{inviteId}")
-    public Invite acceptInvite(@PathVariable Long inviteId) throws Exception {
-        return  requestService.acceptInvite(inviteId);
-    }
+
 
 
     @DeleteMapping("/invite/deny/{inviteId}")
@@ -59,13 +59,8 @@ public class RequestController {
     }
 
     @PostMapping("/tournament/send")
-    public TournamentRequest sendTournamentRequest(@RequestBody TournamentRequestDto teamRequestDto) {
-        Long requestFromId = teamRequestDto.getRequest_from();
-        Long requestToId = teamRequestDto.getRequest_to();
-        Long teamId = teamRequestDto.getTeamId();
-        String teamName = teamRequestDto.getTeamName();
-        Long tournamentId = teamRequestDto.getTournamentId();
-        return requestService.sendTournamentRequest(requestFromId, requestToId, teamId, teamName, tournamentId, teamName);
+    public TournamentRequest sendTournamentRequest(@RequestBody TournamentRequestDto tournamentRequestDto) {
+        return requestService.sendTournamentRequest(tournamentRequestDto);
     }
 
 
@@ -81,8 +76,14 @@ public class RequestController {
     }
 
     @DeleteMapping("/team/{requestId}/accept")
-    public TeamRequest acceptTeamRequest(@PathVariable Long requestId) {
-        return requestService.acceptTeamRequest(requestId);
+    public ResponseEntity<?> acceptTeamRequest(@PathVariable Long requestId) {
+        try {
+            TeamRequest request = requestService.acceptTeamRequest(requestId);
+            return ResponseEntity.ok(request);
+        } catch (RuntimeException e){
+            String localizedMessage = e.getLocalizedMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(localizedMessage);
+        }
     }
 
     @DeleteMapping("/team/{requestId}/deny")
@@ -90,11 +91,29 @@ public class RequestController {
         return requestService.denyTeamRequest(requestId);
     }
 
+    @DeleteMapping("/invite/accept/{inviteId}")
+    public ResponseEntity<?> acceptInvite(@PathVariable Long inviteId) {
+        try {
+            Invite invite = requestService.acceptInvite(inviteId);
+            return ResponseEntity.ok(invite);
+        } catch (RuntimeException e) {
+            String localizedMessage = e.getLocalizedMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(localizedMessage);
+        }
+    }
+
 
     @DeleteMapping("/tournament/{requestId}/accept")
-    public TournamentRequest acceptTournamentRequest(@PathVariable Long requestId) {
-        return requestService.acceptTournamentRequest(requestId);
+    public ResponseEntity<?> acceptTournamentRequest(@PathVariable Long requestId) {
+        try {
+            TournamentRequest request = requestService.acceptTournamentRequest(requestId);
+            return ResponseEntity.ok(request);
+        } catch (RuntimeException e) {
+            String localizedMessage = e.getLocalizedMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(localizedMessage);
+        }
     }
+
 
     @DeleteMapping("/tournament/{requestId}/deny")
     public TournamentRequest denyTournamentRequest(@PathVariable Long requestId) {

@@ -52,24 +52,47 @@ function fetchFixture(id, tournament, calendarListHTML) {
                 </div>
             `;
 
-            fixture.matches.forEach(match => {
-                const location = match.location;
-                const date = match.date;
-                const team1 = match.teamName1; // fetch team
-                const team2 = match.teamName2; // fetch team
+            if (tournament.creatorId !== localStorage.getItem("userId")) {
+                fixture.matches.forEach(match => {
+                    const location = match.location;
+                    const date = match.date;
+                    const team1 = match.teamName1; // fetch team
+                    const team2 = match.teamName2; // fetch team
 
-                const listItem = document.createElement('li');
+                    const listItem = document.createElement('li');
 
-                listItem.innerHTML = `
+                    listItem.innerHTML = `
                     <h3>${date}</h3>
                     <p>${team1} VS ${team2}</p>
                     <p>${location}</p>
                 `;
-                calendarListHTML.appendChild(listItem);
-            })
+                    calendarListHTML.appendChild(listItem);
+                })
+            } else {
+                fixture.matches.forEach(match => {
+                    const location = match.location;
+                    const date = match.date;
+                    const team1 = match.teamName1; // fetch team
+                    const team2 = match.teamName2; // fetch team
 
+                    const listItem = document.createElement('li');
+
+                    listItem.innerHTML = `
+                    <h3>${date}</h3>
+                    <p>${team1} VS ${team2}</p>
+                    <p>${location}</p>
+                    <button onclick="modifyDate(${date})">Modificar fecha</button>
+                `;
+                    //<button onclick="editarEquipo(${teamId})">Editar</button>
+                    calendarListHTML.appendChild(listItem);
+                })
+            }
         })
 }
 
 // Al cargar la página, cargar los torneos del usuario
 document.addEventListener("DOMContentLoaded", loadCalendar);
+
+function modifyDate(matchDate) {
+
+}
