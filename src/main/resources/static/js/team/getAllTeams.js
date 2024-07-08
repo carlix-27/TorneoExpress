@@ -111,33 +111,45 @@ function displayTeamDetails(team, signupButton) {
 }
 
 function addSignupButtonListener(team, userId, signupButton) {
-
     signupButton.addEventListener("click", function() {
 
-        const {
-            sport: teamSport,
-            players,
+
+        console.log(team)
+
+        const isTeamPrivate = team.private;
+        const playersInTeam = team.players.length;
+        const teamSport = team.sport
+        const teamPlayers = team.players
+
+        console.log("Players in team: ", playersInTeam)
+
+        const maxPlayers = teamSport.num_players * 2;
+
+        console.log("Team players: ", teamPlayers)
+
+        const isPlayerInTeam = teamPlayers.some(player => {
+            console.log("Comparing player ID:", player.id, "with user ID:", userId);
+            return player.id == userId;
+        });
+        console.log("Is the player already in the team: " , isPlayerInTeam)
+
+        if (isPlayerInTeam) {
+            displayErrorMessage("Ya eres parte de este equipo.");
+            return;
         }
-        = team
-
-
-        const isTeamPrivate = team.private
-        const playersInTeam = players.length
-        const maxPlayers = teamSport.num_players * 2
 
         if (playersInTeam < maxPlayers) {
-
             if (isTeamPrivate) {
                 sendTeamRequest(team, userId);
-            }
-            else {
+            } else {
                 joinPublicTeam(team, userId);
             }
         } else {
-            displayErrorMessage("Maximum number of players reached.");
+            displayErrorMessage("Numero máximo de jugadores permitidos");
         }
     });
 }
+
 
 
 function joinPublicTeam(team, userId) {
@@ -225,13 +237,9 @@ function createTeamNotification(teamRequest) {
             const playerName = player.name;
             const teamName = team.name;
 
-            console.log("Team:", team)
-
             const isTeamPrivate = team.private
 
             let message
-
-            console.log("Is Team Private:", isTeamPrivate)
 
             if (isTeamPrivate){
                 message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
