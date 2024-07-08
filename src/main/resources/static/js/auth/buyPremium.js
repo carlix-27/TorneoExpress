@@ -1,4 +1,10 @@
+
+const mp = new MercadoPago('YOUR_PUBLIC_KEY');
+const bricksBuilder = mp.bricks();
+
+
 function buyPremium() {
+
     // Fetch userId from localStorage
     const userId = localStorage.getItem("userId");
 
@@ -43,3 +49,15 @@ function buyPremium() {
             document.getElementById('upgrade-status').innerText = 'Upgrade failed. Please try again later.';
         });
 }
+
+
+mp.bricks().create("wallet", "wallet_container", {
+    initialization: {
+        preferenceId: "wallet_container",
+    },
+    customization: {
+        texts: {
+            valueProp: 'smart_option',
+        },
+    },
+});

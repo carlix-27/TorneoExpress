@@ -1,28 +1,95 @@
+/*		ESTILOS GENERALES		*/
+
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #000000;
 }
+
+/*		HEADER		*/
+
 h1 {
-    color: #333;
+    color: #3d1f7f;
+    text-align: center;
+    margin-top: 20px;
 }
+
 p {
-    color: #666;
+    text-align: center;
+    font-size: 1.2em;
 }
+
+/*		CONTENIDO		*/
+
+h2 {
+    color: #3d1f7f;
+    text-align: center;
+    margin-top: 30px;
+}
+
 ul {
-    color: #666;
-    list-style-type: disc;
-    margin-left: 20px;
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
 }
+
+ul li {
+    font-size: 1.1em;
+    margin: 10px 0;
+}
+
+/*		FORMULARIO		*/
+
+form {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#wallet_container {
+    margin-bottom: 20px;
+}
+
 .button {
-    display: inline-block;
-    padding: 10px 20px;
     background-color: #3d1f7f;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
     cursor: pointer;
-    margin-bottom: 10px; /* Add margin bottom for spacing */
+    border-radius: 5px;
+    margin: 10px;
+    transition: background-color 0.3s ease;
 }
+
 .button:hover {
-    background-color: #5a42a5;
+    background-color: #2e155d;
+}
+
+#upgrade-status {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #3d1f7f;
+}
+
+/*		BOTÓN DE VOLVER		*/
+
+.button-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #3d1f7f;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button-back:hover {
+    background-color: #2e155d;
 }
