@@ -84,29 +84,24 @@ function fetchTeamDetails(teamId) {
 function displayTeamDetails(team, signupButton) {
     const teamDetails = document.getElementById("teamDetails");
 
-    const {
-        location: teamLocation,
-        sport: teamSport,
-        name,
-        private: isPrivate,
-        players,
-    }
-        = team
-
-    const sportName = teamSport.name
-    const playersInTeam = players.length
+    const teamSport = team.sport
+    const teamPlayers = team.players
+    const sportName = teamSport.sportName
+    const teamLocation = team.location
+    const playersInTeam = teamPlayers.length
     const maxPlayers = teamSport.num_players * 2
+    const isTeamPrivate = team.private
 
 
     teamDetails.innerHTML = `
         <h3>${name}</h3>
         <p>Ubicación: ${teamLocation}</p>
         <p>Deporte: ${sportName}</p>
-        <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
+        <p>Privacidad: ${isTeamPrivate ? "Privado" : "Público"}</p>
         <p>Jugadores inscritos: ${playersInTeam} / ${maxPlayers}</p>
     `;
 
-    if (isPrivate) {
+    if (isTeamPrivate) {
         signupButton.textContent = "Mandar solicitud";
         signupButton.setAttribute("data-privacy", "private");
     } else {
@@ -116,27 +111,30 @@ function displayTeamDetails(team, signupButton) {
 }
 
 function addSignupButtonListener(team, userId, signupButton) {
+
     signupButton.addEventListener("click", function() {
 
         const {
             sport: teamSport,
-            private: isPrivate,
             players,
         }
         = team
 
+
+        const isTeamPrivate = team.private
         const playersInTeam = players.length
         const maxPlayers = teamSport.num_players * 2
 
         if (playersInTeam < maxPlayers) {
-            if (isPrivate) {
+
+            if (isTeamPrivate) {
                 sendTeamRequest(team, userId);
             }
             else {
                 joinPublicTeam(team, userId);
             }
         } else {
-            displaySuccessMessage("Maximum number of players reached.");
+            displayErrorMessage("Maximum number of players reached.");
         }
     });
 }
@@ -158,6 +156,7 @@ function joinPublicTeam(team, userId) {
                 throw new Error(`Error al unirse a equipo: ${statusError}`);
             }
             fetchPlayerDetails(userId).then(playerDetails => {
+
                 const teamRequest ={
                     requestFrom: userId,
                     requestTo: team.captainId,
@@ -226,9 +225,13 @@ function createTeamNotification(teamRequest) {
             const playerName = player.name;
             const teamName = team.name;
 
-            const isTeamPrivate = team.isPrivate
+            console.log("Team:", team)
+
+            const isTeamPrivate = team.private
 
             let message
+
+            console.log("Is Team Private:", isTeamPrivate)
 
             if (isTeamPrivate){
                 message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
