@@ -113,25 +113,17 @@ function displayTeamDetails(team, signupButton) {
 function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
 
-
-        console.log(team)
-
         const isTeamPrivate = team.private;
         const playersInTeam = team.players.length;
         const teamSport = team.sport
         const teamPlayers = team.players
 
-        console.log("Players in team: ", playersInTeam)
-
         const maxPlayers = teamSport.num_players * 2;
-
-        console.log("Team players: ", teamPlayers)
 
         const isPlayerInTeam = teamPlayers.some(player => {
             console.log("Comparing player ID:", player.id, "with user ID:", userId);
             return player.id == userId;
         });
-        console.log("Is the player already in the team: " , isPlayerInTeam)
 
         if (isPlayerInTeam) {
             displayErrorMessage("Ya eres parte de este equipo.");

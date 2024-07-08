@@ -101,14 +101,25 @@ function addSignupButtonListener(tournament, userId, signupButton) {
 
     signupButtonClickHandler = function() {
 
-        const {participatingTeams, maxTeams} = tournament;
-        const numOfParticipatingTeams = participatingTeams.length;
+        const maxTeams = tournament.maxTeams;
+        const tournamentParticipatingTeams = tournament.participatingTeams
+        const numOfParticipatingTeams = tournamentParticipatingTeams.length;
         const tournamentCreator = tournament.creatorId;
         const teamId = document.getElementById("teamSelect").value;
         const user = localStorage.getItem("userId");
 
         if (user === tournamentCreator.toString()){
             displayErrorMessage("No te podes anotar a tu propio torneo.");
+            return;
+        }
+
+        const isTeamInTournament = tournamentParticipatingTeams.some(team => {
+            console.log("Comparing team ID:", teamId, "with team ID:", team.id);
+            return teamId == team.id;
+        });
+
+        if (isTeamInTournament){
+            displayErrorMessage("Este equipo ya esta en el torneo")
             return;
         }
 
