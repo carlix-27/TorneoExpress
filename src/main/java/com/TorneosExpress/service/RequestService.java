@@ -46,6 +46,10 @@ public class RequestService {
         return teamRequestRepository.findById(id);
     }
 
+    public Optional<TournamentRequest> getTournamentRequestById(Long id) {
+        return tournamentRequestRepository.findById(id);
+    }
+
     public Invite acceptInvite(Long inviteId) {
         Invite invite = inviteRepository.findById(inviteId)
                 .orElseThrow(() -> new RuntimeException("Invite not found"));

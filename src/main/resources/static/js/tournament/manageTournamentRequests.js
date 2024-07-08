@@ -66,6 +66,16 @@ function updateRequestStatus(requestId, accepted) {
 
     const url = accepted ? acceptUrl : denyUrl;
 
+    if (accepted){
+        fetchRequestDetails(requestId)
+            .then(request => {
+                sendConfirmationNotification(request);
+            })
+            .catch(error => {
+                console.error('Error fetching request details:', error);
+            });
+    }
+
     fetch(url, {
         method: 'DELETE',
     })
@@ -124,4 +134,60 @@ function displayErrorMessage(message) {
     setTimeout(() => {
         errorMessage.style.display = "none";
     }, 3000);
+}
+
+function fetchRequestDetails(requestId) {
+    return fetch(`/api/requests/tournament/details/${requestId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch request details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error fetching request details:', error);
+            throw error; // Re-throw the error to handle it further if needed
+        });
+}
+
+function sendConfirmationNotification(request) {
+    const requestTournamentId = request.tournamentId;
+    const teamName = request.teamName
+
+    fetchTournamentDetails(requestTournamentId)
+        .then((tournament) => {
+            const tournamentName = tournament.name;
+            const message = `${tournamentName} ha aceptado tu solicitud al torneo para el equipo: ${teamName}.`;
+            const notificationTo = request.requestFrom;
+
+            return fetch(`/api/notifications/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    toId: notificationTo,
+                    message: message,
+                })
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error sending confirmation notification:', error);
+        });
+}
+
+function fetchTournamentDetails(tournamentId) {
+    return fetch(`/api/tournaments/${tournamentId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
 }
