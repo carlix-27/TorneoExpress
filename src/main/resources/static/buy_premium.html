@@ -14,32 +14,66 @@
     <title>Comprar Premium</title>
 </head>
 <body>
-<h1>Actualízate a Premium</h1>
-<p>¡Bienvenido a Torneos Express!</p>
+<main>
+    <section class="shopping-cart dark">
+        <h1>Actualízate a Premium</h1>
+        <p>¡Bienvenido a Torneos Express!</p>
 
-<h2>Beneficios de Premium:</h2>
-<ul>
-    <li>Creación de Torneos</li>
-    <li>Creación de Equipos</li>
-    <li>Beneficios con la tienda</li>
-    <li>Prioridad en la lista de equipos</li>
-</ul>
+        <h2>Beneficios de Premium:</h2>
+        <ul>
+            <li>Creación de Torneos</li>
+            <li>Creación de Equipos</li>
+            <li>Beneficios con la tienda</li>
+            <li>Prioridad en la lista de equipos</li>
+        </ul>
 
-<h2>Precio:</h2>
-<ul>
-    <li>$499.99 ars (único pago)</li>
-</ul>
+        <h2>Precio:</h2>
+        <ul>
+            <li id="unit-price">$499.99 ars (único pago)</li>
+        </ul>
 
-<h2>Tenés dudas?</h2>
-<ul>
-    <li>Teléfono: 1-800-PREMIUM</li>
-    <li>Email: torneosExpress@dudas.com</li>
-</ul>
+        <h2>Tenés dudas?</h2>
+        <ul>
+            <li>Teléfono: 1-800-PREMIUM</li>
+            <li>Email: torneosExpress@dudas.com</li>
+        </ul>
 
-<form id="upgrade-form">
-    <div id="wallet_container"></div>
-    <button type="button" class="button" onclick="comprarPremium()">Comprar Premium</button>
-</form>
+        <button class="btn btn-primary btn-lg btn-block" id="checkout-btn">Checkout</button>
+    </section>
+
+    <section class="payment-form dark">
+        <div class="container_payment">
+            <div class="block-heading">
+                <h2>Checkout Payment</h2>
+            </div>
+            <div class="form-payment">
+                <div class="products">
+                    <h2 class="title">Resumen de compra</h2>
+                    <div class="item">
+                        <span class="price" id="summary-price"></span>
+                        <p class="item-name">Torneos Express Premium</p>
+                    </div>
+                    <div class="total">Total<span class="price" id="summary-total"></span></div>
+                </div>
+                <div class="payment-details">
+                    <div class="form-group col-sm-12">
+                        <br>
+                        <div id="button-checkout"></div>
+                        <br>
+                        <a id="go-back">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 10 10" class="chevron-left">
+                                <path fill="#009EE3" fill-rule="nonzero" id="chevron_left"
+                                      d="M7.05 1.4L6.2.552 1.756 4.997l4.449 4.448.849-.848-3.6-3.6z"></path>
+                            </svg>
+                            Volver a los beneficios
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
 
 <button type="button" class="button-back" onclick="volver()">Volver</button>
 

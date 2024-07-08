@@ -1,6 +1,7 @@
 
-const mp = new MercadoPago('YOUR_PUBLIC_KEY');
-const bricksBuilder = mp.bricks();
+const mercadopago = new MercadoPago('TESTUSER264492744', {
+    locale: 'es-AR' // The most common are: 'pt-BR', 'es-AR' and 'en-US'
+});
 
 
 function buyPremium() {

@@ -3,15 +3,24 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
+import com.mercadopago.client.preference.PreferenceClient;
+import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferenceRequest;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.preference.Preference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.mercadopago.MercadoPagoConfig;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -50,6 +59,31 @@ public class PlayerController {
     public ResponseEntity<List<Player>> getPlayersByName(@PathVariable String name) {
         List<Player> response = playerService.getPlayerByName(name);
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/create_preference")
+    public Preference createPreference() throws MPException, MPApiException {
+        MercadoPagoConfig.setAccessToken("YOUR_ACCESS_TOKEN");
+        PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
+                .id("1")
+                .title("Torneos Express premium")
+                .currencyId("ARS")
+                .description("Premium para la aplicación de Torneos Express")
+                .categoryId("sport")
+                .quantity(1)
+                .unitPrice(new BigDecimal("75.76"))
+                .build();
+
+
+        List<PreferenceItemRequest> items = new ArrayList<>();
+        items.add(itemRequest);
+
+        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                .items(items).build();
+
+        PreferenceClient client = new PreferenceClient();
+
+        return client.create(preferenceRequest);
     }
 
     @PostMapping("/upgrade/{userId}")
