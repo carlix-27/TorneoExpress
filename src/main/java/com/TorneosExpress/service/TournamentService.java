@@ -80,10 +80,23 @@ public class TournamentService {
 
     public FixtureDto getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
-        Fixture fixture = new FixtureBuilder(
-            tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
-            .build(tournament.getParticipatingTeams());
+        Fixture fixture;
         FixtureDto fixtureDto = new FixtureDto();
+
+        if (tournament.getFixture() == null || tournament.getFixture().getMatches().isEmpty()) {
+            List<Team> teams = tournament.getParticipatingTeams();
+            teamRepository.saveAll(teams);
+
+            fixture = new FixtureBuilder(
+                tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                .build(teams);
+
+            tournament.setFixture(fixture);
+            tournamentRepository.save(tournament);
+        } else {
+            fixture = tournament.getFixture();
+        }
+
         fixtureDto.setMatches(convertToDtoFormat(fixture.getMatches()));
         return fixtureDto;
     }

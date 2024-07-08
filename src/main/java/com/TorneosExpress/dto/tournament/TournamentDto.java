@@ -1,5 +1,6 @@
 package com.TorneosExpress.dto.tournament;
 
+import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Sport;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class TournamentDto {
     private final Difficulty difficulty;
     private final boolean isActive;
     private final int maxTeams;
-
+    private final Fixture fixture;
 
     public TournamentDto(Long id, Long creatorId, String name, String location, LocalDate date, Sport sport, boolean isPrivate, Difficulty difficulty, boolean isActive, int maxTeams){
         this.id = id;
@@ -28,6 +29,7 @@ public class TournamentDto {
         this.difficulty = difficulty;
         this.isActive = isActive;
         this.maxTeams = maxTeams;
+        this.fixture = null;
     }
 
     public Long getId(){
@@ -60,6 +62,10 @@ public class TournamentDto {
 
     public boolean getIsActive(){
         return isActive;
+    }
+
+    public Fixture getFixture() {
+      return fixture;
     }
 
 }

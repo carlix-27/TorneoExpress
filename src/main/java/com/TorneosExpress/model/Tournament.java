@@ -3,6 +3,7 @@ package com.TorneosExpress.model;
 
 import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
+import com.TorneosExpress.fixture.Fixture;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public class Tournament {
     this.difficulty = dto.getDifficulty();
     this.isActive = dto.getIsActive();
     this.maxTeams = dto.getMaxTeams();
+    this.fixture = dto.getFixture();
   }
 
   public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty) {
@@ -35,6 +37,7 @@ public class Tournament {
     this.isPrivate = privacy;
     this.difficulty = difficulty;
     this.isActive = true;
+    this.fixture = null;
   }
 
   @Id
@@ -78,6 +81,9 @@ public class Tournament {
   )
   private List<Team> participatingTeams = new ArrayList<>();
 
+  @Embedded
+  private Fixture fixture;
+
   public boolean isActive() {
     return isActive;
   }
@@ -93,8 +99,6 @@ public class Tournament {
   public void setMaxTeams(int maxTeams) {
     this.maxTeams = maxTeams;
   }
-
-
 
   public void setCreatorId(Long creatorId) {
     this.creatorId = creatorId;
@@ -144,6 +148,10 @@ public class Tournament {
     this.difficulty = difficulty;
   }
 
+  public void setFixture(Fixture fixture) {
+    this.fixture = fixture;
+  }
+
   @Override
   public boolean equals(Object o){ // Define bien como tiene que comparar contains con las colecciones de java.
     if (this == o) return true;
@@ -156,6 +164,10 @@ public class Tournament {
 
   public List<Team> getParticipatingTeams() {
     return participatingTeams;
+  }
+
+  public Fixture getFixture() {
+    return fixture;
   }
 
   public void setParticipatingTeams(List<Team> participatingTeams) {

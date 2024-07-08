@@ -4,6 +4,7 @@ import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.MatchRepository;
+import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,7 +27,9 @@ public class FixtureBuilder {
 
 
   public Fixture build(List<Team> teams) {
-    return new Fixture(calculateMatchCalendar(teams));
+    Fixture fixture = new Fixture();
+    fixture.setMatches(calculateMatchCalendar(teams));
+    return fixture;
   }
 
   private List<Match> calculateMatchCalendar(List<Team> teams) {
@@ -34,7 +37,7 @@ public class FixtureBuilder {
     int numTeams = teams.size();
 
     if (numTeams % 2 != 0) {
-      teams.add(new Team("Dummy")); // 'Dummy' team.
+      teams.add(new Team("Dummy"));// 'Dummy' team.
       numTeams++;
     }
     int numWeeks = teams.size() - 1; // Teams play against everyone except for themselves.
