@@ -42,6 +42,11 @@ public class RequestController {
         return requestService.getInvitesById(id);
     }
 
+    @GetMapping("/team/details/{id}")
+    public Optional<TeamRequest> getTeamRequestById(@PathVariable Long id) {
+        return requestService.getTeamRequestById(id);
+    }
+
     @GetMapping("/invite/details/{requestId}")
     public Optional<Invite> getInvite(@PathVariable Long requestId) {
         return requestService.getInvite(requestId);

@@ -72,11 +72,10 @@ function updateRequestStatus(requestId, accepted) {
     const url = accepted ? acceptUrl : denyUrl;
 
     if (accepted){
-        console.log(accepted)
         fetchRequestDetails(requestId)
-            .then(invite => {
-                console.log(invite)
-                sendConfirmationNotification(invite);
+            .then(request => {
+                console.log(request)
+                sendConfirmationNotification(request);
             })
             .catch(error => {
                 console.error('Error fetching request details:', error);
@@ -110,14 +109,14 @@ function updateRequestStatus(requestId, accepted) {
         });
 }
 
-function sendConfirmationNotification(invite) {
-    const requestTeamId = invite.team;
+function sendConfirmationNotification(request) {
+    const requestTeamId = request.teamId;
 
     fetchTeamDetails(requestTeamId)
         .then((team) => {
             const teamName = team.name;
             const message = `${teamName} ha aceptado tu solicitud al equipo.`;
-            const notificationFrom = invite.inviteFrom;
+            const notificationTo = request.requestFrom;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
@@ -125,7 +124,7 @@ function sendConfirmationNotification(invite) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    toId: notificationFrom,
+                    toId: notificationTo,
                     message: message,
                 })
             });
@@ -140,6 +139,18 @@ function sendConfirmationNotification(invite) {
             console.error('Error sending confirmation notification:', error);
         });
 }
+
+
+function fetchTeamDetails(teamId) {
+    return fetch(`/api/teams/${teamId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
+
 
 
 function displaySuccessMessage(message) {
@@ -159,7 +170,7 @@ function displayErrorMessage(message) {
 }
 
 function fetchRequestDetails(requestId) {
-    return fetch(`/api/requests/invite/details/${requestId}`)
+    return fetch(`/api/requests/team/details/${requestId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch request details: ${response.status} ${response.statusText}`);
