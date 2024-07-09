@@ -36,7 +36,7 @@ function fetchArticles() {
               divItem.innerHTML = `
                  <h3>${articleName}</h3>
                  <p>Precio: ${articlePrice}</p>
-                 <button>Comprar</button>
+                 <a href="article.html?article-id=${article.id}"><button>Comprar</button></a>
               `;
               productList.appendChild(divItem);
           });
