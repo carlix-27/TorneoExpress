@@ -52,7 +52,7 @@ function fetchFixture(id, tournament, calendarListHTML) {
                 </div>
             `;
 
-            if (tournament.creatorId !== localStorage.getItem("userId")) {
+            if (tournament.creatorId != localStorage.getItem("userId")) {
                 fixture.matches.forEach(match => {
                     const location = match.location;
                     const date = match.date;
@@ -77,11 +77,12 @@ function fetchFixture(id, tournament, calendarListHTML) {
 
                     const listItem = document.createElement('li');
 
+                    //<button onclick="modifyDate(${date})">Modificar fecha</button>
                     listItem.innerHTML = `
                     <h3>${date}</h3>
                     <p>${team1} VS ${team2}</p>
                     <p>${location}</p>
-                    <button onclick="modifyDate(${date})">Modificar fecha</button>
+                    <button class="modify-date-button" onclick="modifyDate(${match.id}, ${tournament.id})">Modificar fecha</button>
                 `;
                     //<button onclick="editarEquipo(${teamId})">Editar</button>
                     calendarListHTML.appendChild(listItem);
@@ -93,6 +94,6 @@ function fetchFixture(id, tournament, calendarListHTML) {
 // Al cargar la página, cargar los torneos del usuario
 document.addEventListener("DOMContentLoaded", loadCalendar);
 
-function modifyDate(matchDate) {
-
+function modifyDate(matchId, tournamentId) {
+    window.location.replace(`modifyDate.html?match-id=${matchId}&tournament-id=${tournamentId}`);
 }
