@@ -86,6 +86,14 @@ main {
     flex-wrap: wrap;
 }
 
+.product-list p {
+    display: flex;
+    text-align: center;
+    margin: auto;
+    font-size: 18px;
+    color: #333;
+}
+
 .product-item {
     background-color: #fff;
     border: 1px solid #ddd;
