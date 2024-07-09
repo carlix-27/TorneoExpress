@@ -74,8 +74,8 @@ public class PlayerController {
                 .build();
 
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("src/main/resources/static/buyPremiumSuccess.html")
-                        .failure("src/main/resources/static/buy_premium.html")
+                .success("http://127.0.0.1:8080/buyPremiumSuccess.html")
+                        .failure("http://127.0.0.1:8080/buy_premium.html")
                 .build();
 
         List<PreferenceItemRequest> items = new ArrayList<>();

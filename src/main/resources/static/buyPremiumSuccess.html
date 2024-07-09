@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <s
   <title>Upgrade to Premium</title>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const userId = localStorage.getItem("userID");
+      const userId = localStorage.getItem("userId");
+      console.log(userId);
 
-      fetch(`/upgrade/${userId}`, {
+      fetch(`api/user/upgrade/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -27,10 +27,15 @@
                 document.getElementById("status").innerText = "An error occurred during the upgrade process.";
               });
     });
+
+    function goBack() {
+      window.location.href = 'home.html';
+    }
   </script>
 </head>
 <body>
 <h1>Upgrade to Premium</h1>
 <p id="status">Upgrading...</p>
+<button onclick="goBack()">Back to Home</button>
 </body>
 </html>
