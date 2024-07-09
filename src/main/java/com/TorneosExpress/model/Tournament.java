@@ -1,17 +1,20 @@
 package com.TorneosExpress.model;
 
 
-import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 
+@Getter
 @Entity
+@Setter
 public class Tournament {
 
   public Tournament() { }
@@ -43,34 +46,44 @@ public class Tournament {
   private Long Id;
 
   @Column
+  @Setter
   private Long creatorId;
 
   @Column(unique = true)
+  @Setter
   private String name;
 
   @Column
+  @Setter
   private String location;
 
   @Column
+  @Setter
   private LocalDate startDate;
 
   @ManyToOne(fetch = FetchType.EAGER)
+  @Setter
   @JoinColumn(name = "sport_id", referencedColumnName = "sport_Id")
   private Sport sport;
 
   @Column
+  @Setter
   private boolean isPrivate;
 
   @Column
+  @Setter
   private Difficulty difficulty;
 
+  @Setter
   @Column
   private boolean isActive;
 
+  @Setter
   @Column
   private int maxTeams;
 
   @ManyToMany
+  @Setter
   @JoinTable(
           name = "tournament_teams",
           joinColumns = @JoinColumn(name = "tournament_id"),
@@ -82,118 +95,16 @@ public class Tournament {
 
   @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonIgnore
+  @Setter
   private List<Match> matches = new ArrayList<>();
-
-  public boolean isActive() {
-    return isActive;
-  }
-
-  public void setActive(boolean active) {
-    isActive = active;
-  }
-
-  public int getMaxTeams() {
-    return maxTeams;
-  }
-
-  public void setMaxTeams(int maxTeams) {
-    this.maxTeams = maxTeams;
-  }
-
-  public void setCreatorId(Long creatorId) {
-    this.creatorId = creatorId;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public LocalDate getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(LocalDate startDate) {
-    this.startDate = startDate;
-  }
-
-  public Sport getSport() {
-    return sport;
-  }
-
-  public void setSport(Sport sport) {
-    this.sport = sport;
-  }
-
-  public boolean isPrivate() {
-    return isPrivate;
-  }
-
-  public void setPrivate(boolean aPrivate) {
-    isPrivate = aPrivate;
-  }
-
-  public void setDifficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
-  }
 
   @Override
   public boolean equals(Object o){ // Define bien como tiene que comparar contains con las colecciones de java.
     if (this == o) return true;
-    if (!(o instanceof Tournament)) {
+    if (!(o instanceof Tournament other)) {
       return false;
     }
-    Tournament other = (Tournament) o;
     return this.getId().equals(other.getId());
-  }
-
-  public List<Team> getParticipatingTeams() {
-    return participatingTeams;
-  }
-
-  public void setParticipatingTeams(List<Team> participatingTeams) {
-    this.participatingTeams = participatingTeams;
-  }
-
-  public Long getId() {
-    return Id;
-  }
-
-  public void setId(Long id) {
-    Id = id;
-  }
-
-  public void setTournament_id(Long tournamentId) {
-    this.Id = tournamentId;
-  }
-
-  public Difficulty getDifficulty() { return this.difficulty; }
-
-  public Long getCreatorId() {
-    return creatorId;
-  }
-
-  public ShortTournamentDto toShortDto(){
-    return new ShortTournamentDto(this.Id, this.name);
-  }
-
-  public List<Match> getMatches() {
-    return matches;
-  }
-
-  public void setMatches(List<Match> matches) {
-    this.matches = matches;
   }
 
 }
