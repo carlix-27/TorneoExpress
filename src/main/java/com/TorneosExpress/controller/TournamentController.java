@@ -3,13 +3,9 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.team.TeamPointsDto;
-import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
-import com.TorneosExpress.model.Difficulty;
-import com.TorneosExpress.model.Sport;
-import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.model.*;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,7 +49,7 @@ public class TournamentController {
     }
 
     @PutMapping("{tournamentId}/endTournament")
-    public ResponseEntity<?> endTournament(@PathVariable Long tournamentId) { // TODO
+    public ResponseEntity<?> endTournament(@PathVariable Long tournamentId) {
         Tournament tournament = tournamentService.getTournamentById(tournamentId);
         if(tournament == null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
@@ -158,12 +154,8 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/activeMatches")
-    public ResponseEntity<ActiveMatchesFixtureDto> getActiveMatches(@PathVariable Long tournamentId) {
-        ActiveMatchesFixtureDto activeMatches = tournamentService.getActiveMatches(tournamentId);
-        if (activeMatches == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(activeMatches);
+    public List<Match> getActiveMatches(@PathVariable Long tournamentId) {
+        return tournamentService.getActiveMatches(tournamentId);
     }
 
 }

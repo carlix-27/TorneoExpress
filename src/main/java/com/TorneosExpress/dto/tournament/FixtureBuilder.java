@@ -1,10 +1,8 @@
-package com.TorneosExpress.fixture;
+package com.TorneosExpress.dto.tournament;
 
 import com.TorneosExpress.model.Match;
-import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.MatchRepository;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -60,22 +58,5 @@ public class FixtureBuilder {
       }
     }
   }
-
-
-
-  /*public static void main(String[] args) {
-    Sport futbol = new Sport();
-    List<Team> teams = new ArrayList<>();
-    teams.add(new Team(1L, "test1", futbol, "pilar", false));
-    teams.add(new Team(2L, "test2", futbol, "pilar", false));
-    teams.add(new Team(3L, "test3", futbol, "pilar", true));
-    teams.add(new Team(4L, "test4", futbol, "pilar", false));
-    teams.add(new Team(5L, "test5", futbol, "pilar", false));
-
-    FixtureBuilder fb = new FixtureBuilder(3L, "pilar", LocalDate.now(), matchRepository);
-    Fixture fixture = fb.build(teams);
-    fixture.getMatches().forEach(System.out::println);
-    /* Fixture should contain N(N-1)/2 matches, N being the amount of teams. */
-  /*}*/
 
 }

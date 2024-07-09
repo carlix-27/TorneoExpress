@@ -20,15 +20,12 @@ public class Statistics {
     @JoinColumn(name = "matchId", nullable = false)
     private Match match;
 
-
     private Integer team1Score;
     private Integer team2Score;
 
     @OneToOne
     @JoinColumn(name = "id", nullable = false)
     private Team winner;
-
-
 
     // Getters y setters
     public Long getMatchId(){
@@ -104,6 +101,14 @@ public class Statistics {
         this.winner.setId(teamWinnerPointsDto.getId()); // FIXME: Aca el id del team, es null.
         this.winner.setName(teamWinnerPointsDto.getName());
         this.winner.setPrestigePoints(teamWinnerPointsDto.getPrestigePoints());
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
+    public void setWinner(Team winner) {
+        this.winner = winner;
     }
 
 }

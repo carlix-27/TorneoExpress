@@ -5,10 +5,7 @@ import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.MatchDto;
 import com.TorneosExpress.dto.tournament.ShortMatchDto;
-import com.TorneosExpress.fixture.ActiveMatchFixture;
-import com.TorneosExpress.fixture.ActiveMatchesFixtureBuilder;
-import com.TorneosExpress.fixture.Fixture;
-import com.TorneosExpress.fixture.FixtureBuilder;
+import com.TorneosExpress.dto.tournament.FixtureBuilder;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
@@ -45,16 +42,11 @@ public class TournamentService {
     }
 
 
-    public ActiveMatchesFixtureDto getActiveMatches(Long tournamentId){ // TODO
+    public List<Match> getActiveMatches(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
         if(tournament == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
         }
-
-        // Crear una instancia de FixtureBuilder y construir el Fixture
-        Fixture fixture = new FixtureBuilder(
-                tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
-                .build(tournament.getParticipatingTeams());
 
         ActiveMatchFixture activeMatchFixture = new ActiveMatchesFixtureBuilder(tournamentId, matchRepository).build(tournament.getParticipatingTeams());
 

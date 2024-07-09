@@ -1,16 +1,15 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.dto.ActiveMatch;
-import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.StatisticsDto;
-import com.TorneosExpress.dto.team.TeamPointsDto;
-import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
+import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Statistics;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.StatisticsRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,81 +20,59 @@ import java.util.Optional;
 @Service
 public class StatisticsService {
 
-    @Autowired
-    private StatisticsRepository statisticsRepository;
+    private final StatisticsRepository statisticsRepository;
+
+    private final TournamentRepository tournamentRepository;
+
+    private final MatchRepository matchRepository;
+
+    private final TeamRepository teamRepository;
 
     @Autowired
-    private TournamentRepository tournamentRepository;
+    public StatisticsService(StatisticsRepository statisticsRepository, TournamentRepository tournamentRepository, MatchRepository matchRepository, TeamRepository teamRepository) {
+        this.statisticsRepository = statisticsRepository;
+        this.tournamentRepository = tournamentRepository;
+        this.matchRepository = matchRepository;
+        this.teamRepository = teamRepository;
+    }
 
-    @Autowired
-    private MatchRepository matchRepository;
-    @Autowired
-    private TeamRepository teamRepository;
+    public Statistics saveStatistics(Long match_id, Long tournamentId, StatisticsDto statisticsDto) {
+        Tournament tournament = getTournament(tournamentId);
+        Match match = getMatch(match_id);
+        Team winner = getWinnerTeam(statisticsDto.getWinner().getId());
 
-    public boolean saveStatistics(Long match_id, Long tournamentId, StatisticsDto statisticsDto) {
-        ShortTournamentDto shortTournamentDto = tournamentRepository.findById(tournamentId)
-                .map(tournament -> new ShortTournamentDto(
-                        tournament.getId(),
-                        tournament.getName()
-                )).orElse(null);
+        Statistics statistics = new Statistics();
+        statistics.setTournament(tournament);
+        statistics.setMatch(match);
+        statistics.setTeam1Score(statisticsDto.getTeam1Score());
+        statistics.setTeam2Score(statisticsDto.getTeam2Score());
+        statistics.setWinner(winner);
 
-        if(shortTournamentDto == null){
-            return false;
-        }
+        return statisticsRepository.save(statistics);
+    }
 
-        ActiveMatch activeMatch = matchRepository.findById(match_id)
-                .map(match -> new ActiveMatch(match.getMatch_id(),
-                        match.getTeam1_id(),
-                        match.getTeam2_id(),
-                        match.getTournamentId(),
-                        match.getTeamName1(),
-                        match.getTeamName2()
-                )).orElse(null);
-
-        if(activeMatch == null){
-            return false;
-        }
-
-        TeamWinnerPointsDto teamWinnerPointsDto = statisticsDto.getWinner();
-        if(teamWinnerPointsDto == null){
-            return false;
-        }
-
-        Optional<Team> teamOptional = teamRepository.findById(teamWinnerPointsDto.getId());
+    private Team getTeam(Long winnerTeamId) {
+        Optional<Team> teamOptional = teamRepository.findById(winnerTeamId);
         if (teamOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El equipo ganador no existe.");
+            throw new EntityNotFoundException("Team not found with id " + winnerTeamId);
         }
+        return teamOptional.get();
+    }
 
-        Team team = teamOptional.get();
-        teamWinnerPointsDto.setName(team.getName());
-
-        int points = determineScore(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
-        teamWinnerPointsDto.setPrestigePoints(points);
-
-
-        Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_Id(match_id, tournamentId);
-
-        if(existingStatisticsOptional.isPresent()){
-            // Actualizar estadisticas existentes
-            Statistics existingStatistics = existingStatisticsOptional.get();
-            existingStatistics.setTeam1Score(statisticsDto.getTeam1Score());
-            existingStatistics.setTeam2Score(statisticsDto.getTeam2Score());
-            existingStatistics.setTeamWinnerPointsDto(teamWinnerPointsDto);
-            statisticsRepository.save(existingStatistics);
-            // Se sobreescribe la informacion (se edita de alguna forma)
-            // TODO: Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
-        } else{
-            // Crear nuevas estadisticas
-            Statistics statistics = new Statistics();
-            statistics.setShortTournamentDto(shortTournamentDto);
-            statistics.setActiveMatch(activeMatch);
-            statistics.setTeam1Score(statisticsDto.getTeam1Score());
-            statistics.setTeam2Score(statisticsDto.getTeam2Score());
-            statistics.setTeamWinnerPointsDto(statisticsDto.getWinner());
-            statisticsRepository.save(statistics);
+    private Match getMatch(Long match_id) {
+        Optional<Match> matchOptional = matchRepository.findById(match_id);
+        if (matchOptional.isEmpty()) {
+            throw new EntityNotFoundException("Match not found with id " + match_id);
         }
+        return matchOptional.get();
+    }
 
-        return true;
+    private Tournament getTournament(Long tournamentId) {
+        Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentId);
+        if (tournamentOptional.isEmpty()) {
+            throw new EntityNotFoundException("Tournament not found with id " + tournamentId);
+        }
+        return tournamentOptional.get();
     }
 
 
@@ -109,6 +86,11 @@ public class StatisticsService {
         }
     }
 
+    private Team getWinnerTeam(Long winnerTeamId) {
+        return teamRepository.findById(winnerTeamId)
+                .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + winnerTeamId));
+    }
+
 
     public StatisticsDto getStatistics(Long match_id){
         Statistics statistics = statisticsRepository.findByMatch_matchId(match_id);
@@ -117,6 +99,7 @@ public class StatisticsService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las estadisticas de este partido no existen todavia.");
         }
 
-        return new StatisticsDto(statistics.getWinner().teamWinnerPointsDto(), statistics.getTeam1Score(), statistics.getTeam2Score());
+        Team winner = statistics.getWinner();
+        return new StatisticsDto(winner, statistics.getTeam1Score(), statistics.getTeam2Score());
     }
 }
