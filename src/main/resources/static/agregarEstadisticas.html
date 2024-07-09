@@ -15,10 +15,12 @@
         <!-- Options will be populated dynamically -->
     </select>
 
-    <label for="team1Score">Puntaje Equipo 1:</label>
+    <!-- Resultado Equipo 1 -->
+    <label id="team1ScoreLabel" for="team1Score">Resultado Equipo 1:</label>
     <input type="number" name="team1Score" required>
 
-    <label for="team2Score">Puntaje Equipo 2:</label>
+    <!-- Resultado Equipo 2 -->
+    <label id="team2ScoreLabel" for="team2Score">Resultado Equipo 2:</label>
     <input type="number" name="team2Score" required>
 
     <label for="winnerSelector">Equipo Ganador:</label>
@@ -31,5 +33,6 @@
 
 <div id="successMessage" style="display:none; color: green;"></div>
 <div id="errorMessage" style="display:none; color: red;"></div>
+
 </body>
 </html>

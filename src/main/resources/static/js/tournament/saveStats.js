@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('tournamentId').value = tournamentId;
 
     const formularioEstadisticas = document.getElementById('formularioEstadisticas');
-    formularioEstadisticas.addEventListener('submit', saveStats);
+    formularioEstadisticas.addEventListener('submit', function(event) {
+        saveStats(event);
+    });
 
     fetchMatches(tournamentId);
     fetchTeams(tournamentId);
@@ -20,42 +22,24 @@ function fetchMatches(tournamentId) {
             return response.json();
         })
         .then(matches => {
-            console.log("Is matches empty?: ", matches);
+            const partidoSelector = document.getElementById('partidoSelector');
+            matches.forEach(match => {
+                const option = document.createElement('option');
+                option.value = match.id;
+                option.textContent = `${match.team1.name} vs ${match.team2.name}`;
+                partidoSelector.appendChild(option);
+            });
 
-            if (matches.length === 0) {
-                return createMatches(tournamentId)
-                    .then(() => fetch(`/api/tournaments/${tournamentId}/activeMatches`))
-                    .then(response => response.json())
-                    .then(newMatches => {
-                        displayMatches(newMatches);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching matches after creating:', error);
-                    });
-            } else {
-                displayMatches(matches);
+            // Actualizar etiquetas de resultados dinámicamente
+            const team1Label = document.getElementById('team1ScoreLabel');
+            const team2Label = document.getElementById('team2ScoreLabel');
+            if (matches.length > 0) {
+                team1Label.textContent = `Resultado ${matches[0].team1.name}:`;
+                team2Label.textContent = `Resultado ${matches[0].team2.name}:`;
             }
         })
         .catch(error => {
             console.error('Error fetching matches:', error);
-        });
-}
-
-function createMatches(tournamentId) {
-    return fetch(`/api/tournaments/${tournamentId}/createMatches`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error creating matches');
-            }
-        })
-        .catch(error => {
-            console.error('Error creating matches:', error);
-            throw error; // Re-throw the error to be caught by the caller
         });
 }
 
@@ -69,8 +53,6 @@ function fetchTeams(tournamentId) {
         })
         .then(teams => {
             const winnerSelector = document.getElementById('winnerSelector');
-            winnerSelector.innerHTML = ''; // Clear previous options if any
-
             teams.forEach(team => {
                 const option = document.createElement('option');
                 option.value = team.id;
@@ -115,12 +97,11 @@ function saveStats(event) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
             } else {
-                throw new Error('Hubo un problema al agregar las estadísticas');
+                displayErrorMessage("Hubo un problema al agregar las estadísticas");
             }
         })
         .catch(error => {
             displayErrorMessage("Error al guardar las estadísticas");
-            console.error('Error saving stats:', error);
         });
 }
 
@@ -142,20 +123,4 @@ function displayErrorMessage(message) {
     setTimeout(() => {
         errorMessage.style.display = "none";
     }, 3000);
-}
-
-function displayMatches(matches) {
-    const partidoSelector = document.getElementById('partidoSelector');
-    partidoSelector.innerHTML = ''; // Clear previous options if any
-
-    matches.forEach(match => {
-        const option = document.createElement('option');
-        option.value = match.id;
-
-        const firstTeam = match.team1;
-        const secondTeam = match.team2;
-
-        option.textContent = `${firstTeam.name} vs ${secondTeam.name}`;
-        partidoSelector.appendChild(option);
-    });
 }
