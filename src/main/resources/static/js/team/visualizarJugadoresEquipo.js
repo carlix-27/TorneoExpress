@@ -67,7 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(() => {
-                displayFeedbackMessage('Jugador expulsado correctamente', true);
+                sendExpulsionNotification(teamId, playerId);
+                displayFeedbackMessage('Jugador expulsado', true);
                 fetchPlayersOfTeam(teamId, userId);
             })
             .catch(error => {
@@ -87,19 +88,47 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3000);
     }
 
-    function fetchTeamDetails(teamId) {
-        return fetch(`/api/teams/${teamId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            });
-    }
-
     function getTeamIdFromURL() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         return urlParams.get('id');
     }
 });
+
+function fetchTeamDetails(teamId) {
+    return fetch(`/api/teams/${teamId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        });
+}
+
+function sendExpulsionNotification(teamId, playerId) {
+    fetchTeamDetails(teamId)
+        .then((team) => {
+            const teamName = team.name;
+            const message = `Has sido expulsado del equipo ${teamName}.`;
+            return fetch(`/api/notifications/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    toId: playerId,
+                    message: message,
+                })
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to create expulsion notification: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error sending expulsion notification:', error);
+        });
+}
+
