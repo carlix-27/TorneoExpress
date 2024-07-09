@@ -59,12 +59,15 @@ public class StatisticsService {
             Statistics existingStatistics = existingStatisticsOptional.get();
             existingStatistics.setTeam1Score(statisticsDto.getTeam1Score());
             existingStatistics.setTeam2Score(statisticsDto.getTeam2Score());
-            TeamWinnerPointsDto teamWinner = statisticsDto.getGanador();
-            int points = determineScore(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
-            teamWinner.setPrestigePoints(points);
-            TeamPointsDto teamPointsDto = new TeamPointsDto(points);
-            teamPointsDto.setPrestigePoints(points); // Ver la parte del get
-            existingStatistics.setWinner(teamWinner);
+            TeamWinnerPointsDto teamWinner = statisticsDto.getWinner();
+            if(teamWinner != null){
+                int points = determineScore(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
+                teamWinner.setPrestigePoints(points);
+                TeamPointsDto teamPointsDto = new TeamPointsDto(points);
+                teamPointsDto.setPrestigePoints(points); // Ver la parte del get
+                existingStatistics.setTeamWinnerPointsDto(teamWinner);
+            }
+
             statisticsRepository.save(existingStatistics); // Se sobreescribe la informacion (se edita de alguna forma)
             // TODO: Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
         } else{
@@ -74,7 +77,7 @@ public class StatisticsService {
             statistics.setActiveMatch(activeMatch);
             statistics.setTeam1Score(statisticsDto.getTeam1Score());
             statistics.setTeam2Score(statisticsDto.getTeam2Score());
-            statistics.setWinner(statisticsDto.getGanador());
+            statistics.setTeamWinnerPointsDto(statisticsDto.getWinner());
             statisticsRepository.save(statistics);
         }
 

@@ -1,8 +1,7 @@
 package com.TorneosExpress.dto.team;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TeamWinnerPointsDto {
+public class TeamWinnerPointsDto { // Si jode, vola el name al carajo. Solo nos interesa el id del team, y le asignamos los puntos.
     private Long id;
     private String name;
     private int prestigePoints;
@@ -17,22 +16,17 @@ public class TeamWinnerPointsDto {
         this.prestigePoints = prestigePoints;
     }
 
-    public Long getId() {
+    public Long getId() { // En teoria esto, deberia tener un dato que es el id del team ganador.
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Long setId(Long id) {
+        return id;
     }
-
     public int getPrestigePoints() {
         return prestigePoints;
     }

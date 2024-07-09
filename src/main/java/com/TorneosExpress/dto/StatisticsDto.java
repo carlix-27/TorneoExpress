@@ -3,12 +3,12 @@ package com.TorneosExpress.dto;
 import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 
 public class StatisticsDto {
-    private TeamWinnerPointsDto ganador;
+    private TeamWinnerPointsDto winner;
     private int team1Score;
     private int team2Score;
 
-    public StatisticsDto(TeamWinnerPointsDto ganador, int team1Score, int team2Score){
-        this.ganador = ganador;
+    public StatisticsDto(TeamWinnerPointsDto winner, int team1Score, int team2Score){
+        this.winner = winner;
         this.team1Score = team1Score;
         this.team2Score = team2Score;
     }
@@ -17,12 +17,12 @@ public class StatisticsDto {
 
     // Getters y setters
 
-    public TeamWinnerPointsDto getGanador(){
-        return ganador;
+    public TeamWinnerPointsDto getWinner(){
+        return winner;
     }
 
-    public void setGanador(TeamWinnerPointsDto ganador){
-        this.ganador = ganador;
+    public void setWinner(TeamWinnerPointsDto winner){
+        this.winner = winner;
     }
 
     public int getTeam1Score() {

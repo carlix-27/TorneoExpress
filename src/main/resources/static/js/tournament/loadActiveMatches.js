@@ -18,10 +18,10 @@ function loadActiveMatches() {
 
             console.log('ActiveMatches: ',activeMatches.matches);
 
-            activeMatches.matches.forEach(match => { // FIXME: No entiendo porque aca se aumenta el valor del matchId.
+            activeMatches.matches.forEach(match => {
                 const team1 = match.teamName1;
                 const team2 = match.teamName2;
-                const matchId = match.matchId; //getMatchIDWithAssociatedStatistics(match, tournamentId); // Punto de control accediendo al punto previo a modificarse.
+                const matchId = match.matchId;
 
                 // Esto me permite, realizar otro partido, en el que puedo agregar el dato que quiera.
                 const option = document.createElement('option');
@@ -36,7 +36,7 @@ function loadActiveMatches() {
                 listItem.innerHTML = `
                     <td>${team1} VS ${team2}</td>
                     <td>
-                        <button class="action-button view-button" data-match-id="${matchId}">Ver Estadísticas</button>
+                        <button class="action-button view-button" data-match-id="${matchId}" data-team1="${team1}" data-team2="${team2}">Ver Estadísticas</button>
                     </td>
                 `;
                 activeMatchesList.appendChild(listItem);
@@ -48,8 +48,10 @@ function loadActiveMatches() {
 
             function handleViewMatchStats(event) {
                 const matchId = event.target.getAttribute('data-match-id');
+                const team1 = event.target.getAttribute('data-team1');
+                const team2 = event.target.getAttribute('data-team2');
                 // Implement view stats functionality here
-                viewMatchStats(matchId);
+                viewMatchStats(matchId, team1, team2);
             }
             // Opcional: Agregar un mensaje si no hay partidos activos
             if (activeMatches.matches.length === 0) {
@@ -68,8 +70,7 @@ function loadActiveMatches() {
 document.addEventListener("DOMContentLoaded", loadActiveMatches);
 
 // Función para mostrar las estadísticas de un partido
-function viewMatchStats(matchId){ // Seguro voy a necesitar el tournamentId, fijate como lo hiciste con SaveStats
-    console.log('Match ID: ', matchId);
+function viewMatchStats(matchId, teamName1, teamName2){ // Seguro voy a necesitar el tournamentId, fijate como lo hiciste con SaveStats
     fetch(`/api/matches/${matchId}/getStatistics`)
         .then(response => {
             if (!response.ok) {
@@ -80,10 +81,20 @@ function viewMatchStats(matchId){ // Seguro voy a necesitar el tournamentId, fij
         .then(stats => {
             // Mostrar las estadísticas en la página
             const statsContainer = document.getElementById('stats-container');
+            const scoreTeam1 = stats.team1Score;
+            const scoreTeam2 = stats.team2Score;
+            let winner = "";
+            if(scoreTeam1 > scoreTeam2){
+                winner = teamName1;
+            } else if(scoreTeam2 > scoreTeam1){
+                winner = teamName2;
+            } else{
+                winner = "Empate";
+            }
             statsContainer.innerHTML = `
                 <h3>Estadísticas del partido ${matchId}</h3>
                 <p>Resultado: ${stats.team1Score} a ${stats.team2Score}</p>
-                <p>Ganador: ${stats.ganador}</p>
+                <p>Ganador: ${winner}</p>
                 <!-- Agregar más estadísticas según sea necesario -->
             `;
         })
@@ -93,88 +104,8 @@ function viewMatchStats(matchId){ // Seguro voy a necesitar el tournamentId, fij
         });
 }
 
-function getMatchIDWithAssociatedStatistics(match, tournamentId){
-    fetch(`api/matches/${tournamentId}/${match.matchId}/getMatchId`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch match statistics: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-
-
-}
 
 
 
-
-/*function loadActiveMatches() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tournamentId = urlParams.get('id');
-
-    fetch(`/api/tournaments/${tournamentId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(tournament => {
-            const activeMatches = document.getElementById("match-result");
-            const backButton = document.getElementById("back-button");
-
-            backButton.addEventListener("click", () => {
-                window.location.replace(`loadTournament.html?id=${tournament.id}`);
-            });
-
-            if (tournament.participatingTeams.length < tournament.maxTeams) {
-                calendar.innerHTML = `
-                <div id="result">
-                    <h3>Partidos Activos no disponible para el torneo.</h3>
-                </div>`;
-            } else {
-                /* Segundo fetch para agarrar el fixture. */
-                /*fetchFixture(tournamentId, tournament, activeMatches);
-            }
-
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Handle error, show message to user
-        });
-}
-
-function fetchFixture(id, tournament, activeMatchesList) {
-    fetch(`/api/tournaments/${id}/activeMatches`) // /api/tournament/{tournamentId}/activeMatches
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(fixture => { // FIXME: Esta parte <h2>${tournament.name} - Partidos Activos</h2>. No sé si está bien.
-            activeMatchesList.innerHTML = `
-                <div id="result">
-                    <h2>${tournament.name} - Partidos Activos</h2>
-                    
-                </div>
-            `;
-
-            fixture.matches.forEach(match => {
-                const team1 = match.teamName1; // fetch team
-                const team2 = match.teamName2; // fetch team
-
-                const listItem = document.createElement('li');
-
-                listItem.innerHTML = `
-                    <p>${team1} VS ${team2}</p>
-                `;
-                activeMatchesList.appendChild(listItem);
-            })
-
-        })
-}
-// Al cargar la página, cargar los torneos del usuario
-document.addEventListener("DOMContentLoaded", loadCalendar);*/
 
 

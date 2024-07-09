@@ -25,8 +25,9 @@ public class Statistics {
     private Integer team2Score;
 
     @OneToOne
-    @JoinColumn(name = "name")
+    @JoinColumn(name = "id", nullable = false)
     private Team winner;
+
 
 
     // Getters y setters
@@ -87,16 +88,22 @@ public class Statistics {
         this.team2Score = team2Score;
     }
 
+    public Long getWinnerId(){
+        return winner.getId(); // Devuelvo el id del team que es winner.
+    }
 
     public Team getWinner(){
         return winner;
     }
 
 
-    public void setWinner(TeamWinnerPointsDto winner) {
-        this.winner = new Team();
-        this.winner.setId(winner.getId());
-        this.winner.setName(winner.getName());
-        this.winner.setPrestigePoints(winner.getPrestigePoints());
+    public void setTeamWinnerPointsDto(TeamWinnerPointsDto teamWinnerPointsDto){
+        if (this.winner == null) {
+            this.winner = new Team();
+        }
+        this.winner.setId(teamWinnerPointsDto.getId()); // Asegura que el id del team se establece correctamente.
+        this.winner.setName(teamWinnerPointsDto.getName());
+        this.winner.setPrestigePoints(teamWinnerPointsDto.getPrestigePoints());
     }
+
 }
