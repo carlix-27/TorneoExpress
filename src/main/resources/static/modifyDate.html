@@ -19,28 +19,27 @@
 
     <div class="update-team-box">
         <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
-        <h2>Editar equipo</h2>
+        <h2>Modificar fecha</h2>
 
-        <form id="edit-team-form" action="/api/tournaments/calendar/update/" method="post">
+        <form id="modify-date-form" action="/api/tournaments/calendar/update/" method="post">
+            <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+            <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
             <!-- Hidden input for tournament ID -->
-            <input type="hidden" id="team-id" name="team-id" value="">
+            <input type="hidden" id="match-id" name="match-id" value="">
 
             <div class="form-group">
-                <label for="team-name">Team name:</label>
-                <input type="text" id="team-name" name="team-name" required>
-            </div>
-            <div class="form-group">
-                <label for="location">Location:</label>
-                <input type="text" id="location" name="location" required>
+                <label for="match-date">Date:</label>
+                <input type="date" id="match-date" name="match-date" required>
             </div>
 
-            <div class="form-group">
-                <label for="privacy">Privacy:</label>
-                <input type="checkbox" id="privacy" name="privacy"> Private team
-            </div>
+            <input type="hidden" id="team1-name" name="team1-name" value="">
+
+            <input type="hidden" id="team2-name" name="team2-name" value="">
+
+            <input type="hidden" id="match-location" name="match-location" value="">
 
             <div class="form-group">
-                <button type="submit">Save Changes</button>
+                <button type="submit">Guardar cambios</button>
             </div>
         </form>
     </div>

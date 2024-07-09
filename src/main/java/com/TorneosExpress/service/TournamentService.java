@@ -146,6 +146,14 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
+    public Match getMatchById(Long id) {
+        return matchRepository.getReferenceById(id);
+    }
+
+    public Match updateMatch(Match match) {
+        return matchRepository.save(match);
+    }
+
     public void deleteTournament(Long id) {
         tournamentRepository.deleteById(id);
     }

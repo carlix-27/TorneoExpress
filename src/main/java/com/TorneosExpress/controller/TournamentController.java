@@ -5,11 +5,9 @@ import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.team.TeamPointsDto;
 import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
+import com.TorneosExpress.dto.tournament.MatchDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
-import com.TorneosExpress.model.Difficulty;
-import com.TorneosExpress.model.Sport;
-import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.model.*;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -106,6 +106,35 @@ public class TournamentController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(fixture);
+    }
+
+    @GetMapping("/{tournamentId}/calendar/{matchId}")
+    public ResponseEntity<MatchDto> getCalendarMatch(
+        @PathVariable Long tournamentId, @PathVariable Long matchId) {
+        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
+        if (fixture == null) {
+            return ResponseEntity.notFound().build();
+        }
+        for (MatchDto match : fixture.getMatches()) {
+            if (Objects.equals(match.getMatchId(), matchId)) {
+                return ResponseEntity.ok(match);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{tournamentId}/calendar/{matchId}")
+    public ResponseEntity<Match> updateMatch(
+        @PathVariable Long tournamentId, @PathVariable Long matchId, @RequestBody MatchDto matchDto) {
+        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
+        if (fixture == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Match match = tournamentService.getMatchById(matchId);
+        LocalDate updatedDate = matchDto.getDate();
+        match.setDate(updatedDate);
+        Match updatedMatchEntity = tournamentService.updateMatch(match);
+        return ResponseEntity.ok(updatedMatchEntity);
     }
     
 
