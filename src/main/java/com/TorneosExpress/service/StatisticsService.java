@@ -39,7 +39,7 @@ public class StatisticsService {
     public Statistics saveStatistics(Long match_id, Long tournamentId, StatisticsDto statisticsDto) {
         Tournament tournament = getTournament(tournamentId);
         Match match = getMatch(match_id);
-        Team winner = getWinnerTeam(statisticsDto.getWinner().getId());
+        Team winner = getWinnerTeam(statisticsDto.getWinner());
 
         Statistics statistics = new Statistics();
         statistics.setTournament(tournament);
@@ -82,6 +82,7 @@ public class StatisticsService {
         }
 
         Team winner = statistics.getWinner();
-        return new StatisticsDto(winner, statistics.getTeam1Score(), statistics.getTeam2Score());
+        Long winnerId = winner.getId();
+        return new StatisticsDto(winnerId, statistics.getTeam1Score(), statistics.getTeam2Score());
     }
 }

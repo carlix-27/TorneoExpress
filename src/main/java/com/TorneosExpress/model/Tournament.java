@@ -3,6 +3,7 @@ package com.TorneosExpress.model;
 
 import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -80,6 +81,7 @@ public class Tournament {
 
 
   @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonIgnore
   private List<Match> matches = new ArrayList<>();
 
   public boolean isActive() {

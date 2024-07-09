@@ -4,17 +4,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('tournamentId').value = tournamentId;
 
-    const formularioEstadisticas = document.getElementById('formularioEstadisticas');
-    formularioEstadisticas.addEventListener('submit', function(event) {
-        saveStats(event);
-    });
+    fetchMatches(tournamentId)
+        .then(() => {
+            fetchTeams(tournamentId);
 
-    fetchMatches(tournamentId);
-    fetchTeams(tournamentId);
+            const formularioEstadisticas = document.getElementById('formularioEstadisticas');
+            formularioEstadisticas.addEventListener('submit', function(event) {
+                saveStats(event, tournamentId);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching matches:', error);
+        });
 });
 
 function fetchMatches(tournamentId) {
-    fetch(`/api/tournaments/${tournamentId}/activeMatches`)
+    return fetch(`/api/tournaments/${tournamentId}/activeMatches`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -23,9 +28,10 @@ function fetchMatches(tournamentId) {
         })
         .then(matches => {
             const partidoSelector = document.getElementById('partidoSelector');
+            partidoSelector.innerHTML = ''; // Clear existing options
             matches.forEach(match => {
                 const option = document.createElement('option');
-                option.value = match.id;
+                option.value = match.matchId;
                 option.textContent = `${match.team1.name} vs ${match.team2.name}`;
                 partidoSelector.appendChild(option);
             });
@@ -40,11 +46,12 @@ function fetchMatches(tournamentId) {
         })
         .catch(error => {
             console.error('Error fetching matches:', error);
+            throw error; // Propagate the error to the caller
         });
 }
 
 function fetchTeams(tournamentId) {
-    fetch(`/api/tournaments/${tournamentId}/teams`)
+    return fetch(`/api/tournaments/${tournamentId}/teams`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -53,6 +60,7 @@ function fetchTeams(tournamentId) {
         })
         .then(teams => {
             const winnerSelector = document.getElementById('winnerSelector');
+            winnerSelector.innerHTML = ''; // Clear existing options
             teams.forEach(team => {
                 const option = document.createElement('option');
                 option.value = team.id;
@@ -62,13 +70,13 @@ function fetchTeams(tournamentId) {
         })
         .catch(error => {
             console.error('Error fetching teams:', error);
+            throw error; // Propagate the error to the caller
         });
 }
 
-function saveStats(event) {
+function saveStats(event, tournamentId) {
     event.preventDefault();
 
-    const tournamentId = document.getElementById('tournamentId').value;
     const matchId = document.querySelector('#partidoSelector').value;
     const team1Score = document.querySelector('input[name="team1Score"]').value;
     const team2Score = document.querySelector('input[name="team2Score"]').value;

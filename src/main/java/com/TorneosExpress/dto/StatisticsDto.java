@@ -1,13 +1,11 @@
 package com.TorneosExpress.dto;
 
-import com.TorneosExpress.model.Team;
-
 public class StatisticsDto {
-    private Team winner;
+    private Long winner;
     private int team1Score;
     private int team2Score;
 
-    public StatisticsDto(Team winner, int team1Score, int team2Score){
+    public StatisticsDto(Long winner, int team1Score, int team2Score){
         this.winner = winner;
         this.team1Score = team1Score;
         this.team2Score = team2Score;
@@ -15,13 +13,12 @@ public class StatisticsDto {
 
     public StatisticsDto(){}
 
-    // Getters y setters
 
-    public Team getWinner(){
+    public Long getWinner(){
         return winner;
     }
 
-    public void setWinner(Team winner){
+    public void setWinner(Long winner){
         this.winner = winner;
     }
 
