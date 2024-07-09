@@ -7,9 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Llamar a la función para obtener equipos y puntajes del torneo
     fetchTeamsAndPointsOfTournament(tournamentId)
-        .then(teamsWithScores => {
+        .then(teamsWithPrestigePoints => {
             // Renderizar equipos y puntajes en la tabla
-            renderTeams(teamsWithScores);
+            renderTeams(teamsWithPrestigePoints);
+            console.log(teamsWithPrestigePoints);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -26,27 +27,29 @@ document.addEventListener("DOMContentLoaded", function () {
             const teams = await teamsResponse.json();
 
             // Obtener puntajes de los equipos
-            const teamsScoreResponse = await fetch(`/api/tournaments/${tournamentId}/teamsScore`);
-            if (!teamsScoreResponse.ok) {
-                throw new Error(`Failed to fetch teams score of this tournament: ${teamsScoreResponse.status} ${teamsScoreResponse.statusText}`);
+            const teamsPrestigePointsResponse = await fetch(`/api/tournaments/${tournamentId}/teamsScore`);
+            if (!teamsPrestigePointsResponse.ok) {
+                throw new Error(`Failed to fetch teams score of this tournament: ${teamsPrestigePointsResponse.status} ${teamsPrestigePointsResponse.statusText}`);
             }
-            const teamsScore = await teamsScoreResponse.json();
+            console.log("TeamsScoreResponse: ", teamsPrestigePointsResponse);
+            const teamsPrestigePoints = await teamsPrestigePointsResponse.json();
 
             // Combinar la información de equipos y puntajes
-            return combineTeamsAndScores(teams, teamsScore);
+            return combineTeamsAndPrestigePoints(teams, teamsPrestigePoints);
         } catch (error) {
             console.error('Error:', error);
             throw error; // Re-throw the error to be caught by the caller
         }
     }
 
-    function combineTeamsAndScores(teams, teamsScore) {
+    function combineTeamsAndPrestigePoints(teams, teamsPrestigePoints) {
         // Suponiendo que teams y teamsScore tienen la misma longitud y están ordenados de la misma manera
         return teams.map((team, index) => {
+            console.log("Team: ", team);
             return {
                 id: team.id,
                 name: team.name,
-                score: teamsScore[index].score
+                prestigePoints: teamsPrestigePoints[index].prestigePoints // team.score directamente, fijate como podes ordenarlos aca.
             };
         });
     }
@@ -56,10 +59,11 @@ document.addEventListener("DOMContentLoaded", function () {
         TeamsScoreTableBody.innerHTML = ''; // Limpiar datos previos
 
         teams.forEach(team => {
+            console.log("Team of renderTeams: ", team);
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${team.name}</td>
-                <td>${team.score}</td>
+                <td>${team.prestigePoints}</td>
             `;
             TeamsScoreTableBody.appendChild(row);
         });

@@ -3,12 +3,16 @@ package com.TorneosExpress.dto.team;
 public class TeamWinnerPointsDto {
     private Long id;
     private String name;
-    private int matchPoints;
+    private int prestigePoints;
 
-    public TeamWinnerPointsDto(Long id, String name, int matchPoints){
+    public TeamWinnerPointsDto() {
+
+    }
+
+    public TeamWinnerPointsDto(Long id, String name, int prestigePoints){
         this.id = id;
         this.name = name;
-        this.matchPoints = matchPoints;
+        this.prestigePoints = prestigePoints;
     }
 
     public Long getId() {
@@ -27,12 +31,12 @@ public class TeamWinnerPointsDto {
         this.name = name;
     }
 
-    public int getMatchPoints() {
-        return matchPoints;
+    public int getPrestigePoints() {
+        return prestigePoints;
     }
 
-    public void setMatchPoints(int matchPoints) {
-        this.matchPoints = matchPoints;
+    public void setPrestigePoints(int prestigePoints) {
+        this.prestigePoints = prestigePoints;
     }
 
 

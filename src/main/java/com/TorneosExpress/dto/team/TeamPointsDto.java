@@ -1,17 +1,17 @@
 package com.TorneosExpress.dto.team;
 
 public class TeamPointsDto {
-    private int matchPoints;
+    private int prestigePoints;
 
-    public TeamPointsDto(int matchPoints) {
-        this.matchPoints = matchPoints;
+    public TeamPointsDto(int prestigePoints) {
+        this.prestigePoints = prestigePoints;
     }
 
-    public int getMatchPoints() {
-        return matchPoints;
+    public int getPrestigePoints() {
+        return prestigePoints;
     }
 
-    public void setMatchPoints(int matchPoints) {
-        this.matchPoints = matchPoints;
+    public void setPrestigePoints(int prestigePoints) {
+        this.prestigePoints = prestigePoints;
     }
 }

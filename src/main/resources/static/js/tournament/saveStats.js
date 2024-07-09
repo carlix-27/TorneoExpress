@@ -26,7 +26,7 @@ async function saveStats(event) {
         return;
     }
 
-    const matchId = document.querySelector('#partidoSelector').value;
+    const matchId = document.querySelector('#partidoSelector').value; // Aca puede haber un drama.
 
     const team1Score = document.querySelector('input[name="team1Score"]').value;
     const team2Score = document.querySelector('input[name="team2Score"]').value;

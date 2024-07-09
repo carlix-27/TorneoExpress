@@ -56,7 +56,7 @@ public class TournamentService {
                 tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
                 .build(tournament.getParticipatingTeams());
 
-        ActiveMatchFixture activeMatchFixture = new ActiveMatchesFixtureBuilder(tournamentId, fixture).build(tournament.getParticipatingTeams());
+        ActiveMatchFixture activeMatchFixture = new ActiveMatchesFixtureBuilder(tournamentId, matchRepository).build(tournament.getParticipatingTeams());
 
         ActiveMatchesFixtureDto activeMatchesFixtureDto = new ActiveMatchesFixtureDto();
         activeMatchesFixtureDto.setMatches(convertToShortMatchDto(activeMatchFixture.getMatches()));

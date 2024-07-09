@@ -1,6 +1,5 @@
 package com.TorneosExpress.model;
 import com.TorneosExpress.dto.ShortTeamDto;
-import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.team.TeamDto;
 
 import com.TorneosExpress.dto.team.TeamPointsDto;
@@ -21,7 +20,6 @@ public class Team {
     this.prestigePoints = teamDto.getPrestigePoints();
     this.captainId = teamDto.getCaptainId();
     this.sport = teamDto.getSport();
-
   }
 
   @Id
@@ -68,17 +66,14 @@ public class Team {
   )
   private List<Article> articles = new ArrayList<>();
 
-  @Column
-  private int matchPoints;
 
-  public Team(Long captainId, String teamName, Sport sport, String teamLocation, boolean isPrivate) {
+  public Team(Long captainId, String teamName, Sport sport, String teamLocation, boolean isPrivate, int prestigePoints) {
     this.name = teamName;
     this.location = teamLocation;
     this.sport = sport;
     this.isPrivate = isPrivate;
-    this.prestigePoints = 0;
+    this.prestigePoints = prestigePoints;
     this.captainId = captainId;
-    this.matchPoints = 0;
   }
 
   public Team(String name) {
@@ -194,19 +189,12 @@ public class Team {
     return new ShortTeamDto(this.id, this.name);
   }
 
-  public int getMatchPoints(){
-    return matchPoints;
-  }
-
-  public void setMatchPoints(int matchPoints){
-    this.matchPoints = matchPoints;
-  }
 
   public TeamWinnerPointsDto teamWinnerPointsDto(){
-    return new TeamWinnerPointsDto(this.id, this.name, this.matchPoints);
+    return new TeamWinnerPointsDto(this.id, this.name, this.prestigePoints);
   }
 
   public TeamPointsDto teamPointsDto(){
-    return new TeamPointsDto(this.matchPoints);
+    return new TeamPointsDto(this.prestigePoints);
   }
 }

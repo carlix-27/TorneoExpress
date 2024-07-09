@@ -63,7 +63,7 @@ public class TournamentController {
         }
     }
 
-    @GetMapping("/history") // TODO
+    @GetMapping("/history")
     public List<Tournament> getTournamentHistory() { // Te devuelve los torneos que dejamos inactivos. La clave esta en chequear si isActive es false. y devolver esos.
         return tournamentService.getInactiveTournaments();
     }

@@ -3,6 +3,7 @@ package com.TorneosExpress.service;
 import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.StatisticsDto;
+import com.TorneosExpress.dto.team.TeamPointsDto;
 import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.TorneosExpress.model.Statistics;
 import com.TorneosExpress.repository.MatchRepository;
@@ -42,7 +43,7 @@ public class StatisticsService {
                 .map(match -> new ActiveMatch(match.getMatch_id(),
                         match.getTeam1_id(),
                         match.getTeam2_id(),
-                        match.getTournament_id(),
+                        match.getTournamentId(),
                         match.getTeamName1(),
                         match.getTeamName2()
                 )).orElse(null);
@@ -59,8 +60,10 @@ public class StatisticsService {
             existingStatistics.setTeam1Score(statisticsDto.getTeam1Score());
             existingStatistics.setTeam2Score(statisticsDto.getTeam2Score());
             TeamWinnerPointsDto teamWinner = statisticsDto.getGanador();
-            int points = determinarPuntos(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
-            teamWinner.setMatchPoints(points);
+            int points = determineScore(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
+            teamWinner.setPrestigePoints(points);
+            TeamPointsDto teamPointsDto = new TeamPointsDto(points);
+            teamPointsDto.setPrestigePoints(points); // Ver la parte del get
             existingStatistics.setGanador(teamWinner);
             statisticsRepository.save(existingStatistics); // Se sobreescribe la informacion (se edita de alguna forma)
             // TODO: Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
@@ -79,7 +82,7 @@ public class StatisticsService {
     }
 
 
-    private int determinarPuntos(int team1Score, int team2Score) {
+    private int determineScore(int team1Score, int team2Score) {
         if (team1Score > team2Score) {
             return 30;
         } else if (team1Score == team2Score) {

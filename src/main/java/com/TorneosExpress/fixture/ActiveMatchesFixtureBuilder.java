@@ -4,6 +4,7 @@ import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.repository.MatchRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,11 +16,12 @@ public class ActiveMatchesFixtureBuilder {
 
     private final Long tournamentId;
 
-    private final Fixture fixture;
 
-    public ActiveMatchesFixtureBuilder(Long tournamentId, Fixture fixture){
+    private final MatchRepository matchRepository;
+
+    public ActiveMatchesFixtureBuilder(Long tournamentId, MatchRepository matchRepository){
         this.tournamentId = tournamentId;
-        this.fixture = fixture;
+        this.matchRepository = matchRepository;
     }
 
     public ActiveMatchFixture build(List<Team> teams) {
@@ -29,7 +31,7 @@ public class ActiveMatchesFixtureBuilder {
 
     private List<ActiveMatch> calculateActiveMatches(List<Team> teams) {
         List<ActiveMatch> matches = new ArrayList<>();
-        List<Match> fixtureMatches = fixture.getMatches();
+        List<Match> existingMatches = matchRepository.findAllByTournamentId(tournamentId);
         int numTeams = teams.size();
         int matchIndex = 0;
         Set<String> processedMatches = new HashSet<>();
@@ -37,12 +39,11 @@ public class ActiveMatchesFixtureBuilder {
         // Generate matches only between participating teams
         for (int i = 0; i < numTeams; i++) {
             for (int j = i + 1; j < numTeams; j++) {
-                if (matchIndex >= fixtureMatches.size()) {
+                if (matchIndex >= existingMatches.size()) {
                     break; // Ensure we do not go out of bounds
                 }
 
-                // TODO: Buscando solucion para evitar muchos partidos repetidos, la idea es tener un partido unico, cuestion de que no vuelvan a enfrentarse en el mismo torneo.
-                Match currentMatch = fixtureMatches.get(matchIndex++);
+                Match currentMatch =  existingMatches.get(matchIndex++); // FIXME! Este es el error, aca hace bochinche
                 Long team1Id = teams.get(i).getId();
                 Long team2Id = teams.get(j).getId();
 

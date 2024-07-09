@@ -1,9 +1,7 @@
 package com.TorneosExpress.model;
 
-import com.TorneosExpress.dto.ActiveMatch;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Entity
 public class Match {
@@ -21,7 +19,7 @@ public class Match {
   private Long team2_id;
 
   @Column
-  private Long tournament_id;
+  private Long tournamentId;
 
   @Column
   private String match_location;
@@ -32,15 +30,12 @@ public class Match {
   @Column
   private String score;
 
-  /*@OneToOne
-  @JoinColumn(name = "statisticsId", nullable = false)
-  private Statistics statistics;*/
 
-  public Match(Team team1, Team team2, Long tournament_id, String match_location, LocalDate date, String score) {
+  public Match(Team team1, Team team2, Long tournamentId, String match_location, LocalDate date, String score) {
     this.score = score;
     this.date = date;
     this.match_location = match_location;
-    this.tournament_id = tournament_id;
+    this.tournamentId = tournamentId;
     this.team2_id = team2.getId();
     this.team1_id = team1.getId();
     this.teamName1 = team1.getName();
@@ -95,12 +90,12 @@ public class Match {
     this.team2_id = team2_id;
   }
 
-  public Long getTournament_id() {
-    return tournament_id;
+  public Long getTournamentId() {
+    return tournamentId;
   }
 
-  public void setTournament_id(Long tournament_id) {
-    this.tournament_id = tournament_id;
+  public void setTournamentId(Long tournamentId) {
+    this.tournamentId = tournamentId;
   }
 
   public String getMatch_location() {
@@ -126,22 +121,5 @@ public class Match {
   public void setScore(String score) {
     this.score = score;
   }
-
-  // Statistics Data
-  /*public Long getStatisticId(){ // Con este dato, al igual que con el resultado partido y ganador, voy a poder reconstruir la estadistica que quiero mostrar!
-    return statistics.getId();
-  }
-
-  public void setStatisticId(Long statisticId){
-    this.statistics.setId(statisticId);
-  }
-
-  public String getResultadoPartidoOfMatch(){
-    return statistics.getResultadoPartido();
-  }
-
-  public String getGanadorOfMatch(){
-    return statistics.getGanador();
-  }*/
 
 }
