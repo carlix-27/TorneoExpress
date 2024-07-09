@@ -2,6 +2,7 @@ package com.TorneosExpress.dto.tournament;
 
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.MatchRepository;
 
 import java.time.LocalDate;
@@ -10,13 +11,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class FixtureBuilder {
-  private final Long tournamentId;
+  private final Tournament tournament;
   private final String location;
   private final LocalDate startDate;
   private final MatchRepository matchRepository;
 
-  public FixtureBuilder(Long tournamentId, String location, LocalDate startDate, MatchRepository matchRepository) {
-    this.tournamentId = tournamentId;
+  public FixtureBuilder(Tournament tournament, String location, LocalDate startDate, MatchRepository matchRepository) {
+    this.tournament = tournament;
     this.location = location;
     this.startDate = startDate;
     this.matchRepository = matchRepository;
@@ -52,9 +53,9 @@ public class FixtureBuilder {
       Team team1 = teamsCopy.get(i);
       Team team2 = teamsCopy.get(numTeams - i - 1);
       if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
-        Match match = new Match(team1, team2, tournamentId, location, matchDate, "To be played.");
+        Match match = new Match(team1, team2, tournament, location, matchDate, "To be played.");
         matches.add(match);
-        matchRepository.save(match); // Add to db info about matches.
+        matchRepository.save(match);
       }
     }
   }

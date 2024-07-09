@@ -27,7 +27,11 @@ async function fetchMatches(tournamentId) {
         matches.forEach(match => {
             const option = document.createElement('option');
             option.value = match.id;
-            option.textContent = `${match.team1.name} vs ${match.team2.name}`;
+
+            const firstTeam = match.team1
+            const secondTeam = match.team2
+
+            option.textContent = `${firstTeam.name} vs ${secondTeam.name}`;
             partidoSelector.appendChild(option);
         });
     } catch (error) {
@@ -91,6 +95,18 @@ async function saveStats(event) {
         displayErrorMessage("Error al guardar las estadísticas");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 function isValidScore(score) {
     return !isNaN(parseInt(score)) && isFinite(score) && parseInt(score) >= 0;

@@ -51,14 +51,6 @@ public class StatisticsService {
         return statisticsRepository.save(statistics);
     }
 
-    private Team getTeam(Long winnerTeamId) {
-        Optional<Team> teamOptional = teamRepository.findById(winnerTeamId);
-        if (teamOptional.isEmpty()) {
-            throw new EntityNotFoundException("Team not found with id " + winnerTeamId);
-        }
-        return teamOptional.get();
-    }
-
     private Match getMatch(Long match_id) {
         Optional<Match> matchOptional = matchRepository.findById(match_id);
         if (matchOptional.isEmpty()) {
@@ -74,17 +66,7 @@ public class StatisticsService {
         }
         return tournamentOptional.get();
     }
-
-
-    private int determineScore(int team1Score, int team2Score) {
-        if (team1Score > team2Score) {
-            return 30;
-        } else if (team1Score == team2Score) {
-            return 15;
-        } else {
-            return 0;
-        }
-    }
+    
 
     private Team getWinnerTeam(Long winnerTeamId) {
         return teamRepository.findById(winnerTeamId)

@@ -5,24 +5,25 @@ import java.time.LocalDate;
 
 @Entity
 public class Match {
-  private String teamName1;
-  private String teamName2;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long matchId;
 
-  @Column
-  private Long team1_id;
+  @ManyToOne
+  @JoinColumn(name = "team1_id", nullable = false)
+  private Team team1;
+
+  @ManyToOne
+  @JoinColumn(name = "team2_id", nullable = false)
+  private Team team2;
+
+  @ManyToOne
+  @JoinColumn(name = "tournament_id", nullable = false)
+  private Tournament tournament;
 
   @Column
-  private Long team2_id;
-
-  @Column
-  private Long tournamentId;
-
-  @Column
-  private String match_location;
+  private String matchLocation;
 
   @Column
   private LocalDate date;
@@ -30,80 +31,61 @@ public class Match {
   @Column
   private String score;
 
-
-  public Match(Team team1, Team team2, Long tournamentId, String match_location, LocalDate date, String score) {
-    this.score = score;
-    this.date = date;
-    this.match_location = match_location;
-    this.tournamentId = tournamentId;
-    this.team2_id = team2.getId();
-    this.team1_id = team1.getId();
-    this.teamName1 = team1.getName();
-    this.teamName2 = team2.getName();
-  }
-
-
-  @Override
-  public String toString() {
-    return teamName1 + " VS " + teamName2 + " on date " + date;
-  }
+  @Column
+  private boolean played;
 
   public Match() {}
 
-  public String getTeamName1() {
-    return teamName1;
+  public Match(Team team1, Team team2, Tournament tournament, String matchLocation, LocalDate date, String score) {
+    this.team1 = team1;
+    this.team2 = team2;
+    this.tournament = tournament;
+    this.matchLocation = matchLocation;
+    this.date = date;
+    this.score = score;
+    this.played = false;
   }
 
-  public void setTeamName1(String teamName1) {
-    this.teamName1 = teamName1;
-  }
+  // Getters and setters...
 
-  public String getTeamName2() {
-    return teamName2;
-  }
-
-  public void setTeamName2(String teamName2) {
-    this.teamName2 = teamName2;
-  }
-
-  public Long getMatch_id() {
+  public Long getMatchId() {
     return matchId;
   }
 
-  public void setMatch_id(Long matchId) {
-    this.matchId= matchId;
+  public void setMatchId(Long matchId) {
+    this.matchId = matchId;
   }
 
-  public Long getTeam1_id() {
-    return team1_id;
+  public Team getTeam1() {
+    return team1;
   }
 
-  public void setTeam1_id(Long team1_id) {
-    this.team1_id = team1_id;
+  public void setTeam1(Team team1) {
+    this.team1 = team1;
   }
 
-  public Long getTeam2_id() {
-    return team2_id;
+  public Team getTeam2() {
+    return team2;
   }
 
-  public void setTeam2_id(Long team2_id) {
-    this.team2_id = team2_id;
+  public void setTeam2(Team team2) {
+    this.team2 = team2;
   }
 
-  public Long getTournamentId() {
-    return tournamentId;
+  public Tournament getTournament() {
+    return tournament;
   }
 
-  public void setTournamentId(Long tournamentId) {
-    this.tournamentId = tournamentId;
+  public void setTournament(Tournament tournament) {
+    this.tournament = tournament;
   }
 
-  public String getMatch_location() {
-    return match_location;
+  public String getMatchLocation() {
+    return matchLocation;
   }
 
-  public void setMatch_location(String match_location) {
-    this.match_location = match_location;
+  public void setMatchLocation(String matchLocation) {
+    this.matchLocation = matchLocation;
   }
 
   public LocalDate getDate() {
@@ -122,4 +104,11 @@ public class Match {
     this.score = score;
   }
 
+  public boolean isPlayed() {
+    return played;
+  }
+
+  public void setPlayed(boolean played) {
+    this.played = played;
+  }
 }

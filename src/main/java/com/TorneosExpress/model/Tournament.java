@@ -78,6 +78,10 @@ public class Tournament {
   )
   private List<Team> participatingTeams = new ArrayList<>();
 
+
+  @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Match> matches = new ArrayList<>();
+
   public boolean isActive() {
     return isActive;
   }
@@ -93,8 +97,6 @@ public class Tournament {
   public void setMaxTeams(int maxTeams) {
     this.maxTeams = maxTeams;
   }
-
-
 
   public void setCreatorId(Long creatorId) {
     this.creatorId = creatorId;
@@ -182,6 +184,14 @@ public class Tournament {
 
   public ShortTournamentDto toShortDto(){
     return new ShortTournamentDto(this.Id, this.name);
+  }
+
+  public List<Match> getMatches() {
+    return matches;
+  }
+
+  public void setMatches(List<Match> matches) {
+    this.matches = matches;
   }
 
 }

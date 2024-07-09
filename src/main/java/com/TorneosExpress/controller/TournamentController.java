@@ -3,7 +3,7 @@ package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.team.TeamPointsDto;
-import com.TorneosExpress.dto.tournament.FixtureDto;
+import com.TorneosExpress.dto.tournament.Fixture;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.TorneosExpress.model.*;
 import com.TorneosExpress.service.TournamentService;
@@ -55,12 +55,12 @@ public class TournamentController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
         } else{
             tournament.setActive(false);
-            return ResponseEntity.ok(tournamentService.updateTournament(tournament)); // Guarda los datos del torneo finalizado. Actualiza el estado de active a false.
+            return ResponseEntity.ok(tournamentService.updateTournament(tournament));
         }
     }
 
     @GetMapping("/history")
-    public List<Tournament> getTournamentHistory() { // Te devuelve los torneos que dejamos inactivos. La clave esta en chequear si isActive es false. y devolver esos.
+    public List<Tournament> getTournamentHistory() {
         return tournamentService.getInactiveTournaments();
     }
 
@@ -96,12 +96,8 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/calendar")
-    public ResponseEntity<FixtureDto> getTournamentCalendar(@PathVariable Long tournamentId) {
-        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
-        if (fixture == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(fixture);
+    public Fixture getTournamentCalendar(@PathVariable Long tournamentId) {
+        return tournamentService.getTournamentCalendar(tournamentId);
     }
     
 

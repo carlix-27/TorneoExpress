@@ -1,10 +1,6 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.dto.ActiveMatch;
-import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
-import com.TorneosExpress.dto.tournament.FixtureDto;
-import com.TorneosExpress.dto.tournament.MatchDto;
-import com.TorneosExpress.dto.tournament.ShortMatchDto;
+import com.TorneosExpress.dto.tournament.Fixture;
 import com.TorneosExpress.dto.tournament.FixtureBuilder;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
@@ -17,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,63 +36,21 @@ public class TournamentService {
         return tournament.getParticipatingTeams();
     }
 
-
-    public List<Match> getActiveMatches(Long tournamentId){
+    public List<Match> getActiveMatches(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
-        if(tournament == null){
+        if (tournament == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
         }
 
-        ActiveMatchFixture activeMatchFixture = new ActiveMatchesFixtureBuilder(tournamentId, matchRepository).build(tournament.getParticipatingTeams());
-
-        ActiveMatchesFixtureDto activeMatchesFixtureDto = new ActiveMatchesFixtureDto();
-        activeMatchesFixtureDto.setMatches(convertToShortMatchDto(activeMatchFixture.getMatches()));
-
-        return activeMatchesFixtureDto;
+        return matchRepository.findByTournamentIdAndPlayed(tournamentId, false);
     }
 
-    private List<ShortMatchDto> convertToShortMatchDto(List<ActiveMatch> activeMatches) {
-        List<ShortMatchDto> dtoActiveMatches = new ArrayList<>();
-        for(ActiveMatch match: activeMatches){
-            ShortMatchDto shortMatchDto = new ShortMatchDto();
-            shortMatchDto.setMatchId(match.getMatchId());
-            shortMatchDto.setTeam1_id(match.getTeam1Id());
-            shortMatchDto.setTeam2_id(match.getTeam2Id());
-            shortMatchDto.setTeamName1(match.getTeamName1());
-            shortMatchDto.setTeamName2(match.getTeamName2());
-            dtoActiveMatches.add(shortMatchDto);
-        }
-        return dtoActiveMatches;
-    }
-
-    public FixtureDto getTournamentCalendar(Long tournamentId) {
+    public Fixture getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
-        Fixture fixture = new FixtureBuilder(
-            tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
+        return new FixtureBuilder(
+                tournament, tournament.getLocation(), tournament.getStartDate(), matchRepository)
             .build(tournament.getParticipatingTeams());
-        FixtureDto fixtureDto = new FixtureDto();
-        fixtureDto.setMatches(convertToDtoFormat(fixture.getMatches()));
-        return fixtureDto;
     }
-
-    private List<MatchDto> convertToDtoFormat(List<Match> matches) {
-        List<MatchDto> matchDtos = new ArrayList<>();
-        for (Match match : matches) {
-            MatchDto matchDto = new MatchDto();
-            matchDto.setMatchId(match.getMatch_id());
-            matchDto.setDate(match.getDate());
-            matchDto.setLocation(match.getMatch_location());
-            matchDto.setTeam1_id(match.getTeam1_id());
-            matchDto.setTeam2_id(match.getTeam2_id());
-            matchDto.setTeamName1(match.getTeamName1());
-            matchDto.setTeamName2(match.getTeamName2());
-            matchDtos.add(matchDto);
-        }
-        return matchDtos;
-    }
-
-
-
 
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorId(userId);
