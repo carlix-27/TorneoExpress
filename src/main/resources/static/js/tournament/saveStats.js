@@ -2,85 +2,88 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');
 
-    if (tournamentId) {
-        document.getElementById('tournamentId').value = tournamentId;
-    }
+    document.getElementById('tournamentId').value = tournamentId;
 
     const formularioEstadisticas = document.getElementById('formularioEstadisticas');
-    if (formularioEstadisticas) {
-        formularioEstadisticas.addEventListener('submit', saveStats);
-    }
+    formularioEstadisticas.addEventListener('submit', saveStats);
 
-    if (tournamentId) {
-        fetchMatches(tournamentId);
-        fetchTeams(tournamentId);
-    }
+    fetchMatches(tournamentId);
+    fetchTeams(tournamentId);
 });
 
-async function fetchMatches(tournamentId) {
-    try {
-        let response = await fetch(`/api/tournaments/${tournamentId}/activeMatches`);
-        let matches = await response.json();
-
-        if (matches.length === 0) {
-            await createMatches(tournamentId);
-            response = await fetch(`/api/tournaments/${tournamentId}/activeMatches`);
-            matches = await response.json();
-        }
-
-        console.log(matches);
-        const partidoSelector = document.getElementById('partidoSelector');
-
-        matches.forEach(match => {
-            const option = document.createElement('option');
-            option.value = match.id;
-
-            const firstTeam = match.team1;
-            const secondTeam = match.team2;
-
-            option.textContent = `${firstTeam.name} vs ${secondTeam.name}`;
-            partidoSelector.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Error fetching matches:', error);
-    }
-}
-
-async function createMatches(tournamentId) {
-    try {
-        const response = await fetch(`/api/tournaments/${tournamentId}/createMatches`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+function fetchMatches(tournamentId) {
+    fetch(`/api/tournaments/${tournamentId}/activeMatches`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        });
+            return response.json();
+        })
+        .then(matches => {
+            console.log("Is matches empty?: ", matches);
 
-        if (!response.ok) {
-            throw new Error('Error creating matches');
+            if (matches.length === 0) {
+                return createMatches(tournamentId)
+                    .then(() => fetch(`/api/tournaments/${tournamentId}/activeMatches`))
+                    .then(response => response.json())
+                    .then(newMatches => {
+                        displayMatches(newMatches);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching matches after creating:', error);
+                    });
+            } else {
+                displayMatches(matches);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching matches:', error);
+        });
+}
+
+function createMatches(tournamentId) {
+    return fetch(`/api/tournaments/${tournamentId}/createMatches`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
         }
-    } catch (error) {
-        console.error('Error creating matches:', error);
-    }
-}
-
-async function fetchTeams(tournamentId) {
-    try {
-        const response = await fetch(`/api/tournaments/${tournamentId}/teams`);
-        const teams = await response.json();
-        const winnerSelector = document.getElementById('winnerSelector');
-
-        teams.forEach(team => {
-            const option = document.createElement('option');
-            option.value = team.id;
-            option.textContent = team.name;
-            winnerSelector.appendChild(option);
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error creating matches');
+            }
+        })
+        .catch(error => {
+            console.error('Error creating matches:', error);
+            throw error; // Re-throw the error to be caught by the caller
         });
-    } catch (error) {
-        console.error('Error fetching teams:', error);
-    }
 }
 
-async function saveStats(event) {
+function fetchTeams(tournamentId) {
+    fetch(`/api/tournaments/${tournamentId}/teams`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(teams => {
+            const winnerSelector = document.getElementById('winnerSelector');
+            winnerSelector.innerHTML = ''; // Clear previous options if any
+
+            teams.forEach(team => {
+                const option = document.createElement('option');
+                option.value = team.id;
+                option.textContent = team.name;
+                winnerSelector.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching teams:', error);
+        });
+}
+
+function saveStats(event) {
     event.preventDefault();
 
     const tournamentId = document.getElementById('tournamentId').value;
@@ -100,24 +103,25 @@ async function saveStats(event) {
         team2Score: parseInt(team2Score)
     };
 
-    try {
-        const response = await fetch(`/api/matches/${tournamentId}/${matchId}/statistics`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+    fetch(`/api/matches/${tournamentId}/${matchId}/statistics`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (response.ok) {
+                displaySuccessMessage("Estadísticas agregadas con éxito");
+                document.getElementById('formularioEstadisticas').reset();
+            } else {
+                throw new Error('Hubo un problema al agregar las estadísticas');
+            }
+        })
+        .catch(error => {
+            displayErrorMessage("Error al guardar las estadísticas");
+            console.error('Error saving stats:', error);
         });
-
-        if (response.ok) {
-            displaySuccessMessage("Estadísticas agregadas con éxito");
-            document.getElementById('formularioEstadisticas').reset();
-        } else {
-            displayErrorMessage("Hubo un problema al agregar las estadísticas");
-        }
-    } catch (error) {
-        displayErrorMessage("Error al guardar las estadísticas");
-    }
 }
 
 function isValidScore(score) {
@@ -138,4 +142,20 @@ function displayErrorMessage(message) {
     setTimeout(() => {
         errorMessage.style.display = "none";
     }, 3000);
+}
+
+function displayMatches(matches) {
+    const partidoSelector = document.getElementById('partidoSelector');
+    partidoSelector.innerHTML = ''; // Clear previous options if any
+
+    matches.forEach(match => {
+        const option = document.createElement('option');
+        option.value = match.id;
+
+        const firstTeam = match.team1;
+        const secondTeam = match.team2;
+
+        option.textContent = `${firstTeam.name} vs ${secondTeam.name}`;
+        partidoSelector.appendChild(option);
+    });
 }
