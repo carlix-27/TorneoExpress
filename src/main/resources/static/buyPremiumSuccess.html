@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <s
+  <title>Upgrade to Premium</title>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const userId = localStorage.getItem("userID");
+
+      fetch(`/upgrade/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data === true) {
+                  document.getElementById("status").innerText = "You have been upgraded to Premium!";
+                } else {
+                  document.getElementById("status").innerText = "Failed to upgrade to Premium.";
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("status").innerText = "An error occurred during the upgrade process.";
+              });
+    });
+  </script>
+</head>
+<body>
+<h1>Upgrade to Premium</h1>
+<p id="status">Upgrading...</p>
+</body>
+</html>

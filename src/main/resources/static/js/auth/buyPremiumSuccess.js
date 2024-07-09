@@ -4,7 +4,7 @@ const mercadopago = new MercadoPago('TESTUSER264492744', {
 });
 
 
-function buyPremium() {
+function buyPremiumSuccess() {
 
     // Fetch userId from localStorage
     const userId = localStorage.getItem("userId");

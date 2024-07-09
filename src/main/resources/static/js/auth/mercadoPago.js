@@ -20,7 +20,7 @@ document.getElementById("checkout-btn").addEventListener("click", function () {
             console.log("Preference ID: ", preference.id)
             createCheckoutButton(preference.id);
 
-            const unitPrice = 500
+            const unitPrice = 50
 
             // Populate the summary price and total elements
             document.getElementById("summary-price").textContent = `$${unitPrice}`;

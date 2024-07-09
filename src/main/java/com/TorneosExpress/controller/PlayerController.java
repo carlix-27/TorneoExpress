@@ -3,12 +3,14 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
+import com.mercadopago.resources.preference.PreferenceBackUrls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +61,7 @@ public class PlayerController {
 
     @PostMapping("/create_preference")
     public Preference createPreference() throws MPException, MPApiException {
+
         MercadoPagoConfig.setAccessToken("APP_USR-6665380637091560-070820-649b96fd61881045c6aea8bc93be58d1-1893369186");
         PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                 .id("1")
@@ -72,11 +75,20 @@ public class PlayerController {
                 .build();
 
 
+
+        PreferenceBackUrlsRequest preferenceBackUrls = PreferenceBackUrlsRequest.builder();
+
+
+
+        backUrls.setSuccess("https://www.success.com");
+        backUrls.setFailure("src/main/resources/static/buy_premium.html");
+
+
         List<PreferenceItemRequest> items = new ArrayList<>();
         items.add(itemRequest);
 
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(items).build();
+                .items(items).backUrls(preferenceBackUrls).build();
 
         PreferenceClient client = new PreferenceClient();
 
