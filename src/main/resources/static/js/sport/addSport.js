@@ -1,7 +1,4 @@
-import {displaySuccessMessage} from "../display/displaySuccessMessage.js";
-import {displayErrorMessage} from "../display/displayErrorMessage.js";
-
-export function addSport() {
+function addSport() {
     const sportName = document.getElementById('sport-name').value;
     const num_players = document.getElementById('num_players').value;
     const userId = localStorage.getItem("userId");
@@ -64,4 +61,20 @@ function checkPremiumStatus(userId, callback){
         }
     };
     xhr.send();
+}
+
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+}
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
 }

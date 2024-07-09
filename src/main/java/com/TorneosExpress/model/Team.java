@@ -209,5 +209,4 @@ public class Team {
   public TeamPointsDto teamPointsDto(){
     return new TeamPointsDto(this.matchPoints);
   }
-
 }
