@@ -22,9 +22,8 @@ function fetchTeamDetails(teamId) {
         });
 }
 
-// Function to handle form submission
 function updateTeam(event) {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
     const teamId = document.getElementById('team-id').value;
     const name = document.getElementById('team-name').value;
@@ -35,7 +34,7 @@ function updateTeam(event) {
         id: teamId, // Include the ID in the updated data
         name: name,
         location: location,
-        isPrivate: isPrivate
+        private: isPrivate
     };
 
     fetch(`/api/teams/${teamId}`, {
@@ -49,12 +48,10 @@ function updateTeam(event) {
             if (!response.ok) {
                 throw new Error(`Failed to update team: ${response.status} ${response.statusText}`);
             }
-            // Redirect back to tournaments list after successful update
             window.location.href = 'misEquipos.html';
         })
         .catch(error => {
             console.error('Error:', error);
-            // Handle error, show message to user
         });
 }
 
