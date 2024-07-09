@@ -36,7 +36,6 @@ function fetchMatches(tournamentId) {
                 partidoSelector.appendChild(option);
             });
 
-            // Actualizar etiquetas de resultados dinámicamente
             const team1Label = document.getElementById('team1ScoreLabel');
             const team2Label = document.getElementById('team2ScoreLabel');
             if (matches.length > 0) {
@@ -70,7 +69,7 @@ function fetchTeams(tournamentId) {
         })
         .catch(error => {
             console.error('Error fetching teams:', error);
-            throw error; // Propagate the error to the caller
+            throw error;
         });
 }
 
