@@ -14,11 +14,14 @@ public class Match {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long matchId;
 
-  @Column
-  private Long team1_id;
+  @ManyToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "team1_id", referencedColumnName = "id")
+  private Team team1;
 
-  @Column
-  private Long team2_id;
+  @ManyToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "team2_id", referencedColumnName = "id")
+  private Team team2;
+
 
   @Column
   private Long tournament_id;
@@ -41,8 +44,8 @@ public class Match {
     this.date = date;
     this.match_location = match_location;
     this.tournament_id = tournament_id;
-    this.team2_id = team2.getId();
-    this.team1_id = team1.getId();
+    this.team2 = team2;
+    this.team1 = team1;
     this.teamName1 = team1.getName();
     this.teamName2 = team2.getName();
   }
@@ -80,19 +83,36 @@ public class Match {
   }
 
   public Long getTeam1_id() {
-    return team1_id;
+    return team1.getId();
   }
 
   public void setTeam1_id(Long team1_id) {
-    this.team1_id = team1_id;
+    this.team1.setId(team1_id);
   }
 
   public Long getTeam2_id() {
-    return team2_id;
+    return team2.getId();
   }
 
   public void setTeam2_id(Long team2_id) {
-    this.team2_id = team2_id;
+    this.team2.setId(team2_id);
+  }
+
+
+  public Team getTeam1() {
+    return team1;
+  }
+
+  public Team getTeam2() {
+    return team2;
+  }
+
+  public void setTeam1(Team team1) {
+    this.team1 = team1;
+  }
+
+  public void setTeam2(Team team2) {
+    this.team2 = team2;
   }
 
   public Long getTournament_id() {

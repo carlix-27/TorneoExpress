@@ -15,6 +15,7 @@ import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TournamentService {
@@ -78,6 +80,7 @@ public class TournamentService {
         return dtoActiveMatches;
     }
 
+    @Transactional
     public FixtureDto getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture;
@@ -85,7 +88,10 @@ public class TournamentService {
 
         if (tournament.getFixture() == null || tournament.getFixture().getMatches().isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
-            teamRepository.saveAll(teams);
+            teamRepository.saveAll(teams); // Ensure teams are saved
+
+            // Refresh the teams list to ensure we have managed entities
+            teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
 
             fixture = new FixtureBuilder(
                 tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
