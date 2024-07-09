@@ -1,21 +1,4 @@
-/* CSS for the horizontal navbar */
-
-nav ul li:last-child {
-    margin-right: 0;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #333333;
-}
-
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -23,6 +6,7 @@ body {
     background-color: #f0f0f0;
 }
 
+/* Estilos del encabezado */
 header {
     background-color: #000;
     color: #fff;
@@ -46,17 +30,49 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #fff;
     text-decoration: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-/*  STYLES FOR EACH RESULT  */
+nav ul li a:hover {
+    background-color: #333333;
+}
 
-h2 {
+/* Estilos para la sección de torneos */
+#mis-torneos {
     text-align: center;
+    margin: 20px 0;
 }
 
-#lista-torneos li {
+#mis-torneos h2 {
+    margin-bottom: 20px;
+}
+
+/* Estilos para los cuadros de torneos */
+#lista-torneos-creados, #lista-torneos-participados {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#lista-torneos-creados h3, #lista-torneos-participados h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#lista-torneos-creados ul, #lista-torneos-participados ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#lista-torneos-creados li, #lista-torneos-participados li {
     margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ccc;
@@ -65,31 +81,29 @@ h2 {
     margin-right: 30px;
 }
 
-
-/* Team name style */
-#lista-torneos li h3 {
+#lista-torneos-creados li h3, #lista-torneos-participados li h3 {
     margin: 0;
     font-size: 20px;
     color: #333;
 }
 
-#lista-torneos li p {
+#lista-torneos-creados li p, #lista-torneos-participados li p {
     margin: 5px 0;
     font-size: 16px;
     color: #666;
 }
 
-#lista-torneos li button {
+.action-link {
+    display: inline-block;
     margin-top: 10px;
     padding: 8px 16px;
-    border: none;
     border-radius: 5px;
     background-color: #3d1f7f;
     color: #fff;
+    text-decoration: none;
     cursor: pointer;
 }
 
-/* Button hover style */
-#lista-torneos li button:hover {
+.action-link:hover {
     background-color: #342160;
 }

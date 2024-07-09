@@ -123,11 +123,8 @@ public class TournamentService {
         return matchDtos;
     }
 
-
-
-
     public List<Tournament> getTournamentsByUser(Long userId) {
-        return tournamentRepository.findByCreatorId(userId);
+        return tournamentRepository.findByCreatorIdOrParticipatingTeamsUserId(userId);
     }
 
     public Tournament createTournament(Tournament tournament) {

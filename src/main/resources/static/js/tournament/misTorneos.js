@@ -13,8 +13,10 @@ function cargarTorneos() {
             return response.json();
         })
         .then(tournaments => {
-            const listaTorneos = document.getElementById("lista-torneos");
-            listaTorneos.innerHTML = "";
+            const listaTorneosCreados = document.getElementById("torneos-creados-list");
+            const listaTorneosParticipados = document.getElementById("torneos-participados-list");
+            listaTorneosCreados.innerHTML = "";
+            listaTorneosParticipados.innerHTML = "";
 
             tournaments.forEach(tournament => {
                 const li = document.createElement("li");
@@ -25,34 +27,35 @@ function cargarTorneos() {
                     location: tournamentLocation,
                     private: privateTournament,
                     id: tournamentId,
-                    participatingTeams
-                } = tournament
+                    participatingTeams,
+                    creatorId,
+                } = tournament;
 
-                const numOfParticipatingTeams = participatingTeams.length
+                const isCreator = userId == creatorId;
+
+                const numOfParticipatingTeams = participatingTeams.length;
                 const maxTeams = tournament.maxTeams;
-                const sportName = tournamentSport.sportName
-
+                const sportName = tournamentSport.sportName;
 
                 li.innerHTML = `
-                
                 <div>
-                
-                    <div>
                     <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a> 
                     <p>Deporte: ${sportName}</p>
                     <p>Ubicación: ${tournamentLocation}</p>
                     <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
                     <p>Dificultad: ${tournament.difficulty}</p>
-                    <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams} </p>
-                    <button onclick="editarTorneo(${tournament.id})">Editar</button>
-                    <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
-                    ${privateTournament ? `<button onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes</button>` : ''}
+                    <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+                    ${isCreator ? `<a class="action-link" onclick="editarTorneo(${tournament.id})">Editar</a>
+                    <a class="action-link" onclick="borrarTorneo(${tournament.id})">Borrar</a>` : ''}
+                    ${privateTournament && isCreator ? `<a class="action-link" onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes</a>` : ''}
                 </div>
-                
                 `;
-                listaTorneos.appendChild(li);
+                if (isCreator) {
+                    listaTorneosCreados.appendChild(li);
+                } else {
+                    listaTorneosParticipados.appendChild(li);
+                }
             });
-
         })
         .catch(error => {
             console.error('Error:', error);
@@ -63,8 +66,7 @@ function editarTorneo(torneoId) {
     window.location.href = `edit-tournament.html?id=${torneoId}`;
 }
 
-
-function manejarSolicitudes(torneoId){
+function manejarSolicitudes(torneoId) {
     window.location.href = `manejarSolicitudesTorneo.html?id=${torneoId}`;
 }
 
