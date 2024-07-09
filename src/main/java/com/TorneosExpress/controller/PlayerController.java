@@ -12,11 +12,7 @@ import com.mercadopago.resources.preference.Preference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.mercadopago.MercadoPagoConfig;
 
 import java.math.BigDecimal;
@@ -63,7 +59,7 @@ public class PlayerController {
 
     @PostMapping("/create_preference")
     public Preference createPreference() throws MPException, MPApiException {
-        MercadoPagoConfig.setAccessToken("YOUR_ACCESS_TOKEN");
+        MercadoPagoConfig.setAccessToken("APP_USR-6b76fcb4-909a-41bb-9abb-35e4910f698c");
         PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                 .id("1")
                 .title("Torneos Express premium")
@@ -71,7 +67,7 @@ public class PlayerController {
                 .description("Premium para la aplicación de Torneos Express")
                 .categoryId("sport")
                 .quantity(1)
-                .unitPrice(new BigDecimal("75.76"))
+                .unitPrice(new BigDecimal(500))
                 .build();
 
 
@@ -83,7 +79,9 @@ public class PlayerController {
 
         PreferenceClient client = new PreferenceClient();
 
-        return client.create(preferenceRequest);
+        Preference preference = client.create(preferenceRequest);
+
+        return preference;
     }
 
     @PostMapping("/upgrade/{userId}")
