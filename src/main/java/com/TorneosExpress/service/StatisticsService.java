@@ -66,7 +66,7 @@ public class StatisticsService {
         }
         return tournamentOptional.get();
     }
-    
+
 
     private Team getWinnerTeam(Long winnerTeamId) {
         return teamRepository.findById(winnerTeamId)

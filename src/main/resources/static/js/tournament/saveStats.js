@@ -19,23 +19,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function fetchMatches(tournamentId) {
     try {
-        const response = await fetch(`/api/tournaments/${tournamentId}/activeMatches`);
-        const matches = await response.json();
-        console.log(matches)
+        let response = await fetch(`/api/tournaments/${tournamentId}/activeMatches`);
+        let matches = await response.json();
+
+        if (matches.length === 0) {
+            await createMatches(tournamentId);
+            response = await fetch(`/api/tournaments/${tournamentId}/activeMatches`);
+            matches = await response.json();
+        }
+
+        console.log(matches);
         const partidoSelector = document.getElementById('partidoSelector');
 
         matches.forEach(match => {
             const option = document.createElement('option');
             option.value = match.id;
 
-            const firstTeam = match.team1
-            const secondTeam = match.team2
+            const firstTeam = match.team1;
+            const secondTeam = match.team2;
 
             option.textContent = `${firstTeam.name} vs ${secondTeam.name}`;
             partidoSelector.appendChild(option);
         });
     } catch (error) {
         console.error('Error fetching matches:', error);
+    }
+}
+
+async function createMatches(tournamentId) {
+    try {
+        const response = await fetch(`/api/tournaments/${tournamentId}/createMatches`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error creating matches');
+        }
+    } catch (error) {
+        console.error('Error creating matches:', error);
     }
 }
 
@@ -95,18 +119,6 @@ async function saveStats(event) {
         displayErrorMessage("Error al guardar las estadísticas");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 function isValidScore(score) {
     return !isNaN(parseInt(score)) && isFinite(score) && parseInt(score) >= 0;

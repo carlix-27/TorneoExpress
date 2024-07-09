@@ -4,8 +4,10 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.ShortTeamDto;
 import com.TorneosExpress.dto.team.TeamPointsDto;
 import com.TorneosExpress.dto.tournament.Fixture;
+import com.TorneosExpress.dto.tournament.FixtureBuilder;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.TorneosExpress.model.*;
+import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,10 +25,12 @@ import java.util.stream.Collectors;
 public class TournamentController {
 
     private final TournamentService tournamentService;
+    private final MatchRepository matchRepository;
 
     @Autowired
-    public TournamentController(TournamentService tournamentService) {
+    public TournamentController(TournamentService tournamentService, MatchRepository matchRepository) {
         this.tournamentService = tournamentService;
+        this.matchRepository = matchRepository;
     }
 
     @PostMapping("/create")
@@ -153,5 +158,26 @@ public class TournamentController {
     public List<Match> getActiveMatches(@PathVariable Long tournamentId) {
         return tournamentService.getActiveMatches(tournamentId);
     }
+
+    @PostMapping("/{tournamentId}/createMatches")
+    public ResponseEntity<Void> createMatches(@PathVariable Long tournamentId) {
+        Tournament tournament = tournamentService.getTournamentById(tournamentId);
+        if (tournament == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Match> existingMatches = matchRepository.findByTournamentId(tournamentId);
+        if (!existingMatches.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        List<Team> teamList = tournament.getParticipatingTeams();
+        FixtureBuilder fixtureBuilder = new FixtureBuilder(tournament, "Some Location", LocalDate.now(), matchRepository);
+        fixtureBuilder.build(teamList);
+
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }
