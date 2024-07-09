@@ -3,44 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="styles/buyPremium.css">
-
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="js/auth/checkRedirect.js"></script>
-    <script src="js/auth/buyPremium.js"></script>
-
     <script src="https://sdk.mercadopago.com/js/v2"></script>
-
+    <script src="js/auth/mercadoPago.js" defer></script>
     <title>Comprar Premium</title>
 </head>
 <body>
 <main>
     <section class="shopping-cart dark">
-        <h1>Actualízate a Premium</h1>
-        <p>¡Bienvenido a Torneos Express!</p>
-
-        <h2>Beneficios de Premium:</h2>
-        <ul>
-            <li>Creación de Torneos</li>
-            <li>Creación de Equipos</li>
-            <li>Beneficios con la tienda</li>
-            <li>Prioridad en la lista de equipos</li>
-        </ul>
-
-        <h2>Precio:</h2>
-        <ul>
-            <li id="unit-price">$499.99 ars (único pago)</li>
-        </ul>
-
-        <h2>Tenés dudas?</h2>
-        <ul>
-            <li>Teléfono: 1-800-PREMIUM</li>
-            <li>Email: torneosExpress@dudas.com</li>
-        </ul>
-
-        <button class="btn btn-primary btn-lg btn-block" id="checkout-btn">Checkout</button>
+        <div class="content">
+            <div class="block-heading">
+                <h1>Actualízate a Premium</h1>
+                <p>¡Bienvenido a Torneos Express!</p>
+            </div>
+            <h2>Beneficios de Premium:</h2>
+            <ul>
+                <li>Creación de Torneos</li>
+                <li>Creación de Equipos</li>
+                <li>Beneficios con la tienda</li>
+                <li>Prioridad en la lista de equipos</li>
+            </ul>
+            <h2>Precio:</h2>
+            <ul>
+                <b>Precio:</b> $ <span id="unit-price">10</span>
+            </ul>
+            <h2>Tenés dudas?</h2>
+            <ul>
+                <li>Teléfono: 1-800-PREMIUM</li>
+                <li>Email: torneosExpress@dudas.com</li>
+            </ul>
+            <button class="btn btn-primary btn-lg btn-block" id="checkout-btn">Checkout</button>
+        </div>
     </section>
-
     <section class="payment-form dark">
         <div class="container_payment">
             <div class="block-heading">
@@ -72,18 +69,13 @@
             </div>
         </div>
     </section>
-
 </main>
-
 <button type="button" class="button-back" onclick="volver()">Volver</button>
-
 <p id="upgrade-status"></p>
-
 <script>
     function volver() {
         window.history.back();
     }
 </script>
-
 </body>
 </html>

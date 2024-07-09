@@ -1,16 +1,13 @@
-
-//Ver que carajo es el PUBLIC KEY
-
-const mercadopago = new MercadoPago('<PUBLIC_KEY>', {
+const mercadopago = new MercadoPago('TESTUSER264492744', {
     locale: 'es-AR'
 });
 
 document.getElementById("checkout-btn").addEventListener("click", function () {
     $('#checkout-btn').attr("disabled", true);
 
+    const unitPrice = parseFloat(document.getElementById("unit-price").textContent);
     const orderData = {
-        description: document.getElementById("product-description").innerHTML,
-        price: parseFloat(document.getElementById("unit-price").innerHTML)
+        price: unitPrice
     };
 
     fetch("/api/user/create_preference", {
@@ -26,9 +23,13 @@ document.getElementById("checkout-btn").addEventListener("click", function () {
         .then(function (preference) {
             createCheckoutButton(preference.id);
 
-            $(".shopping-cart").fadeOut(500);
+            // Populate the summary price and total elements
+            document.getElementById("summary-price").textContent = `$${unitPrice}`;
+            document.getElementById("summary-total").textContent = `$${unitPrice}`;
+
+            $(".shopping-cart").addClass("hidden");
             setTimeout(() => {
-                $(".container_payment").show(500).fadeIn();
+                $(".container_payment").fadeIn(500).removeClass("hidden");
             }, 500);
         })
         .catch(function () {
@@ -36,7 +37,6 @@ document.getElementById("checkout-btn").addEventListener("click", function () {
             $('#checkout-btn').attr("disabled", false);
         });
 });
-
 
 function createCheckoutButton(preferenceId) {
     const bricksBuilder = mercadopago.bricks();
@@ -57,5 +57,5 @@ function createCheckoutButton(preferenceId) {
             }
         );
     };
-    window.checkoutButton =  renderComponent(bricksBuilder);
+    window.checkoutButton = renderComponent(bricksBuilder);
 }
