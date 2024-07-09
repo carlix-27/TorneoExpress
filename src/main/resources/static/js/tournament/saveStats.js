@@ -31,8 +31,6 @@ async function saveStats(event) {
     const team1Score = document.querySelector('input[name="team1Score"]').value;
     const team2Score = document.querySelector('input[name="team2Score"]').value;
 
-    const ganador = document.querySelector('input[name="ganador"]').value;
-
     // Validar que los puntajes sean números válidos
     if (!isValidScore(team1Score) || !isValidScore(team2Score)) {
         document.getElementById('error-message').innerText = "Ingrese puntajes validos para los equipos";
@@ -44,7 +42,6 @@ async function saveStats(event) {
     const data = {
         team1Score: parseInt(team1Score),
         team2Score: parseInt(team2Score),
-        ganador: ganador
     };
 
     try {

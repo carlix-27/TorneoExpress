@@ -25,8 +25,8 @@ public class Statistics {
     private Integer team2Score;
 
     @OneToOne
-    @JoinColumn(name = "id", nullable = false)
-    private Team ganador;
+    @JoinColumn(name = "name")
+    private Team winner;
 
 
     // Getters y setters
@@ -87,16 +87,16 @@ public class Statistics {
         this.team2Score = team2Score;
     }
 
-    // TODO: Tene cuidado con esto, castealo a TeamDto, cualquier cosa. Sino puede provocarse el infinitiveRecursion
 
-    public Team getGanador(){
-        return ganador;
+    public Team getWinner(){
+        return winner;
     }
 
 
-    public void setGanador(TeamWinnerPointsDto ganadorDto) {
-        this.ganador = new Team();
-        this.ganador.setId(ganadorDto.getId());
-        this.ganador.setName(ganadorDto.getName());
+    public void setWinner(TeamWinnerPointsDto winner) {
+        this.winner = new Team();
+        this.winner.setId(winner.getId());
+        this.winner.setName(winner.getName());
+        this.winner.setPrestigePoints(winner.getPrestigePoints());
     }
 }

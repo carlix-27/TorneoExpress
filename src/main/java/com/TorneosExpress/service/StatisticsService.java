@@ -64,7 +64,7 @@ public class StatisticsService {
             teamWinner.setPrestigePoints(points);
             TeamPointsDto teamPointsDto = new TeamPointsDto(points);
             teamPointsDto.setPrestigePoints(points); // Ver la parte del get
-            existingStatistics.setGanador(teamWinner);
+            existingStatistics.setWinner(teamWinner);
             statisticsRepository.save(existingStatistics); // Se sobreescribe la informacion (se edita de alguna forma)
             // TODO: Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
         } else{
@@ -74,7 +74,7 @@ public class StatisticsService {
             statistics.setActiveMatch(activeMatch);
             statistics.setTeam1Score(statisticsDto.getTeam1Score());
             statistics.setTeam2Score(statisticsDto.getTeam2Score());
-            statistics.setGanador(statisticsDto.getGanador());
+            statistics.setWinner(statisticsDto.getGanador());
             statisticsRepository.save(statistics);
         }
 
@@ -100,17 +100,6 @@ public class StatisticsService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las estadisticas de este partido no existen todavia.");
         }
 
-        return new StatisticsDto(statistics.getGanador().teamWinnerPointsDto(), statistics.getTeam1Score(), statistics.getTeam2Score());
-    }
-
-
-
-    public Long getIdOfMatchWithAssociatedStatistics(Long match_id, Long tournament_id){
-        Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_Id(match_id, tournament_id);
-        if(existingStatisticsOptional.isPresent()){
-            Statistics existingStatistics = existingStatisticsOptional.get();
-            return existingStatistics.getMatchId();
-        }
-        return null;
+        return new StatisticsDto(statistics.getWinner().teamWinnerPointsDto(), statistics.getTeam1Score(), statistics.getTeam2Score());
     }
 }

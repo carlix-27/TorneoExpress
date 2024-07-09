@@ -1,5 +1,7 @@
 package com.TorneosExpress.dto.team;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TeamWinnerPointsDto {
     private Long id;
     private String name;
