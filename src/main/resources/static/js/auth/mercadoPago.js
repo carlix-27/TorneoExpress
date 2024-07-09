@@ -1,3 +1,5 @@
+
+// Vendedor Public KEY
 const mercadopago = new MercadoPago("APP_USR-6b76fcb4-909a-41bb-9abb-35e4910f698c", {
     locale: 'es-AR'
 });
@@ -15,9 +17,10 @@ document.getElementById("checkout-btn").addEventListener("click", function () {
             return response.json();
         })
         .then(function (preference) {
-            console.log("Preference: ", preference)
             console.log("Preference ID: ", preference.id)
             createCheckoutButton(preference.id);
+
+            const unitPrice = 500
 
             // Populate the summary price and total elements
             document.getElementById("summary-price").textContent = `$${unitPrice}`;
