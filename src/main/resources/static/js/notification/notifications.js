@@ -7,7 +7,7 @@ function getNotifications(userId) {
     fetch(`/api/notifications/${userId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`);
+                throw new Error(`Error al obtener las notificaciones: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
@@ -15,14 +15,26 @@ function getNotifications(userId) {
             const unreadContainer = document.getElementById('unread-notifications');
             const readContainer = document.getElementById('read-notifications');
 
-            unreadContainer.innerHTML = ''; // Clear any existing notifications
+            // Ordenar notificaciones por fecha de creación (más reciente primero)
+            notifications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            unreadContainer.innerHTML = ''; // Limpiar notificaciones existentes
             readContainer.innerHTML = '';
 
             notifications.forEach(notification => {
+                const createdAt = new Date(notification.createdAt);
+                const timeAgo = tiempoTranscurrido(new Date(), createdAt);
+
+                // Filtrar notificaciones que tienen más de 24 horas
+                if (transcurridoMasDe24Horas(createdAt)) {
+                    return; // Salir del bucle forEach para esta notificación
+                }
+
                 const notificationElement = document.createElement('div');
                 notificationElement.className = 'notification';
+
                 notificationElement.innerHTML = `
-                    <p>${notification.message}</p>
+                    <p>${notification.message} - <span style="font-size: 12px; color: #999;">${timeAgo}</span></p>
                 `;
 
                 if (!notification.read) {
@@ -43,12 +55,37 @@ function markNotificationsAsRead(userId) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to mark notifications as read: ${response.status} ${response.statusText}`);
+                throw new Error(`Error al marcar las notificaciones como leídas: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('All notifications marked as read successfully:', data);
+            console.log('Todas las notificaciones marcadas como leídas correctamente:', data);
         })
         .catch(error => console.error('Error:', error));
+}
+
+function tiempoTranscurrido(actual, anterior) {
+    const milisegundosPorMinuto = 60 * 1000;
+    const milisegundosPorHora = milisegundosPorMinuto * 60;
+    const milisegundosPorDia = milisegundosPorHora * 24;
+
+    const transcurrido = actual - anterior;
+
+    if (transcurrido < milisegundosPorMinuto) {
+        return `hace ${Math.round(transcurrido / 1000)} segs`;
+    } else if (transcurrido < milisegundosPorHora) {
+        return `hace ${Math.round(transcurrido / milisegundosPorMinuto)} mins`;
+    } else if (transcurrido < milisegundosPorDia) {
+        return `hace ${Math.round(transcurrido / milisegundosPorHora)} horas`;
+    } else {
+        return ''; // Si ha pasado más de 24 horas, no mostrar tiempo transcurrido
+    }
+}
+
+function transcurridoMasDe24Horas(createdAt) {
+    const milisegundosPorDia = 24 * 60 * 60 * 1000;
+    const ahora = new Date();
+
+    return (ahora - createdAt) > milisegundosPorDia;
 }
