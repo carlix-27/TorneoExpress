@@ -77,12 +77,16 @@
     </section>
 </main>
 
-<!-- Logout Script -->
 <script>
-    function logout() {
-        localStorage.removeItem("userId"); // Remove userId from localStorage
-        window.location.href = "login.html"; // Redirect to login page after logout
+    function confirmLogout() {
+        const logoutConfirmed = window.confirm('Do you want to logout?');
+        if (logoutConfirmed) {
+            localStorage.removeItem("userId"); // Remove userId from localStorage
+            window.location.href = "login.html";
+        }
     }
+
+    document.getElementById("logout-link").addEventListener("click", confirmLogout);
 </script>
 </body>
 </html>

@@ -31,13 +31,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-
-function confirmLogout() {
-    const logoutConfirmed = window.confirm('Do you want to logout?');
-    if (logoutConfirmed) {
-        localStorage.removeItem("userId"); // Remove userId from localStorage
-        window.location.href = "login.html";
-    }
-}
-
-document.getElementById("logout-link").addEventListener("click", confirmLogout);
