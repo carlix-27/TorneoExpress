@@ -108,11 +108,6 @@ function addSignupButtonListener(tournament, userId, signupButton) {
         const teamId = document.getElementById("teamSelect").value;
         const user = localStorage.getItem("userId");
 
-        if (user === tournamentCreator.toString()){
-            displayErrorMessage("No te podes anotar a tu propio torneo.");
-            return;
-        }
-
         const isTeamInTournament = tournamentParticipatingTeams.some(team => {
             console.log("Comparing team ID:", teamId, "with team ID:", team.id);
             return teamId == team.id;
