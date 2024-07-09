@@ -101,7 +101,7 @@ public class Statistics {
         if (this.winner == null) {
             this.winner = new Team();
         }
-        this.winner.setId(teamWinnerPointsDto.getId()); // Asegura que el id del team se establece correctamente.
+        this.winner.setId(teamWinnerPointsDto.getId()); // FIXME: Aca el id del team, es null.
         this.winner.setName(teamWinnerPointsDto.getName());
         this.winner.setPrestigePoints(teamWinnerPointsDto.getPrestigePoints());
     }

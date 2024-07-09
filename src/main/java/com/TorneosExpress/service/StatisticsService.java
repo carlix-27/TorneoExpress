@@ -6,8 +6,10 @@ import com.TorneosExpress.dto.StatisticsDto;
 import com.TorneosExpress.dto.team.TeamPointsDto;
 import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.TorneosExpress.model.Statistics;
+import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.StatisticsRepository;
+import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,8 @@ public class StatisticsService {
 
     @Autowired
     private MatchRepository matchRepository;
+    @Autowired
+    private TeamRepository teamRepository;
 
     public boolean saveStatistics(Long match_id, Long tournamentId, StatisticsDto statisticsDto) {
         ShortTournamentDto shortTournamentDto = tournamentRepository.findById(tournamentId)
@@ -52,6 +56,23 @@ public class StatisticsService {
             return false;
         }
 
+        TeamWinnerPointsDto teamWinnerPointsDto = statisticsDto.getWinner();
+        if(teamWinnerPointsDto == null){
+            return false;
+        }
+
+        Optional<Team> teamOptional = teamRepository.findById(teamWinnerPointsDto.getId());
+        if (teamOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El equipo ganador no existe.");
+        }
+
+        Team team = teamOptional.get();
+        teamWinnerPointsDto.setName(team.getName());
+
+        int points = determineScore(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
+        teamWinnerPointsDto.setPrestigePoints(points);
+
+
         Optional<Statistics> existingStatisticsOptional = statisticsRepository.findByMatch_matchIdAndTournament_Id(match_id, tournamentId);
 
         if(existingStatisticsOptional.isPresent()){
@@ -59,16 +80,9 @@ public class StatisticsService {
             Statistics existingStatistics = existingStatisticsOptional.get();
             existingStatistics.setTeam1Score(statisticsDto.getTeam1Score());
             existingStatistics.setTeam2Score(statisticsDto.getTeam2Score());
-            TeamWinnerPointsDto teamWinner = statisticsDto.getWinner();
-            if(teamWinner != null){
-                int points = determineScore(statisticsDto.getTeam1Score(), statisticsDto.getTeam2Score());
-                teamWinner.setPrestigePoints(points);
-                TeamPointsDto teamPointsDto = new TeamPointsDto(points);
-                teamPointsDto.setPrestigePoints(points); // Ver la parte del get
-                existingStatistics.setTeamWinnerPointsDto(teamWinner);
-            }
-
-            statisticsRepository.save(existingStatistics); // Se sobreescribe la informacion (se edita de alguna forma)
+            existingStatistics.setTeamWinnerPointsDto(teamWinnerPointsDto);
+            statisticsRepository.save(existingStatistics);
+            // Se sobreescribe la informacion (se edita de alguna forma)
             // TODO: Evalua por front, que cuando esto ocurra, informe por web 'Estadisticas actualizadas'
         } else{
             // Crear nuevas estadisticas

@@ -24,6 +24,9 @@ public class TeamWinnerPointsDto { // Si jode, vola el name al carajo. Solo nos 
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
     public Long setId(Long id) {
         return id;
     }
