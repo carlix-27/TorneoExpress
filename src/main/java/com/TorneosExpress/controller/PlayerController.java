@@ -10,7 +10,6 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
-import com.mercadopago.resources.preference.PreferenceBackUrls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,30 +70,23 @@ public class PlayerController {
                 .description("Premium para la aplicación de Torneos Express")
                 .categoryId("sport")
                 .quantity(1)
-                .unitPrice(new BigDecimal(500))
+                .unitPrice(new BigDecimal(50))
                 .build();
 
-
-
-        PreferenceBackUrlsRequest preferenceBackUrls = PreferenceBackUrlsRequest.builder();
-
-
-
-        backUrls.setSuccess("https://www.success.com");
-        backUrls.setFailure("src/main/resources/static/buy_premium.html");
-
+        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
+                .success("src/main/resources/static/buyPremiumSuccess.html")
+                        .failure("src/main/resources/static/buy_premium.html")
+                .build();
 
         List<PreferenceItemRequest> items = new ArrayList<>();
         items.add(itemRequest);
 
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(items).backUrls(preferenceBackUrls).build();
+                .items(items).backUrls(backUrls).autoReturn("approved").build();
 
         PreferenceClient client = new PreferenceClient();
 
-        Preference preference = client.create(preferenceRequest);
-
-        return preference;
+        return client.create(preferenceRequest);
     }
 
     @PostMapping("/upgrade/{userId}")
