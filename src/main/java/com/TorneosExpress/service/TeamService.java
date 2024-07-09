@@ -56,6 +56,10 @@ public class TeamService {
     return teamRepository.findByCaptainId(id);
   }
 
+  public List<Team> findByMemberId(Long userId) {
+    return teamRepository.findByMemberId(userId);
+  }
+
   public List<Team> findByName(String name) {
     return teamRepository.findByName(name);
   }

@@ -12,11 +12,14 @@ function loadTeams() {
             }
             return response.json();
         })
-        .then(teams => {
-            const listaEquipos = document.getElementById("lista-equipos");
-            listaEquipos.innerHTML = "";
+        .then(data => {
+            const { teamsAsCaptain, teamsAsMember } = data;
+            const listaEquiposCapitan = document.getElementById("lista-equipos-capitan");
+            const listaEquiposMiembro = document.getElementById("lista-equipos-miembro");
+            listaEquiposCapitan.innerHTML = "";
+            listaEquiposMiembro.innerHTML = "";
 
-            teams.forEach(team => {
+            const createTeamElement = (team, isCaptain) => {
                 const teamId = team.id;
                 const teamPrivate = team.private;
                 const teamLocation = team.location;
@@ -34,12 +37,21 @@ function loadTeams() {
                         <p>Ubicación: ${teamLocation}</p>
                         <p>Privacidad: ${teamPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores inscritos: ${numberOfPlayersInTeam} / ${maxNumberOfPlayersPerTeam}</p>
+                        ${isCaptain ? `
                         <button onclick="editarEquipo(${teamId})">Editar</button>
                         <button onclick="borrarEquipo(${teamId})">Borrar</button>
-                        ${teamPrivate ? `<button onclick="manejarSolicitudes(${teamId})">Manejar Solicitudes</button>` : ''}
+                        ${teamPrivate ? `<button onclick="manejarSolicitudes(${teamId})">Manejar Solicitudes</button>` : ''}` : ''}
                     </div>
                 `;
-                listaEquipos.appendChild(li);
+                return li;
+            };
+
+            teamsAsCaptain.forEach(team => {
+                listaEquiposCapitan.appendChild(createTeamElement(team, true));
+            });
+
+            teamsAsMember.forEach(team => {
+                listaEquiposMiembro.appendChild(createTeamElement(team, false));
             });
         })
         .catch(error => {
@@ -48,12 +60,11 @@ function loadTeams() {
         });
 }
 
-
 function editarEquipo(teamId) {
     window.location.href = `editar-equipo.html?id=${teamId}`;
 }
 
-function manejarSolicitudes(torneoId){
+function manejarSolicitudes(torneoId) {
     window.location.href = `manejarSolicitudesEquipo.html?id=${torneoId}`;
 }
 

@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/teams")
@@ -50,9 +52,16 @@ public class TeamController {
 
 
   @GetMapping("/user/{userId}")
-  public ResponseEntity<List<Team>> getTeamsByUser(@PathVariable Long userId) {
-    List<Team> teams = teamService.findByCaptainId(userId);
-    return ResponseEntity.ok().body(teams);
+  public ResponseEntity<Map<String, List<Team>>> getTeamsByUser(@PathVariable Long userId) {
+    List<Team> teamsAsCaptain = teamService.findByCaptainId(userId);
+    List<Team> teamsAsMember = teamService.findByMemberId(userId);
+    teamsAsMember.removeAll(teamsAsCaptain); // Remove duplicate teams
+
+    Map<String, List<Team>> response = new HashMap<>();
+    response.put("teamsAsCaptain", teamsAsCaptain);
+    response.put("teamsAsMember", teamsAsMember);
+
+    return ResponseEntity.ok().body(response);
   }
 
   @GetMapping("/all")

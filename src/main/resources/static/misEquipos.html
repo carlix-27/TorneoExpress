@@ -9,24 +9,28 @@
 </head>
 <body>
 
-    <header>
-        <h1>Torneos Express - Equipos</h1>
-        <nav>
-            <ul>
-                <li><a href="home.html">Inicio</a></li>
-                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section id="mis-equipos">
-        <h2>Tus Equipos</h2>
-        <ul id="lista-equipos">
-
+<header>
+    <h1>Torneos Express - Equipos</h1>
+    <nav>
+        <ul>
+            <li><a href="home.html">Inicio</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
         </ul>
-    </section>
+    </nav>
+</header>
 
-    <script src="js/team/misEquipos.js"></script>
+<section id="mis-equipos">
+    <div class="column">
+        <h2>Mis Equipos</h2>
+        <ul id="lista-equipos-capitan"></ul>
+    </div>
+    <div class="column">
+        <h2>Equipos en los que soy Parte</h2>
+        <ul id="lista-equipos-miembro"></ul>
+    </div>
+</section>
+
+<script src="js/team/misEquipos.js"></script>
 
 </body>
 </html>
