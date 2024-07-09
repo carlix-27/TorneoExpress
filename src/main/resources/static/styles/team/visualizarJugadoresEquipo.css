@@ -92,3 +92,15 @@ h2 {
     text-align: center;
     margin-top: 20px; /* Ajusta según necesites */
 }
+
+.back-button {
+    display: block;
+    margin-bottom: 20px;
+    color: #3d1f7f;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.back-button:hover {
+    text-decoration: underline;
+}
