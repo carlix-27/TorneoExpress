@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
     const teamId = getTeamIdFromURL();
-    if (!teamId) {
-        console.error("Team ID not found");
+    const userId = localStorage.getItem("userId");
+
+    if (!teamId || !userId) {
+        console.error("Team ID or User ID not found");
         return;
     }
-    fetchPlayersOfTeam(teamId);
 
-    function fetchPlayersOfTeam(teamId) {
+    fetchPlayersOfTeam(teamId, userId);
+
+    function fetchPlayersOfTeam(teamId, userId) {
         fetch(`/api/teams/all/${teamId}`)
             .then(response => {
                 if (!response.ok) {
@@ -15,40 +18,40 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(players => {
-                renderPlayers(players);
+                renderPlayers(teamId, players, userId);
             })
             .catch(error => console.error('Error:', error));
     }
 
-    function renderPlayers(players) {
-        const playersTableBody = document.querySelector("#playersTable tbody");
-        playersTableBody.innerHTML = ''; // Clear previous data
+    function renderPlayers(teamId, players, userId) {
+        fetchTeamDetails(teamId)
+            .then(team => {
+                const playersTableBody = document.querySelector("#playersTable tbody");
+                playersTableBody.innerHTML = ''; // Clear previous data
 
-        players.forEach(player => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${player.name}</td>
-                <td>
-                    <button class="action-button view-button" data-player-id="${player.id}">Ver</button>
-                    <button class="action-button remove-button" data-player-id="${player.id}">Expulsar</button>
-                </td>
-            `;
-            playersTableBody.appendChild(row);
-        });
+                // Update the header dynamically with team name
+                const playersHeader = document.querySelector("h2");
+                playersHeader.textContent = `Jugadores del Equipo: ${team.name}`;
 
-        document.querySelectorAll('.view-button').forEach(button => {
-            button.addEventListener('click', handleViewPlayer);
-        });
+                players.forEach(player => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${player.name}</td>
+                        <td>
+                            ${userId == team.captainId && player.id != userId ? `<button class="action-button remove-button" data-player-id="${player.id}">Expulsar</button>` : ''}
+                        </td>
+                    `;
+                    playersTableBody.appendChild(row);
+                });
 
-        document.querySelectorAll('.remove-button').forEach(button => {
-            button.addEventListener('click', handleRemovePlayer);
-        });
-    }
+                document.querySelectorAll('.remove-button').forEach(button => {
+                    button.addEventListener('click', handleRemovePlayer);
+                });
 
-    function handleViewPlayer(event) {
-        const playerId = event.target.getAttribute('data-player-id');
-        // Implement view player functionality here
-        console.log(`View player with ID: ${playerId}`);
+            })
+            .catch(error => {
+                console.error('Error fetching team details:', error);
+            });
     }
 
     function handleRemovePlayer(event) {
@@ -64,35 +67,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(() => {
-                displaySuccessMessage('Removed player');
-                fetchPlayersOfTeam(teamId);
+                displayFeedbackMessage('Jugador expulsado correctamente', true);
+                fetchPlayersOfTeam(teamId, userId);
             })
-            .catch(error => console.error('Error:', error));
-        console.log(`Remove player with ID: ${playerId}`);
+            .catch(error => {
+                console.error('Error:', error);
+                displayFeedbackMessage('Failed to remove player', false);
+            });
     }
 
-
-    function displaySuccessMessage(message) {
-        const successMessage = document.getElementById("successMessage");
-        successMessage.textContent = message;
-        successMessage.style.display = "block";
+    function displayFeedbackMessage(message, success) {
+        const feedbackMessage = document.getElementById("feedbackMessage");
+        feedbackMessage.textContent = message;
+        feedbackMessage.style.color = success ? 'green' : 'red';
+        feedbackMessage.style.display = "block";
 
         setTimeout(() => {
-            successMessage.style.display = "none";
+            feedbackMessage.style.display = "none";
         }, 3000);
     }
 
-    function displayErrorMessage(message) {
-        const errorMessage = document.getElementById("errorMessage");
-        errorMessage.textContent = message;
-        errorMessage.style.display = "block";
-
-        setTimeout(() => {
-            errorMessage.style.display = "none";
-        }, 3000);
+    function fetchTeamDetails(teamId) {
+        return fetch(`/api/teams/${teamId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            });
     }
-
-
 
     function getTeamIdFromURL() {
         const queryString = window.location.search;
