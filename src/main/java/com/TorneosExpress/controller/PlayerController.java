@@ -59,11 +59,12 @@ public class PlayerController {
 
     @PostMapping("/create_preference")
     public Preference createPreference() throws MPException, MPApiException {
-        MercadoPagoConfig.setAccessToken("APP_USR-6b76fcb4-909a-41bb-9abb-35e4910f698c");
+        MercadoPagoConfig.setAccessToken("APP_USR-6665380637091560-070820-649b96fd61881045c6aea8bc93be58d1-1893369186");
         PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                 .id("1")
                 .title("Torneos Express premium")
                 .currencyId("ARS")
+                .pictureUrl("jetbrains://idea/navigate/reference?project=lab1&path=static/img/trophy-award-winner.webp")
                 .description("Premium para la aplicación de Torneos Express")
                 .categoryId("sport")
                 .quantity(1)
