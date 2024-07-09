@@ -2,6 +2,7 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.team.TeamDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,7 @@ public class TeamController {
     return ResponseEntity.ok(team);
   }
 
-  /*@PutMapping("/{teamId}")
+  @PutMapping("/{teamId}")
   public ResponseEntity<Team> updateTeam(@PathVariable Long teamId, @RequestBody Tournament updatedTournament){
     Team existingTeam = teamService.findById(teamId);
     if(existingTeam == null){
@@ -98,9 +99,9 @@ public class TeamController {
     existingTeam.setLocation(updatedTournament.getLocation());
     existingTeam.setIsPrivate(updatedTournament.isPrivate());
 
-    // Team updatedTeam = teamService.updateTeam(existingTeam);
+    Team updatedTeam = teamService.updateTeam(existingTeam);
     return ResponseEntity.ok(updatedTeam);
-  }*/
+  }
   @GetMapping("/captain/{userId}")
   public List<Team> getTeamsByCaptainId(@PathVariable Long userId) {
     return teamService.findByCaptainId(userId);
@@ -115,7 +116,5 @@ public class TeamController {
   public Team deletePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long userId) {
     return teamService.removePlayerFromTeam(teamId, userId);
   }
-
-
 
 }

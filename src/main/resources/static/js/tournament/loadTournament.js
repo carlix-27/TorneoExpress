@@ -22,6 +22,7 @@ function loadTournament() {
             const teams = tournament.participatingTeams;
             const teamsList = teams.map(team => `<li><a href="loadTeam.html?id=${team.id}">${team.name}</a></li>`).join('');
             const maxTeams = tournament.maxTeams
+            const status = tournament.active
 
 
             tournamentList.innerHTML = `
@@ -35,6 +36,7 @@ function loadTournament() {
                     <p>Equipos anotados:</p>
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
+                    ${status ? `<a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver Estadisticas</h3></a>` : ''}
                 </div>
             `;
         })

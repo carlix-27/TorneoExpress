@@ -105,4 +105,12 @@ public class TeamService {
     return team;
   }
 
+  // Update Team
+  public Team updateTeam(Team team) {
+    if(team.getId() == null || !teamRepository.existsById(team.getId())) {
+      return null;
+    }
+    return teamRepository.save(team);
+  }
+
 }

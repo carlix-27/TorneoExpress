@@ -13,6 +13,7 @@ function cargarTorneos() {
             return response.json();
         })
         .then(tournaments => {
+            console.log("Mis torneos: ", tournaments);
             const listaTorneos = document.getElementById("lista-torneos");
             listaTorneos.innerHTML = "";
 
@@ -25,8 +26,16 @@ function cargarTorneos() {
                     location: tournamentLocation,
                     private: privateTournament,
                     id: tournamentId,
-                    participatingTeams
+                    participatingTeams,
+                    active
                 } = tournament
+
+                let status = "";
+                if(active === false){
+                    status = "INACTIVE"
+                } else{
+                    status = "ACTIVE"
+                }
 
                 const numOfParticipatingTeams = participatingTeams.length
                 const maxTeams = tournament.maxTeams;
@@ -44,6 +53,7 @@ function cargarTorneos() {
                     <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
                     <p>Dificultad: ${tournament.difficulty}</p>
                     <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams} </p>
+                    <p>Estado: ${status}</p>
                     <button onclick="editarTorneo(${tournament.id})">Editar</button>
                     <button onclick="borrarTorneo(${tournament.id})">Borrar</button>
                     ${privateTournament ? `<button onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes</button>` : ''}
