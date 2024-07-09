@@ -29,6 +29,19 @@ function fetchMatches(tournamentId) {
         .then(matches => {
             const partidoSelector = document.getElementById('partidoSelector');
             partidoSelector.innerHTML = ''; // Clear existing options
+
+            if (matches.length === 0) {
+                return createMatches(tournamentId)
+                    .then(() => fetch(`/api/tournaments/${tournamentId}/activeMatches`))
+                    .then(response => response.json())
+                    .then(newMatches => {
+                        displayMatches(newMatches);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching matches after creating:', error);
+                    });
+            }
+
             matches.forEach(match => {
                 const option = document.createElement('option');
                 option.value = match.matchId;
@@ -87,10 +100,12 @@ function saveStats(event, tournamentId) {
     }
 
     const data = {
-        winner: { id: parseInt(winnerId) },
+        winner: parseInt(winnerId),
         team1Score: parseInt(team1Score),
         team2Score: parseInt(team2Score)
     };
+
+    console.log(data)
 
     fetch(`/api/matches/${tournamentId}/${matchId}/statistics`, {
         method: 'POST',
@@ -130,4 +145,37 @@ function displayErrorMessage(message) {
     setTimeout(() => {
         errorMessage.style.display = "none";
     }, 3000);
+}
+
+function displayMatches(matches) {
+    const partidoSelector = document.getElementById('partidoSelector');
+    partidoSelector.innerHTML = ''; // Clear previous options if any
+
+    matches.forEach(match => {
+        const option = document.createElement('option');
+        option.value = match.matchId;
+        option.textContent = `${match.team1.name} vs ${match.team2.name}`;
+        partidoSelector.appendChild(option);
+    });
+}
+
+function createMatches(tournamentId) {
+    return fetch(`/api/tournaments/${tournamentId}/createMatches`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        // Optionally, you can include request body if needed
+        // body: JSON.stringify({ /* data if needed */ })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to create matches');
+            }
+            console.log('Matches created successfully');
+        })
+        .catch(error => {
+            console.error('Error creating matches:', error);
+            throw error;
+        });
 }

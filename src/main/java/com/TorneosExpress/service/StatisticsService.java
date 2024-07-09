@@ -37,9 +37,13 @@ public class StatisticsService {
     }
 
     public Statistics saveStatistics(Long match_id, Long tournamentId, StatisticsDto statisticsDto) {
+
         Tournament tournament = getTournament(tournamentId);
         Match match = getMatch(match_id);
         Team winner = getWinnerTeam(statisticsDto.getWinner());
+
+        match.setWinner(winner.getId());
+        match.setPlayed(true);
 
         Statistics statistics = new Statistics();
         statistics.setTournament(tournament);
@@ -48,6 +52,8 @@ public class StatisticsService {
         statistics.setTeam2Score(statisticsDto.getTeam2Score());
         statistics.setWinner(winner);
 
+
+        matchRepository.save(match);
         return statisticsRepository.save(statistics);
     }
 

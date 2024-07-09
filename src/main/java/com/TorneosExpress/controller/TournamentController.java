@@ -161,6 +161,7 @@ public class TournamentController {
 
     @PostMapping("/{tournamentId}/createMatches")
     public ResponseEntity<Void> createMatches(@PathVariable Long tournamentId) {
+
         Tournament tournament = tournamentService.getTournamentById(tournamentId);
         if (tournament == null) {
             return ResponseEntity.notFound().build();
@@ -172,7 +173,7 @@ public class TournamentController {
         }
 
         List<Team> teamList = tournament.getParticipatingTeams();
-        FixtureBuilder fixtureBuilder = new FixtureBuilder(tournament, "Some Location", LocalDate.now(), matchRepository);
+        FixtureBuilder fixtureBuilder = new FixtureBuilder(tournament, tournament.getLocation(), LocalDate.now(), matchRepository);
         fixtureBuilder.build(teamList);
 
         return ResponseEntity.ok().build();

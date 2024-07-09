@@ -23,7 +23,6 @@ public class FixtureBuilder {
     this.matchRepository = matchRepository;
   }
 
-
   public Fixture build(List<Team> teams) {
     return new Fixture(calculateMatchCalendar(teams));
   }
@@ -53,7 +52,7 @@ public class FixtureBuilder {
       Team team1 = teamsCopy.get(i);
       Team team2 = teamsCopy.get(numTeams - i - 1);
       if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
-        Match match = new Match(team1, team2, tournament, location, matchDate, "To be played.");
+        Match match = new Match(team1, team2, tournament, location, matchDate, null);
         matches.add(match);
         matchRepository.save(match);
       }

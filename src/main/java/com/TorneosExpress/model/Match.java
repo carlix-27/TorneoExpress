@@ -1,8 +1,19 @@
 package com.TorneosExpress.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
+@Setter
+@Getter
 @Entity
 public class Match {
 
@@ -29,86 +40,21 @@ public class Match {
   private LocalDate date;
 
   @Column
-  private String score;
+  private Long winner;
 
   @Column
   private boolean played;
 
   public Match() {}
 
-  public Match(Team team1, Team team2, Tournament tournament, String matchLocation, LocalDate date, String score) {
+  public Match(Team team1, Team team2, Tournament tournament, String matchLocation, LocalDate date, Long winner) {
     this.team1 = team1;
     this.team2 = team2;
     this.tournament = tournament;
     this.matchLocation = matchLocation;
     this.date = date;
-    this.score = score;
+    this.winner = winner;
     this.played = false;
   }
 
-  // Getters and setters...
-
-  public Long getMatchId() {
-    return matchId;
-  }
-
-  public void setMatchId(Long matchId) {
-    this.matchId = matchId;
-  }
-
-  public Team getTeam1() {
-    return team1;
-  }
-
-  public void setTeam1(Team team1) {
-    this.team1 = team1;
-  }
-
-  public Team getTeam2() {
-    return team2;
-  }
-
-  public void setTeam2(Team team2) {
-    this.team2 = team2;
-  }
-
-  public Tournament getTournament() {
-    return tournament;
-  }
-
-  public void setTournament(Tournament tournament) {
-    this.tournament = tournament;
-  }
-
-  public String getMatchLocation() {
-    return matchLocation;
-  }
-
-  public void setMatchLocation(String matchLocation) {
-    this.matchLocation = matchLocation;
-  }
-
-  public LocalDate getDate() {
-    return date;
-  }
-
-  public void setDate(LocalDate date) {
-    this.date = date;
-  }
-
-  public String getScore() {
-    return score;
-  }
-
-  public void setScore(String score) {
-    this.score = score;
-  }
-
-  public boolean isPlayed() {
-    return played;
-  }
-
-  public void setPlayed(boolean played) {
-    this.played = played;
-  }
 }
