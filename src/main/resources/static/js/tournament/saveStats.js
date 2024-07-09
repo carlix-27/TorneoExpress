@@ -44,8 +44,10 @@ async function saveStats(event) {
 
     const data = {
         team1Score: parseInt(team1Score),
-        team2Score: parseInt(team2Score),
+        team2Score: parseInt(team2Score)
     };
+
+    console.log(data);
 
     try {
         const response = await fetch(`/api/matches/${tournamentId}/${matchId}/statistics`, {

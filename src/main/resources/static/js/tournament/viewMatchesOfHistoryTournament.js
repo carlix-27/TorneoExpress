@@ -15,7 +15,7 @@ function viewMatchesOfHistoryTournament() {
         .then(activeMatches => {
             const activeMatchesList = document.getElementById("match-result");
 
-            activeMatches.matches.forEach(match => { 
+            activeMatches.matches.forEach(match => {
                 const team1 = match.teamName1;
                 const team2 = match.teamName2;
                 const matchId = match.matchId;
