@@ -164,7 +164,7 @@ public class TournamentController {
         return tournamentService.getFinishedMatches(tournamentId);
     }
 
-    @GetMapping("/{tournamentId}/allMatches")
+    @GetMapping("/{tournamentId}/matches")
     public List<Match> getAllMatches(@PathVariable Long tournamentId) {
         return tournamentService.getAllMatches(tournamentId);
     }

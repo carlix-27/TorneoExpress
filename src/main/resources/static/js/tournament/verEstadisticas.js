@@ -40,14 +40,22 @@ function populateMatches(statistics, matches) {
     const listaPartidosTerminados = document.getElementById('listaPartidosTerminados');
     const listaPartidosPendientes = document.getElementById('listaPartidosPendientes');
 
+    console.log(statistics)
+    console.log(matches)
+
     matches.forEach(match => {
         if (match.played) {
-            const statistic = statistics.find(stat => stat.match.matchId === match.matchId);
-            if (statistic) {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${match.team1.name} ${statistic.team1Score} - ${statistic.team2Score} ${match.team2.name}`;
-                listaPartidosTerminados.appendChild(listItem);
-            }
+            const listItem = document.createElement('li');
+
+            // Nombre del equipo 1 y su puntaje
+            const team1Text = `<span class="team-name">${match.team1.name}</span> ${statistics.team1Score}`;
+
+            // Nombre del equipo 2 y su puntaje
+            const team2Text = `${statistics.team2Score} <span class="team-name">${match.team2.name}</span>`;
+
+            listItem.innerHTML = `${team1Text} - ${team2Text}`;
+
+            listaPartidosTerminados.appendChild(listItem);
         } else {
             const listItem = document.createElement('li');
             listItem.textContent = `${match.team1.name} vs ${match.team2.name}`;
