@@ -15,6 +15,7 @@ import java.util.List;
 public class Team {
 
   public Team(CreateTeamDto createTeamDto) {
+    this.name = createTeamDto.getName();
     this.location = createTeamDto.getLocation();
     this.isPrivate = createTeamDto.isPrivate();
     this.prestigePoints = 0;
