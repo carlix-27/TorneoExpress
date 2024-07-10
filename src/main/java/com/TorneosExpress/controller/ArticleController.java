@@ -3,7 +3,9 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.model.Article;
 import com.TorneosExpress.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +22,12 @@ public class ArticleController {
   }
 
   @GetMapping("/all")
-  public List<Article> getAllArticles() {
-    return articleService.getAllArticles();
+  public ResponseEntity<List<Article>> getAllArticles() {
+    return ResponseEntity.ok(articleService.getAllArticles());
+  }
+
+  @GetMapping("/{articleId}")
+  public ResponseEntity<Article> getArticleById(@PathVariable("articleId") Long articleId) {
+    return ResponseEntity.ok(articleService.getArticleById(articleId));
   }
 }

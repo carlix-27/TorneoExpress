@@ -7,10 +7,10 @@ public class Article {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long article_id;
+  private Long id;
 
   @Column()
-  private String article_name;
+  private String name;
 
   @Column()
   private String description;
