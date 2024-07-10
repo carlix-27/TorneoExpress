@@ -1,5 +1,5 @@
 package com.TorneosExpress.controller;
-import com.TorneosExpress.dto.team.TeamDto;
+import com.TorneosExpress.dto.team.CreateTeamDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
@@ -30,12 +30,14 @@ public class TeamController {
   }
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamRequest) {
+  public ResponseEntity<Team> createTeam(@RequestBody CreateTeamDto teamRequest) {
 
     Team team = new Team(teamRequest);
 
     Team createdTeam = teamService.createTeam(team);
-    teamService.addPlayerToTeam(createdTeam.getId(), teamRequest.getCaptainId());
+    Long createdTeamId = createdTeam.getId();
+
+    teamService.addPlayerToTeam(createdTeamId, teamRequest.getCaptainId());
     playerService.upgradeToCaptain(teamRequest.getCaptainId());
     return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
   }
@@ -94,22 +96,7 @@ public class TeamController {
     }
     return ResponseEntity.ok(team);
   }
-
-  /*@PutMapping("/{teamId}")
-  public ResponseEntity<Team> updateTeam(@PathVariable Long teamId, @RequestBody Tournament updatedTournament){
-    Team existingTeam = teamService.findById(teamId);
-    if(existingTeam == null){
-      return ResponseEntity.notFound().build();
-    }
-
-    // Update the existing tournament with the new data
-    existingTeam.setName(updatedTournament.getName());
-    existingTeam.setLocation(updatedTournament.getLocation());
-    existingTeam.setIsPrivate(updatedTournament.isPrivate());
-
-    // Team updatedTeam = teamService.updateTeam(existingTeam);
-    return ResponseEntity.ok(updatedTeam);
-  }*/
+  
   @GetMapping("/captain/{userId}")
   public List<Team> getTeamsByCaptainId(@PathVariable Long userId) {
     return teamService.findByCaptainId(userId);

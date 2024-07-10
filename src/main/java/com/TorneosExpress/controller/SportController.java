@@ -1,8 +1,7 @@
 package com.TorneosExpress.controller;
 
 
-import com.TorneosExpress.dto.sport.CreateSportRequest;
-import com.TorneosExpress.dto.sport.SportDto;
+import com.TorneosExpress.dto.request.CreateSportRequest;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +32,12 @@ public class SportController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<SportDto> createSport(@RequestBody CreateSportRequest request){
+    public Sport createSport(@RequestBody CreateSportRequest request){
 
         String requestName = request.name();
         int requestNumPlayers = request.num_players();
 
-        Sport createdSport =  sportService.createSport(requestName, requestNumPlayers);
-
-        SportDto sportDto = new SportDto(
-                createdSport.getSportId(),
-                createdSport.getSportName(),
-                createdSport.getNum_players()
-        );
-        return ResponseEntity.ok(sportDto);
+        return sportService.createSport(requestName, requestNumPlayers);
     }
 
     @PutMapping("/update/{id}")

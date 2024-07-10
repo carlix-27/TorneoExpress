@@ -3,7 +3,6 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.auth.LoginRequest;
 import com.TorneosExpress.dto.auth.RegisterRequest;
 import com.TorneosExpress.model.Player;
-import com.TorneosExpress.dto.auth.PlayerDto;
 import com.TorneosExpress.service.PlayerService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,25 +41,14 @@ public class AuthController {
 
 
     @PostMapping("/submit_registration")
-    public ResponseEntity<PlayerDto> createPlayer(@RequestBody RegisterRequest request) {
-        Player player = playerService.createPlayer(request.getName(), request.getLocation(), request.getEmail(), request.getPassword());
-        PlayerDto playerDto = new PlayerDto(
-                player.getId(),
-                player.getName(),
-                player.getEmail(),
-                player.getLocation(),
-                player.getIs_Premium(),
-                player.getEnabled(),
-                player.getPassword(),
-                player.isIs_Captain()
-        );
-        return ResponseEntity.ok(playerDto);
+    public Player createPlayer(@RequestBody RegisterRequest request) {
+        return playerService.createPlayer(request.getName(), request.getLocation(), request.getEmail(), request.getPassword());
     }
 
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
-        request.getSession().invalidate(); // Invalidate the session
+        request.getSession().invalidate();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

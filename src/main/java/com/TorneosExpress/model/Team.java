@@ -1,25 +1,25 @@
 package com.TorneosExpress.model;
-import com.TorneosExpress.dto.ShortTeamDto;
-import com.TorneosExpress.dto.team.TeamDto;
+import com.TorneosExpress.dto.team.CreateTeamDto;
 
-import com.TorneosExpress.dto.team.TeamPointsDto;
-import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Team {
 
-  public Team(TeamDto teamDto) {
-    this.id = teamDto.getId();
-    this.name = teamDto.getName();
-    this.location = teamDto.getLocation();
-    this.isPrivate = teamDto.isPrivate();
-    this.prestigePoints = teamDto.getPrestigePoints();
-    this.captainId = teamDto.getCaptainId();
-    this.sport = teamDto.getSport();
+  public Team(CreateTeamDto createTeamDto) {
+    this.location = createTeamDto.getLocation();
+    this.isPrivate = createTeamDto.isPrivate();
+    this.prestigePoints = 0;
+    this.captainId = createTeamDto.getCaptainId();
+    this.sport = createTeamDto.getSport();
     this.matchPoints = 0;
   }
 
@@ -92,121 +92,5 @@ public class Team {
   public Team() {
   }
 
-  // Getters and setters...
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id){
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
-  public boolean isPrivate() {
-    return isPrivate;
-  }
-
-  public int getPrestigePoints() {
-    return prestigePoints;
-  }
-
-  public Long getCaptainId() {
-    return captainId;
-  }
-
-  public List<Tournament> getActiveTournaments() {
-    return activeTournaments;
-  }
-
-  public List<Player> getPlayers() {
-    return players;
-  }
-
-
-  public List<Article> getArticles() {
-    return articles;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public void setIsPrivate(boolean aPrivate) {
-    isPrivate = aPrivate;
-  }
-
-  public void setPrestigePoints(int prestigePoints) {
-    this.prestigePoints = prestigePoints;
-  }
-
-  public void setCaptainId(Long captainId) {
-    this.captainId = captainId;
-  }
-
-  public void setActiveTournaments(List<Tournament> activeTournaments) {
-    this.activeTournaments = activeTournaments;
-  }
-
-  public void setPlayers(List<Player> players) {
-    this.players = players;
-  }
-
-  public void addPlayer(Player player) {
-    this.players.add(player);
-  }
-
-  public void setJoinRequests(List<Player> players) {
-    this.players = players;
-  }
-
-  public void setArticles(List<Article> articles) {
-    this.articles = articles;
-  }
-
-  public Sport getSport() {
-    return sport;
-  }
-
-  public void setSport(Sport sport) {
-    this.sport = sport;
-  }
-
-
-  public int getMaxPlayers() {
-    Sport sport = getSport();
-    int numPlayers = sport.getNum_players();
-    return numPlayers * 2;
-  }
-
-  public ShortTeamDto shortTeamDto(){
-    return new ShortTeamDto(this.id, this.name);
-  }
-
-  public int getMatchPoints(){
-    return matchPoints;
-  }
-
-  public void setMatchPoints(int matchPoints){
-    this.matchPoints = matchPoints;
-  }
-
-  public TeamWinnerPointsDto teamWinnerPointsDto(){
-    return new TeamWinnerPointsDto(this.id, this.name, this.matchPoints);
-  }
-
-  public TeamPointsDto teamPointsDto(){
-    return new TeamPointsDto(this.matchPoints);
-  }
 }
