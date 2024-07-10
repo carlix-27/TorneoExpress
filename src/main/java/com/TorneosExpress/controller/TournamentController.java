@@ -103,6 +103,10 @@ public class TournamentController {
         return tournamentService.getActiveTournaments();
     }
 
+    @GetMapping("/teams/{teamId}")
+    public List<Tournament> getTournamentsForTeam(@PathVariable Long teamId) {
+        return tournamentService.getTournamentsByTeam(teamId);
+    }
 
     @GetMapping("/{tournamentId}/teams")
     public List<Team> getTeamsOfTournament(@PathVariable Long tournamentId) {

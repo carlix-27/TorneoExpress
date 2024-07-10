@@ -83,6 +83,10 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
+    public List<Tournament> getTournamentsByTeam(Long teamId) {
+        return tournamentRepository.findTournamentsByTeamId(teamId);
+    }
+
     public Tournament getTournamentById(Long id) {
         Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
         return optionalTournament.orElse(null);
