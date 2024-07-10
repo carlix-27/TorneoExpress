@@ -66,6 +66,7 @@ function populateMatches(statistics, matches) {
 
 function checkTournamentOwner(tournamentId) {
     const userId = getUserId();
+    console.log("User Id: ", userId)
 
     fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
@@ -75,7 +76,12 @@ function checkTournamentOwner(tournamentId) {
             return response.json();
         })
         .then(tournament => {
-            if (userId === tournament.creatorId) {
+
+            console.log("Tournament:", tournament)
+            console.log("Tournament creator:", tournament.creatorId)
+
+
+            if (userId == tournament.creatorId) {
                 const addButton = document.createElement('button');
                 addButton.textContent = 'Agregar Estadísticas';
                 addButton.addEventListener('click', () => {
