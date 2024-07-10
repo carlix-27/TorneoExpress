@@ -7,6 +7,7 @@ import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.model.Type;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,9 +74,9 @@ public class TournamentController {
         return ResponseEntity.ok(tournament);
     }
 
-    @GetMapping("/{tournamentId}/calendar")
-    public Fixture getTournamentCalendar(@PathVariable Long tournamentId) {
-        return tournamentService.getTournamentFixture(tournamentId);
+    @GetMapping("/{tournamentId}/{type}/calendar")
+    public Fixture getTournamentCalendar(@PathVariable Long tournamentId, @PathVariable Type type) {
+        return tournamentService.getTournamentFixture(tournamentId, type);
     }
 
 

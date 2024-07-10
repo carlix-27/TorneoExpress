@@ -50,7 +50,7 @@ public class TournamentService {
         return matchRepository.findByTournamentAndPlayed(tournament, false);
     }
 
-    public Fixture getTournamentFixture(Long tournamentId) {
+    public Fixture getTournamentFixture(Long tournamentId, Type type) {
 
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture;
@@ -63,7 +63,7 @@ public class TournamentService {
 
             fixture = new FixtureBuilder(
                 tournament, tournament.getLocation(), tournament.getStartDate(), matchRepository)
-                .build(teams);
+                .build(teams, type);
 
             tournament.setFixture(fixture);
             tournamentRepository.save(tournament);
