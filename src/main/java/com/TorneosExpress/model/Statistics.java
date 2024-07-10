@@ -2,7 +2,6 @@ package com.TorneosExpress.model;
 
 import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.dto.ShortTournamentDto;
-import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import jakarta.persistence.*;
 
 @Entity

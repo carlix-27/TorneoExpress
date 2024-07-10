@@ -1,11 +1,8 @@
 package com.TorneosExpress.fixture;
 
 import com.TorneosExpress.model.Match;
-import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.MatchRepository;
-import com.TorneosExpress.repository.TeamRepository;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

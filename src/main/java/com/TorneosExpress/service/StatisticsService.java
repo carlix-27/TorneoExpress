@@ -3,7 +3,6 @@ package com.TorneosExpress.service;
 import com.TorneosExpress.dto.ActiveMatch;
 import com.TorneosExpress.dto.ShortTournamentDto;
 import com.TorneosExpress.dto.StatisticsDto;
-import com.TorneosExpress.dto.team.TeamWinnerPointsDto;
 import com.TorneosExpress.model.Statistics;
 import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.StatisticsRepository;

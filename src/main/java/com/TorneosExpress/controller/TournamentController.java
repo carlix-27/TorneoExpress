@@ -1,6 +1,5 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.MatchDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
 import com.TorneosExpress.model.*;

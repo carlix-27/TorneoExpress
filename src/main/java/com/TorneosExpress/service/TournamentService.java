@@ -1,7 +1,5 @@
 package com.TorneosExpress.service;
 
-import com.TorneosExpress.dto.tournament.FixtureDto;
-import com.TorneosExpress.dto.tournament.MatchDto;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
 import com.TorneosExpress.model.Match;
@@ -16,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,14 +50,14 @@ public class TournamentService {
     }
 
     @Transactional
-    public FixtureDto getTournamentCalendar(Long tournamentId) {
+    public Fixture getTournamentCalendar(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture;
-        FixtureDto fixtureDto = new FixtureDto();
+
 
         if (tournament.getFixture() == null || tournament.getFixture().getMatches().isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
-            teamRepository.saveAll(teams); // Ensure teams are saved
+            teamRepository.saveAll(teams);
 
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
 
@@ -74,25 +71,9 @@ public class TournamentService {
             fixture = tournament.getFixture();
         }
 
-        fixtureDto.setMatches(convertToDtoFormat(fixture.getMatches()));
-        return fixtureDto;
+        return fixture;
     }
 
-    private List<MatchDto> convertToDtoFormat(List<Match> matches) {
-        List<MatchDto> matchDtos = new ArrayList<>();
-        for (Match match : matches) {
-            MatchDto matchDto = new MatchDto();
-            matchDto.setMatchId(match.getMatch_id());
-            matchDto.setDate(match.getDate());
-            matchDto.setLocation(match.getMatch_location());
-            matchDto.setTeam1_id(match.getTeam1_id());
-            matchDto.setTeam2_id(match.getTeam2_id());
-            matchDto.setTeamName1(match.getTeamName1());
-            matchDto.setTeamName2(match.getTeamName2());
-            matchDtos.add(matchDto);
-        }
-        return matchDtos;
-    }
 
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorIdOrParticipatingTeamsUserId(userId);
