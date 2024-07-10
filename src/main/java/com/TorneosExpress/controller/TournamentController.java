@@ -169,6 +169,10 @@ public class TournamentController {
         return tournamentService.getActiveTournaments();
     }
 
+    @GetMapping("/teams/{teamId}")
+    public List<Tournament> getTournamentsForTeam(@PathVariable Long teamId) {
+        return tournamentService.getTournamentsByTeam(teamId);
+    }
 
     @GetMapping("/{tournamentId}/teams")
     public ResponseEntity<List<ShortTeamDto>> getTeamsOfTournament(@PathVariable Long tournamentId) {

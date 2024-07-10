@@ -127,6 +127,10 @@ public class TournamentService {
         return tournamentRepository.findByCreatorIdOrParticipatingTeamsUserId(userId);
     }
 
+    public List<Tournament> getTournamentsByTeam(Long teamId) {
+        return tournamentRepository.findTournamentsByTeamId(teamId);
+    }
+
     public Tournament createTournament(Tournament tournament) {
         return tournamentRepository.save(tournament);
     }

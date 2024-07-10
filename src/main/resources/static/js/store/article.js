@@ -58,7 +58,7 @@ function fetchMyTeams() {
             return response.json();
         })
         .then(data => {
-            const {teamsAsCaptain, teamsAsMember} = data;
+            const { teamsAsCaptain, teamsAsMember } = data;
             const teamDropDown = document.getElementById('my-teams');
 
             if (teamsAsCaptain.length === 0) {
@@ -66,31 +66,59 @@ function fetchMyTeams() {
                 option.value = -1;
                 option.text = "No posee equipos";
                 teamDropDown.appendChild(option);
-            } else if (teamsAsCaptain !== 0) {
+            } else {
                 teamsAsCaptain.forEach(team => {
                     const {
                         id: teamId,
-                        location: teamLocation,
-                        sport: teamSport,
                         name,
-                        private: isPrivate,
-                        players,
-                    }
-                        = team;
+                    } = team;
 
-                    console.log(team);
                     const option = document.createElement('option');
-                    option.value = teamId; // Assuming id is the ID field in your Team entity
-                    option.text = name; // Assuming name is the name field in your Team entity
+                    option.value = teamId;
+                    option.text = name;
                     teamDropDown.appendChild(option);
                 });
             }
+
+            // Add event listener to fetch tournaments when a team is selected
+            teamDropDown.addEventListener('change', fetchTournamentsForTeam);
         })
         .catch(error => {
             console.error('Error:', error);
-            // Handle error, show message to user or retry fetch
         });
 }
 
-// Al cargar la página, cargar los torneos del usuario
+function fetchTournamentsForTeam() {
+    const teamDropDown = document.getElementById('my-teams');
+    const teamId = teamDropDown.value;
+    const tournamentDropDown = document.getElementById('tournaments-for-team');
+    tournamentDropDown.innerHTML = '<option value="-1">Seleccione un torneo</option>'; // Clear existing options
+
+    if (teamId && teamId !== "-1") {
+        fetch(`/api/tournaments/teams/${teamId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch tournaments: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.forEach(tournament => {
+                    const {
+                        id: tournamentId,
+                        name: tournamentName,
+                    } = tournament;
+
+                    const option = document.createElement('option');
+                    option.value = tournamentId;
+                    option.text = tournamentName;
+                    tournamentDropDown.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+}
+
 document.addEventListener("DOMContentLoaded", loadArticle);

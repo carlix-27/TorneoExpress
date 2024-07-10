@@ -22,5 +22,9 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
             "WHERE t.creatorId = :userId OR p.id = :userId")
     List<Tournament> findByCreatorIdOrParticipatingTeamsUserId(@Param("userId") Long userId);
 
+    @Query("SELECT t FROM Tournament t JOIN t.participatingTeams pt WHERE pt.id = :teamId")
+    List<Tournament> findTournamentsByTeamId(@Param("teamId") Long teamId);
+
+
 }
 
