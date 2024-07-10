@@ -65,10 +65,12 @@ public class RequestController {
 
     @PostMapping("/team/send")
     public TeamRequest sendTeamRequest(@RequestBody TeamRequestDto teamRequestDto) {
+
         Long requestFromId = teamRequestDto.getRequestFrom();
         Long requestToId = teamRequestDto.getRequestTo();
         Long teamId = teamRequestDto.getTeamId();
         String name = teamRequestDto.getName();
+
         return requestService.sendTeamRequest(requestFromId, requestToId, teamId, name);
     }
 

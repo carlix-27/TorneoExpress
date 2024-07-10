@@ -59,7 +59,7 @@ public class FixtureBuilder {
       if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
         Match match = new Match(team1, team2, tournamentId, location, matchDate, "To be played.");
         matches.add(match);
-        matchRepository.save(match); // Add to db info about matches.
+        matchRepository.save(match);
       }
     }
   }

@@ -1,9 +1,5 @@
 package com.TorneosExpress.controller;
 
-
-import com.TorneosExpress.dto.ShortTeamDto;
-import com.TorneosExpress.dto.team.TeamPointsDto;
-import com.TorneosExpress.dto.tournament.ActiveMatchesFixtureDto;
 import com.TorneosExpress.dto.tournament.FixtureDto;
 import com.TorneosExpress.dto.tournament.MatchDto;
 import com.TorneosExpress.dto.tournament.TournamentDto;
@@ -15,11 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/tournaments")
@@ -53,18 +48,18 @@ public class TournamentController {
     }
 
     @PutMapping("{tournamentId}/endTournament")
-    public ResponseEntity<?> endTournament(@PathVariable Long tournamentId) { // TODO
+    public ResponseEntity<?> endTournament(@PathVariable Long tournamentId) {
         Tournament tournament = tournamentService.getTournamentById(tournamentId);
         if(tournament == null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
         } else{
             tournament.setActive(false);
-            return ResponseEntity.ok(tournamentService.updateTournament(tournament)); // Guarda los datos del torneo finalizado. Actualiza el estado de active a false.
+            return ResponseEntity.ok(tournamentService.updateTournament(tournament));
         }
     }
 
-    @GetMapping("/history") // TODO
-    public List<Tournament> getTournamentHistory() { // Te devuelve los torneos que dejamos inactivos. La clave esta en chequear si isActive es false. y devolver esos.
+    @GetMapping("/history")
+    public List<Tournament> getTournamentHistory() {
         return tournamentService.getInactiveTournaments();
     }
 
@@ -171,28 +166,14 @@ public class TournamentController {
 
 
     @GetMapping("/{tournamentId}/teams")
-    public ResponseEntity<List<ShortTeamDto>> getTeamsOfTournament(@PathVariable Long tournamentId) {
-        List<ShortTeamDto> teams = tournamentService.getTeamsOfTournament(tournamentId).stream()
-                .map(Team::shortTeamDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(teams);
+    public List<Team> getTeamsOfTournament(@PathVariable Long tournamentId) {
+        return tournamentService.getTeamsOfTournament(tournamentId);
     }
 
-    @GetMapping("/{tournamentId}/teamsScore")
-    public ResponseEntity<List<TeamPointsDto>> getTeamsScoreOfTournament(@PathVariable Long tournamentId) {
-        List<TeamPointsDto> teams = tournamentService.getTeamsOfTournament(tournamentId).stream()
-                .map(Team::teamPointsDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(teams);
-    }
 
     @GetMapping("/{tournamentId}/activeMatches")
-    public ResponseEntity<ActiveMatchesFixtureDto> getActiveMatches(@PathVariable Long tournamentId) {
-        ActiveMatchesFixtureDto activeMatches = tournamentService.getActiveMatches(tournamentId);
-        if (activeMatches == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(activeMatches);
+    public List<Match> getActiveMatches(@PathVariable Long tournamentId) {
+        return tournamentService.getActiveMatches(tournamentId);
     }
 
 }
