@@ -59,7 +59,6 @@ function updateTournament(event) {
 
     const tournamentId = document.getElementById('tournament-id').value;
     const name = document.getElementById('tournament-name').value;
-    const sportId = document.getElementById('sport').value;
     const location = document.getElementById('location').value;
     const isTournamentPrivate = document.getElementById('privacy').checked;
 
@@ -68,9 +67,7 @@ function updateTournament(event) {
     const difficulty = document.getElementById('difficulty').value;
 
     const updatedTournament = {
-        id: tournamentId,
         name: name,
-        sport: { sportId: sportId },
         location: location,
         isPrivate: isTournamentPrivate,
         difficulty: difficulty

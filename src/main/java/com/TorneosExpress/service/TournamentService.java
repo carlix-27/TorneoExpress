@@ -1,14 +1,13 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.dto.tournament.CreateTournamentDto;
+import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
-import com.TorneosExpress.model.Match;
-import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -49,11 +48,10 @@ public class TournamentService {
         return matchRepository.findByTournamentAndPlayed(tournament, false);
     }
 
-    @Transactional
-    public Fixture getTournamentCalendar(Long tournamentId) {
+    public Fixture getTournamentFixture(Long tournamentId) {
+
         Tournament tournament = getTournamentById(tournamentId);
         Fixture fixture;
-
 
         if (tournament.getFixture() == null || tournament.getFixture().getMatches().isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
@@ -62,7 +60,7 @@ public class TournamentService {
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
 
             fixture = new FixtureBuilder(
-                tournamentId, tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                tournament, tournament.getLocation(), tournament.getStartDate(), matchRepository)
                 .build(teams);
 
             tournament.setFixture(fixture);
@@ -74,28 +72,33 @@ public class TournamentService {
         return fixture;
     }
 
-
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorIdOrParticipatingTeamsUserId(userId);
     }
 
-    public Tournament createTournament(Tournament tournament) {
+    public Tournament createTournament(CreateTournamentDto createTournamentDto) {
+        Tournament tournament = new Tournament(createTournamentDto);
         return tournamentRepository.save(tournament);
-    }
-
-    public boolean isTournamentNameUnique(String name) {
-        return tournamentRepository.findByName(name).isEmpty();
     }
 
     public Tournament getTournamentById(Long id) {
         Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
         return optionalTournament.orElse(null);
     }
-    public Tournament updateTournament(Tournament tournament) {
-        if (tournament.getId() == null || !tournamentRepository.existsById(tournament.getId())) {
-            return null;
-        }
-        return tournamentRepository.save(tournament);
+    public Tournament updateTournament(Long tournamentId, UpdateTournamentDto updateTournamentDto) {
+
+        String updatedTournamentName = updateTournamentDto.getName();
+        String updatedTournamentLocation = updateTournamentDto.getLocation();
+        Boolean updatedTournamentPrivate = updateTournamentDto.getIsPrivate();
+        Difficulty updatedTournamentDifficulty = updateTournamentDto.getDifficulty();
+
+        Tournament existingTournament = getTournamentById(tournamentId);
+        existingTournament.setName(updatedTournamentName);
+        existingTournament.setLocation(updatedTournamentLocation);
+        existingTournament.setPrivate(updatedTournamentPrivate);
+        existingTournament.setDifficulty(updatedTournamentDifficulty);
+
+        return tournamentRepository.save(existingTournament);
     }
 
     public Match getMatchById(Long id) {
@@ -135,6 +138,12 @@ public class TournamentService {
         }
 
         participatingTeams.add(team);
+        return tournamentRepository.save(tournament);
+    }
+
+    public Tournament endTournament(Long tournamentId) {
+        Tournament tournament = getTournamentById(tournamentId);
+        tournament.setActive(false);
         return tournamentRepository.save(tournament);
     }
 

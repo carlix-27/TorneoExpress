@@ -1,8 +1,14 @@
 package com.TorneosExpress.controller;
 
 import com.TorneosExpress.dto.tournament.MatchDto;
-import com.TorneosExpress.dto.tournament.TournamentDto;
-import com.TorneosExpress.model.*;
+import com.TorneosExpress.dto.tournament.CreateTournamentDto;
+import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
+import com.TorneosExpress.fixture.Fixture;
+import com.TorneosExpress.model.Difficulty;
+import com.TorneosExpress.model.Match;
+import com.TorneosExpress.model.Sport;
+import com.TorneosExpress.model.Team;
+import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,34 +33,13 @@ public class TournamentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createTournament(@RequestBody TournamentDto request) {
-
-        String requestName = request.getName();
-
-        boolean tournamentNameUnique = tournamentService.isTournamentNameUnique(requestName);
-
-        if (tournamentNameUnique) {
-
-            Tournament tournament = new Tournament(request);
-            Tournament createdTournament = tournamentService.createTournament(tournament);
-            createdTournament.setActive(true);
-            return ResponseEntity.ok(createdTournament);
-
-        } else{
-
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
-        }
+    public Tournament createTournament(@RequestBody CreateTournamentDto request) {
+        return tournamentService.createTournament(request);
     }
 
-    @PutMapping("{tournamentId}/endTournament")
-    public ResponseEntity<?> endTournament(@PathVariable Long tournamentId) {
-        Tournament tournament = tournamentService.getTournamentById(tournamentId);
-        if(tournament == null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Tournament name must be unique.");
-        } else{
-            tournament.setActive(false);
-            return ResponseEntity.ok(tournamentService.updateTournament(tournament));
-        }
+    @PutMapping("{tournamentId}/end")
+    public Tournament endTournament(@PathVariable Long tournamentId) {
+        return tournamentService.endTournament(tournamentId);
     }
 
     @GetMapping("/history")
@@ -73,9 +58,8 @@ public class TournamentController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Tournament>> getTournamentsByUser(@PathVariable Long userId) {
-        List<Tournament> tournaments = tournamentService.getTournamentsByUser(userId);
-        return ResponseEntity.ok().body(tournaments);
+    public List<Tournament> getTournamentsByUser(@PathVariable Long userId) {
+        return tournamentService.getTournamentsByUser(userId);
     }
 
     @DeleteMapping("/{tournamentId}")
@@ -94,18 +78,13 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/calendar")
-    public ResponseEntity<FixtureDto> getTournamentCalendar(@PathVariable Long tournamentId) {
-        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
-        if (fixture == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(fixture);
+    public Fixture getTournamentCalendar(@PathVariable Long tournamentId) {
+        return tournamentService.getTournamentFixture(tournamentId);
     }
 
     @GetMapping("/{tournamentId}/calendar/{matchId}")
-    public ResponseEntity<MatchDto> getCalendarMatch(
-        @PathVariable Long tournamentId, @PathVariable Long matchId) {
-        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
+    public Match getCalendarMatch(@PathVariable Long tournamentId, @PathVariable Long matchId) {
+        Fixture fixture = tournamentService.getTournamentFixture(tournamentId);
         if (fixture == null) {
             return ResponseEntity.notFound().build();
         }
@@ -133,12 +112,14 @@ public class TournamentController {
     
 
     @PutMapping("/{tournamentId}")
-    public ResponseEntity<Tournament> updateTournament(@PathVariable Long tournamentId,
-                                                       @RequestBody Tournament updatedTournament) {
+    public Tournament updateTournament(@PathVariable Long tournamentId,
+                                                       @RequestBody UpdateTournamentDto updatedTournamentDto) {
+
+        return tournamentService.updateTournament(tournamentId, updatedTournamentDto);
 
         Tournament existingTournament = tournamentService.getTournamentById(tournamentId);
         if (existingTournament == null) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
 
         String updatedTournamentName = updatedTournament.getName();

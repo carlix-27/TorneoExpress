@@ -1,7 +1,11 @@
 package com.TorneosExpress.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 public class TeamRequest {
 
@@ -44,67 +48,4 @@ public class TeamRequest {
     }
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getRequestFrom() {
-        return requestFrom;
-    }
-
-    public void setRequestFrom(Long request_from) {
-        this.requestFrom = request_from;
-    }
-
-    public Long getRequestTo() {
-        return requestTo;
-    }
-
-    public void setRequestTo(Long request_to) {
-        this.requestTo = request_to;
-    }
-
-    public boolean isAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
-    }
-
-    public boolean isDenied() {
-        return denied;
-    }
-
-    public void setDenied(boolean denied) {
-        this.denied = denied;
-    }
-
-    public Long getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isSent() {
-        return sent;
-    }
-
-    public void setSent(boolean sent) {
-        this.sent = sent;
-    }
 }
