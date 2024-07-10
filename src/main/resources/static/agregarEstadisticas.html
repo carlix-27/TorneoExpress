@@ -8,27 +8,50 @@
     <link rel="stylesheet" href="styles/agregarEstadisticas.css">
 </head>
 <body>
-<form id="formularioEstadisticas">
-    <input type="hidden" id="tournamentId" name="tournamentId">
-    <label for="partidoSelector">Partido:</label>
-    <select id="partidoSelector" name="partidoSelector">
-    </select>
+<header>
+    <h1>Guardar Estadísticas</h1>
+</header>
 
-    <label id="team1ScoreLabel" for="team1Score">Resultado Equipo 1:</label>
-    <input type="number" name="team1Score" required>
+<div class="container">
+    <section id="partidosTerminados" class="section">
+        <h2>Partidos Terminados</h2>
+        <ul id="listaPartidosTerminados">
+            <!-- Aquí se mostrarán los partidos terminados -->
+        </ul>
+    </section>
 
-    <label id="team2ScoreLabel" for="team2Score">Resultado Equipo 2:</label>
-    <input type="number" name="team2Score" required>
+    <section id="partidosPendientes" class="section">
+        <h2>Partidos Pendientes</h2>
+        <ul id="listaPartidosPendientes">
+            <!-- Aquí se mostrarán los partidos pendientes -->
+        </ul>
+    </section>
 
-    <label for="winnerSelector">Equipo Ganador:</label>
-    <select id="winnerSelector" name="winnerSelector">
-    </select>
+    <section id="agregarEstadisticas" class="section">
+        <h2>Agregar Estadísticas</h2>
+        <form id="formularioEstadisticas">
+            <input type="hidden" id="tournamentId" name="tournamentId">
+            <label for="partidoSelector">Partido:</label>
+            <select id="partidoSelector" name="partidoSelector">
+            </select>
 
-    <button type="submit">Guardar Estadísticas</button>
-</form>
+            <label id="team1ScoreLabel" for="team1Score">Resultado Equipo 1:</label>
+            <input type="number" name="team1Score" required>
 
-<div id="successMessage" style="display:none; color: green;"></div>
-<div id="errorMessage" style="display:none; color: red;"></div>
+            <label id="team2ScoreLabel" for="team2Score">Resultado Equipo 2:</label>
+            <input type="number" name="team2Score" required>
+
+            <label for="winnerSelector">Equipo Ganador:</label>
+            <select id="winnerSelector" name="winnerSelector">
+            </select>
+
+            <button type="submit">Guardar Estadísticas</button>
+        </form>
+
+        <div id="successMessage" style="display:none; color: green;"></div>
+        <div id="errorMessage" style="display:none; color: red;"></div>
+    </section>
+</div>
 
 </body>
 </html>

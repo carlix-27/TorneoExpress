@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchMatches(tournamentId)
         .then(() => {
             fetchTeams(tournamentId);
+            checkTournamentCreator(tournamentId);
 
             const formularioEstadisticas = document.getElementById('formularioEstadisticas');
             formularioEstadisticas.addEventListener('submit', function(event) {
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchMatches(tournamentId) {
-    return fetch(`/api/tournaments/${tournamentId}/activeMatches`)
+    return fetch(`/api/tournaments/${tournamentId}/matches`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -27,26 +28,23 @@ function fetchMatches(tournamentId) {
             return response.json();
         })
         .then(matches => {
-            const partidoSelector = document.getElementById('partidoSelector');
-            partidoSelector.innerHTML = ''; // Clear existing options
-
-            if (matches.length === 0) {
-                return createMatches(tournamentId)
-                    .then(() => fetch(`/api/tournaments/${tournamentId}/activeMatches`))
-                    .then(response => response.json())
-                    .then(newMatches => {
-                        displayMatches(newMatches);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching matches after creating:', error);
-                    });
-            }
+            const listaPartidosTerminados = document.getElementById('listaPartidosTerminados');
+            const listaPartidosPendientes = document.getElementById('listaPartidosPendientes');
 
             matches.forEach(match => {
                 const option = document.createElement('option');
                 option.value = match.matchId;
                 option.textContent = `${match.team1.name} vs ${match.team2.name}`;
-                partidoSelector.appendChild(option);
+
+                if (match.isCompleted) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${match.team1.name} ${match.team1Score} - ${match.team2Score} ${match.team2.name}`;
+                    listaPartidosTerminados.appendChild(listItem);
+                } else {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${match.team1.name} vs ${match.team2.name}`;
+                    listaPartidosPendientes.appendChild(listItem);
+                }
             });
 
             const team1Label = document.getElementById('team1ScoreLabel');
@@ -100,12 +98,10 @@ function saveStats(event, tournamentId) {
     }
 
     const data = {
-        winner: parseInt(winnerId),
+        winner: { id: parseInt(winnerId) },
         team1Score: parseInt(team1Score),
         team2Score: parseInt(team2Score)
     };
-
-    console.log(data)
 
     fetch(`/api/matches/${tournamentId}/${matchId}/statistics`, {
         method: 'POST',
@@ -147,35 +143,26 @@ function displayErrorMessage(message) {
     }, 3000);
 }
 
-function displayMatches(matches) {
-    const partidoSelector = document.getElementById('partidoSelector');
-    partidoSelector.innerHTML = ''; // Clear previous options if any
+function checkTournamentCreator(tournamentId) {
+    // Aquí debes implementar la lógica para verificar si el usuario loggeado es el creador del torneo
+    // Por ejemplo, podrías comparar el userId con tournament.creatorId
+    const userId = getUserId(); // Implementa cómo obtienes el userId del usuario loggeado
 
-    matches.forEach(match => {
-        const option = document.createElement('option');
-        option.value = match.matchId;
-        option.textContent = `${match.team1.name} vs ${match.team2.name}`;
-        partidoSelector.appendChild(option);
-    });
+    if (userId === tournament.creatorId) {
+        const agregarEstadisticasSection = document.getElementById('agregarEstadisticas');
+        const addButton = document.createElement('button');
+        addButton.textContent = 'Agregar Estadísticas';
+        addButton.addEventListener('click', () => {
+            // Aquí podrías abrir un modal, o redireccionar a una página para agregar estadísticas
+            // Puedes usar window.location.href = 'URL_DE_LA_PÁGINA' para redireccionar
+            console.log('Agregar estadísticas para el partido seleccionado');
+        });
+        agregarEstadisticasSection.appendChild(addButton);
+    }
 }
 
-function createMatches(tournamentId) {
-    return fetch(`/api/tournaments/${tournamentId}/createMatches`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-        // Optionally, you can include request body if needed
-        // body: JSON.stringify({ /* data if needed */ })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to create matches');
-            }
-            console.log('Matches created successfully');
-        })
-        .catch(error => {
-            console.error('Error creating matches:', error);
-            throw error;
-        });
+// Función de ejemplo para obtener el userId del usuario loggeado
+function getUserId() {
+    // Implementa cómo obtienes el userId del usuario loggeado en tu aplicación
+    return 'exampleUserId'; // Cambia esto según tu implementación real
 }

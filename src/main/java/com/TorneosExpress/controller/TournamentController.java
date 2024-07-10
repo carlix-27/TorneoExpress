@@ -159,6 +159,21 @@ public class TournamentController {
         return tournamentService.getActiveMatches(tournamentId);
     }
 
+    @GetMapping("/{tournamentId}/finishedMatches")
+    public List<Match> getFinishedMatches(@PathVariable Long tournamentId) {
+        return tournamentService.getFinishedMatches(tournamentId);
+    }
+
+    @GetMapping("/{tournamentId}/allMatches")
+    public List<Match> getAllMatches(@PathVariable Long tournamentId) {
+        return tournamentService.getAllMatches(tournamentId);
+    }
+
+    @GetMapping("/{tournamentId}/statistics")
+    public Statistics getStatisticByMatch(@PathVariable Long tournamentId) {
+        return tournamentService.getStatisticsOfTournament(tournamentId);
+    }
+
     @PostMapping("/{tournamentId}/createMatches")
     public ResponseEntity<Void> createMatches(@PathVariable Long tournamentId) {
 

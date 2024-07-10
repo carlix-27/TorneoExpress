@@ -3,9 +3,11 @@ package com.TorneosExpress.service;
 import com.TorneosExpress.dto.tournament.Fixture;
 import com.TorneosExpress.dto.tournament.FixtureBuilder;
 import com.TorneosExpress.model.Match;
+import com.TorneosExpress.model.Statistics;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.repository.MatchRepository;
+import com.TorneosExpress.repository.StatisticsRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,14 @@ public class TournamentService {
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
     private final MatchRepository matchRepository;
+    private final StatisticsRepository statisticsRepository;
 
     @Autowired
-    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository) {
+    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository, StatisticsRepository statisticsRepository) {
         this.tournamentRepository = tournamentRepository;
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
+        this.statisticsRepository = statisticsRepository;
     }
 
     public List<Team> getTeamsOfTournament(Long tournamentId) {
@@ -43,6 +47,37 @@ public class TournamentService {
         }
 
         return matchRepository.findByTournamentIdAndPlayed(tournamentId, false);
+    }
+
+    public List<Match> getFinishedMatches(Long tournamentId) {
+        Tournament tournament = getTournamentById(tournamentId);
+        if (tournament == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
+        }
+
+        return matchRepository.findByTournamentIdAndPlayed(tournamentId, true);
+    }
+
+    public List<Match> getAllMatches(Long tournamentId) {
+        Tournament tournament = getTournamentById(tournamentId);
+        if (tournament == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
+        }
+
+        return matchRepository.findByTournamentId(tournamentId);
+    }
+
+    public Statistics getStatisticsOfTournament(Long tournamentId) {
+        Tournament tournament = getTournamentById(tournamentId);
+        if (tournament == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
+        }
+
+        Optional<Statistics> statistics = statisticsRepository.findByTournament_id(tournamentId);
+        if (statistics.isPresent()) {
+            return statistics.get();
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Statistics not found");
     }
 
     public Fixture getTournamentCalendar(Long tournamentId) {
