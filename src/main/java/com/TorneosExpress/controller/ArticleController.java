@@ -23,12 +23,12 @@ public class ArticleController {
 
   @GetMapping("/all")
   public List<Article> getAllArticles() {
-    //return ResponseEntity.ok().body(articleService.getAllArticles());
     return articleService.getAllArticles();
   }
 
   @GetMapping("/{articleId}")
-  public ResponseEntity<Article> getArticleById(@PathVariable("articleId") Long articleId) {
-    return ResponseEntity.ok(articleService.getArticleById(articleId));
+  public ResponseEntity<Article> getArticleById(@PathVariable Long articleId) {
+    Article article = articleService.findById(articleId);
+    return ResponseEntity.ok(article);
   }
 }
