@@ -15,12 +15,12 @@ function loadArticle() {
 
             articleSection.innerHTML = "";
             articleSection.innerHTML = `
-        <div id="article-result">
-            <h2>${article.name}</h2>
-            <p>Descripcion: ${article.description}</p>
-            <p>Price: ${article.price}</p>
-        </div>
-    `;
+                <div id="article-result">
+                    <h2>${article.name}</h2>
+                    <p>Descripcion: ${article.description}</p>
+                    <p>Price: ${article.price}</p>
+                </div>
+            `;
         })
 
         .catch(error => {

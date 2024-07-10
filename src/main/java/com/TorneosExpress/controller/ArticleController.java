@@ -22,8 +22,9 @@ public class ArticleController {
   }
 
   @GetMapping("/all")
-  public ResponseEntity<List<Article>> getAllArticles() {
-    return ResponseEntity.ok(articleService.getAllArticles());
+  public List<Article> getAllArticles() {
+    //return ResponseEntity.ok().body(articleService.getAllArticles());
+    return articleService.getAllArticles();
   }
 
   @GetMapping("/{articleId}")

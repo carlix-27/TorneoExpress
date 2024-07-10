@@ -20,6 +20,7 @@ function fetchArticles() {
                     const divItem = document.createElement("div");
                     divItem.className = "product-item";
                     const {
+                        id: articleId,
                         article_name: articleName,
                         article_description: articleDescription,
                         article_price: articlePrice,
@@ -31,7 +32,7 @@ function fetchArticles() {
                     divItem.innerHTML = `
             <h3>${articleName}</h3>
             <p>Precio: ${articlePrice}</p>
-            <a href="article.html?article-id=${article.id}"><button>Comprar</button></a>
+            <a href="article.html?article-id=${articleId}"><button>Comprar</button></a>
           `;
                     productList.appendChild(divItem);
                 });
