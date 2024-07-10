@@ -46,6 +46,12 @@ public class Match {
   @Column
   private boolean played;
 
+  @Column
+  private int firstTeamScore;
+
+  @Column
+  private int secondTeamScore;
+
   public Match() {}
 
   public Match(Team team1, Team team2, Tournament tournament, String matchLocation, LocalDate date, Long winner) {
