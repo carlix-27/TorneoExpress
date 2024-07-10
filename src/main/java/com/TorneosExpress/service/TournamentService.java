@@ -1,6 +1,7 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
+import com.TorneosExpress.dto.tournament.UpdateMatchDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
 import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -105,10 +107,6 @@ public class TournamentService {
         return matchRepository.getReferenceById(id);
     }
 
-    public Match updateMatch(Match match) {
-        return matchRepository.save(match);
-    }
-
     public void deleteTournament(Long id) {
         tournamentRepository.deleteById(id);
     }
@@ -147,5 +145,22 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
+    public Match updateMatch(Long matchId, UpdateMatchDto newMatch) {
+
+        Team newMatchFirstTeam = newMatch.getTeam1();
+        Team newMatchSecondTeam = newMatch.getTeam2();
+        String newLocation = newMatch.getLocation();
+        LocalDate newDate = newMatch.getDate();
+
+        Match match = matchRepository.findById(matchId).orElse(null);
+
+        assert match != null;
+        match.setTeam1(newMatchFirstTeam);
+        match.setTeam2(newMatchSecondTeam);
+        match.setMatchLocation(newLocation);
+        match.setDate(newDate);
+
+        return matchRepository.save(match);
+    }
 
 }

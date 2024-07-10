@@ -1,7 +1,9 @@
 package com.TorneosExpress.dto;
 
+import com.TorneosExpress.model.Team;
+
 public class StatisticsDto {
-    private TeamWinnerPointsDto ganador;
+    private Team winner;
     private int team1Score;
     private int team2Score;
 

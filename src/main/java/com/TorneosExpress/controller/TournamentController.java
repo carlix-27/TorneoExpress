@@ -1,12 +1,10 @@
 package com.TorneosExpress.controller;
 
-import com.TorneosExpress.dto.tournament.MatchDto;
+import com.TorneosExpress.dto.tournament.UpdateMatchDto;
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
 import com.TorneosExpress.fixture.Fixture;
-import com.TorneosExpress.model.Difficulty;
 import com.TorneosExpress.model.Match;
-import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.service.TournamentService;
@@ -16,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 
 @RestController
@@ -82,60 +78,23 @@ public class TournamentController {
         return tournamentService.getTournamentFixture(tournamentId);
     }
 
-    @GetMapping("/{tournamentId}/calendar/{matchId}")
-    public Match getCalendarMatch(@PathVariable Long tournamentId, @PathVariable Long matchId) {
-        Fixture fixture = tournamentService.getTournamentFixture(tournamentId);
-        if (fixture == null) {
-            return ResponseEntity.notFound().build();
-        }
-        for (MatchDto match : fixture.getMatches()) {
-            if (Objects.equals(match.getMatchId(), matchId)) {
-                return ResponseEntity.ok(match);
-            }
-        }
-        return ResponseEntity.notFound().build();
+
+
+    //cambie el getMatchCalendar a esto a un simple getMatch, ya que es exactamente lo mismo y se puede usar en todos lados
+    @GetMapping("/{matchId}")
+    public Match getMatch(@PathVariable Long matchId) {
+        return tournamentService.getMatchById(matchId);
     }
 
-    @PutMapping("/{tournamentId}/calendar/{matchId}")
-    public ResponseEntity<Match> updateMatch(
-        @PathVariable Long tournamentId, @PathVariable Long matchId, @RequestBody MatchDto matchDto) {
-        FixtureDto fixture = tournamentService.getTournamentCalendar(tournamentId);
-        if (fixture == null) {
-            return ResponseEntity.notFound().build();
-        }
-        Match match = tournamentService.getMatchById(matchId);
-        LocalDate updatedDate = matchDto.getDate();
-        match.setDate(updatedDate);
-        Match updatedMatchEntity = tournamentService.updateMatch(match);
-        return ResponseEntity.ok(updatedMatchEntity);
+    @PutMapping("/{matchId}")
+    public Match updateMatch(@PathVariable Long matchId, @RequestBody UpdateMatchDto updateMatchDto) {
+        return tournamentService.updateMatch(matchId, updateMatchDto);
     }
     
 
     @PutMapping("/{tournamentId}")
-    public Tournament updateTournament(@PathVariable Long tournamentId,
-                                                       @RequestBody UpdateTournamentDto updatedTournamentDto) {
-
+    public Tournament updateTournament(@PathVariable Long tournamentId, @RequestBody UpdateTournamentDto updatedTournamentDto) {
         return tournamentService.updateTournament(tournamentId, updatedTournamentDto);
-
-        Tournament existingTournament = tournamentService.getTournamentById(tournamentId);
-        if (existingTournament == null) {
-            return null;
-        }
-
-        String updatedTournamentName = updatedTournament.getName();
-        Sport updatedTournamentSport = updatedTournament.getSport();
-        String updatedTournamentLocation = updatedTournament.getLocation();
-        boolean updatedTournamentPrivate = updatedTournament.isPrivate();
-        Difficulty updatedTournamentDifficulty = updatedTournament.getDifficulty();
-
-        existingTournament.setName(updatedTournamentName);
-        existingTournament.setSport(updatedTournamentSport);
-        existingTournament.setLocation(updatedTournamentLocation);
-        existingTournament.setPrivate(updatedTournamentPrivate);
-        existingTournament.setDifficulty(updatedTournamentDifficulty);
-
-        Tournament updatedTournamentEntity = tournamentService.updateTournament(existingTournament);
-        return ResponseEntity.ok(updatedTournamentEntity);
     }
 
 
