@@ -18,15 +18,16 @@ import java.util.List;
 @Setter
 public class Tournament {
 
-  public Tournament() { }
+  public Tournament() {}
 
-  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty) {
+  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty, Type type) {
     this.name = tournamentName;
     this.location = tournamentLocation;
     this.sport = sport;
     this.isPrivate = privacy;
     this.difficulty = difficulty;
     this.isActive = true;
+    this.type = type;
   }
 
   public Tournament(CreateTournamentDto request){
@@ -42,6 +43,7 @@ public class Tournament {
     this.participatingTeams = new ArrayList<>();
     this.matches = new ArrayList<>();
     this.fixture = new Fixture();
+    this.type = request.getType();
   }
 
   @Id
@@ -103,5 +105,8 @@ public class Tournament {
 
   @Embedded
   private Fixture fixture;
+
+  @Column
+  private Type type;
 
 }
