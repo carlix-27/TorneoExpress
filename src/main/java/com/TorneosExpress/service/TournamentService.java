@@ -34,19 +34,13 @@ public class TournamentService {
     }
 
     public List<Team> getTeamsOfTournament(Long tournamentId) {
-        Tournament tournament = tournamentRepository.findById(tournamentId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found"));
+        Tournament tournament = getTournamentById(tournamentId);
         return tournament.getParticipatingTeams();
     }
 
 
     public List<Match> getActiveMatches(Long tournamentId){
-
         Tournament tournament = getTournamentById(tournamentId);
-        if(tournament == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament not found");
-        }
-
         return matchRepository.findByTournamentAndPlayed(tournament, false);
     }
 
@@ -87,24 +81,25 @@ public class TournamentService {
         return tournamentRepository.findTournamentsByTeamId(teamId);
     }
 
-    public Tournament getTournamentById(Long id) {
-        Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
-        return optionalTournament.orElse(null);
-    }
+
     public Tournament updateTournament(Long tournamentId, UpdateTournamentDto updateTournamentDto) {
+        Tournament tournament = getTournamentById(tournamentId);
+        Tournament updatedTournament = updateTournamentData(tournament, updateTournamentDto);
+        return tournamentRepository.save(updatedTournament);
+    }
+
+    private Tournament updateTournamentData(Tournament existingTournament, UpdateTournamentDto updateTournamentDto) {
 
         String updatedTournamentName = updateTournamentDto.getName();
         String updatedTournamentLocation = updateTournamentDto.getLocation();
         Boolean updatedTournamentPrivate = updateTournamentDto.getIsPrivate();
         Difficulty updatedTournamentDifficulty = updateTournamentDto.getDifficulty();
 
-        Tournament existingTournament = getTournamentById(tournamentId);
         existingTournament.setName(updatedTournamentName);
         existingTournament.setLocation(updatedTournamentLocation);
         existingTournament.setPrivate(updatedTournamentPrivate);
         existingTournament.setDifficulty(updatedTournamentDifficulty);
-
-        return tournamentRepository.save(existingTournament);
+        return existingTournament;
     }
 
     public Match getMatchById(Long id) {
@@ -165,6 +160,11 @@ public class TournamentService {
         match.setDate(newDate);
 
         return matchRepository.save(match);
+    }
+
+    public Tournament getTournamentById(Long id) {
+        Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
+        return optionalTournament.orElse(null);
     }
 
 }

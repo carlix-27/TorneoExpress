@@ -77,10 +77,6 @@ function checkTournamentOwner(tournamentId) {
         })
         .then(tournament => {
 
-            console.log("Tournament:", tournament)
-            console.log("Tournament creator:", tournament.creatorId)
-
-
             if (userId == tournament.creatorId) {
                 const addButton = document.createElement('button');
                 addButton.textContent = 'Agregar Estadísticas';
