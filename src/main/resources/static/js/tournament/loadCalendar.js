@@ -48,7 +48,7 @@ function loadCalendar() {
 }
 
 // TODO: Fijate aca de usar el fixture-generator.
-function fetchRoundRobinFixture(id, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+function fetchRoundRobinFixture(id, tournamentFixture, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -56,7 +56,7 @@ function fetchRoundRobinFixture(id, tournamentName, tournamentCreatorId, calenda
             }
             return response.json();
         })
-        .then(fixture => {
+        .then(tournamentFixture => {
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
@@ -65,12 +65,12 @@ function fetchRoundRobinFixture(id, tournamentName, tournamentCreatorId, calenda
             `;
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                fixture.matches.forEach(match => {
+                tournamentFixture.matches.forEach(match => {
                     console.log("Fixture Round Robin: ", fixture);
                     const location = match.match_location;
                     const date = match.date;
-                    const team1 = match.teamName1; // fetch team
-                    const team2 = match.teamName2; // fetch team
+                    const team1 = match.team1.name; // fetch team
+                    const team2 = match.team2.name; // fetch team
 
                     const listItem = document.createElement('li');
 
@@ -82,7 +82,7 @@ function fetchRoundRobinFixture(id, tournamentName, tournamentCreatorId, calenda
                     calendarListHTML.appendChild(listItem);
                 })
             } else {
-                fixture.matches.forEach(match => {
+                tournamentFixture.matches.forEach(match => {
                     const location = match.location;
                     const date = match.date;
                     const team1 = match.teamName1; // fetch team
