@@ -13,6 +13,8 @@ function loadTournament() {
 
             const tournamentList = document.getElementById("tournament-result");
 
+            console.log(tournament)
+
 
             const tournamentName = tournament.name
             const location = tournament.location
@@ -35,6 +37,7 @@ function loadTournament() {
                     <p>Equipos anotados:</p>
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
+                    <a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>
                 </div>
             `;
         })
