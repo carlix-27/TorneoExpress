@@ -1,6 +1,7 @@
 let map;
 let marker;
 let geocoder;
+let autocomplete;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -17,20 +18,72 @@ function initMap() {
     geocoder = new google.maps.Geocoder();
 
     google.maps.event.addListener(marker, 'dragend', function(event) {
-        updateMarkerPosition(marker.getPosition());
+        updateAddress(marker.getPosition());
+    });
+
+    initAutocomplete();
+}
+
+function initAutocomplete() {
+    const input = document.getElementById('address');
+    autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', function() {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+            map.setCenter(place.geometry.location);
+            marker.setPosition(place.geometry.location);
+            document.getElementById('map-container').style.display = 'block';
+            document.getElementById('toggle-map-button').textContent = 'Hide Map';
+        } else {
+            console.error('No details available for input: ' + place.name);
+        }
     });
 }
 
-function geocodeAddress() {
-    const address = document.getElementById('address').value;
-    geocoder.geocode({ 'address': address }, function(results, status) {
+function updateAddress(latlng) {
+    geocoder.geocode({ 'location': latlng }, function(results, status) {
         if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            marker.setPosition(results[0].geometry.location);
+            if (results[0]) {
+                const addressComponents = results[0].address_components;
+                const formattedAddress = formatAddress(addressComponents);
+                document.getElementById('address').value = formattedAddress;
+            } else {
+                console.error('No results found');
+            }
         } else {
-            console.error('Geocode was not successful for the following reason: ' + status);
+            console.error('Geocoder failed due to: ' + status);
         }
     });
+}
+
+function formatAddress(components) {
+    const addressParts = [];
+    components.forEach(component => {
+        if (component.types.includes('locality') ||
+            component.types.includes('administrative_area_level_1') ||
+            component.types.includes('country')) {
+            addressParts.push(component.long_name);
+        }
+    });
+    return addressParts.join(', ');
+}
+
+function toggleMap() {
+    const mapContainer = document.getElementById('map-container');
+    const toggleButton = document.getElementById('toggle-map-button');
+
+    if (mapContainer.style.display === 'none') {
+        mapContainer.style.display = 'block';
+        toggleButton.textContent = 'Hide Map';
+
+        // Initialize the map if it hasn't been initialized yet
+        if (!map) {
+            initMap();
+        }
+    } else {
+        mapContainer.style.display = 'none';
+        toggleButton.textContent = 'Show Map';
+    }
 }
 
 function register() {

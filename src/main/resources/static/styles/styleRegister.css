@@ -126,3 +126,7 @@ body {
 .login-link a:hover {
     text-decoration: underline;
 }
+
+#map-container {
+    display: none;
+}
