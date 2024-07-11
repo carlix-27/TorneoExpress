@@ -29,13 +29,13 @@ function loadCalendar() {
             } else {
                 switch(tournament.type){
                     case 'ROUNDROBIN': // FIXME: Le estas pasando toda la entidad de tournament, fijate que haces con tournament ahi, sino pedi lo que necesitas nada mas.
-                        fetchRoundRobinFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+                        fetchRoundRobinFixture(tournamentId, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'KNOCKOUT':
-                        fetchKnockoutFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+                        fetchKnockoutFixture(tournamentId, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'GROUPSTAGE':
-                        fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+                        fetchGroupStage(tournamentId, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                 }
             }
@@ -48,7 +48,7 @@ function loadCalendar() {
 }
 
 // TODO: Fijate aca de usar el fixture-generator.
-function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+function fetchRoundRobinFixture(id, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -56,7 +56,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
             }
             return response.json();
         })
-        .then(matches => {
+        .then(fixture => {
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
@@ -65,8 +65,8 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
             `;
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                matches.forEach(match => {
-                    console.log("List of Matches (Fixture) Round Robin: ", matches);
+                fixture.matches.forEach(match => {
+                    console.log("List of Matches (Fixture) Round Robin: ", fixture);
                     const location = match.match_location;
                     const date = match.date;
                     const team1 = match.team1.name; // fetch team
@@ -82,7 +82,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                     calendarListHTML.appendChild(listItem);
                 })
             } else {
-                matches.forEach(match => {
+                fixture.matches.forEach(match => {
                     const location = match.location;
                     const date = match.date;
                     const team1 = match.teamName1; // fetch team
@@ -103,7 +103,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
         })
 }
 
-function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
+function fetchKnockoutFixture(id, tournamentName, tournamentCreatorId, calendarListHTML, type){
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -111,7 +111,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
             }
             return response.json();
         })
-        .then(matches => {
+        .then(fixture => {
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
@@ -120,7 +120,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
             `;
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                matches.forEach(match => {
+                fixture.matches.forEach(match => {
                     console.log("Fixture Knockout: ",tournamentFixture);
                     const location = match.match_location;
                     const date = match.date;
@@ -137,7 +137,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                     calendarListHTML.appendChild(listItem);
                 })
             } else {
-                matches.forEach(match => {
+                fixture.matches.forEach(match => {
                     const location = match.match_location;
                     const date = match.date;
                     const team1 = match.teamName1; // fetch team
@@ -157,7 +157,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
         })
 }
 
-function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+function fetchGroupStage(id, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -165,7 +165,7 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
             }
             return response.json();
         })
-        .then(matches => {
+        .then(fixture => {
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
@@ -175,7 +175,7 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
 
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                const matches = matches;
+                const matches = fixture.matches;
 
                 // Objeto para almacenar los grupos de partidos
                 const groupedMatches = {};
