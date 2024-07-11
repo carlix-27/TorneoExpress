@@ -21,8 +21,7 @@ public class FixtureBuilder {
     this.startDate = startDate;
     this.matchRepository = matchRepository;
   }
-
-
+  
   public Fixture build(List<Team> teams, Type type) {
     Fixture fixture = new Fixture();
     switch (type){
@@ -71,7 +70,7 @@ public class FixtureBuilder {
       }
     }
   }
-
+  
 
   private List<Match> calculateKnockoutMatches(List<Team> teams) {
     List<Match> matches = new ArrayList<>();
@@ -113,9 +112,4 @@ public class FixtureBuilder {
 
     return matches;
   }
-
-
-
-
-
 }

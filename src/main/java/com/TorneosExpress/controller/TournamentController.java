@@ -82,12 +82,12 @@ public class TournamentController {
 
 
     //cambie el getMatchCalendar a esto a un simple getMatch, ya que es exactamente lo mismo y se puede usar en todos lados
-    @GetMapping("/{matchId}")
+    @GetMapping("/matches/{matchId}")
     public Match getMatch(@PathVariable Long matchId) {
         return tournamentService.getMatchById(matchId);
     }
 
-    @PutMapping("/{matchId}")
+    @PutMapping("/matches/{matchId}")
     public Match updateMatch(@PathVariable Long matchId, @RequestBody UpdateMatchDto updateMatchDto) {
         return tournamentService.updateMatch(matchId, updateMatchDto);
     }

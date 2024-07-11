@@ -13,7 +13,7 @@ public class CreateTournamentDto {
     private Long creatorId;
     private String name;
     private String location;
-    private LocalDate startDate;
+    private LocalDate date;
     private Sport sport;
     private Boolean isPrivate;
     private Difficulty difficulty;
