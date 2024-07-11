@@ -9,6 +9,7 @@ import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.model.Type;
 import com.TorneosExpress.service.TournamentService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,8 +56,9 @@ public class TournamentController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Tournament> getTournamentsByUser(@PathVariable Long userId) {
-        return tournamentService.getTournamentsByUser(userId);
+    public ResponseEntity<List<Tournament>> getTournamentsByUser(@PathVariable Long userId) {
+        List<Tournament> tournaments = tournamentService.getTournamentsByUser(userId);
+        return ResponseEntity.ok().body(tournaments);
     }
 
     @DeleteMapping("/{tournamentId}")

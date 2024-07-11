@@ -30,8 +30,16 @@ function cargarTorneos() {
                     private: privateTournament,
                     id: tournamentId,
                     participatingTeams,
-                    creatorId,
+                    creatorId
                 } = tournament;
+
+                console.log("Name: ", tournamentName);
+                console.log("Sport: ", tournamentSport);
+                console.log("Location: ", tournamentLocation);
+                console.log("Private: ", privateTournament);
+                console.log("ID: ", tournamentId);
+                console.log("Participating Teams: ", participatingTeams);
+                console.log("Creator Id:", creatorId);
 
                 console.log("Tournament despues de const: ", tournament);
 
