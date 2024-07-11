@@ -38,7 +38,7 @@ public class Tournament {
     this.difficulty = request.getDifficulty();
     this.isActive = true;
     this.maxTeams = request.getMaxTeams();
-    this.startDate = request.getStartDate();
+    this.startDate = request.getDate();
     this.participatingTeams = new ArrayList<>();
     this.matches = new ArrayList<>();
     this.fixture = new Fixture();
