@@ -4,6 +4,7 @@ function loadCalendar() {
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');
 
+
     fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
             if (!response.ok) {
@@ -36,6 +37,7 @@ function loadCalendar() {
         });
 }
 
+// TODO: Tenes que adecuarlo a cada tipo de torneo. 
 function fetchFixture(id, tournament, calendarListHTML) {
     fetch(`/api/tournaments/${id}/calendar`)
         .then(response => {
@@ -52,7 +54,7 @@ function fetchFixture(id, tournament, calendarListHTML) {
                 </div>
             `;
 
-            if (tournament.creatorId != localStorage.getItem("userId")) {
+            if (tournament.creatorId !== localStorage.getItem("userId")) { // Antes era tournament.creatorId != localStorage.getItem("userId")
                 fixture.matches.forEach(match => {
                     const location = match.location;
                     const date = match.date;
