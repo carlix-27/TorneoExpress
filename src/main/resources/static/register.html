@@ -17,23 +17,26 @@
     <h2>Register new Account</h2>
 
     <form id="registration-form" action="api/auth/submit_registration" method="post">
+
         <div class="textbox">
             <i class="fas fa-user"></i>
             <input type="text" id="name" placeholder="Name" required>
         </div>
-        <div class="textbox">
-            <i class="fas fa-map-marker-alt"></i>
-            <input type="text" id="location" placeholder="Location" required>
-        </div>
+
         <div class="textbox">
             <i class="fas fa-envelope"></i>
             <input type="email" id="email" placeholder="Email" required>
         </div>
+
+        <h3>Location:</h3>
+        <div id="map" style="height: 400px; width: 100%;"></div><br>
+
         <div class="textbox">
             <i class="fas fa-lock"></i>
             <input type="password" id="password" placeholder="Password" required>
         </div>
-        <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div> <!-- Error message div -->
+
+        <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div>
         <input type="button" value="Register" name="register_button" onclick="register()">
     </form>
 
@@ -41,7 +44,9 @@
         <p><a href="login.html">Login here</a></p>
     </div>
 
-    <script src="js/auth/register.js"></script>
+    <script src="js/auth/googleMaps.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoyKxpCJJNs1Nu21WTzvkgXUR_fHPQBFE&libraries=places&callback=initMap"
+            async defer></script>
 </div>
 </body>
 </html>
