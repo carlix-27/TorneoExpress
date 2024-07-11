@@ -39,7 +39,6 @@ function loadCalendar() {
                         break;
                 }
             }
-
         })
         .catch(error => {
             console.error('Error:', error);
