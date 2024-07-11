@@ -74,7 +74,9 @@ function toggleMap() {
 
     if (mapContainer.style.display === 'none') {
         mapContainer.style.display = 'block';
-        toggleButton.textContent = 'Hide Map';
+        toggleButton.querySelector('svg').setAttribute('data-icon', 'hide');
+        toggleButton.querySelector('path').setAttribute('d', 'M12,2C8.14,2 5,5.14 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.86 -3.14,-7 -7,-7zM12,11.5C10.62,11.5 9.5,10.38 9.5,9C9.5,7.62 10.62,6.5 12,6.5C13.38,6.5 14.5,7.62 14.5,9C14.5,10.38 13.38,11.5 12,11.5z');
+        toggleButton.setAttribute('title', 'Hide Map');
 
         // Initialize the map if it hasn't been initialized yet
         if (!map) {
@@ -82,9 +84,12 @@ function toggleMap() {
         }
     } else {
         mapContainer.style.display = 'none';
-        toggleButton.textContent = 'Show Map';
+        toggleButton.querySelector('svg').setAttribute('data-icon', 'show');
+        toggleButton.querySelector('path').setAttribute('d', 'M12,2C8.14,2 5,5.14 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.86 -3.14,-7 -7,-7zM12,11.5C10.62,11.5 9.5,10.38 9.5,9C9.5,7.62 10.62,6.5 12,6.5C13.38,6.5 14.5,7.62 14.5,9C14.5,10.38 13.38,11.5 12,11.5z');
+        toggleButton.setAttribute('title', 'Show Map');
     }
 }
+
 
 function register() {
     const name = document.getElementById('name').value;
