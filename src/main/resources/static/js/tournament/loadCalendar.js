@@ -26,8 +26,17 @@ function loadCalendar() {
                     <h3>Calendario no disponible para el torneo.</h3>
                 </div>`;
             } else {
-                /* Segundo fetch para agarrar el fixture. */
-                fetchFixture(tournamentId, tournament, calendar);
+                switch(tournament.type){
+                    case 'ROUNDROBIN':
+                        fetchRoundRobinFixture(tournamentId, tournament, calendar, tournament.type);
+                        break;
+                    case 'KNOCKOUT':
+                        fetchKnockoutFixture(tournamentId, tournament, calendar, tournament.type);
+                        break;
+                    case 'GROUPSTAGE':
+                        fetchGroupStage(tournamentId, tournament, calendar, tournament.type);
+                        break;
+                }
             }
 
         })
@@ -37,9 +46,9 @@ function loadCalendar() {
         });
 }
 
-// TODO: Tenes que adecuarlo a cada tipo de torneo. 
-function fetchFixture(id, tournament, calendarListHTML) {
-    fetch(`/api/tournaments/${id}/calendar`)
+// TODO: Fijate aca de usar el fixture-generator.
+function fetchRoundRobinFixture(id, tournament, calendarListHTML, type) {
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
@@ -54,9 +63,10 @@ function fetchFixture(id, tournament, calendarListHTML) {
                 </div>
             `;
 
-            if (tournament.creatorId !== localStorage.getItem("userId")) { // Antes era tournament.creatorId != localStorage.getItem("userId")
+            if (tournament.creatorId !== localStorage.getItem("userId")) {
                 fixture.matches.forEach(match => {
-                    const location = match.location;
+                    console.log("Fixture Round Robin: ", fixture);
+                    const location = match.match_location;
                     const date = match.date;
                     const team1 = match.teamName1; // fetch team
                     const team2 = match.teamName2; // fetch team
@@ -79,7 +89,6 @@ function fetchFixture(id, tournament, calendarListHTML) {
 
                     const listItem = document.createElement('li');
 
-                    //<button onclick="modifyDate(${date})">Modificar fecha</button>
                     listItem.innerHTML = `
                     <h3>${date}</h3>
                     <p>${team1} VS ${team2}</p>
@@ -91,6 +100,168 @@ function fetchFixture(id, tournament, calendarListHTML) {
                 })
             }
         })
+}
+
+function fetchKnockoutFixture(id, tournament, calendarListHTML, type){
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(fixture => {
+            calendarListHTML.innerHTML = `
+                <div id="result">
+                    <h2>${tournament.name} - Calendario</h2>
+                    
+                </div>
+            `;
+
+            if (tournament.creatorId !== localStorage.getItem("userId")) {
+                fixture.matches.forEach(match => {
+                    console.log("Fixture Knockout: ",fixture);
+                    const location = match.match_location;
+                    const date = match.date;
+                    const team1 = match.teamName1; // fetch team
+                    const team2 = match.teamName2; // fetch team
+
+                    const listItem = document.createElement('li');
+
+                    listItem.innerHTML = `
+                    <h3>${date}</h3>
+                    <p>${team1} VS ${team2}</p>
+                    <p>${location}</p>
+                `;
+                    calendarListHTML.appendChild(listItem);
+                })
+            } else {
+                fixture.matches.forEach(match => {
+                    const location = match.match_location;
+                    const date = match.date;
+                    const team1 = match.teamName1; // fetch team
+                    const team2 = match.teamName2; // fetch team
+
+                    const listItem = document.createElement('li');
+
+                    listItem.innerHTML = `
+                    <h3>${date}</h3>
+                    <p>${team1} VS ${team2}</p>
+                    <p>${location}</p>
+                    <button class="modify-date-button" onclick="modifyDate(${match.id}, ${tournament.id})">Modificar fecha</button>
+                `;
+                    calendarListHTML.appendChild(listItem);
+                })
+            }
+        })
+}
+
+function fetchGroupStage(id, tournament, calendarListHTML, type) {
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(fixture => {
+            calendarListHTML.innerHTML = `
+                <div id="result">
+                    <h2>${tournament.name} - Calendario</h2>
+                    
+                </div>
+            `;
+
+
+            const matches = fixture.matches;
+
+            // Objeto para almacenar los grupos de partidos
+            const groupedMatches = {};
+            let groupCounter = 1;
+
+            // Iterar sobre los partidos y agrupar de a 2 por grupo
+            for (let i = 0; i < matches.length; i += 2) {
+                const groupMatches = matches.slice(i, i + 2); // Tomar los próximos 2 partidos
+
+                // Verificar y ajustar equipos para que no se repitan dentro del grupo
+                adjustTeamsForGroup(groupMatches);
+
+                // Crear un objeto para el grupo actual
+                const group = {
+                    id: groupCounter++,
+                    matches: groupMatches
+                };
+
+                // Agregar el grupo al objeto de grupos
+                groupedMatches[group.id] = group;
+            }
+
+            // Función para ajustar equipos y evitar repeticiones dentro del grupo
+            function adjustTeamsForGroup(groupMatches) {
+                // Utilizar un set para almacenar equipos únicos dentro del grupo
+                const usedTeams = new Set();
+
+                // Iterar sobre los partidos del grupo y ajustar los equipos si es necesario
+                groupMatches.forEach(match => {
+                    const team1 = match.teamName1;
+                    const team2 = match.teamName2;
+
+                    // Verificar y ajustar equipo 2 si ya está en el set
+                    if (usedTeams.has(team1)) {
+                        match.teamName1 = findUniqueTeam(usedTeams, team1);
+                    }
+                    usedTeams.add(match.teamName1);
+
+                    // Verificar y ajustar equipo 2 si ya está en el set
+                    if (usedTeams.has(team2)) {
+                        match.teamName2 = findUniqueTeam(usedTeams, team2);
+                    }
+                    usedTeams.add(match.teamName2);
+                });
+            }
+
+            // Función para encontrar un equipo único que no esté en el set
+            function findUniqueTeam(usedTeams, currentTeam) {
+                let uniqueTeam = currentTeam + " (2)"; // Ejemplo: agregar sufijo para indicar duplicado
+                while (usedTeams.has(uniqueTeam)) {
+                    uniqueTeam += " (2)"; // Incrementar sufijo hasta encontrar un nombre único
+                }
+                return uniqueTeam;
+            }
+
+            // Iterar sobre cada grupo y mostrar los partidos
+            Object.values(groupedMatches).forEach(group => {
+                // Crear elemento HTML para el grupo
+                const groupElement = document.createElement('div');
+                groupElement.classList.add('group'); // Estilo CSS para grupos
+
+                // Encabezado del grupo (número de grupo)
+                const groupHeader = document.createElement('h2');
+                groupHeader.textContent = `Grupo ${group.id}`;
+                groupElement.appendChild(groupHeader);
+
+                // Lista de partidos del grupo
+                const matchesList = document.createElement('ul');
+                group.matches.forEach(match => {
+                    const date = match.date;
+                    const team1 = match.teamName1;
+                    const team2 = match.teamName2;
+
+                    const matchItem = document.createElement('li');
+                    matchItem.innerHTML = `
+                        <h3>${date}</h3>
+                        <p>${team1} VS ${team2}</p>
+                    `;
+                    matchesList.appendChild(matchItem);
+                });
+                groupElement.appendChild(matchesList);
+
+                // Agregar el grupo a la lista principal en HTML
+                calendarListHTML.appendChild(groupElement);
+            });
+
+        })
+
 }
 
 // Al cargar la página, cargar los torneos del usuario
