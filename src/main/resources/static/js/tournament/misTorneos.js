@@ -20,6 +20,8 @@ function cargarTorneos() {
 
             tournaments.forEach(tournament => {
                 const li = document.createElement("li");
+                console.log("Tournament previo a const: ", tournament);
+
 
                 const {
                     name: tournamentName,
@@ -30,6 +32,8 @@ function cargarTorneos() {
                     participatingTeams,
                     creatorId,
                 } = tournament;
+
+                console.log("Tournament despues de const: ", tournament);
 
                 const isCreator = userId == creatorId;
 
@@ -45,8 +49,8 @@ function cargarTorneos() {
                     <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
                     <p>Dificultad: ${tournament.difficulty}</p>
                     <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
-                    ${isCreator ? `<a class="action-link" onclick="editarTorneo(${tournament.id})">Editar</a>
-                    <a class="action-link" onclick="borrarTorneo(${tournament.id})">Borrar</a>` : ''}
+                    ${isCreator ? `<a class="action-link" onclick="editarTorneo(${tournamentId})">Editar</a>
+                    <a class="action-link" onclick="borrarTorneo(${tournamentId})">Borrar</a>` : ''}
                     ${privateTournament && isCreator ? `<a class="action-link" onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes</a>` : ''}
                 </div>
                 `;

@@ -2,6 +2,8 @@ function loadTournament() {
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');
 
+    console.log("Tournament ID: ", tournamentId);
+
     fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
             if (!response.ok) {
@@ -13,7 +15,7 @@ function loadTournament() {
 
             const tournamentList = document.getElementById("tournament-result");
 
-            console.log(tournament)
+            console.log(tournament);
 
 
             const tournamentName = tournament.name
@@ -24,6 +26,7 @@ function loadTournament() {
             const teams = tournament.participatingTeams;
             const teamsList = teams.map(team => `<li><a href="loadTeam.html?id=${team.id}">${team.name}</a></li>`).join('');
             const maxTeams = tournament.maxTeams
+            const type = tournament.type
 
 
             tournamentList.innerHTML = `
@@ -31,6 +34,7 @@ function loadTournament() {
                     <h2>${tournamentName}</h2>
                     <p>Ubicación: ${location}</p>
                     <p>Dificultad: ${difficulty}</p>
+                    <p>Tipo: ${type}</p>
                     <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
                     <p>Inicio: ${startDate}</p>
                     <p>Número máximo de equipos: ${maxTeams}</p>
