@@ -42,7 +42,6 @@ public class Tournament {
     this.startDate = request.getDate();
     this.participatingTeams = new ArrayList<>();
     this.matches = new ArrayList<>();
-    this.fixture = new Fixture();
     this.type = request.getType();
   }
 
@@ -103,8 +102,6 @@ public class Tournament {
   @Setter
   private List<Match> matches = new ArrayList<>();
 
-  @Embedded
-  private Fixture fixture;
 
   @Column
   private Type type;
