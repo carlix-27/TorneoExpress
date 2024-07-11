@@ -146,12 +146,12 @@ public class TournamentService {
 
     public Match updateMatch(Long matchId, UpdateMatchDto newMatch) {
 
+        Match match = matchRepository.findById(matchId).orElse(null);
+
         Team newMatchFirstTeam = newMatch.getTeam1();
         Team newMatchSecondTeam = newMatch.getTeam2();
         String newLocation = newMatch.getLocation();
         LocalDate newDate = newMatch.getDate();
-
-        Match match = matchRepository.findById(matchId).orElse(null);
 
         assert match != null;
         match.setTeam1(newMatchFirstTeam);

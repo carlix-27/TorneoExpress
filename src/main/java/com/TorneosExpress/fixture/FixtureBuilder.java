@@ -24,13 +24,6 @@ public class FixtureBuilder {
   }
 
 
-  public Fixture build(List<Team> teams) {
-    Fixture fixture = new Fixture();
-    fixture.setMatches(calculateMatchCalendar(teams));
-    return fixture;
-  }
-
-
   private List<Match> calculateMatchCalendar(List<Team> teams) {
     List<Match> matches = new ArrayList<>();
     int numTeams = teams.size();
@@ -61,6 +54,12 @@ public class FixtureBuilder {
         matchRepository.save(match);
       }
     }
+  }
+
+  public Fixture build(List<Team> teams) {
+    Fixture fixture = new Fixture();
+    fixture.setMatches(calculateMatchCalendar(teams));
+    return fixture;
   }
 
 }
