@@ -98,7 +98,7 @@ public class Tournament {
 
 
   @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonIgnore
+  // @JsonIgnore
   @Setter
   private List<Match> matches = new ArrayList<>();
 
