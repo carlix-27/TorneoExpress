@@ -29,6 +29,11 @@
         </div>
 
         <h3>Location:</h3>
+        <div class="textbox">
+            <i class="fas fa-map-marker-alt"></i>
+            <input type="text" id="address" placeholder="Enter your address">
+            <button type="button" onclick="geocodeAddress()">Find Address</button>
+        </div>
         <div id="map" style="height: 400px; width: 100%;"></div><br>
 
         <div class="textbox">
@@ -44,9 +49,8 @@
         <p><a href="login.html">Login here</a></p>
     </div>
 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoyKxpCJJNs1Nu21WTzvkgXUR_fHPQBFE&libraries=places&callback=initMap" async defer></script>
     <script src="js/auth/register.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoyKxpCJJNs1Nu21WTzvkgXUR_fHPQBFE&libraries=places&callback=initMap"
-            async defer></script>
 </div>
 </body>
 </html>
