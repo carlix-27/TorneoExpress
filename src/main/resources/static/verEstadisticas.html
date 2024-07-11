@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Visualizar estadísticas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualizar Estadísticas</title>
   <script src="js/auth/checkRedirect.js"></script>
   <link rel="stylesheet" href="styles/verEstadisticas.css">
 
   <style>
-    /* Styles for error and success messages */
     #error-message,
     #success-message {
       color: red;
@@ -17,25 +17,12 @@
     .success {
       color: green;
     }
-
-    /* Styles for back button */
-    .back-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 5px 10px;
-      background-color: #f2f2f2;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
 
 <header>
   <h1>Torneos Express</h1>
-  <!-- Menú de navegación -->
   <nav>
     <ul>
       <li><a href="home.html">Inicio</a></li>
@@ -43,62 +30,26 @@
     </ul>
   </nav>
 </header>
-<!-- Logout Script -->
-<script>
-  function logout() {
-    localStorage.removeItem("userId"); // Remove userId from localStorage
-    window.location.href = "login.html"; // Redirect to login page after logout
-  }
-</script>
 
-<!-- Mostrar equipos participantes y Fixture -->
+<div class="container">
+  <section id="partidosPendientes" class="section">
+    <h2>Partidos Pendientes</h2>
+    <ul id="listaPartidosPendientes">
+    </ul>
+  </section>
 
-<!-- Tabla de Equipos-->
-<table id="equipoPuntajeTable">
-  <thead>
-  <tr>
-    <th>Nombre del Equipo</th>
-    <th>Puntaje</th>
-  </tr>
-  </thead>
-  <tbody id="tablaContenido">
-  <!-- Filas se agregarán aquí dinámicamente -->
-  </tbody>
-</table>
+  <section id="partidosTerminados" class="section">
+    <h2>Partidos Terminados</h2>
+    <ul id="listaPartidosTerminados">
+    </ul>
+  </section>
 
-<div id="functions">
-  <button id="agregarEstadisticas">Agregar Estadísticas</button>
-  <button id="terminarTorneo">Terminar Torneo</button>
 </div>
 
-
-<!-- Elemento oculto para almacenar el ID del torneo -->
-<input type="hidden" id="tournamentId">
-
-<!-- Mensajes de éxito y error -->
 <div id="success-message" class="success"></div>
 <div id="error-message"></div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tournamentId = urlParams.get('id');
-    if (tournamentId) {
-      document.getElementById('tournamentId').value = tournamentId;
-    }
-
-    document.getElementById('agregarEstadisticas').addEventListener('click', function() {
-      if (tournamentId) {
-        window.location.href = `agregarEstadisticas.html?id=${tournamentId}`;
-      } else {
-        alert('No se encontró el ID del torneo.');
-      }
-    });
-  });
-</script>
-
-<script src="js/tournament/getTeamsAndPointsOfTournament.js"></script>
-<script src="js/tournament/endTournament.js"></script>
+<script src="js/tournament/verEstadisticas.js"></script>
 
 </body>
 </html>
