@@ -1,38 +1,50 @@
+let map;
+let marker;
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 0, lng: 0 },
+        zoom: 4
+    });
+
+    marker = new google.maps.Marker({
+        position: map.getCenter(),
+        map: map,
+        draggable: true
+    });
+}
+
 function register() {
-    const name = document.getElementById('name').value;
-    const location = document.getElementById('location').value;
+    const name = document.getElementById('name').value
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    if (!name || !location || !email || !password) {
-        const errorMessage = document.getElementById('error-message');
-        errorMessage.textContent = "Please fill out all fields"; // Error message for empty fields
-        errorMessage.style.display = "block"; // Display the error message div
-        return; // Exit the function if any required field is empty
-    }
+    const latitude = marker.getPosition().lat();
+    const longitude = marker.getPosition().lng();
 
-    const registerRequest = {
+    const location = `${latitude},${longitude}`
+    console.log("User Location: ", location)
+
+    const formData = {
         name: name,
-        location: location,
         email: email,
+        location: location,
         password: password
     };
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'api/auth/submit_registration', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            console.log(response);
-            localStorage.setItem("token", response.token);
+    fetch('/api/auth/submit_registration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('User registered successfully:', data);
             window.location.replace("login.html?success=true");
-        } else {
-            const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = "Email already in use"; // Set your error message here
-            errorMessage.style.display = "block"; // Display the error message div
-            console.error(xhr.responseText);
-        }
-    };
-    xhr.send(JSON.stringify(registerRequest));
+        })
+        .catch(error => {
+            console.error('Error registering user:', error);
+        });
 }
