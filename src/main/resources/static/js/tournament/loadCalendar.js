@@ -4,7 +4,7 @@ function loadCalendar() {
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');
 
-
+    // Hay algo raro con el fixture aca. Fijate.
     fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
             if (!response.ok) {
@@ -48,7 +48,7 @@ function loadCalendar() {
 }
 
 // TODO: Fijate aca de usar el fixture-generator.
-function fetchRoundRobinFixture(id, tournamentFixture, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+function fetchRoundRobinFixture(id, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -56,7 +56,7 @@ function fetchRoundRobinFixture(id, tournamentFixture, tournamentName, tournamen
             }
             return response.json();
         })
-        .then(tournamentFixture => {
+        .then(fixture => {
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
@@ -65,8 +65,8 @@ function fetchRoundRobinFixture(id, tournamentFixture, tournamentName, tournamen
             `;
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                tournamentFixture.matches.forEach(match => {
-                    console.log("Fixture Round Robin: ", tournamentFixture);
+                fixture.matches.forEach(match => {
+                    console.log("Fixture Round Robin: ", fixture);
                     const location = match.match_location;
                     const date = match.date;
                     const team1 = match.teamName1; // fetch team
@@ -82,7 +82,7 @@ function fetchRoundRobinFixture(id, tournamentFixture, tournamentName, tournamen
                     calendarListHTML.appendChild(listItem);
                 })
             } else {
-                tournamentFixture.matches.forEach(match => {
+                fixture.matches.forEach(match => {
                     const location = match.location;
                     const date = match.date;
                     const team1 = match.teamName1; // fetch team

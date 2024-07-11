@@ -33,13 +33,6 @@ function cargarTorneos() {
                     creatorId
                 } = tournament;
 
-                console.log("Name: ", tournamentName);
-                console.log("Sport: ", tournamentSport);
-                console.log("Location: ", tournamentLocation);
-                console.log("Private: ", privateTournament);
-                console.log("ID: ", tournamentId);
-                console.log("Participating Teams: ", participatingTeams);
-                console.log("Creator Id:", creatorId);
 
                 console.log("Tournament despues de const: ", tournament);
 
@@ -48,6 +41,7 @@ function cargarTorneos() {
                 const numOfParticipatingTeams = participatingTeams.length;
                 const maxTeams = tournament.maxTeams;
                 const sportName = tournamentSport.sportName;
+
 
                 li.innerHTML = `
                 <div>
