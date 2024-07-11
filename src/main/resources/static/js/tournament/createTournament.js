@@ -29,6 +29,7 @@ function createTournament() {
     const date = document.getElementById('start-date').value;
     const isPrivate = document.getElementById('privacy').checked;
     const difficulty = document.getElementById('difficulty').value;
+    const type = document.getElementById('type').value;
     const maxTeams = document.getElementById('maxTeams').value;
 
     const userId = localStorage.getItem("userId");
@@ -53,7 +54,8 @@ function createTournament() {
                 difficulty: difficulty,
                 creatorId: userId,
                 maxTeams: maxTeams,
-                isActive: true
+                isActive: true,
+                type: type
             };
 
             const xhr = new XMLHttpRequest();
