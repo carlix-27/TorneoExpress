@@ -66,7 +66,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
                 matches.forEach(match => {
-                    console.log("Fixture Round Robin: ", fixture);
+                    console.log("List of Matches (Fixture) Round Robin: ", matches);
                     const location = match.match_location;
                     const date = match.date;
                     const team1 = match.team1.name; // fetch team

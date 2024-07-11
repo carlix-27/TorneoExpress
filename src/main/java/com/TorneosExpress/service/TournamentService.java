@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,27 +45,27 @@ public class TournamentService {
         return matchRepository.findByTournamentAndPlayed(tournament, false);
     }
 
-    public Fixture getTournamentFixture(Long tournamentId, Type type) {
+    public List<Match> getTournamentFixture(Long tournamentId, Type type) {
 
         Tournament tournament = getTournamentById(tournamentId);
-        Fixture fixture;
+        List<Match> fixtureMatches;
 
-        if (tournament.getFixture() == null || tournament.getFixture().getMatches().isEmpty()) {
+        if (tournament.getMatches() == null || tournament.getMatches().isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
             teamRepository.saveAll(teams);
 
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
 
-            fixture = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+            fixtureMatches = new FixtureBuilder(tournament, tournament.getLocation(), tournament.getStartDate(), matchRepository)
                 .build(teams, type);
 
-            tournament.setFixture(fixture);
+            tournament.setMatches(fixtureMatches);
             tournamentRepository.save(tournament);
         } else {
-            fixture = tournament.getFixture();
+            fixtureMatches = tournament.getMatches();
         }
 
-        return fixture;
+        return fixtureMatches;
     }
 
     public List<Tournament> getTournamentsByUser(Long userId) {

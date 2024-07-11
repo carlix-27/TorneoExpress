@@ -77,7 +77,7 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/{type}/calendar")
-    public Fixture getTournamentCalendar(@PathVariable Long tournamentId, @PathVariable Type type) {
+    public List<Match> getTournamentCalendar(@PathVariable Long tournamentId, @PathVariable Type type) {
         return tournamentService.getTournamentFixture(tournamentId, type);
     }
 
