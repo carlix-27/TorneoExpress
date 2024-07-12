@@ -18,15 +18,17 @@ public class RequestService {
     private final TeamRepository teamRepository;
     private final TournamentRepository tournamentRepository;
     private final PlayerRepository playerRepository;
+    private final SportRepository sportRepository;
 
     @Autowired
-    public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TeamRepository teamRepository, PlayerRepository playerRepository, TournamentRequestRepository tournamentRequestRepository, TournamentRepository tournamentRepository) {
+    public RequestService(InviteRepository inviteRepository, TeamRequestRepository teamRequestRepository, TeamRepository teamRepository, PlayerRepository playerRepository, TournamentRequestRepository tournamentRequestRepository, TournamentRepository tournamentRepository, SportRepository sportRepository) {
         this.inviteRepository = inviteRepository;
         this.teamRequestRepository = teamRequestRepository;
         this.teamRepository = teamRepository;
         this.playerRepository = playerRepository;
         this.tournamentRequestRepository = tournamentRequestRepository;
         this.tournamentRepository = tournamentRepository;
+        this.sportRepository = sportRepository;
     }
 
     public Invite sendInvite(Long from, Long to, Long team) {
@@ -65,13 +67,15 @@ public class RequestService {
 
         List<Player> teamPlayers = team.getPlayers();
 
+        Sport sport = sportRepository.findBySportId(team.getSport().getSportId());
+
         boolean playerAlreadyInTeam = teamPlayers.contains(player);
         if (playerAlreadyInTeam) {
             throw new RuntimeException("El jugador ya pertenece al equipo");
         }
 
         int numOfPlayersInTeam = teamPlayers.size();
-        int maxPlayers = team.getMaxPlayers();
+        int maxPlayers = getMaxPlayers(sport);
 
         boolean teamFull = numOfPlayersInTeam == maxPlayers;
         if (teamFull){
@@ -82,6 +86,11 @@ public class RequestService {
         teamRepository.save(team);
         inviteRepository.delete(invite);
         return invite;
+    }
+
+    public int getMaxPlayers(Sport sport){
+        int maxSportPlayers = sport.getNum_players();
+        return maxSportPlayers * 2;
     }
 
     public Invite denyInvite(Long inviteId) throws Exception {
@@ -139,8 +148,12 @@ public class RequestService {
             throw new RuntimeException("El jugador ya pertenece al equipo");
         }
 
+        Sport sport = team.getSport();
+
+
+
         int numOfPlayers = teamPlayers.size();
-        int maxPlayers = team.getMaxPlayers();
+        int maxPlayers = getMaxPlayers(sport);
 
         if (numOfPlayers == maxPlayers){
             throw new RuntimeException("Numero máximo de jugadores en el equipo");
@@ -153,6 +166,8 @@ public class RequestService {
 
         return request;
     }
+
+
 
 
     public TournamentRequest acceptTournamentRequest(Long requestId) {

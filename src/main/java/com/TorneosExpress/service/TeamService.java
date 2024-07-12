@@ -1,8 +1,10 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.model.Player;
+import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.repository.PlayerRepository;
+import com.TorneosExpress.repository.SportRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,13 @@ public class TeamService {
 
   private final TeamRepository teamRepository;
   private final PlayerRepository playerRepository;
+  private final SportRepository sportRepository;
 
   @Autowired
-  public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
+  public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository, SportRepository sportRepository) {
     this.teamRepository = teamRepository;
     this.playerRepository = playerRepository;
+    this.sportRepository = sportRepository;
   }
 
   public Team findById(long id) {
@@ -43,13 +47,20 @@ public class TeamService {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Player is already part of the team.");
     }
 
-    int teamMaxPlayers = team.getMaxPlayers();
+    Sport sport = sportRepository.findBySportId(team.getSport().getSportId());
+
+    int teamMaxPlayers = getMaxPlayers(sport);
     if (players.size() == teamMaxPlayers){
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Numero máximo de jugadores en el equipo");
     }
 
     players.add(player);
     return teamRepository.save(team);
+  }
+
+  public int getMaxPlayers(Sport sport){
+    int maxSportPlayers = sport.getNum_players();
+    return maxSportPlayers * 2;
   }
 
   public List<Team> findByCaptainId(long id) {

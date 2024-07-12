@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
 <header>
     <h1>Torneos Express - Equipos</h1>
     <nav>
@@ -21,14 +20,13 @@
 </header>
 
 <div class="create-team-box">
-
     <a href="javascript: goBack()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
     <h2>Crear Equipo</h2>
 
     <div id="successMessage" style="display:none; color: green;"></div>
     <div id="errorMessage" style="display:none; color: red;"></div>
 
-    <form id="add-team-form">
+    <form id="add-team-form" onsubmit="createTeam(event)">
         <div class="form-group">
             <label for="team-name">Nombre del Equipo:</label>
             <input type="text" id="team-name" name="team-name" required>
@@ -36,13 +34,13 @@
 
         <div class="form-group">
             <label for="sport">Deporte:</label>
-            <select id="sport" name="sport" required>
-            </select>
+            <select id="sport" name="sport" required></select>
         </div>
 
         <div class="form-group">
-            <label for="team-location">Ubicación:</label>
-            <input type="text" id="team-location" name="team-location" required>
+            <i class="fas fa-map-marker-alt"></i>
+            <label for="location">Ubicación:</label>
+            <input type="text" id="location" name="location" required>
         </div>
 
         <div class="form-group">
@@ -55,20 +53,26 @@
         </div>
     </form>
 </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoyKxpCJJNs1Nu21WTzvkgXUR_fHPQBFE&libraries=places" defer></script>
 <script src="js/team/createTeam.js"></script>
+
 <script>
     function goBack() {
         window.history.back();
     }
     document.addEventListener("DOMContentLoaded", function() {
         fetchSports();
+        initAutocomplete();
     });
 </script>
+
 <script>
     function logout() {
         localStorage.removeItem("userId");
         window.location.href = "login.html";
     }
 </script>
+
 </body>
 </html>
