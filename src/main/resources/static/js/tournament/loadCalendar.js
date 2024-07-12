@@ -157,7 +157,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
 
 // fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
 
-function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+/*function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -224,13 +224,13 @@ function groupMatchesByGroupId(matches) {
         groupedMatches[groupId].matches.push(match);
     });
     return groupedMatches;
-}
+}*/
 
 
 
 
 
-/*function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -313,7 +313,7 @@ function groupMatchesByGroupId(matches) {
                 });
             }
         })
-}*/
+}
 
 // Al cargar la página, cargar los torneos del usuario
 document.addEventListener("DOMContentLoaded", loadCalendar);
