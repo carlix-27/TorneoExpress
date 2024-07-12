@@ -43,13 +43,8 @@ function createTournament() {
     const sportId = document.getElementById('sport').value;
 
     const latitude = document.getElementById('location').dataset.latitude;
-    console.log("Latitude: ", latitude)
-
     const longitude = document.getElementById('location').dataset.longitude;
-    console.log("Longitude: ", longitude)
-
     const location = `${latitude},${longitude}`;
-    console.log("Location: ", location)
 
     const date = document.getElementById('start-date').value;
     const isPrivate = document.getElementById('privacy').checked;
