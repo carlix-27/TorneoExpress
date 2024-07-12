@@ -51,6 +51,10 @@
     <h2>Crear Torneo</h2>
 
     <form id="create-tournament-form" action="/api/tournaments/create" method="post">
+
+        <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+        <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+
         <div class="form-group">
             <label for="tournament-name"> Nombre del torneo:</label>
             <input type="text" id="tournament-name" name="tournament-name" required>
@@ -60,10 +64,13 @@
             <select id="sport" name="sport" required>
             </select>
         </div>
+
         <div class="form-group">
+            <i class="fas fa-map-marker-alt"></i>
             <label for="location">Ubicación:</label>
             <input type="text" id="location" name="location" required>
         </div>
+
         <div class="form-group">
             <label for="start-date">Fecha de inicio:</label>
             <input type="date" id="start-date" name="start-date" required>
@@ -90,12 +97,11 @@
         <div class="form-group">
             <button type="button" onclick="createTournament()">Crear Torneo</button>
         </div>
-        <div id="error-message"></div>
-        <div id="success-message" class="success" style="display: none;"></div>
+
     </form>
+
 </div>
 
-<script src="js/tournament/createTournament.js"></script>
 <script>
     function goBack() {
         window.history.back();
@@ -104,5 +110,9 @@
         fetchSports();
     });
 </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoyKxpCJJNs1Nu21WTzvkgXUR_fHPQBFE&libraries=places" defer></script>
+    <script src="js/tournament/createTournament.js"></script>
+
 </body>
 </html>
