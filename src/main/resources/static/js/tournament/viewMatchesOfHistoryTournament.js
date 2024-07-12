@@ -16,8 +16,8 @@ function viewMatchesOfHistoryTournament() {
             const activeMatchesList = document.getElementById("match-result");
 
             activeMatches.matches.forEach(match => { // FIXME: No entiendo porque aca se aumenta el valor del matchId.
-                const team1 = match.teamName1;
-                const team2 = match.teamName2;
+                const team1 = match.team1.name;
+                const team2 = match.team2.name;
                 const matchId = match.matchId;
 
                 const listItem = document.createElement('li');
@@ -56,6 +56,7 @@ function viewMatchesOfHistoryTournament() {
 document.addEventListener("DOMContentLoaded", viewMatchesOfHistoryTournament);
 
 
+// TODO: Debemos esperar a que Marcos haga esto de agregar estadisticas.
 // Función para mostrar las estadísticas de un partido
 function viewMatchStatsOfHistoryTournament(matchId){ // Seguro voy a necesitar el tournamentId, fijate como lo hiciste con SaveStats
     console.log('Match ID: ', matchId);
