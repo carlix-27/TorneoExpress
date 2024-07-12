@@ -14,19 +14,6 @@ function cargarHistorialTorneos() {
             tournaments.forEach(tournament => {
                 const li = document.createElement("li");
 
-                const tournamentName = tournament.name
-                const tournamentSport = tournament.sport
-                const tournamentSportName = tournamentSport.sportName
-                const tournamentLocation = tournament.location
-                const privateTournament = tournament.private
-
-                const tournamentId = tournament.id;
-
-                const participatingTeams = tournament.participatingTeams
-                const numOfParticipatingTeams = participatingTeams.length
-                const maxTeams = tournament.maxTeams;
-
-
                 li.innerHTML = `
 
         <div>
@@ -48,7 +35,7 @@ function cargarHistorialTorneos() {
         });
 }
 
-
+// TODO: una vez refine Marcos el codigo de estadisticas, fijate como podes hacerlo mas sencillo con esto.
 function verParticipantes(torneoId) {
     window.location.href = `participantes.html?id=${torneoId}`; // En participantes, muestro toda la informacion asociada a los equipos y los partidos que se disputaron en el torneo.
 }

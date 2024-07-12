@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+/*document.addEventListener('DOMContentLoaded', function() {
     const tournamentId = document.getElementById('tournamentId').value;
 
     document.getElementById('terminarTorneo').addEventListener('click', function() {
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Confirmar finalización del torneo
         if (confirm('¿Estás seguro de que deseas terminar el torneo? Esta acción es irreversible.')) {
             // Enviar datos al servidor para finalizar el torneo
-            fetch(`/api/tournaments/${tournamentId}/endTournament`, {
+            fetch(`/api/tournaments/${tournamentId}/end`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -44,4 +44,4 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
     });
-});
+});*/

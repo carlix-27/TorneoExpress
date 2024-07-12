@@ -3,29 +3,41 @@ package com.TorneosExpress.fixture;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
+import com.TorneosExpress.model.Type;
 import com.TorneosExpress.repository.MatchRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class FixtureBuilder {
-  private final Tournament tournament;
   private final String location;
   private final LocalDate startDate;
   private final MatchRepository matchRepository;
 
-  public FixtureBuilder(Tournament tournament, String location, LocalDate startDate, MatchRepository matchRepository) {
-    this.tournament = tournament;
+  public FixtureBuilder(String location, LocalDate startDate, MatchRepository matchRepository) {
     this.location = location;
     this.startDate = startDate;
     this.matchRepository = matchRepository;
   }
+  
+  public List<Match> build(List<Team> teams, Type type) {
+    List<Match> fixtureMatches = new ArrayList<>();
+    switch (type){
+      case ROUNDROBIN:
+        calculateMatchRoundRobinCalendar(teams, fixtureMatches);
+        break;
+      case KNOCKOUT:
+        calculateKnockoutMatches(teams, fixtureMatches);
+        break;
+      case GROUPSTAGE:
+        calculateGroupMatches(teams, teams.size(), fixtureMatches);
+    }
+
+    return fixtureMatches;
+  }
 
 
-  private List<Match> calculateMatchCalendar(List<Team> teams) {
-    List<Match> matches = new ArrayList<>();
+  private void calculateMatchRoundRobinCalendar(List<Team> teams, List<Match> fixtureMatches) {
     int numTeams = teams.size();
 
     if (numTeams % 2 != 0) {
@@ -37,11 +49,10 @@ public class FixtureBuilder {
     List<Team> teamsCopy = new ArrayList<>(teams);
     for (int week = 0; week < numWeeks; week++) {
       LocalDate matchDate = startDate.plusWeeks(week);
-      buildMatches(numTeams, teamsCopy, matches, matchDate);
+      buildMatches(numTeams, teamsCopy, fixtureMatches, matchDate);
       Collections.rotate(teamsCopy.subList(1, numTeams), 1);
     }
 
-    return matches;
   }
 
   private void buildMatches(int numTeams, List<Team> teamsCopy, List<Match> matches, LocalDate matchDate) {
@@ -49,17 +60,48 @@ public class FixtureBuilder {
       Team team1 = teamsCopy.get(i);
       Team team2 = teamsCopy.get(numTeams - i - 1);
       if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
-        Match match = new Match(team1, team2, tournament, location, matchDate, null);
+        Match match = new Match(team1, team2, location, matchDate, null);
         matches.add(match);
         matchRepository.save(match);
       }
     }
   }
+  
 
-  public Fixture build(List<Team> teams) {
-    Fixture fixture = new Fixture();
-    fixture.setMatches(calculateMatchCalendar(teams));
-    return fixture;
+  private void calculateKnockoutMatches(List<Team> teams, List<Match> fixtureMatches) {
+    Queue<Team> teamQueue = new LinkedList<>(teams);
+    LocalDate matchDate = startDate;
+
+    while (teamQueue.size() > 1) {
+      int numMatches = teamQueue.size() / 2;
+
+      for (int i = 0; i < numMatches; i++) {
+        Team team1 = teamQueue.poll();
+        Team team2 = teamQueue.poll();
+        Match match = new Match(team1, team2, location, matchDate, null);
+        fixtureMatches.add(match);
+        matchRepository.save(match);
+      }
+      matchDate = matchDate.plusWeeks(1);
+    }
+
   }
 
+  private void calculateGroupMatches(List<Team> teams, int groupSize, List<Match> fixtureMatches) {
+    int numTeams = teams.size();
+    int numGroups = (int) Math.ceil((double) numTeams / groupSize);
+
+    for (int group = 0; group < numGroups; group++) {
+      List<Team> groupTeams = teams.subList(group * groupSize, Math.min((group + 1) * groupSize, numTeams));
+      for (int i = 0; i < groupTeams.size(); i++) {
+        for (int j = i + 1; j < groupTeams.size(); j++) {
+          LocalDate matchDate = startDate.plusDays((i + j) % groupTeams.size());
+          Match match = new Match(groupTeams.get(i), groupTeams.get(j), location, matchDate, null);
+          fixtureMatches.add(match);
+          matchRepository.save(match);
+        }
+      }
+    }
+
+  }
 }

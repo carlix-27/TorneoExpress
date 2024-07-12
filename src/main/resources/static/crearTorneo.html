@@ -90,6 +90,15 @@
         </div>
 
         <div class="form-group">
+            <label for="type">Tipo de Torneo:</label>
+            <select id="type" name="type" required>
+                <option value="ROUNDROBIN">Todos contra todos</option>
+                <option value="KNOCKOUT">Llaves</option>
+                <option value="GROUPSTAGE">Grupos</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="maxTeams">Numero máximo de equipos:</label>
             <input type="text" id="maxTeams" name="maxTeams" required>
         </div>

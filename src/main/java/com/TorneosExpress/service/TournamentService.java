@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,32 +41,35 @@ public class TournamentService {
 
 
     public List<Match> getActiveMatches(Long tournamentId){
-        Tournament tournament = getTournamentById(tournamentId);
-        return matchRepository.findByTournamentAndPlayed(tournament, false);
+        Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
+        if(tournament.isPresent()){
+            return tournament.get().getMatches();
+        } else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
-    public Fixture getTournamentFixture(Long tournamentId) {
+    public List<Match> getTournamentFixture(Long tournamentId, Type type) {
 
         Tournament tournament = getTournamentById(tournamentId);
-        Fixture fixture;
+        List<Match> fixtureMatches;
 
-        if (tournament.getFixture() == null || tournament.getFixture().getMatches().isEmpty()) {
+        if (tournament.getMatches() == null || tournament.getMatches().isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
             teamRepository.saveAll(teams);
 
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
 
-            fixture = new FixtureBuilder(
-                tournament, tournament.getLocation(), tournament.getStartDate(), matchRepository)
-                .build(teams);
+            fixtureMatches = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                .build(teams, type);
 
-            tournament.setFixture(fixture);
+            tournament.setMatches(fixtureMatches);
             tournamentRepository.save(tournament);
         } else {
-            fixture = tournament.getFixture();
+            fixtureMatches = tournament.getMatches();
         }
 
-        return fixture;
+        return fixtureMatches;
     }
 
     public List<Tournament> getTournamentsByUser(Long userId) {
@@ -138,8 +142,29 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-    public Tournament endTournament(Long tournamentId) {
+    // TODO: Asignacion de puntaje de prestigio aca
+    public Tournament endTournament(Long tournamentId, Long teamId) {
         Tournament tournament = getTournamentById(tournamentId);
+        Team teamWinner = teamRepository.findById(teamId).orElse(null);
+        Difficulty difficulty = tournament.getDifficulty();
+        switch (difficulty){
+            case BEGINNER:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(10);
+                break;
+            case INTERMEDIATE:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(30);
+                break;
+            case ADVANCED:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(60);
+                break;
+            case EXPERT:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(100);
+                break;
+        }
         tournament.setActive(false);
         return tournamentRepository.save(tournament);
     }

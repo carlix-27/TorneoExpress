@@ -30,9 +30,6 @@ public class Match {
   @JoinColumn(name = "team2_id", nullable = false)
   private Team team2;
 
-  @ManyToOne
-  @JoinColumn(name = "tournament_id", nullable = false)
-  private Tournament tournament;
 
   @Column
   private String matchLocation;
@@ -54,10 +51,9 @@ public class Match {
 
   public Match() {}
 
-  public Match(Team team1, Team team2, Tournament tournament, String matchLocation, LocalDate date, Long winner) {
+  public Match(Team team1, Team team2, String matchLocation, LocalDate date, Long winner) {
     this.team1 = team1;
     this.team2 = team2;
-    this.tournament = tournament;
     this.matchLocation = matchLocation;
     this.date = date;
     this.winner = winner;
