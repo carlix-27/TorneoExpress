@@ -154,7 +154,10 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
         })
 }
 
-function fetchGroupStage(id, calendarListHTML, type) {
+
+// fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+
+function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
