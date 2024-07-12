@@ -28,8 +28,7 @@ function loadTournament() {
             const teamsList = teams.map(team => `<li><a href="loadTeam.html?id=${team.id}">${team.name}</a></li>`).join('');
             const maxTeams = tournament.maxTeams
             const type = tournament.type
-
-
+            
             tournamentList.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName}</h2>
@@ -43,8 +42,8 @@ function loadTournament() {
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
                     <a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>
-                    <a class="action-link" onclick="endTournament(${tournament.id}, ${tournament.matches.winner.id})">Terminar Torneo</a>
-                </div>
+                    <!--<a class="action-link" onclick="endTournament({tournament.id}, {tournament.matches.winner.id})">Terminar Torneo</a>-->
+                </div> 
             `;
         })
         .catch(error => {
@@ -54,7 +53,7 @@ function loadTournament() {
 
 document.addEventListener("DOMContentLoaded", loadTournament);
 
-// TODO: El teamWinner lo determinan las estadisticas. Marcos debe refinar eso. 
+// TODO: El teamWinner lo determinan las estadisticas. Marcos debe refinar eso.
 function endTournament(tournamentId, teamId){
     // Confirmar finalización del torneo
     if (confirm('¿Estás seguro de que deseas terminar el torneo? Esta acción es irreversible.')) {
