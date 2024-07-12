@@ -56,7 +56,7 @@ public class TournamentService {
 
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
 
-            fixtureMatches = new FixtureBuilder(tournament, tournament.getLocation(), tournament.getStartDate(), matchRepository)
+            fixtureMatches = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                 .build(teams, type);
 
             tournament.setMatches(fixtureMatches);
