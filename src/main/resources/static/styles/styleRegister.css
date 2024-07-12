@@ -63,6 +63,7 @@ body {
     padding: 8px 0;
     margin: 8px 0;
     border-bottom: 1px solid #ccc; /* Lighter border color */
+    position: relative;
 }
 
 .textbox i {
@@ -78,7 +79,7 @@ body {
     background: none;
     color: #333; /* Adjusted text color */
     font-size: 16px; /* Adjusted font size */
-    width: 80%;
+    width: calc(100% - 52px); /* Adjust width to make room for button */
     float: left;
     margin: 0 10px;
 }
@@ -125,4 +126,30 @@ body {
 
 .login-link a:hover {
     text-decoration: underline;
+}
+
+#map-container {
+    display: none;
+}
+
+/* Estilo para el botón de mapa con SVG */
+#toggle-map-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#toggle-map-button svg {
+    fill: #3d1f7f;
+    width: 24px;
+    height: 24px;
+}
+
+#toggle-map-button:hover svg {
+    fill: #342160;
 }

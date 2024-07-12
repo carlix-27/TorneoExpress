@@ -1,3 +1,20 @@
+let autocomplete;
+
+function initAutocomplete() {
+    const input = document.getElementById('location');
+    autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', function() {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+            const location = place.geometry.location;
+            document.getElementById('location').dataset.latitude = location.lat();
+            document.getElementById('location').dataset.longitude = location.lng();
+        } else {
+            console.error('No details available for input: ' + place.name);
+        }
+    });
+}
+
 function fetchSports() {
     fetch('/api/sports')
         .then(response => {
@@ -20,25 +37,16 @@ function fetchSports() {
         });
 }
 
-function fetchSportDetails(sportId) {
-    return fetch(`/api/sports/${sportId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch sport details: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
 function createTeam(event) {
     event.preventDefault();
 
     const name = document.getElementById('team-name').value;
     const sportId = document.getElementById('sport').value;
-    const location = document.getElementById('team-location').value;
+
+    const latitude = document.getElementById('location').dataset.latitude;
+    const longitude = document.getElementById('location').dataset.longitude;
+    const location = `${latitude},${longitude}`;
+
     const isPrivate = document.getElementById('privacy').checked;
     const captainId = localStorage.getItem("userId");
 
@@ -52,41 +60,30 @@ function createTeam(event) {
         return;
     }
 
-    // Fetch the sport details and then create the team
-    fetchSportDetails(sportId)
-        .then(sport => {
-            if (!sport) {
-                displayErrorMessage("No se pudo obtener los detalles del deporte.");
-                return;
-            }
+    const createTeamRequest = {
+        name: name,
+        captainId: captainId,
+        sport: { sportId: sportId },
+        location: location,
+        isPrivate: isPrivate
+    };
 
-            const createTeamRequest = {
-                name: name,
-                sport: sport,
-                location: location,
-                isPrivate: isPrivate,
-                captainId: captainId
-            };
+    console.log(createTeamRequest);
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/teams/create', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onload = function () {
-                if (xhr.status === 201) {
-                    displaySuccessMessage("Equipo creado exitosamente!");
-                } else if (xhr.status === 500) {
-                    displayErrorMessage("El nombre del equipo debe ser único. Por favor, elija un nombre diferente.");
-                }
-            };
-            xhr.onerror = function () {
-                displayErrorMessage("Ocurrió un error al crear el equipo.");
-            };
-            xhr.send(JSON.stringify(createTeamRequest));
-        })
-        .catch(error => {
-            displayErrorMessage("Error al obtener los detalles del deporte.");
-            console.error('Error:', error);
-        });
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/teams/create', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function () {
+        if (xhr.status === 201) {
+            displaySuccessMessage("Equipo creado exitosamente!");
+        } else if (xhr.status === 500) {
+            displayErrorMessage("El nombre del equipo debe ser único. Por favor, elija un nombre diferente.");
+        }
+    };
+    xhr.onerror = function () {
+        displayErrorMessage("Ocurrió un error al crear el equipo.");
+    };
+    xhr.send(JSON.stringify(createTeamRequest));
 }
 
 function displaySuccessMessage(message) {
@@ -106,8 +103,3 @@ function displayErrorMessage(message) {
         errorMessage.style.display = "none";
     }, 3000);
 }
-
-const form = document.getElementById('add-team-form');
-form.addEventListener('submit', createTeam);
-
-fetchSports();

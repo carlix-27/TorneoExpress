@@ -1,38 +1,74 @@
+let autocomplete;
+
+function initAutocomplete() {
+    const input = document.getElementById('address');
+    autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', function() {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+            const location = place.geometry.location;
+            document.getElementById('address').dataset.latitude = location.lat();
+            document.getElementById('address').dataset.longitude = location.lng();
+        } else {
+            console.error('No details available for input: ' + place.name);
+        }
+    });
+}
+
 function register() {
     const name = document.getElementById('name').value;
-    const location = document.getElementById('location').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    if (!name || !location || !email || !password) {
-        const errorMessage = document.getElementById('error-message');
-        errorMessage.textContent = "Please fill out all fields"; // Error message for empty fields
-        errorMessage.style.display = "block"; // Display the error message div
-        return; // Exit the function if any required field is empty
+    const latitude = document.getElementById('address').dataset.latitude;
+    const longitude = document.getElementById('address').dataset.longitude;
+    const location = `${latitude},${longitude}`;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+        displayErrorMessage("Por favor, ingrese un email válido.")
+        return;
     }
 
-    const registerRequest = {
+    if (name === "" || address === "" || password === "") {
+        displayErrorMessage("Todos los campos son obligatorios.")
+        return;
+    }
+
+    const formData = {
         name: name,
-        location: location,
         email: email,
+        location: location,
         password: password
     };
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'api/auth/submit_registration', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            console.log(response);
-            localStorage.setItem("token", response.token);
+    fetch('/api/auth/submit_registration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('User registered successfully:', data);
             window.location.replace("login.html?success=true");
-        } else {
-            const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = "Email already in use"; // Set your error message here
-            errorMessage.style.display = "block"; // Display the error message div
-            console.error(xhr.responseText);
-        }
-    };
-    xhr.send(JSON.stringify(registerRequest));
+        })
+        .catch(error => {
+            console.error('Error registering user:', error);
+        });
 }
+
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initAutocomplete();
+});

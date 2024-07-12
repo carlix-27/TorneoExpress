@@ -92,15 +92,4 @@ public class Team {
 
   public Team() {
   }
-
-  public int getMaxPlayers(){
-    Sport sport = getSport();
-    int maxSportPlayers = sport.getNum_players();
-    return maxSportPlayers * 2;
-  }
-
-  public void addPrestigePoints(int points) {
-    this.prestigePoints += points;
-  }
-
 }
