@@ -87,6 +87,8 @@ public class FixtureBuilder {
 
   }
 
+
+
   private void calculateGroupMatches(List<Team> teams, int groupSize, List<Match> fixtureMatches) {
     int numTeams = teams.size();
     int numGroups = (int) Math.ceil((double) numTeams / groupSize);
@@ -102,6 +104,7 @@ public class FixtureBuilder {
         }
       }
     }
-
   }
+
+
 }
