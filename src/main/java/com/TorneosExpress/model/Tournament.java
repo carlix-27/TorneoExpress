@@ -97,7 +97,7 @@ public class Tournament {
   private List<Team> participatingTeams = new ArrayList<>();
 
 
-  @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany
   @Setter
   private List<Match> matches = new ArrayList<>();
 
