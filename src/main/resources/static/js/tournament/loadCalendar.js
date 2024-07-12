@@ -65,8 +65,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
                 matches.forEach(match => {
-                    console.log("List of Matches (Fixture) Round Robin: ", matches);
-                    const location = match.match_location;
+                    const location = match.matchLocation;
                     const date = match.date;
                     const team1 = match.team1.name; // fetch team
                     const team2 = match.team2.name; // fetch team
@@ -84,8 +83,8 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                 matches.forEach(match => {
                     const location = match.location;
                     const date = match.date;
-                    const team1 = match.teamName1; // fetch team
-                    const team2 = match.teamName2; // fetch team
+                    const team1 = match.team1.name; // fetch team
+                    const team2 = match.team2.name; // fetch team
 
                     const listItem = document.createElement('li');
 
@@ -120,11 +119,10 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
                 matches.forEach(match => {
-                    console.log("Fixture Knockout: ", matches);
-                    const location = match.match_location;
+                    const location = match.matchLocation;
                     const date = match.date;
-                    const team1 = match.teamName1; // fetch team
-                    const team2 = match.teamName2; // fetch team
+                    const team1 = match.team1.name; // fetch team
+                    const team2 = match.team2.name; // fetch team
 
                     const listItem = document.createElement('li');
 
@@ -137,10 +135,10 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                 })
             } else {
                 matches.forEach(match => {
-                    const location = match.match_location;
+                    const location = match.matchLocation;
                     const date = match.date;
-                    const team1 = match.teamName1; // fetch team
-                    const team2 = match.teamName2; // fetch team
+                    const team1 = match.team1.name; // fetch team
+                    const team2 = match.team2.name; // fetch team
 
                     const listItem = document.createElement('li');
 
@@ -202,30 +200,9 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
 
                     // Iterar sobre los partidos del grupo y ajustar los equipos si es necesario
                     groupMatches.forEach(match => {
-                        const team1 = match.teamName1;
-                        const team2 = match.teamName2;
-
-                        // Verificar y ajustar equipo 2 si ya está en el set
-                        if (usedTeams.has(team1)) {
-                            match.teamName1 = findUniqueTeam(usedTeams, team1);
-                        }
-                        usedTeams.add(match.teamName1);
-
-                        // Verificar y ajustar equipo 2 si ya está en el set
-                        if (usedTeams.has(team2)) {
-                            match.teamName2 = findUniqueTeam(usedTeams, team2);
-                        }
-                        usedTeams.add(match.teamName2);
+                        usedTeams.add(match.team1.name);
+                        usedTeams.add(match.team2.name);
                     });
-                }
-
-                // Función para encontrar un equipo único que no esté en el set
-                function findUniqueTeam(usedTeams, currentTeam) {
-                    let uniqueTeam = currentTeam + " (2)"; // Ejemplo: agregar sufijo para indicar duplicado
-                    while (usedTeams.has(uniqueTeam)) {
-                        uniqueTeam += " (2)"; // Incrementar sufijo hasta encontrar un nombre único
-                    }
-                    return uniqueTeam;
                 }
 
                 // Iterar sobre cada grupo y mostrar los partidos
@@ -243,8 +220,8 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                     const matchesList = document.createElement('ul');
                     group.matches.forEach(match => {
                         const date = match.date;
-                        const team1 = match.teamName1;
-                        const team2 = match.teamName2;
+                        const team1 = match.team1.name;
+                        const team2 = match.team2.name;
 
                         const matchItem = document.createElement('li');
                         matchItem.innerHTML = `
