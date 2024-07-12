@@ -72,29 +72,30 @@ h2 {
 }
 
 /* Style for each team */
-#calendar-result li {
+/*#calendar-result li {
     margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
     margin-right: 30px;
-}
+}*/
 
 
 /* Team name style */
-#calendar-result li h3 {
+/*#calendar-result li h3 {
     margin: 0;
     font-size: 20px;
     color: #333;
-}
+}*/
 
 /* Additional information style */
-#calendar-result li p {
+/*#calendar-result li p {
     margin: 5px 0;
     font-size: 16px;
     color: #666;
 }
+*/
 
 #back-button {
     margin: 10px;
@@ -146,4 +147,96 @@ h2 {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+
+#calendar {
+    margin: 20px;
+}
+
+#calendar-div {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#calendar-result {
+    list-style-type: none;
+    padding: 0;
+}
+
+.group, .round-robin, .knockout {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.group h2, .round-robin h2, .knockout h2 {
+    text-align: center;
+}
+
+.group ul, .round-robin ul, .knockout ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.group li, .round-robin li, .knockout li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+.group li:last-child, .round-robin li:last-child, .knockout li:last-child {
+    border-bottom: none;
+}
+
+.modify-date-button {
+    display: block;
+    margin: 10px auto;
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modify-date-button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos específicos para el fixture knockout */
+.knockout {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    align-items: center;
+}
+
+.knockout .match {
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Estilos específicos para el fixture round robin */
+.round-robin .match {
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Estilos específicos para el fixture group stage */
+.group-stage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.group-stage .group {
+    flex: 1;
+    margin: 10px;
 }
