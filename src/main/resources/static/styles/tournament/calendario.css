@@ -72,30 +72,30 @@ h2 {
 }
 
 /* Style for each team */
-/*#calendar-result li {
+#calendar-result li {
     margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
     margin-right: 30px;
-}*/
+}
 
 
 /* Team name style */
-/*#calendar-result li h3 {
+#calendar-result li h3 {
     margin: 0;
     font-size: 20px;
     color: #333;
-}*/
+}
 
 /* Additional information style */
-/*#calendar-result li p {
+#calendar-result li p {
     margin: 5px 0;
     font-size: 16px;
     color: #666;
 }
-*/
+
 
 #back-button {
     margin: 10px;
@@ -155,7 +155,7 @@ h2 {
     margin: 20px;
 }
 
-#calendar-div {
+/*#calendar-div {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -164,7 +164,7 @@ h2 {
 #calendar-result {
     list-style-type: none;
     padding: 0;
-}
+}*/
 
 .group, .round-robin, .knockout {
     border: 1px solid #ccc;
@@ -192,7 +192,7 @@ h2 {
     border-bottom: none;
 }
 
-.modify-date-button {
+/*.modify-date-button {
     display: block;
     margin: 10px auto;
     padding: 5px 10px;
@@ -205,7 +205,7 @@ h2 {
 
 .modify-date-button:hover {
     background-color: #0056b3;
-}
+}*/
 
 /* Estilos específicos para el fixture knockout */
 .knockout {
