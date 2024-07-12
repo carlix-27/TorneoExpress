@@ -35,9 +35,9 @@ public class TournamentController {
         return tournamentService.createTournament(request);
     }
 
-    @PutMapping("{tournamentId}/end")
-    public Tournament endTournament(@PathVariable Long tournamentId) {
-        return tournamentService.endTournament(tournamentId);
+    @PutMapping("{tournamentId}/{teamId}/end") // TODO
+    public Tournament endTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
+        return tournamentService.endTournament(tournamentId, teamId);
     }
 
     @GetMapping("/history")

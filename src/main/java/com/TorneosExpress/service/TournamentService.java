@@ -142,8 +142,29 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-    public Tournament endTournament(Long tournamentId) {
+    // TODO: Asignacion de puntaje de prestigio aca
+    public Tournament endTournament(Long tournamentId, Long teamId) {
         Tournament tournament = getTournamentById(tournamentId);
+        Team teamWinner = teamRepository.findById(teamId).orElse(null);
+        Difficulty difficulty = tournament.getDifficulty();
+        switch (difficulty){
+            case BEGINNER:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(10);
+                break;
+            case INTERMEDIATE:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(30);
+                break;
+            case ADVANCED:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(60);
+                break;
+            case EXPERT:
+                assert teamWinner != null;
+                teamWinner.addPrestigePoints(100);
+                break;
+        }
         tournament.setActive(false);
         return tournamentRepository.save(tournament);
     }

@@ -17,6 +17,7 @@ function loadTournament() {
 
             console.log(tournament);
 
+            console.log("Matches del torneo: ", tournament.matches);
 
             const tournamentName = tournament.name
             const location = tournament.location
@@ -42,7 +43,7 @@ function loadTournament() {
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
                     <a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>
-                    <a class="action-link" onclick="endTournament(${tournament.id})">Terminar Torneo</a>
+                    <a class="action-link" onclick="endTournament(${tournament.id}, ${tournament.matches.winner.id})">Terminar Torneo</a>
                 </div>
             `;
         })
@@ -53,11 +54,12 @@ function loadTournament() {
 
 document.addEventListener("DOMContentLoaded", loadTournament);
 
-function endTournament(tournamentId){
+// TODO: El teamWinner lo determinan las estadisticas. Marcos debe refinar eso. 
+function endTournament(tournamentId, teamId){
     // Confirmar finalización del torneo
     if (confirm('¿Estás seguro de que deseas terminar el torneo? Esta acción es irreversible.')) {
         // Enviar datos al servidor para finalizar el torneo
-        fetch(`/api/tournaments/${tournamentId}/end`, {
+        fetch(`/api/tournaments/${tournamentId}/${teamId}/end`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

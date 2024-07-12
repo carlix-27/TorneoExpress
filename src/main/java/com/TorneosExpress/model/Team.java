@@ -99,4 +99,8 @@ public class Team {
     return maxSportPlayers * 2;
   }
 
+  public void addPrestigePoints(int points) {
+    this.prestigePoints += points;
+  }
+
 }

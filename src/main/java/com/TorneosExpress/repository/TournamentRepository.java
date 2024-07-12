@@ -1,6 +1,5 @@
 package com.TorneosExpress.repository;
 
-import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Tournament;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +24,6 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
 
     @Query("SELECT t FROM Tournament t JOIN t.participatingTeams pt WHERE pt.id = :teamId")
     List<Tournament> findTournamentsByTeamId(@Param("teamId") Long teamId);
-
 
 }
 
