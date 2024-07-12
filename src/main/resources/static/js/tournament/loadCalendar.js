@@ -154,7 +154,80 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
         })
 }
 
-function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+function fetchGroupStage(id, calendarListHTML, type) {
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(matches => {
+            calendarListHTML.innerHTML = `
+                <div id="result">
+                    <h2>Calendario del Torneo</h2>
+                </div>
+            `;
+
+            // Objeto para almacenar los grupos de partidos
+            const groupedMatches = groupMatchesByGroupId(matches);
+
+            // Iterar sobre cada grupo y mostrar los partidos
+            Object.values(groupedMatches).forEach(group => {
+                // Crear elemento HTML para el grupo
+                const groupElement = document.createElement('div');
+                groupElement.classList.add('group'); // Estilo CSS para grupos
+
+                // Encabezado del grupo (número de grupo)
+                const groupHeader = document.createElement('h2');
+                groupHeader.textContent = `Grupo ${group.id}`;
+                groupElement.appendChild(groupHeader);
+
+                // Lista de partidos del grupo
+                const matchesList = document.createElement('ul');
+                group.matches.forEach(match => {
+                    const date = match.date;
+                    const team1 = match.team1.name;
+                    const team2 = match.team2.name;
+
+                    const matchItem = document.createElement('li');
+                    matchItem.innerHTML = `
+                        <h3>${date}</h3>
+                        <p>${team1} VS ${team2}</p>
+                    `;
+                    matchesList.appendChild(matchItem);
+                });
+                groupElement.appendChild(matchesList);
+
+                // Agregar el grupo a la lista principal en HTML
+                calendarListHTML.appendChild(groupElement);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching tournament calendar:', error);
+        });
+}
+
+function groupMatchesByGroupId(matches) {
+    const groupedMatches = {};
+    matches.forEach(match => {
+        const groupId = match.groupId;
+        if (!groupedMatches[groupId]) {
+            groupedMatches[groupId] = {
+                id: groupId,
+                matches: []
+            };
+        }
+        groupedMatches[groupId].matches.push(match);
+    });
+    return groupedMatches;
+}
+
+
+
+
+
+/*function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -237,7 +310,7 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                 });
             }
         })
-}
+}*/
 
 // Al cargar la página, cargar los torneos del usuario
 document.addEventListener("DOMContentLoaded", loadCalendar);
