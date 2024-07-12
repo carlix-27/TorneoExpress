@@ -28,7 +28,7 @@ function loadTournament() {
             const teamsList = teams.map(team => `<li><a href="loadTeam.html?id=${team.id}">${team.name}</a></li>`).join('');
             const maxTeams = tournament.maxTeams
             const type = tournament.type
-            
+
             tournamentList.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName}</h2>
