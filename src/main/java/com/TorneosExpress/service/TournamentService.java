@@ -41,8 +41,12 @@ public class TournamentService {
 
 
     public List<Match> getActiveMatches(Long tournamentId){
-        Tournament tournament = getTournamentById(tournamentId);
-        return matchRepository.findByTournamentAndPlayed(tournament, false);
+        Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
+        if(tournament.isPresent()){
+            return tournament.get().getMatches();
+        } else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     public List<Match> getTournamentFixture(Long tournamentId, Type type) {
