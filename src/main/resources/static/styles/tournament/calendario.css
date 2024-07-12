@@ -150,6 +150,7 @@ h2 {
 }
 
 
+/*
 #calendar {
     margin: 20px;
 }
@@ -204,33 +205,33 @@ h2 {
 
 .modify-date-button:hover {
     background-color: #0056b3;
-}
+}*/
 
 /* Estilos específicos para el fixture knockout */
-.knockout {
+/*.knockout {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     align-items: center;
-}
+}*/
 
-.knockout .match {
+/*.knockout .match {
     background-color: #e0e0e0;
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
-}
+}*/
 
 /* Estilos específicos para el fixture round robin */
-.round-robin .match {
+/*.round-robin .match {
     background-color: #e0e0e0;
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
-}
+}*/
 
 /* Estilos específicos para el fixture group stage */
-.group-stage {
+/*.group-stage {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -239,4 +240,4 @@ h2 {
 .group-stage .group {
     flex: 1;
     margin: 10px;
-}
+}*/
