@@ -1,14 +1,27 @@
 let autocomplete;
 
-function initAutocomplete() {
+function initAutocomplete(apiKey) {
     const input = document.getElementById('location');
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+}
+
+function initializeAutocomplete() {
+    const input = document.getElementById('location');
+    if (!input) {
+        console.error("No input element with ID 'location' found.");
+        return;
+    }
     autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.addListener('place_changed', function() {
         const place = autocomplete.getPlace();
         if (place.geometry) {
             const location = place.geometry.location;
-            document.getElementById('location').dataset.latitude = location.lat();
-            document.getElementById('location').dataset.longitude = location.lng();
+            input.dataset.latitude = location.lat();
+            input.dataset.longitude = location.lng();
         } else {
             console.error('No details available for input: ' + place.name);
         }
@@ -33,33 +46,34 @@ function fetchSports() {
             });
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error fetching sports:', error);
         });
 }
 
 function createTeam(event) {
     event.preventDefault();
 
-    const name = document.getElementById('team-name').value;
+    const name = document.getElementById('team-name').value.trim();
     const sportId = document.getElementById('sport').value;
-
     const latitude = document.getElementById('location').dataset.latitude;
     const longitude = document.getElementById('location').dataset.longitude;
-    const location = `${latitude},${longitude}`;
 
     const isPrivate = document.getElementById('privacy').checked;
     const captainId = localStorage.getItem("userId");
 
-    if (!name.trim()) {
+    if (!name) {
         displayErrorMessage("Nombre del equipo no puede estar vacío.");
         return;
     }
 
-    if (!location.trim()) {
-        displayErrorMessage("Ubicación del equipo no puede estar vacía.");
+    if (!latitude || !longitude) {
+        displayErrorMessage("Debe seleccionar una ubicación válida.");
         return;
     }
 
+    const location = `${latitude},${longitude}`;
+
+    
     const createTeamRequest = {
         name: name,
         captainId: captainId,
@@ -68,22 +82,26 @@ function createTeam(event) {
         isPrivate: isPrivate
     };
 
-    console.log(createTeamRequest);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/teams/create', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function () {
-        if (xhr.status === 201) {
-            displaySuccessMessage("Equipo creado exitosamente!");
-        } else if (xhr.status === 500) {
-            displayErrorMessage("El nombre del equipo debe ser único. Por favor, elija un nombre diferente.");
-        }
-    };
-    xhr.onerror = function () {
-        displayErrorMessage("Ocurrió un error al crear el equipo.");
-    };
-    xhr.send(JSON.stringify(createTeamRequest));
+    fetch('/api/teams/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(createTeamRequest)
+    })
+        .then(response => {
+            if (response.status === 201) {
+                displaySuccessMessage("Equipo creado exitosamente!");
+            } else if (response.status === 500) {
+                displayErrorMessage("El nombre del equipo debe ser único. Por favor, elija un nombre diferente.");
+            } else {
+                throw new Error(`Failed to create team: ${response.status} ${response.statusText}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error creating team:', error);
+            displayErrorMessage("Ocurrió un error al crear el equipo.");
+        });
 }
 
 function displaySuccessMessage(message) {
@@ -103,3 +121,23 @@ function displayErrorMessage(message) {
         errorMessage.style.display = "none";
     }, 3000);
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('/api/googleMapsApiKey')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then(apiKey => {
+            initAutocomplete(apiKey);
+        })
+        .catch(error => {
+            console.error('Error fetching API key:', error);
+        });
+
+    fetchSports();
+});
+
+

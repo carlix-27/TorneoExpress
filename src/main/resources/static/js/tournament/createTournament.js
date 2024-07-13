@@ -1,6 +1,15 @@
 let autocomplete;
 
-function initAutocomplete() {
+function initAutocomplete(apiKey) {
+    const input = document.getElementById('location');
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+}
+
+function initializeAutocomplete() {
     const input = document.getElementById('location');
     autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.addListener('place_changed', function() {
@@ -14,7 +23,6 @@ function initAutocomplete() {
         }
     });
 }
-
 
 function fetchSports() {
     fetch('/api/sports')
@@ -44,6 +52,12 @@ function createTournament() {
 
     const latitude = document.getElementById('location').dataset.latitude;
     const longitude = document.getElementById('location').dataset.longitude;
+
+    if (!latitude || !longitude) {
+        displayErrorMessage("Debe seleccionar una ubicación válida.");
+        return;
+    }
+
     const location = `${latitude},${longitude}`;
 
     const date = document.getElementById('start-date').value;
@@ -94,6 +108,9 @@ function displaySuccessMessage(message) {
     const successMessage = document.getElementById("successMessage");
     successMessage.textContent = message;
     successMessage.style.display = "block";
+    setTimeout(() => {
+        successMessage.style.display = "none";
+    }, 3000);
 }
 
 function displayErrorMessage(message) {
@@ -105,7 +122,18 @@ function displayErrorMessage(message) {
     }, 3000);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    initAutocomplete();
-    fetchSports();
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('/api/googleMapsApiKey')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then(apiKey => {
+            initAutocomplete(apiKey);
+        })
+        .catch(error => {
+            console.error('Error fetching API key:', error);
+        });
 });

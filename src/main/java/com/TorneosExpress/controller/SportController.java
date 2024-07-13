@@ -47,8 +47,8 @@ public class SportController {
             return ResponseEntity.notFound().build();
         }
 
-        existingSport.setSport(updatedSport.getSportName());
-        existingSport.setNumPlayers(updatedSport.getNum_players());
+        existingSport.setSportName(updatedSport.getSportName());
+        existingSport.setNum_players(updatedSport.getNum_players());
 
         Sport updatedSportEntity = sportService.updateSport(existingSport);
         if (updatedSportEntity == null) {

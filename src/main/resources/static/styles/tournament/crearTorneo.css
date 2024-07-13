@@ -1,12 +1,3 @@
-/* Styles for the back button */
-.back-button {
-    display: block;
-    margin-bottom: 20px;
-    color: #3d1f7f;
-    text-decoration: none;
-    font-size: 18px;
-}
-
 nav ul li:last-child {
     margin-right: 0;
 }
@@ -119,4 +110,26 @@ h2 {
 
 .form-group button[type="button"]:hover {
     background: #342160;
+}
+
+#error-message,
+#success-message {
+    color: red;
+    display: none;
+}
+
+.success {
+    color: green;
+}
+
+.back-button {
+    display: block;
+    margin-bottom: 20px;
+    color: #3d1f7f;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.back-button:hover {
+    text-decoration: underline;
 }
