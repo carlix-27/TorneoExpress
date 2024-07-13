@@ -14,7 +14,7 @@ function loadCalendar() {
         })
         .then(tournament => {
             console.log("Tournament: ", tournament);
-            const calendar = document.getElementById("calendar-result"); // TODO: Para ver como armamos bien el fixture hay que mirar aca.
+            const calendar = document.getElementById("tournament-bracket__list"); // TODO: Para ver como armamos bien el fixture hay que mirar aca.
             const backButton = document.getElementById("back-button");
 
             backButton.addEventListener("click", () => {
@@ -62,17 +62,12 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                 </div>`;
 
             matches.map(match => {
-                const listItem = document.createElement('li');
+                const listItem = document.getElementById('li');
                 listItem.innerHTML = `
-                
-                <div class="tournament-bracket tournament-bracket--rounded">
-                        <div class="tournament-bracket__round tournament-bracket__round--quarterfinals"> <!--TODO: Hay que ver como funciona esto de ponerle la seccion de quaterfinals. -->
-                            <ul class="tournament-bracket__list"> <!-- TODO: La clave considero que esta en esta lista al que hay que agregarle datos mediante el loadCalendar.js -->
-                                <li class="tournament-bracket__item">
-                                    <div class="tournament-bracket__match" tabindex="0">
+                                 <div class="tournament-bracket__match" tabindex="0">
                                         <table class="tournament-bracket__table">
                                              <caption class="tournament-bracket__caption">
-                                                    <time>${match.date}</time>
+                                                    <p>${match.date}</p>
                                                     <p>${match.location}</p>
                                              </caption>
                                              <thead class="sr-only">
@@ -87,7 +82,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                         <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number"></span> <!--TODO: Considero que debe asignarse en base a estadisticas, de forma "automatica" -->
+                                                         <span class="tournament-bracket__number"></span> 
                                                     </td>
                                                 </tr>
                                                 <tr class="tournament-bracket__team">
@@ -100,15 +95,8 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                
-                
+                                 </div>                  
                 `;
-
                 calendarListHTML.appendChild(listItem);
             });
         })
