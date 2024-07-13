@@ -59,8 +59,11 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
-                    ${matches.map(match => `
-                    <li>
+                </div>`;
+
+            const elements =
+                matches.map(match => `
+                <li>
                     <div class="tournament-bracket tournament-bracket--rounded">
                         <div class="tournament-bracket__round tournament-bracket__round--quarterfinals"> <!--TODO: Hay que ver como funciona esto de ponerle la seccion de quaterfinals. -->
                             <ul class="tournament-bracket__list"> <!-- TODO: La clave considero que esta en esta lista al que hay que agregarle datos mediante el loadCalendar.js -->
@@ -71,29 +74,29 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                     <time>${match.date}</time>
                                                     <p>${match.location}</p>
                                              </caption>
-                                            <thead class="sr-only">
-                                            <tr>
-                                                <th>Country</th>
-                                                <th>Score</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody class="tournament-bracket__content">
-                                            <tr class="tournament-bracket__team">
-                                                <td class="tournament-bracket__country">
-                                                    <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
-                                                </td>
-                                                <td class="tournament-bracket__score">
-                                                    <span class="tournament-bracket__number"></span> <!--TODO: Considero que debe asignarse en base a estadisticas, de forma "automatica" -->
-                                                </td>
-                                            </tr>
-                                            <tr class="tournament-bracket__team">
-                                                <td class="tournament-bracket__country">
-                                                    <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
-                                                </td>
-                                                <td class="tournament-bracket__score">
-                                                    <span class="tournament-bracket__number"></span>
-                                                </td>
-                                            </tr>
+                                             <thead class="sr-only">
+                                                <tr>
+                                                    <th>Country</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody class="tournament-bracket__content">
+                                                <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                         <span class="tournament-bracket__number"></span> <!--TODO: Considero que debe asignarse en base a estadisticas, de forma "automatica" -->
+                                                    </td>
+                                                </tr>
+                                                <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number"></span>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -101,47 +104,9 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                             </ul>
                         </div>
                     </div>
-                </li>
-                    
-                </div> `)}
-                    
-            `;
+                </li> `)
 
-            /*if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                matches.forEach(match => {
-                    const location = match.matchLocation;
-                    const date = match.date;
-                    const team1 = match.team1.name; // fetch team
-                    const team2 = match.team2.name; // fetch team
-
-                    const listItem = document.createElement('li');
-
-                    listItem.innerHTML = `
-                    <h3>${date}</h3>
-                    <p>${team1} VS ${team2}</p>
-                    <p>${location}</p>
-                `;
-                    calendarListHTML.appendChild(listItem);
-                })
-            } else {
-                matches.forEach(match => {
-                    const location = match.location;
-                    const date = match.date;
-                    const team1 = match.team1.name; // fetch team
-                    const team2 = match.team2.name; // fetch team
-
-                    const listItem = document.createElement('li');
-
-                    listItem.innerHTML = `
-                    <h3>${date}</h3>
-                    <p>${team1} VS ${team2}</p>
-                    <p>${location}</p>
-                    <button class="modify-date-button" onclick="modifyDate(${match.id}, ${id})">Modificar fecha</button>
-                `;
-                    //<button onclick="editarEquipo(${teamId})">Editar</button>
-                    calendarListHTML.appendChild(listItem);
-                })
-            } */
+            calendarListHTML.append(elements);
         })
 }
 
@@ -292,3 +257,40 @@ document.addEventListener("DOMContentLoaded", loadCalendar);
 function modifyDate(matchId, tournamentId) {
     window.location.replace(`modifyDate.html?match-id=${matchId}&tournament-id=${tournamentId}`);
 }
+
+
+/*if (tournamentCreatorId !== localStorage.getItem("userId")) {
+                matches.forEach(match => {
+                    const location = match.matchLocation;
+                    const date = match.date;
+                    const team1 = match.team1.name; // fetch team
+                    const team2 = match.team2.name; // fetch team
+
+                    const listItem = document.createElement('li');
+
+                    listItem.innerHTML = `
+                    <h3>${date}</h3>
+                    <p>${team1} VS ${team2}</p>
+                    <p>${location}</p>
+                `;
+                    calendarListHTML.appendChild(listItem);
+                })
+            } else {
+                matches.forEach(match => {
+                    const location = match.location;
+                    const date = match.date;
+                    const team1 = match.team1.name; // fetch team
+                    const team2 = match.team2.name; // fetch team
+
+                    const listItem = document.createElement('li');
+
+                    listItem.innerHTML = `
+                    <h3>${date}</h3>
+                    <p>${team1} VS ${team2}</p>
+                    <p>${location}</p>
+                    <button class="modify-date-button" onclick="modifyDate(${match.id}, ${id})">Modificar fecha</button>
+                `;
+                    //<button onclick="editarEquipo(${teamId})">Editar</button>
+                    calendarListHTML.appendChild(listItem);
+                })
+            } */
