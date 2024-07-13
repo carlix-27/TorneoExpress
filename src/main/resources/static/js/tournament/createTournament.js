@@ -67,7 +67,8 @@ function createTournament() {
         difficulty: difficulty,
         creatorId: userId,
         maxTeams: maxTeams,
-        isActive: true
+        isActive: true,
+        type: type
     };
 
     console.log(tournamentData)
