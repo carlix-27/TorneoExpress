@@ -129,7 +129,6 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                         <table class="tournament-bracket__table">
                                              <caption class="tournament-bracket__caption">
                                                     <p>${match.date}</p>
-                                                    <p>${match.location}</p>
                                              </caption>
                                              <thead class="sr-only">
                                                 <tr>
@@ -143,7 +142,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                         <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number"></span> 
+                                                         <span class="tournament-bracket__number">3</span> 
                                                     </td>
                                                 </tr>
                                                 <tr class="tournament-bracket__team">
@@ -151,7 +150,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                         <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number"></span>
+                                                        <span class="tournament-bracket__number">2</span>
                                                     </td>
                                                 </tr>
                                             </tbody>

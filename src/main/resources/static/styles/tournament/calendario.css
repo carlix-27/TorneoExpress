@@ -566,6 +566,7 @@ html {
 }
 
 .tournament-bracket__code {
+    font-family: Monserrat, sans-serif;
     padding: 0 0.5em;
     color: #212121;
     font-weight: 600;
