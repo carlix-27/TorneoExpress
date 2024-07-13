@@ -203,4 +203,7 @@ public class TournamentService {
         return optionalTournament.orElse(null);
     }
 
+    public Team getTournamentTeamById(Long tournamentId, Long teamId) {
+    }
+
 }

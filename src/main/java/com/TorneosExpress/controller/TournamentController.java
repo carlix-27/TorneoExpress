@@ -125,4 +125,10 @@ public class TournamentController {
         return tournamentService.getAllMatches(tournamentId);
     }
 
+    @GetMapping("/{tournamentId}/team/{teamId}")
+    public Team getTeam(@PathVariable Long tournamentId, @PathVariable Long teamId) {
+        return tournamentService.
+    }
+
+
 }

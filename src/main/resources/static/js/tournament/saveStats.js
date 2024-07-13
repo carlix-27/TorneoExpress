@@ -95,9 +95,9 @@ function saveStats(event) {
 
     let winnerId = null;
     if (ganador === "Empate") {
-        winnerId = 0; // Si es empate, asignar 0 como Long para el ganador
+        winnerId = 0;
     } else {
-        winnerId = parseInt(ganador); // Si es un equipo, asignar el ID del equipo como Long
+        winnerId = parseInt(ganador);
     }
 
     const data = {
@@ -115,6 +115,7 @@ function saveStats(event) {
     })
         .then(response => {
             if (response.ok) {
+                if (ganador.id !== 0) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
 

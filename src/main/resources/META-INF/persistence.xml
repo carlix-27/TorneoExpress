@@ -9,7 +9,6 @@
         <class>com.TorneosExpress.model.Player</class>
         <class>com.TorneosExpress.model.Team</class>
         <class>com.TorneosExpress.model.Tournament</class>
-        <class>com.TorneosExpress.model.Ranking</class>
         <class>com.TorneosExpress.model.Match</class>
         <class>com.TorneosExpress.model.Article</class>
 

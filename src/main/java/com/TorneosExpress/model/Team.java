@@ -21,7 +21,6 @@ public class Team {
     this.prestigePoints = 0;
     this.captainId = createTeamDto.getCaptainId();
     this.sport = createTeamDto.getSport();
-    this.matchPoints = 0;
   }
 
   @Id
@@ -47,6 +46,7 @@ public class Team {
   @JoinColumn(name = "sport_id", referencedColumnName = "sport_Id")
   private Sport sport;
 
+
   @ManyToMany(mappedBy = "participatingTeams")
   @JsonIgnore
   private List<Tournament> activeTournaments = new ArrayList<>();
@@ -68,9 +68,6 @@ public class Team {
   )
   private List<Article> articles = new ArrayList<>();
 
-  @Column
-  private int matchPoints;
-
   public Team(Long captainId, String teamName, Sport sport, String teamLocation, boolean isPrivate) {
     this.name = teamName;
     this.location = teamLocation;
@@ -78,7 +75,6 @@ public class Team {
     this.isPrivate = isPrivate;
     this.prestigePoints = 0;
     this.captainId = captainId;
-    this.matchPoints = 0;
   }
 
   public Team(String name) {
