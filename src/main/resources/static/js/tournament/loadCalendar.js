@@ -56,14 +56,58 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
             return response.json();
         })
         .then(matches => {
-            calendarListHTML.innerHTML = `
+            calendarListHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
+                    ${matches.map(match => `
+                    <li>
+                    <div class="tournament-bracket tournament-bracket--rounded">
+                        <div class="tournament-bracket__round tournament-bracket__round--quarterfinals"> <!--TODO: Hay que ver como funciona esto de ponerle la seccion de quaterfinals. -->
+                            <ul class="tournament-bracket__list"> <!-- TODO: La clave considero que esta en esta lista al que hay que agregarle datos mediante el loadCalendar.js -->
+                                <li class="tournament-bracket__item">
+                                    <div class="tournament-bracket__match" tabindex="0">
+                                        <table class="tournament-bracket__table">
+                                             <caption class="tournament-bracket__caption">
+                                                    <time>${match.date}</time>
+                                                    <p>${match.location}</p>
+                                             </caption>
+                                            <thead class="sr-only">
+                                            <tr>
+                                                <th>Country</th>
+                                                <th>Score</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="tournament-bracket__content">
+                                            <tr class="tournament-bracket__team">
+                                                <td class="tournament-bracket__country">
+                                                    <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                </td>
+                                                <td class="tournament-bracket__score">
+                                                    <span class="tournament-bracket__number"></span> <!--TODO: Considero que debe asignarse en base a estadisticas, de forma "automatica" -->
+                                                </td>
+                                            </tr>
+                                            <tr class="tournament-bracket__team">
+                                                <td class="tournament-bracket__country">
+                                                    <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                                </td>
+                                                <td class="tournament-bracket__score">
+                                                    <span class="tournament-bracket__number"></span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
                     
-                </div>
+                </div> `)}
+                    
             `;
 
-            if (tournamentCreatorId !== localStorage.getItem("userId")) {
+            /*if (tournamentCreatorId !== localStorage.getItem("userId")) {
                 matches.forEach(match => {
                     const location = match.matchLocation;
                     const date = match.date;
@@ -97,7 +141,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                     //<button onclick="editarEquipo(${teamId})">Editar</button>
                     calendarListHTML.appendChild(listItem);
                 })
-            }
+            } */
         })
 }
 
