@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchUserInfo(userId) {
-    fetch(`/api/players/${userId}`)
+    fetch(`/api/user/players/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch user info: ${response.status} ${response.statusText}`);
