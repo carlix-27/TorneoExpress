@@ -14,7 +14,7 @@ function loadCalendar() {
         })
         .then(tournament => {
             console.log("Tournament: ", tournament);
-            const calendar = document.getElementById("tournament-bracket__list"); // TODO: Para ver como armamos bien el fixture hay que mirar aca.
+            const calendar = document.getElementById("calendar-result"); // TODO: Para ver como armamos bien el fixture hay que mirar aca.
             const backButton = document.getElementById("back-button");
 
             backButton.addEventListener("click", () => {
@@ -124,7 +124,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                 </div>`;
 
             matches.forEach(match => {
-                const listItem = document.getElementById('tournament-bracket__item');
+                const listItem = document.getElementById('calendar-item');
                 listItem.innerHTML = `
                                  <div class="tournament-bracket__match" tabindex="0">
                                         <table class="tournament-bracket__table">
