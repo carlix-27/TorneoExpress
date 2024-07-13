@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then(notifications => {
 
-                const unreadNotifications = notifications.filter(notification => !notification.read);
+                const unreadNotifications = notifications.filter(notification => !notification.read && !transcurridoMasDe24Horas(new Date(notification.createdAt)));
                 const unreadCountValue = unreadNotifications.length;
 
                 if (unreadCountValue > 0) {
@@ -28,6 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    function transcurridoMasDe24Horas(createdAt) {
+        const milisegundosPorDia = 24 * 60 * 60 * 1000;
+        const ahora = new Date();
+
+        return (ahora - createdAt) > milisegundosPorDia;
     }
 
 });
