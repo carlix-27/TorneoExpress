@@ -145,9 +145,9 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
 
                     const listItem = document.createElement('li');
                     listItem.className = 'tournament-bracket__item';
-                    const title = ''; // TODO: Tiene que ir variando acorde la etapa del torneo.
+                    const title = ''; // TODO: Tiene que ir variando acorde la etapa del torneo. APLICA A 16 Equipos maximo esta logica.
                     listItem.innerHTML = `
-                                 <h3 class="tournament-bracket__round-title"> Cuartos de final </h3>
+                                 <h3 class="tournament-bracket__round-title"> Octavos de Final </h3>
                                  <div class="tournament-bracket__match" tabindex="0">
                                         <table class="tournament-bracket__table">
                                              <caption class="tournament-bracket__caption">
