@@ -25,4 +25,8 @@ public class TournamentTeam {
     @Column
     private int tournamentPoints;
 
+    public void addPoints(int points) {
+        this.tournamentPoints += points;
+    }
+
 }

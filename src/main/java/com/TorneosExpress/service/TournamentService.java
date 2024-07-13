@@ -9,6 +9,7 @@ import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
+import com.TorneosExpress.repository.TournamentTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,14 @@ public class TournamentService {
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
     private final MatchRepository matchRepository;
+    private final TournamentTeamRepository tournamentTeamRepository;
 
     @Autowired
-    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository) {
+    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository, TournamentTeamRepository tournamentTeamRepository) {
         this.tournamentRepository = tournamentRepository;
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
+        this.tournamentTeamRepository = tournamentTeamRepository;
     }
 
     public List<Team> getTeamsOfTournament(Long tournamentId) {
@@ -99,10 +102,6 @@ public class TournamentService {
         existingTournament.setPrivate(updatedTournamentPrivate);
         existingTournament.setDifficulty(updatedTournamentDifficulty);
         return existingTournament;
-    }
-
-    public Match getMatchById(Long id) {
-        return matchRepository.getReferenceById(id);
     }
 
     public void deleteTournament(Long id) {
@@ -203,7 +202,21 @@ public class TournamentService {
         return optionalTournament.orElse(null);
     }
 
-    public Team getTournamentTeamById(Long tournamentId, Long teamId) {
+    public Match getMatchById(Long id) {
+        Optional<Match> optionalMatch = matchRepository.findById(id);
+        return optionalMatch.orElseThrow();
+    }
+
+    public TournamentTeam addPointsToTeam(Long tournamentId, Long teamId) {
+
+        TournamentTeam team = teamRepository.findByTournamentIdAndTeamId(tournamentId, teamId);
+        Tournament tournament = getTournamentById(tournamentId);
+
+        if (tournament.getType() != Type.KNOCKOUT){
+            team.addPoints(3);
+        }
+
+        return tournamentTeamRepository.save(team);
     }
 
 }

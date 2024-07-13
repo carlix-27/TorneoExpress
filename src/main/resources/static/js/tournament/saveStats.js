@@ -115,14 +115,38 @@ function saveStats(event) {
     })
         .then(response => {
             if (response.ok) {
-                if (ganador.id !== 0) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
 
-                // Refrescar la página después de un segundo
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                fetch(`/api/tournaments/matches/${matchId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch match details');
+                        }
+                        return response.json();
+                    })
+                    .then(matchDetails => {
+
+                        const tournamentId = matchDetails.tournamentId;
+                        const teamId = (winnerId === 0) ? null : winnerId;
+
+                        fetch(`/api/tournaments/${tournamentId}/addPoints/${teamId}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Failed to update team points');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error updating team points:', error);
+                            });
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching match details:', error);
+                    });
             } else {
                 displayErrorMessage("Hubo un problema al agregar las estadísticas");
             }
@@ -131,6 +155,7 @@ function saveStats(event) {
             displayErrorMessage("Error al guardar las estadísticas");
         });
 }
+
 
 
 function isValidScore(score) {

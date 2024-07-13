@@ -86,7 +86,7 @@ public class Tournament {
   private List<Team> participatingTeams = new ArrayList<>();
 
 
-  @OneToMany(mappedBy = "tournament")
+  @OneToMany
   private List<Match> matches = new ArrayList<>();
 
 
