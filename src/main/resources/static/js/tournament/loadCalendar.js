@@ -256,6 +256,8 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                 <h2>${tournamentName} - Calendario</h2>
                 <h3 class="tournament-bracket__round-title">Octavos de Final</h3>
             `;
+
+            // Todo: Es muy probable que tengas que sacar el h3 de ahi, hace lio nada mas. 
             calendarListHTML.appendChild(results);
 
             let winners = [];
