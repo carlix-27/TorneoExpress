@@ -66,14 +66,20 @@ function populateMatchSelector(matches) {
 
         if (selectedMatch) {
             const team1Option = document.createElement('option');
-            team1Option.value = selectedMatch.team1.name;
+            team1Option.value = selectedMatch.team1.id;
             team1Option.textContent = selectedMatch.team1.name;
             ganadorSelector.appendChild(team1Option);
 
             const team2Option = document.createElement('option');
-            team2Option.value = selectedMatch.team2.name;
+            team2Option.value = selectedMatch.team2.id;
             team2Option.textContent = selectedMatch.team2.name;
             ganadorSelector.appendChild(team2Option);
+
+            // Agregar opción de empate
+            const empateOption = document.createElement('option');
+            empateOption.value = '0';
+            empateOption.textContent = 'Empate';
+            ganadorSelector.appendChild(empateOption);
         }
     });
 }
@@ -81,12 +87,14 @@ function populateMatchSelector(matches) {
 function populateActiveMatches(matches) {
     const matchResult = document.getElementById('matchResult');
     matchResult.innerHTML = ''; // Limpiar la lista antes de agregar elementos nuevos
+
     matches.forEach(match => {
         const listItem = document.createElement('li');
         listItem.textContent = `${match.team1.name} vs ${match.team2.name}`;
         matchResult.appendChild(listItem);
     });
 }
+
 
 function saveStats(event) {
     event.preventDefault();
@@ -101,12 +109,17 @@ function saveStats(event) {
         return;
     }
 
-    console.log(ganador);
+    let winnerId = null;
+    if (ganador === "Empate") {
+        winnerId = 0; // Si es empate, asignar 0 como Long para el ganador
+    } else {
+        winnerId = parseInt(ganador); // Si es un equipo, asignar el ID del equipo como Long
+    }
 
     const data = {
         team1Score: parseInt(team1Score),
         team2Score: parseInt(team2Score),
-        ganador: ganador
+        winner: winnerId
     };
 
     fetch(`/api/tournaments/matches/stats/${matchId}`, {
@@ -120,6 +133,11 @@ function saveStats(event) {
             if (response.ok) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
+
+                // Refrescar la página después de un segundo
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             } else {
                 displayErrorMessage("Hubo un problema al agregar las estadísticas");
             }
@@ -128,6 +146,7 @@ function saveStats(event) {
             displayErrorMessage("Error al guardar las estadísticas");
         });
 }
+
 
 function isValidScore(score) {
     return !isNaN(parseInt(score)) && isFinite(score) && parseInt(score) >= 0;
