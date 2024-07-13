@@ -127,7 +127,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                 matches.forEach(match => {
                     const listItem = document.createElement('li');
                     listItem.className = 'tournament-bracket__item';
-                    const title = '';
+                    const title = ''; // TODO: Tiene que ir variando acorde la etapa del torneo.
                     listItem.innerHTML = `
                                  <h3 class="tournament-bracket__round-title"> Cuartos de final </h3>
                                  <div class="tournament-bracket__match" tabindex="0">
@@ -192,7 +192,6 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
 
 
 // fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
-
 function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
@@ -211,38 +210,37 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
 
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                // Objeto para almacenar los grupos de partidos
+
                 const groupedMatches = {};
                 let groupCounter = 1;
 
+                // Crear un mapa para rastrear que equipos ya han sido emparejados
+                const pairedTeams = new Set();
+
+
                 // Iterar sobre los partidos y agrupar de a 2 por grupo
-                for (let i = 0; i < matches.length; i += 2) {
-                    const groupMatches = matches.slice(i, i + 2); // Tomar los próximos 2 partidos
+                matches.forEach(match => {
+                    const { team1, team2 } = match;
 
-                    // Verificar y ajustar equipos para que no se repitan dentro del grupo
-                    adjustTeamsForGroup(groupMatches);
+                    // Si uno de los equipos ya ha sido emparejado, saltar este partido
+                    if (pairedTeams.has(team1.name) || pairedTeams.has(team2.name)) return;
 
-                    // Crear un objeto para el grupo actual
-                    const group = {
-                        id: groupCounter++,
-                        matches: groupMatches
-                    };
+                    // Agregar los equipos al conjunto de emparejados
+                    pairedTeams.add(team1.name);
+                    pairedTeams.add(team2.name);
 
-                    // Agregar el grupo al objeto de grupos
-                    groupedMatches[group.id] = group;
-                }
+                    // Verificar si el grupo actual ya tiene 2 partidos
+                    if (!groupedMatches[groupCounter]) {
+                        groupedMatches[groupCounter] = { id: groupCounter, matches: [] };
+                    } else if (groupedMatches[groupCounter].matches.length >= 2) {
+                        groupCounter++;
+                        groupedMatches[groupCounter] = { id: groupCounter, matches: [] };
+                    }
 
-                // Función para ajustar equipos y evitar repeticiones dentro del grupo
-                function adjustTeamsForGroup(groupMatches) {
-                    // Utilizar un set para almacenar equipos únicos dentro del grupo
-                    const usedTeams = new Set();
+                    // Agregar el partido al grupo actual
+                    groupedMatches[groupCounter].matches.push(match);
+                });
 
-                    // Iterar sobre los partidos del grupo y ajustar los equipos si es necesario
-                    groupMatches.forEach(match => {
-                        usedTeams.add(match.team1.name);
-                        usedTeams.add(match.team2.name);
-                    });
-                }
 
                 // Iterar sobre cada grupo y mostrar los partidos
                 Object.values(groupedMatches).forEach(group => {
@@ -255,28 +253,54 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                     groupHeader.textContent = `Grupo ${group.id}`;
                     groupElement.appendChild(groupHeader);
 
-                    // Lista de partidos del grupo
-                    const matchesList = document.createElement('ul');
                     group.matches.forEach(match => {
-                        const date = match.date;
-                        const team1 = match.team1.name;
-                        const team2 = match.team2.name;
-
-                        const matchItem = document.createElement('li');
-                        matchItem.innerHTML = `
-                        <h3>${date}</h3>
-                        <p>${team1} VS ${team2}</p>
-                    `;
-                        matchesList.appendChild(matchItem);
+                        const listItem = document.createElement('li');
+                        listItem.className = 'tournament-bracket__item';
+                        listItem.innerHTML = `
+                                 <div class="tournament-bracket__match" tabindex="0">
+                                        <table class="tournament-bracket__table">
+                                             <caption class="tournament-bracket__caption">
+                                                    <p>${match.date}</p>
+                                             </caption>
+                                             <thead class="sr-only">
+                                                <tr>
+                                                    <th>Country</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody class="tournament-bracket__content">
+                                                <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                         <span class="tournament-bracket__number">3</span> 
+                                                    </td>
+                                                </tr>
+                                                
+                                        
+                                                <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">2</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                 </div>                         
+                        `;
+                        groupElement.appendChild(listItem);
                     });
-                    groupElement.appendChild(matchesList);
 
-                    // Agregar el grupo a la lista principal en HTML
                     calendarListHTML.appendChild(groupElement);
                 });
             }
         })
+        .catch(error => console.error(error));
 }
+
 
 // Al cargar la página, cargar los torneos del usuario
 document.addEventListener("DOMContentLoaded", loadCalendar);
@@ -286,23 +310,8 @@ function modifyDate(matchId, tournamentId) {
 }
 
 
-/*if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                matches.forEach(match => {
-                    const location = match.matchLocation;
-                    const date = match.date;
-                    const team1 = match.team1.name; // fetch team
-                    const team2 = match.team2.name; // fetch team
-
-                    const listItem = document.createElement('li');
-
-                    listItem.innerHTML = `
-                    <h3>${date}</h3>
-                    <p>${team1} VS ${team2}</p>
-                    <p>${location}</p>
-                `;
-                    calendarListHTML.appendChild(listItem);
-                })
-            } else {
+/*
+   else {
                 matches.forEach(match => {
                     const location = match.location;
                     const date = match.date;
