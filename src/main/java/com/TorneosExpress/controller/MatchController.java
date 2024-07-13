@@ -17,12 +17,6 @@ public class MatchController {
         this.matchService = matchService;
     }
 
-    @PostMapping("/{match_id}")
-    public Match saveStatistics(@PathVariable Long match_id, @RequestBody SaveMatchStatsDto statisticsDto) {
-        return matchService.saveStats(match_id, statisticsDto);
-    }
-
-
     @GetMapping("/{matchId}")
     public Match getMatchStats(@PathVariable Long matchId){
         return matchService.getStats(matchId);

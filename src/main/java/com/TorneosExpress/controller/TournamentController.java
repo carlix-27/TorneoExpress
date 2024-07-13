@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 
+import com.TorneosExpress.dto.tournament.SaveMatchStatsDto;
 import com.TorneosExpress.dto.tournament.UpdateMatchDto;
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
@@ -90,6 +91,11 @@ public class TournamentController {
     @PutMapping("/matches/{matchId}")
     public Match updateMatch(@PathVariable Long matchId, @RequestBody UpdateMatchDto updateMatchDto) {
         return tournamentService.updateMatch(matchId, updateMatchDto);
+    }
+
+    @PutMapping("/matches/stats/{matchId}")
+    public Match updateMatchStats(@PathVariable Long matchId, @RequestBody SaveMatchStatsDto saveMatchStatsDto) {
+        return tournamentService.updateMatchStats(matchId, saveMatchStatsDto);
     }
     
 

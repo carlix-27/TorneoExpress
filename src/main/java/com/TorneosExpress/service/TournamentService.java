@@ -1,6 +1,7 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
+import com.TorneosExpress.dto.tournament.SaveMatchStatsDto;
 import com.TorneosExpress.dto.tournament.UpdateMatchDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
 import com.TorneosExpress.fixture.FixtureBuilder;
@@ -176,6 +177,23 @@ public class TournamentService {
         match.setTeam2(newMatchSecondTeam);
         match.setMatchLocation(newLocation);
         match.setDate(newDate);
+        match.setPlayed(true);
+
+        return matchRepository.save(match);
+    }
+
+    public Match updateMatchStats(Long matchId, SaveMatchStatsDto statsDto) {
+
+        Match match = getMatchById(matchId);
+
+        int team1score = statsDto.getTeam1Score();
+        int team2score = statsDto.getTeam2Score();
+        Long winnerId = statsDto.getWinner();
+
+        match.setFirstTeamScore(team1score);
+        match.setSecondTeamScore(team2score);
+        match.setWinner(winnerId);
+        match.setPlayed(true);
 
         return matchRepository.save(match);
     }
