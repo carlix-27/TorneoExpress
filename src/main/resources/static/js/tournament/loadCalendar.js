@@ -61,10 +61,11 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                     <h2>${tournamentName} - Calendario</h2>
                 </div>`;
 
-            const elements =
-                matches.map(match => `
-                <li>
-                    <div class="tournament-bracket tournament-bracket--rounded">
+            matches.map(match => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                
+                <div class="tournament-bracket tournament-bracket--rounded">
                         <div class="tournament-bracket__round tournament-bracket__round--quarterfinals"> <!--TODO: Hay que ver como funciona esto de ponerle la seccion de quaterfinals. -->
                             <ul class="tournament-bracket__list"> <!-- TODO: La clave considero que esta en esta lista al que hay que agregarle datos mediante el loadCalendar.js -->
                                 <li class="tournament-bracket__item">
@@ -104,10 +105,16 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                             </ul>
                         </div>
                     </div>
-                </li> `)
+                
+                
+                `;
 
-            calendarListHTML.append(elements);
+                calendarListHTML.appendChild(listItem);
+            });
         })
+        .catch(error =>{
+            console.error('error fetching tournament data: ', error);
+        });
 }
 
 function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
