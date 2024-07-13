@@ -34,10 +34,13 @@ function register() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const address = document.getElementById('location');
+    const address = document.getElementById('location'); // Corrected here
 
-    const latitude = document.getElementById('address').dataset.latitude;
-    const longitude = document.getElementById('address').dataset.longitude;
+    const latitude = address.dataset.latitude; // Corrected here
+    const longitude = address.dataset.longitude; // Corrected here
+
+    console.log(latitude);
+    console.log(longitude);
 
     if (!latitude || !longitude) {
         displayErrorMessage("Debe seleccionar una ubicación válida.");
@@ -81,6 +84,7 @@ function register() {
             console.error('Error registering user:', error);
         });
 }
+
 
 function displayErrorMessage(message) {
     const errorMessage = document.getElementById("errorMessage");
