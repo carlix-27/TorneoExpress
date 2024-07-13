@@ -46,7 +46,68 @@ function loadCalendar() {
         });
 }
 
-// TODO: Fijate aca de usar el fixture-generator.
+function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Limpiar el contenido existente si es necesario
+            calendarListHTML.innerHTML = '';
+
+            // Crear y agregar el contenido dinámico
+            const resultDiv = document.createElement('div');
+            resultDiv.id = 'result';
+            resultDiv.innerHTML = `<h2>${tournamentName} - Calendario</h2>`;
+            calendarListHTML.appendChild(resultDiv);
+
+            data.forEach(match => {
+                const matchDiv = document.createElement('div');
+                matchDiv.classList.add('tournament-bracket__match');
+                matchDiv.tabIndex = '0';
+                matchDiv.innerHTML = `
+                    <table class="tournament-bracket__table">
+                        <caption class="tournament-bracket__caption">
+                            <p>${match.date}</p>
+                            <p>${match.location}</p>
+                        </caption>
+                        <thead class="sr-only">
+                            <tr>
+                                <th>Country</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tournament-bracket__content">
+                            <tr class="tournament-bracket__team">
+                                <td class="tournament-bracket__country">
+                                    <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                </td>
+                                <td class="tournament-bracket__score">
+                                    <span class="tournament-bracket__number"></span>
+                                </td>
+                            </tr>
+                            <tr class="tournament-bracket__team">
+                                <td class="tournament-bracket__country">
+                                    <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                </td>
+                                <td class="tournament-bracket__score">
+                                    <span class="tournament-bracket__number"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>`;
+                calendarListHTML.appendChild(matchDiv);
+            });
+        })
+        .catch(error =>{
+            console.error('error fetching tournament data: ', error);
+        });
+}
+
+/*
 function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
@@ -103,7 +164,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
         .catch(error =>{
             console.error('error fetching tournament data: ', error);
         });
-}
+}*/
 
 function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
     fetch(`/api/tournaments/${id}/${type}/calendar`)
