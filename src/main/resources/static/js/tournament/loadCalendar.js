@@ -127,7 +127,9 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                 matches.forEach(match => {
                     const listItem = document.createElement('li');
                     listItem.className = 'tournament-bracket__item';
+                    const title = '';
                     listItem.innerHTML = `
+                                 <h3 class="tournament-bracket__round-title"> Cuartos de final </h3>
                                  <div class="tournament-bracket__match" tabindex="0">
                                         <table class="tournament-bracket__table">
                                              <caption class="tournament-bracket__caption">
@@ -160,7 +162,9 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                                                 </tr>
                                             </tbody>
                                         </table>
-                                 </div>                  
+                                 </div>               
+                                 
+                                    
                 `;
                     calendarListHTML.appendChild(listItem);
 
