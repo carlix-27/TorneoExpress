@@ -16,7 +16,7 @@ function fetchUserInfo(userId) {
             const nameElement = document.getElementById('user-name');
             nameElement.textContent = user.name;
 
-            if (user.isPremium) {
+            if (user.is_Premium) {
                 document.getElementById("verified-icon").style.display = "inline";
             }
         })

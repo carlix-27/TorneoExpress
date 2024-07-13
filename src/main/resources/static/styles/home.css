@@ -68,11 +68,17 @@ nav ul li a {
 
 #user-info {
     margin-right: 20px;
+    display: flex;
+    align-items: center;
 }
 
 #user-name {
     color: #fff;
     margin-right: 5px;
+}
+
+#user-name {
+    font-weight: bold;
 }
 
 #verified-icon {
@@ -225,17 +231,6 @@ ul#sport-options li a:hover {
     transition-duration: .2s;
 }
 
-
-/* User */
-/* Adjust padding and gap for user info */
-#user-info {
-    display: flex;
-    align-items: center;
-}
-
-#user-name {
-    font-weight: bold;
-}
 
 @media (max-width: 600px) {
     .nav-container {
