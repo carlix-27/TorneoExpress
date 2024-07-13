@@ -106,7 +106,134 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
         });
 }
 
+function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(matches => {
+            calendarListHTML.innerHTML = `
+                <div id="result">
+                    <h2>${tournamentName} - Calendario</h2>
+                </div>
+            `;
 
+            if (tournamentCreatorId !== localStorage.getItem("userId")) {
+                renderKnockoutStages(matches, calendarListHTML);
+            } else {
+                renderEditableMatches(matches, calendarListHTML);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function renderKnockoutStages(matches, calendarListHTML) {
+    const totalMatches = matches.length;
+    const stages = ['Octavos de Final', 'Cuartos de Final', 'Semifinal', 'Final'];
+
+    let matchIndex = 0;
+    stages.forEach(stage => {
+        const stageMatches = getStageMatches(matches, matchIndex, stage, totalMatches);
+        if (stageMatches.length > 0) {
+            const stageTitle = document.createElement('h3');
+            stageTitle.className = 'tournament-bracket__round-title';
+            stageTitle.textContent = stage;
+            calendarListHTML.appendChild(stageTitle);
+
+            stageMatches.forEach(match => {
+                const listItem = document.createElement('li');
+                listItem.className = 'tournament-bracket__item';
+                listItem.innerHTML = generateMatchHTML(match);
+                calendarListHTML.appendChild(listItem);
+            });
+            matchIndex += stageMatches.length;
+        }
+    });
+}
+
+function getStageMatches(matches, startIndex, stage, totalMatches) {
+    const stageSizes = {
+        'Octavos de Final': totalMatches >= 16 ? 8 : 0,
+        'Cuartos de Final': totalMatches >= 8 ? 4 : 0,
+        'Semifinal': totalMatches >= 4 ? 2 : 0,
+        'Final': totalMatches >= 2 ? 1 : 0
+    };
+
+    const size = stageSizes[stage];
+    return matches.slice(startIndex, startIndex + size);
+}
+
+
+function generateMatchHTML(match) {
+    const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : "-";
+    const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : "-";
+
+    return `
+        <div class="tournament-bracket__match" tabindex="0">
+            <table class="tournament-bracket__table">
+                <caption class="tournament-bracket__caption">
+                    <p>${match.date}</p>
+                </caption>
+                <thead class="sr-only">
+                    <tr>
+                        <th>Country</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody class="tournament-bracket__content">
+                    <tr class="tournament-bracket__team">
+                        <td class="tournament-bracket__country">
+                            <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                        </td>
+                        <td class="tournament-bracket__score">
+                            <span class="tournament-bracket__number">${team1Score}</span> 
+                        </td>
+                    </tr>
+                    <tr class="tournament-bracket__team">
+                        <td class="tournament-bracket__country">
+                            <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                        </td>
+                        <td class="tournament-bracket__score">
+                            <span class="tournament-bracket__number">${team2Score}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script>checkWinner(${team1Score}, ${team2Score})</script>
+    `;
+}
+
+function renderEditableMatches(matches, calendarListHTML) {
+    matches.forEach(match => {
+        const location = match.matchLocation;
+        const date = match.date;
+        const team1 = match.team1.name;
+        const team2 = match.team2.name;
+
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <h3>${date}</h3>
+            <p>${team1} VS ${team2}</p>
+            <p>${location}</p>
+            <button class="modify-date-button" onclick="modifyDate(${match.id}, ${id})">Modificar fecha</button>
+        `;
+        calendarListHTML.appendChild(listItem);
+    });
+}
+
+function checkWinner(team1Score, team2Score) {
+    if (team1Score !== "-" && team2Score !== "-") {
+        return team1Score > team2Score ? 1 : 2;
+    }
+    return null;
+}
+
+
+/*
 function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
@@ -180,9 +307,119 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                                                 </tr>
                                             </tbody>
                                         </table>
-                                 </div>               
+                                 </div> 
+                                 <script>checkWinner(team1Score, team2Score)</script>   
                                  
-                                    
+                                 <h3 class="tournament-bracket__round-title"> Cuartos de Final </h3>
+                                 <div class="tournament-bracket__match" tabindex="0">
+                                        <table class="tournament-bracket__table">
+                                             <caption class="tournament-bracket__caption">
+                                                    <p>${match.date}</p>
+                                             </caption>
+                                             <thead class="sr-only">
+                                                <tr>
+                                                    <th>Country</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody class="tournament-bracket__content">
+                                                <tr class="tournament-bracket__team tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                         <span class="tournament-bracket__number">${team1Score}</span> 
+                                                    </td>
+                                                </tr>
+                                                
+                                        
+                                                <tr class="tournament-bracket__team tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr> <!--Este equipo debe ser distinto al que inicialmente era, es decir, el ganador del otro partido. -->
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                 </div>
+                                 
+                                 <script>checkWinner(team1Score, team2Score)</script>   
+                                 
+                                 <h3 class="tournament-bracket__round-title"> Semifinal </h3>
+                                 <div class="tournament-bracket__match" tabindex="0">
+                                        <table class="tournament-bracket__table">
+                                             <caption class="tournament-bracket__caption">
+                                                    <p>${match.date}</p>
+                                             </caption>
+                                             <thead class="sr-only">
+                                                <tr>
+                                                    <th>Country</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody class="tournament-bracket__content">
+                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                         <span class="tournament-bracket__number">${team1Score}</span> 
+                                                    </td>
+                                                </tr>
+                                                
+                                        
+                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr> <!--Este equipo debe ser distinto al que inicialmente era, es decir, el ganador del otro partido. -->
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                 </div>
+                                 
+                                 <script>checkWinner(team1Score, team2Score)</script>   
+                                 
+                                 <h3 class="tournament-bracket__round-title"> Final </h3>
+                                 <div class="tournament-bracket__match" tabindex="0">
+                                        <table class="tournament-bracket__table">
+                                             <caption class="tournament-bracket__caption">
+                                                    <p>${match.date}</p>
+                                             </caption>
+                                             <thead class="sr-only">
+                                                <tr>
+                                                    <th>Country</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody class="tournament-bracket__content">
+                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                         <span class="tournament-bracket__number">${team1Score}</span> 
+                                                    </td>
+                                                </tr>
+                                                
+                                        
+                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr> <!--Este equipo debe ser distinto al que inicialmente era, es decir, el ganador del otro partido. -->
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                 </div>
+                                 
+                                 <script>checkWinner(team1Score, team2Score)</script>   <!--El que gana aca gana el torneo entero.-->
                 `;
                     calendarListHTML.appendChild(listItem);
 
@@ -206,6 +443,10 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                 })
             }
         })
+}*/
+
+function checkWinner(team1Score, team2Score){
+
 }
 
 
