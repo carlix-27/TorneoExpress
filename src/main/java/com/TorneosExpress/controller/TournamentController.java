@@ -3,13 +3,11 @@ package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.tournament.UpdateMatchDto;
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
-import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.model.Type;
 import com.TorneosExpress.service.TournamentService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +33,7 @@ public class TournamentController {
         return tournamentService.createTournament(request);
     }
 
-    @PutMapping("{tournamentId}/{teamId}/end") // TODO
+    @PutMapping("{tournamentId}/{teamId}/end")
     public Tournament endTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
         return tournamentService.endTournament(tournamentId, teamId);
     }
@@ -116,10 +114,9 @@ public class TournamentController {
         return tournamentService.getTeamsOfTournament(tournamentId);
     }
 
-
-    @GetMapping("/{tournamentId}/activeMatches")
-    public List<Match> getActiveMatches(@PathVariable Long tournamentId) {
-        return tournamentService.getActiveMatches(tournamentId);
+    @GetMapping("/{tournamentId}/matches")
+    public List<Match> getAllMatches(@PathVariable Long tournamentId) {
+        return tournamentService.getAllMatches(tournamentId);
     }
 
 }

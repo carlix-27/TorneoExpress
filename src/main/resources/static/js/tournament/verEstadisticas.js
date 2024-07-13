@@ -2,10 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');
 
-    fetchStatisticsAndMatches(tournamentId)
-        .then(data => {
-            const { statistics, matches } = data;
-            populateMatches(statistics, matches);
+    fetchMatches(tournamentId)
+        .then(matches => {
+            populateMatches(matches);
             checkTournamentOwner(tournamentId);
         })
         .catch(error => {
@@ -13,48 +12,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-function fetchStatisticsAndMatches(tournamentId) {
-    const fetchStatisticsPromise = fetch(`/api/tournaments/${tournamentId}/statistics`)
+function fetchMatches(tournamentId) {
+    return fetch(`/api/tournaments/${tournamentId}/matches`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             return response.json();
-        });
-
-    const fetchMatchesPromise = fetch(`/api/tournaments/${tournamentId}/matches`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        });
-
-    return Promise.all([fetchStatisticsPromise, fetchMatchesPromise])
-        .then(([statistics, matches]) => {
-            return { statistics, matches };
         });
 }
 
-function populateMatches(statistics, matches) {
+function populateMatches(matches) {
     const listaPartidosTerminados = document.getElementById('listaPartidosTerminados');
     const listaPartidosPendientes = document.getElementById('listaPartidosPendientes');
-
-    console.log(statistics)
-    console.log(matches)
 
     matches.forEach(match => {
         if (match.played) {
             const listItem = document.createElement('li');
 
             // Nombre del equipo 1 y su puntaje
-            const team1Text = `<span class="team-name">${match.team1.name}</span> ${statistics.team1Score}`;
+            const team1Text = `<span class="team-name">${match.team1.name}</span> ${match.team1Score}`;
 
             // Nombre del equipo 2 y su puntaje
-            const team2Text = `${statistics.team2Score} <span class="team-name">${match.team2.name}</span>`;
+            const team2Text = `${match.team2Score} <span class="team-name">${match.team2.name}</span>`;
 
             listItem.innerHTML = `${team1Text} - ${team2Text}`;
-
             listaPartidosTerminados.appendChild(listItem);
         } else {
             const listItem = document.createElement('li');
@@ -66,7 +48,6 @@ function populateMatches(statistics, matches) {
 
 function checkTournamentOwner(tournamentId) {
     const userId = getUserId();
-    console.log("User Id: ", userId)
 
     fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
@@ -76,7 +57,6 @@ function checkTournamentOwner(tournamentId) {
             return response.json();
         })
         .then(tournament => {
-
             if (userId == tournament.creatorId) {
                 const addButton = document.createElement('button');
                 addButton.textContent = 'Agregar Estadísticas';

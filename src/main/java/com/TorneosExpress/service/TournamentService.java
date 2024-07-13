@@ -3,7 +3,6 @@ package com.TorneosExpress.service;
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
 import com.TorneosExpress.dto.tournament.UpdateMatchDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
-import com.TorneosExpress.fixture.Fixture;
 import com.TorneosExpress.fixture.FixtureBuilder;
 import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.MatchRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,13 +38,9 @@ public class TournamentService {
     }
 
 
-    public List<Match> getActiveMatches(Long tournamentId){
-        Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
-        if(tournament.isPresent()){
-            return tournament.get().getMatches();
-        } else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public List<Match> getAllMatches(Long tournamentId) {
+        Tournament tournament = getTournamentById(tournamentId);
+        return tournament.getMatches();
     }
 
     public List<Match> getTournamentFixture(Long tournamentId, Type type) {
@@ -142,7 +136,6 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-    // TODO: Asignacion de puntaje de prestigio aca
     public Tournament endTournament(Long tournamentId, Long teamId) {
         Tournament tournament = getTournamentById(tournamentId);
         Team teamWinner = teamRepository.findById(teamId).orElse(null);
