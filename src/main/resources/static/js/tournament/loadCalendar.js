@@ -78,7 +78,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                              <tbody class="tournament-bracket__content">
                                                 <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                        <abbr class="tournament-bracket__code">${match.team1.name} + "VS" </abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
                                                          <span class="tournament-bracket__number">3</span> 
