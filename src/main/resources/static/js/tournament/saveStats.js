@@ -127,8 +127,14 @@ function saveStats(event) {
                     })
                     .then(matchDetails => {
 
-                        const tournamentId = matchDetails.tournamentId;
+                        console.log("MatchDetails", matchDetails);
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const tournamentId = urlParams.get('id');
+
                         const teamId = (winnerId === 0) ? null : winnerId;
+
+                        console.log("TournamentId: " + tournamentId);
+                        console.log("TeamId: " + teamId);
 
                         fetch(`/api/tournaments/${tournamentId}/addPoints/${teamId}`)
                             .then(response => {
@@ -140,9 +146,6 @@ function saveStats(event) {
                                 console.error('Error updating team points:', error);
                             });
 
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1000);
                     })
                     .catch(error => {
                         console.error('Error fetching match details:', error);

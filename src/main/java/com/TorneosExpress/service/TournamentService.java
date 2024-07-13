@@ -209,10 +209,12 @@ public class TournamentService {
 
     public TournamentTeam addPointsToTeam(Long tournamentId, Long teamId) {
 
-        TournamentTeam team = teamRepository.findByTournamentIdAndTeamId(tournamentId, teamId);
+        TournamentTeam team = tournamentTeamRepository.findByTeam_idAndTournament_Id(teamId, tournamentId);
         Tournament tournament = getTournamentById(tournamentId);
 
-        if (tournament.getType() != Type.KNOCKOUT){
+        Type tournamentType = tournament.getType();
+
+        if (tournamentType != Type.KNOCKOUT){
             team.addPoints(3);
         }
 
