@@ -61,7 +61,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                     <h2>${tournamentName} - Calendario</h2>
                 </div>`;
 
-            matches.map(match => {
+            matches.forEach(match => {
                 const listItem = document.getElementById('tournament-bracket__item');
                 listItem.innerHTML = `
                                  <div class="tournament-bracket__match" tabindex="0">
