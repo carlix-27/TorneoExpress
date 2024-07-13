@@ -125,19 +125,45 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
                 matches.forEach(match => {
-                    const location = match.matchLocation;
-                    const date = match.date;
-                    const team1 = match.team1.name; // fetch team
-                    const team2 = match.team2.name; // fetch team
-
                     const listItem = document.createElement('li');
-
+                    listItem.className = 'tournament-bracket__item';
                     listItem.innerHTML = `
-                    <h3>${date}</h3>
-                    <p>${team1} VS ${team2}</p>
-                    <p>${location}</p>
+                                 <div class="tournament-bracket__match" tabindex="0">
+                                        <table class="tournament-bracket__table">
+                                             <caption class="tournament-bracket__caption">
+                                                    <p>${match.date}</p>
+                                             </caption>
+                                             <thead class="sr-only">
+                                                <tr>
+                                                    <th>Country</th>
+                                                    <th>Score</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody class="tournament-bracket__content">
+                                                <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                         <span class="tournament-bracket__number">3</span> 
+                                                    </td>
+                                                </tr>
+                                                
+                                        
+                                                <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">2</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                 </div>                  
                 `;
                     calendarListHTML.appendChild(listItem);
+
                 })
             } else {
                 matches.forEach(match => {
