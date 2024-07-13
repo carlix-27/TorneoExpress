@@ -4,7 +4,6 @@ function loadCalendar() {
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');
 
-    // Hay algo raro con el fixture aca. Fijate.
     fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
             if (!response.ok) {
@@ -108,7 +107,6 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
         });
 }*/
 
-
 function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
@@ -124,7 +122,8 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                 </div>`;
 
             matches.forEach(match => {
-                const listItem = document.getElementById('calendar-item');
+                const listItem = document.createElement('li');
+                listItem.className = 'tournament-bracket__item';
                 listItem.innerHTML = `
                                  <div class="tournament-bracket__match" tabindex="0">
                                         <table class="tournament-bracket__table">
@@ -166,6 +165,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
             console.error('error fetching tournament data: ', error);
         });
 }
+
 
 function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
     fetch(`/api/tournaments/${id}/${type}/calendar`)
