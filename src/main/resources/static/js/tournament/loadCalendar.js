@@ -125,6 +125,24 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
 
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
                 matches.forEach(match => {
+
+                    console.log("Match: ", match)
+
+                    let team1Score = match.firstTeamScore;
+                    console.log(team1Score)
+
+                    if (team1Score === null) {
+                        team1Score = "-"
+                    }
+
+                    let team2Score = match.secondTeamScore;
+                    console.log(team2Score)
+
+                    if (team2Score === null) {
+                        team2Score = "-"
+                    }
+
+
                     const listItem = document.createElement('li');
                     listItem.className = 'tournament-bracket__item';
                     const title = ''; // TODO: Tiene que ir variando acorde la etapa del torneo.
@@ -147,7 +165,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                                                         <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number">3</span> 
+                                                         <span class="tournament-bracket__number">${team1Score}</span> 
                                                     </td>
                                                 </tr>
                                                 
@@ -157,7 +175,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                                                         <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number">2</span>
+                                                        <span class="tournament-bracket__number">${team2Score}</span>
                                                     </td>
                                                 </tr>
                                             </tbody>
