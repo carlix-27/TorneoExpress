@@ -22,6 +22,12 @@ function register() {
 
     const latitude = document.getElementById('address').dataset.latitude;
     const longitude = document.getElementById('address').dataset.longitude;
+
+    if (!latitude || !longitude) {
+        displayErrorMessage("Debe seleccionar una ubicación válida.");
+        return;
+    }
+
     const location = `${latitude},${longitude}`;
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

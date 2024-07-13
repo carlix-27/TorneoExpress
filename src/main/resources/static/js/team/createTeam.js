@@ -45,8 +45,6 @@ function createTeam(event) {
 
     const latitude = document.getElementById('location').dataset.latitude;
     const longitude = document.getElementById('location').dataset.longitude;
-    const location = `${latitude},${longitude}`;
-
     const isPrivate = document.getElementById('privacy').checked;
     const captainId = localStorage.getItem("userId");
 
@@ -55,10 +53,12 @@ function createTeam(event) {
         return;
     }
 
-    if (!location.trim()) {
-        displayErrorMessage("Ubicación del equipo no puede estar vacía.");
+    if (!latitude || !longitude) {
+        displayErrorMessage("Debe seleccionar una ubicación válida.");
         return;
     }
+
+    const location = `${latitude},${longitude}`;
 
     const createTeamRequest = {
         name: name,

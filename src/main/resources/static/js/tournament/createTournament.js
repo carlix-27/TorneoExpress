@@ -44,6 +44,12 @@ function createTournament() {
 
     const latitude = document.getElementById('location').dataset.latitude;
     const longitude = document.getElementById('location').dataset.longitude;
+
+    if (!latitude || !longitude) {
+        displayErrorMessage("Debe seleccionar una ubicación válida.");
+        return;
+    }
+
     const location = `${latitude},${longitude}`;
 
     const date = document.getElementById('start-date').value;
