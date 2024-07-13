@@ -59,6 +59,32 @@ nav ul li a {
     padding: 0 20px;
 }
 
+
+/* User */
+.user-notification-container{
+    display: flex;
+    align-items: center;
+}
+
+#user-info {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#user-name {
+    color: #fff;
+    margin-right: 5px;
+}
+
+#user-name {
+    font-weight: bold;
+}
+
+#verified-icon {
+    color: #00f4ff; /* Adjust the color as needed */
+}
+
 /********/
 
 /* Estilos para la sección de Bienvenida */
@@ -139,6 +165,9 @@ ul#sport-options li a:hover {
     background-color: #342160;
 }
 
+
+
+
 .button {
     width: 200px;
     height: 40px;
@@ -201,3 +230,11 @@ ul#sport-options li a:hover {
     transform: translate(1px , 1px);
     transition-duration: .2s;
 }
+
+
+@media (max-width: 600px) {
+    .nav-container {
+        flex-direction: column;
+    }
+}
+
