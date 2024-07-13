@@ -6,26 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const formularioEstadisticas = document.getElementById('formularioEstadisticas');
     formularioEstadisticas.addEventListener('submit', saveStats);
 
-    loadUnplayedMatches(tournamentId);
     loadActiveMatches(tournamentId);
 });
 
-function loadUnplayedMatches(tournamentId) {
-    fetch(`/api/tournaments/${tournamentId}/matches`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(matches => {
-            const unplayedMatches = matches.filter(match => !match.played);
-            populateMatchSelector(unplayedMatches);
-        })
-        .catch(error => {
-            console.error('Error fetching matches:', error);
-        });
-}
 
 function loadActiveMatches(tournamentId) {
     fetch(`/api/tournaments/${tournamentId}/matches`)
@@ -38,6 +21,7 @@ function loadActiveMatches(tournamentId) {
         .then(matches => {
             const now = new Date();
             const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played);
+            populateMatchSelector(activeMatches);
             populateActiveMatches(activeMatches);
         })
         .catch(error => {
