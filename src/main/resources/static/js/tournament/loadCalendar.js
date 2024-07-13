@@ -46,6 +46,7 @@ function loadCalendar() {
         });
 }
 
+/*
 function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
@@ -105,9 +106,9 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
         .catch(error =>{
             console.error('error fetching tournament data: ', error);
         });
-}
+}*/
 
-/*
+
 function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
@@ -164,7 +165,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
         .catch(error =>{
             console.error('error fetching tournament data: ', error);
         });
-}*/
+}
 
 function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
     fetch(`/api/tournaments/${id}/${type}/calendar`)
