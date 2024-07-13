@@ -2,8 +2,6 @@ package com.TorneosExpress.model;
 
 
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
-import com.TorneosExpress.fixture.Fixture;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

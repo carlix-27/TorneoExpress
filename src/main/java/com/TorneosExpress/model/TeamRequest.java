@@ -34,7 +34,6 @@ public class TeamRequest {
     @Column
     private boolean sent;
 
-
     public TeamRequest(){}
 
     public TeamRequest(Long requestFrom, Long requestTo, Long teamId, String name) {

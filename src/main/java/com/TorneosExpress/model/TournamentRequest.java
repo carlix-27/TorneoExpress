@@ -2,8 +2,12 @@ package com.TorneosExpress.model;
 
 import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class TournamentRequest {
 
     @Id
@@ -44,81 +48,5 @@ public class TournamentRequest {
         this.accepted = tournamentRequestDto.getAccepted();
         this.denied = tournamentRequestDto.getDenied();
     }
-
-    public TournamentRequest(Long requestFrom, Long requestTo, Long teamId, String teamName, Long tournamentId) {
-        this.requestFrom = requestFrom;
-        this.requestTo = requestTo;
-        this.teamId = teamId;
-        this.teamName = teamName;
-        this.tournamentId = tournamentId;
-        this.accepted = false;
-        this.denied = false;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getRequestFrom() {
-        return requestFrom;
-    }
-
-    public void setRequestFrom(Long request_from) {
-        this.requestFrom = request_from;
-    }
-
-    public Long getRequestTo() {
-        return requestTo;
-    }
-
-    public void setRequestTo(Long request_to) {
-        this.requestTo = request_to;
-    }
-
-    public boolean isAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
-    }
-
-    public boolean isDenied() {
-        return denied;
-    }
-
-    public void setDenied(boolean denied) {
-        this.denied = denied;
-    }
-
-    public Long getTournamentId() {
-        return tournamentId;
-    }
-
-    public void setTournamentId(Long tournamentId) {
-        this.tournamentId = tournamentId;
-    }
-
-    public Long getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
 
 }
