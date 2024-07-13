@@ -25,10 +25,51 @@
         <button type="button" id="back-button"> Volver </button>
         <div id="calendar-div">
             <ul id="calendar-result">
-
+                <li>
+                    <div class="tournament-bracket tournament-bracket--rounded">
+                        <div class="tournament-bracket__round tournament-bracket__round--quarterfinals">
+                            <h3 class="tournament-bracket__round-title">Quarterfinals</h3>
+                            <ul class="tournament-bracket__list"> <!-- TODO: La clave considero que esta en esta lista al que hay que agregarle datos mediante el loadCalendar.js -->
+                                <li class="tournament-bracket__item">
+                                    <div class="tournament-bracket__match" tabindex="0">
+                                        <table class="tournament-bracket__table">
+                                            <thead class="sr-only">
+                                            <tr>
+                                                <th>Country</th>
+                                                <th>Score</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="tournament-bracket__content">
+                                            <tr class="tournament-bracket__team tournament-bracket__team--winner">
+                                                <td class="tournament-bracket__country">
+                                                    <abbr class="tournament-bracket__code" title="Canada">CAN</abbr>
+                                                    <span class="tournament-bracket__flag flag-icon flag-icon-ca" aria-label="Flag"></span>
+                                                </td>
+                                                <td class="tournament-bracket__score">
+                                                    <span class="tournament-bracket__number">4</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="tournament-bracket__team">
+                                                <td class="tournament-bracket__country">
+                                                    <abbr class="tournament-bracket__code" title="Kazakhstan">KAZ</abbr>
+                                                    <span class="tournament-bracket__flag flag-icon flag-icon-kz" aria-label="Flag"></span>
+                                                </td>
+                                                <td class="tournament-bracket__score">
+                                                    <span class="tournament-bracket__number">1</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </section>
+
 
     <!-- Logout Script -->
     <script>

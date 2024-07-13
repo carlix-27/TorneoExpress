@@ -14,7 +14,7 @@ function loadCalendar() {
         })
         .then(tournament => {
             console.log("Tournament: ", tournament);
-            const calendar = document.getElementById("calendar-result");
+            const calendar = document.getElementById("calendar-result"); // TODO: Para ver como armamos bien el fixture hay que mirar aca.
             const backButton = document.getElementById("back-button");
 
             backButton.addEventListener("click", () => {
