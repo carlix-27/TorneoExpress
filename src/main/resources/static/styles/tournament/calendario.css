@@ -566,7 +566,7 @@ html {
 }
 
 .tournament-bracket__code {
-    font-family: Monserrat, sans-serif;
+    font-family: Monserrat, ui-monospace;
     padding: 0 0.5em;
     color: #212121;
     font-weight: 600;
@@ -597,6 +597,12 @@ html {
     .tournament-bracket__team:last-child & {
         padding-right: 0.75em;
     }
+}
+
+
+.tournament-bracket__vs {
+     text-align: center;
+     font-weight: bold;
 }
 
 .tournament-bracket__number {
