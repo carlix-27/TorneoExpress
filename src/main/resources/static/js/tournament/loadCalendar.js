@@ -56,7 +56,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
             return response.json();
         })
         .then(matches => {
-            calendarListHTML = `
+            calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
                     ${matches.map(match => `
