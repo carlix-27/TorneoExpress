@@ -131,6 +131,148 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
 }
 
 function renderKnockoutStages(matches, calendarListHTML) {
+    const stages = ['Octavos de Final', 'Cuartos de Final', 'Semifinal', 'Final'];
+    let stageMatches = matches;
+
+    stages.forEach((stage, index) => {
+        if (stageMatches.length > 0) {
+            const stageTitle = document.createElement('h3');
+            stageTitle.className = 'tournament-bracket__round-title';
+            stageTitle.textContent = stage;
+            calendarListHTML.appendChild(stageTitle);
+
+            const nextStageMatches = [];
+            for (let i = 0; i < stageMatches.length; i += 2) {
+                const match1 = stageMatches[i];
+                const match2 = stageMatches[i + 1];
+
+                const winner1 = checkWinner(match1.firstTeamScore, match1.secondTeamScore) === 1 ? match1.team1 : match1.team2;
+                const winner2 = checkWinner(match2.firstTeamScore, match2.secondTeamScore) === 1 ? match2.team1 : match2.team2;
+
+                const listItem = document.createElement('li');
+                listItem.className = 'tournament-bracket__item';
+                listItem.innerHTML = generateMatchHTML(match1, match2);
+                calendarListHTML.appendChild(listItem);
+
+                if (index < stages.length - 1) {
+                    nextStageMatches.push({ team1: winner1, team2: winner2, firstTeamScore: null, secondTeamScore: null, date: '', matchLocation: '' });
+                }
+            }
+
+            stageMatches = nextStageMatches;
+        }
+    });
+}
+
+function generateMatchHTML(match1, match2) {
+    const team1Score = match1.firstTeamScore !== null ? match1.firstTeamScore : "-";
+    const team2Score = match1.secondTeamScore !== null ? match1.secondTeamScore : "-";
+    const team3Score = match2.firstTeamScore !== null ? match2.firstTeamScore : "-";
+    const team4Score = match2.secondTeamScore !== null ? match2.secondTeamScore : "-";
+
+    return `
+        <div class="tournament-bracket__match" tabindex="0">
+            <table class="tournament-bracket__table">
+                <caption class="tournament-bracket__caption">
+                    <p>${match1.date}</p>
+                </caption>
+                <thead class="sr-only">
+                    <tr>
+                        <th>Country</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody class="tournament-bracket__content">
+                    <tr class="tournament-bracket__team">
+                        <td class="tournament-bracket__country">
+                            <abbr class="tournament-bracket__code">${match1.team1.name}</abbr>
+                        </td>
+                        <td class="tournament-bracket__score">
+                            <span class="tournament-bracket__number">${team1Score}</span> 
+                        </td>
+                    </tr>
+                    <tr class="tournament-bracket__team">
+                        <td class="tournament-bracket__country">
+                            <abbr class="tournament-bracket__code">${match1.team2.name}</abbr>
+                        </td>
+                        <td class="tournament-bracket__score">
+                            <span class="tournament-bracket__number">${team2Score}</span>
+                        </td>
+                    </tr>
+                    <tr class="tournament-bracket__team">
+                        <td class="tournament-bracket__country">
+                            <abbr class="tournament-bracket__code">${match2.team1.name}</abbr>
+                        </td>
+                        <td class="tournament-bracket__score">
+                            <span class="tournament-bracket__number">${team3Score}</span> 
+                        </td>
+                    </tr>
+                    <tr class="tournament-bracket__team">
+                        <td class="tournament-bracket__country">
+                            <abbr class="tournament-bracket__code">${match2.team2.name}</abbr>
+                        </td>
+                        <td class="tournament-bracket__score">
+                            <span class="tournament-bracket__number">${team4Score}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+function renderEditableMatches(matches, calendarListHTML) {
+    matches.forEach(match => {
+        const location = match.matchLocation;
+        const date = match.date;
+        const team1 = match.team1.name;
+        const team2 = match.team2.name;
+
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <h3>${date}</h3>
+            <p>${team1} VS ${team2}</p>
+            <p>${location}</p>
+            <button class="modify-date-button" onclick="modifyDate(${match.id}, ${id})">Modificar fecha</button>
+        `;
+        calendarListHTML.appendChild(listItem);
+    });
+}
+
+function checkWinner(team1Score, team2Score) {
+    if (team1Score !== "-" && team2Score !== "-") {
+        return team1Score > team2Score ? 1 : 2;
+    }
+    return null;
+}
+
+
+/*
+function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(matches => {
+            calendarListHTML.innerHTML = `
+                <div id="result">
+                    <h2>${tournamentName} - Calendario</h2>
+                </div>
+            `;
+
+            if (tournamentCreatorId !== localStorage.getItem("userId")) {
+                renderKnockoutStages(matches, calendarListHTML);
+            } else {
+                renderEditableMatches(matches, calendarListHTML);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function renderKnockoutStages(matches, calendarListHTML) {
     const totalMatches = matches.length;
     const stages = ['Octavos de Final', 'Cuartos de Final', 'Semifinal', 'Final'];
 
@@ -230,7 +372,7 @@ function checkWinner(team1Score, team2Score) {
         return team1Score > team2Score ? 1 : 2;
     }
     return null;
-}
+}*/
 
 
 /*
@@ -444,10 +586,6 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
             }
         })
 }*/
-
-function checkWinner(team1Score, team2Score){
-
-}
 
 
 // fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
