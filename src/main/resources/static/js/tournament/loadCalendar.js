@@ -85,12 +85,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                     </td>
                                                 </tr>
                                                 
-                                                <tr>
-                                                    <td colspan="2" class="tournament-bracket__vs">
-                                                            <p>VS</p>
-                                                    </td>
-                                                </tr>
-                                                
+                                        
                                                 <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                         <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
