@@ -56,20 +56,6 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
             return response.json();
         })
         .then(matches => {
-
-            let team1Score = match.firstTeamScore;
-
-            if (team1Score === null) {
-                team1Score = "-"
-            }
-
-            let team2Score = match.secondTeamScore;
-
-            if (team2Score === null) {
-                team2Score = "-"
-            }
-
-
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
@@ -146,25 +132,27 @@ function fetchKnockoutFixture(participatingTeams, id, matches, tournamentName, t
 
             let winners = [];
 
-            let team1Score = match.firstTeamScore;
-
             let roundCompleted = true;
 
             matches.forEach(match => {
                 const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
                 const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
-                
-                const winner = checkWinner(team1Score, team2Score);
 
-                if (winner !== null) {
-                    const winningTeam = winner === 1 ? match.team1 : match.team2;
 
-                    console.log("Winning team: ",winningTeam);
+                if(team1Score !== 0  || team2Score !== 0) { // Si son 0 quiere decir que aun no se agregaron estadisticas a ninguno de los equipos. Estan 0 a 0
 
-                    winners.push(winningTeam);
+                    const winner = checkWinner(team1Score, team2Score);
 
+                    if (winner !== null) {
+                        const winningTeam = winner === 1 ? match.team1 : match.team2;
+
+                        console.log("Winning team: ", winningTeam);
+
+                        winners.push(winningTeam);
+
+                    }
                 } else{
-                    roundCompleted = false;
+                    roundCompleted = false; // Aun no terminamos de hacer el agregado de estadisticas.
                 }
 
                 const listItem = document.createElement('li');
@@ -205,13 +193,13 @@ function fetchKnockoutFixture(participatingTeams, id, matches, tournamentName, t
                 calendarListHTML.appendChild(listItem);
             });
 
-            if(roundCompleted){
+            if(roundCompleted && winners.length !== 0){
                 const nextRoundTitle = getNextRoundTitle('Octavos de Final');
 
                 console.log("Winnners 8tavos: ", winners); // TODO: Si los winners son teams, debo volver a armar partidos con ellos.
 
 
-                if(winners.length === 8){ // Tienen que quedar 8 teams ganadores para armar 4 de final.
+                if(winners.length === 8){ // Tienen que quedar 8 teams ganadores para armar cuartos de final.
                     fillNextRound(calendarListHTML, winners, nextRoundTitle);
                     fetchKnockoutFixtureForQuarterFinals(winners, id, [], tournamentName, tournamentCreatorId, calendarListHTML, type); // Arma partidos con los winners.
                 }
@@ -234,7 +222,6 @@ function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matchesOfQ
         .then(matchesOfQuarter => {
             console.log("Matches de CUARTOS: ", matchesOfQuarter); // Deberia para estar altura, tener los matches armados con los winners.
 
-
             let winners = [];
 
             let roundCompleted = true;
@@ -246,20 +233,24 @@ function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matchesOfQ
                 console.log("Team1Score: ", team1Score);
                 console.log("Team2Score: ", team2Score);
 
-                const winner = checkWinner(team1Score, team2Score);
+                    if(team1Score !== 0 || team2Score !== 0) { // Si alguno de los 2 es distinto de 0 quiere decir que se anotaron estadisticas.
+                        const winner = checkWinner(team1Score, team2Score);
 
-                console.log("Winner: ", winner);
+                        console.log("Winner: ", winner);
 
-                if (winner !== null) {
-                    const winningTeam = winner === 1 ? match.team1 : match.team2;
+                        if (winner !== null) {
+                            const winningTeam = winner === 1 ? match.team1 : match.team2;
 
-                    console.log("Winning team: ",winningTeam);
+                            console.log("Winning team: ", winningTeam);
 
-                    winners.push(winningTeam);
+                            winners.push(winningTeam);
 
-                } else{
-                    roundCompleted = false;
-                }
+                        } else {
+                            roundCompleted = false;
+                        }
+                    }
+
+
 
                 const listItem = document.createElement('li');
                 listItem.className = 'tournament-bracket__item';
@@ -299,7 +290,7 @@ function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matchesOfQ
                 calendarListHTML.appendChild(listItem);
             });
 
-            if(roundCompleted){
+            if(roundCompleted && winners.length !== 0){
                 const nextRoundTitle = getNextRoundTitle('Cuartos de Final');
 
                 console.log("Winnners 4tos: ", winners); // TODO: Si los winners son teams, debo volver a armar partidos con ellos.
@@ -335,18 +326,19 @@ function fetchKnockoutFixtureForSemifinals(participatingTeams, id, matches, tour
                 console.log("Team1Score: ", team1Score);
                 console.log("Team2Score: ", team2Score);
 
-                const winner = checkWinner(team1Score, team2Score);
+                if(team1Score !== 0 || team2Score !== 0) {
+                    const winner = checkWinner(team1Score, team2Score);
 
-                console.log("Winner: ", winner);
+                    console.log("Winner: ", winner);
 
-                if (winner !== null) {
-                    const winningTeam = winner === 1 ? match.team1 : match.team2;
+                    if (winner !== null) {
+                        const winningTeam = winner === 1 ? match.team1 : match.team2;
 
-                    console.log("Winning team: ",winningTeam);
+                        console.log("Winning team: ", winningTeam);
 
-                    winners.push(winningTeam);
-
-                } else{
+                        winners.push(winningTeam);
+                    }
+                } else {
                     roundCompleted = false;
                 }
 
@@ -388,14 +380,14 @@ function fetchKnockoutFixtureForSemifinals(participatingTeams, id, matches, tour
                 calendarListHTML.appendChild(listItem);
             });
 
-            if(roundCompleted){
+            if(roundCompleted && winners.length !== 0){
                 const nextRoundTitle = getNextRoundTitle('Semifinal');
 
                 console.log("Winnners Semi: ", winners); // TODO: Si los winners son teams, debo volver a armar partidos con ellos.
 
                 if(winners.length === 2){
                     fillNextRound(calendarListHTML, winners, nextRoundTitle);
-                    fetchKnockoutFixtureForSemifinals(winners, id, [], tournamentName, tournamentCreatorId, calendarListHTML, type); // Arma partidos con los winners.
+                    fetchKnockoutFixtureForFinal(winners, id, [], tournamentName, tournamentCreatorId, calendarListHTML, type); // Arma partidos con los winners.
                 }
             }
         });
@@ -423,17 +415,14 @@ function fetchKnockoutFixtureForFinal(participatingTeams, id, matches, tournamen
                 console.log("Team1Score: ", team1Score);
                 console.log("Team2Score: ", team2Score);
 
-                const winner = checkWinner(team1Score, team2Score);
-
-                console.log("Winner: ", winner);
-
-                if (winner !== null) {
-                    const winningTeam = winner === 1 ? match.team1 : match.team2;
-
-                    console.log("Winning team: ",winningTeam);
-
-                    winners.push(winningTeam); // TODO: Este es el team que gano el torneo. Podes usarlo.
-
+                if(team1Score !== 0 || team2Score !== 0) {
+                    const winner = checkWinner(team1Score, team2Score);
+                    console.log("Winner: ", winner);
+                    if (winner !== null) {
+                        const winningTeam = winner === 1 ? match.team1 : match.team2;
+                        console.log("Winning team: ", winningTeam);
+                        winners.push(winningTeam); // TODO: Este es el team que gano el torneo. Podes usarlo.
+                    }
                 } else{
                     roundCompleted = false;
                 }
@@ -476,14 +465,14 @@ function fetchKnockoutFixtureForFinal(participatingTeams, id, matches, tournamen
                 calendarListHTML.appendChild(listItem);
             });
 
-            if(roundCompleted){
+            /*if(roundCompleted){
                 // TODO: Que hacemos con el que gana?
                 /*Podrian probablemente, tenerse en consideracion, los siguientes aspectos:
                 * - Ver aca la logica de terminar el torneo, o informar que el team tanto gano.
                 * En base a eso, como ya tenemos un winner, tenemos la posibilidad de terminar un torneo knockout, y asignarle los puntos de prestigio correspondientes.
                 * TODO: Fijate como haces para tener en cuenta estas cuestiones.
                 *  Tenes la lista de Winners, que ahora, va a tener a un winner solo.*/
-            }
+            /*}*/
         });
 }
 
@@ -516,7 +505,13 @@ function getNextRoundTitle(currentRoundTitle) {
 
 // TODO: Que pasa si es empate? Que informe, que pasan a penales y de ahi forma random quien gana. dudoso
 function checkWinner(team1Score, team2Score) {
-    return team1Score > team2Score ? 1 : 2;
+    if(team1Score === team2Score){
+        return 0;
+    } else if(team1Score > team1Score){
+        return 1;
+    } else{
+        return 2;
+    }
 }
 
 

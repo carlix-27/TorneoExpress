@@ -45,8 +45,37 @@ public class TournamentService {
 
     public List<Match> getAllMatches(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
-        return tournament.getMatches();
+        List<Match> matches = tournament.getMatches();
+
+
+        // Verificar si todos los partidos han sido jugados
+        boolean allMatchesPlayed = matches.stream().allMatch(Match::isPlayed);
+
+        if (!allMatchesPlayed) {
+            return matches; // Devuelve la lista de partidos si aun no se terminaron de jugar todos los partidos
+        }
+
+        List<Team> winners = getWinnersFromMatches(matches);
+
+        if(winners.isEmpty()){
+            return matches;
+        }
+
+        if (tournament.getType() == Type.KNOCKOUT && !winners.isEmpty()) {
+            switch (winners.size()) {
+                    case 8:
+                        return getTournamentFixtureKnockoutQuarterFinals(tournamentId, Type.KNOCKOUT);
+                    case 4:
+                        return getTournamentFixtureKnockoutSemifinals(tournamentId, Type.KNOCKOUT);
+                    case 2:
+                        return getTournamentFixtureKnockoutFinals(tournamentId, Type.KNOCKOUT);
+                }
+        }
+
+        return matches;
     }
+
+
 
     public List<Match> getTournamentFixture(Long tournamentId, Type type) {
         Tournament tournament = getTournamentById(tournamentId);
@@ -115,11 +144,16 @@ public class TournamentService {
 
     private List<Team> getWinnersFromMatches(List<Match> matches) {
         List<Team> winners = new ArrayList<>();
-        for (Match match : matches) {
-            Optional<Team> winner = teamRepository.findById(match.getWinner());
-            winner.ifPresent(winners::add);
+        List<Team> emptyMatches = List.of();
+        if(!matches.isEmpty()) {
+            for (Match match : matches) {
+                Optional<Team> winner = teamRepository.findById(match.getWinner());
+                winner.ifPresent(winners::add);
+            }
+            return winners;
+        } else{
+            return emptyMatches;
         }
-        return winners;
     }
 
 

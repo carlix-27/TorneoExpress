@@ -19,8 +19,9 @@ function loadActiveMatches(tournamentId) {
             return response.json();
         })
         .then(matches => {
+            console.log("Matches: ", matches);
             const now = new Date();
-            const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played);
+            const activeMatches = matches.filter(match => new Date(match.date) > now && !match.played); // Las fechas de los partidos, deben ser despues del dia de hoy. No pueden ser antes
             populateMatchSelector(activeMatches);
             populateActiveMatches(activeMatches);
         })
