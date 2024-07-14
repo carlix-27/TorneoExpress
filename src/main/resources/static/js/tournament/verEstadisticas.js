@@ -28,13 +28,14 @@ function populateMatches(matches) {
 
     matches.forEach(match => {
         if (match.played) {
+            console.log("Match", match)
             const listItem = document.createElement('li');
 
             // Nombre del equipo 1 y su puntaje
-            const team1Text = `<span class="team-name">${match.team1.name}</span> ${match.team1Score}`;
+            const team1Text = `<span class="team-name">${match.team1.name}</span> ${match.firstTeamScore}`;
 
             // Nombre del equipo 2 y su puntaje
-            const team2Text = `${match.team2Score} <span class="team-name">${match.team2.name}</span>`;
+            const team2Text = `${match.secondTeamScore} <span class="team-name">${match.team2.name}</span>`;
 
             listItem.innerHTML = `${team1Text} - ${team2Text}`;
             listaPartidosTerminados.appendChild(listItem);
