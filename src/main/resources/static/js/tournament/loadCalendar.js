@@ -27,11 +27,12 @@ function loadCalendar() {
                 </div>`;
             } else {
                 switch(tournament.type){
-                    case 'ROUNDROBIN': // FIXME: Le estas pasando toda la entidad de tournament, fijate que haces con tournament ahi, sino pedi lo que necesitas nada mas.
+                    case 'ROUNDROBIN':
                         fetchRoundRobinFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'KNOCKOUT':
-                        fetchKnockoutFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+                        // TODO: Ver como podes hacer para tener en cuenta la cantidad de equipos, por tanto la estructura del fixture va a ser distinta.
+                        fetchKnockoutFixture(tournament.participatingTeams, tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'GROUPSTAGE':
                         fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
@@ -108,139 +109,8 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
 
 
 
-
-
-
-/*
-function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
-    fetch(`/api/tournaments/${id}/${type}/calendar`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(matches => {
-            calendarListHTML.innerHTML = `
-                <div id="result">
-                    <h2>${tournamentName} - Calendario</h2>
-                </div>
-            `;
-
-            if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                renderKnockoutStages(matches, calendarListHTML);
-            } else {
-                renderEditableMatches(matches, calendarListHTML);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function renderKnockoutStages(matches, calendarListHTML) {
-    const totalMatches = matches.length;
-    const stages = ['Octavos de Final', 'Cuartos de Final', 'Semifinal', 'Final'];
-
-    let matchIndex = 0;
-    stages.forEach(stage => {
-        const stageMatches = getStageMatches(matches, matchIndex, stage, totalMatches);
-        if (stageMatches.length > 0) {
-            const stageTitle = document.createElement('h3');
-            stageTitle.className = 'tournament-bracket__round-title';
-            stageTitle.textContent = stage;
-            calendarListHTML.appendChild(stageTitle);
-
-            stageMatches.forEach(match => {
-                const listItem = document.createElement('li');
-                listItem.className = 'tournament-bracket__item';
-                listItem.innerHTML = generateMatchHTML(match);
-                calendarListHTML.appendChild(listItem);
-            });
-            matchIndex += stageMatches.length;
-        }
-    });
-}
-
-function getStageMatches(matches, startIndex, stage, totalMatches) {
-    const stageSizes = {
-        'Octavos de Final': totalMatches >= 16 ? 8 : 0,
-        'Cuartos de Final': totalMatches >= 8 ? 4 : 0,
-        'Semifinal': totalMatches >= 4 ? 2 : 0,
-        'Final': totalMatches >= 2 ? 1 : 0
-    };
-
-    const size = stageSizes[stage];
-    return matches.slice(startIndex, startIndex + size);
-}
-
-
-function generateMatchHTML(match) {
-    const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : "-";
-    const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : "-";
-
-    return `
-        <div class="tournament-bracket__match" tabindex="0">
-            <table class="tournament-bracket__table">
-                <caption class="tournament-bracket__caption">
-                    <p>${match.date}</p>
-                </caption>
-                <thead class="sr-only">
-                    <tr>
-                        <th>Country</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody class="tournament-bracket__content">
-                    <tr class="tournament-bracket__team">
-                        <td class="tournament-bracket__country">
-                            <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
-                        </td>
-                        <td class="tournament-bracket__score">
-                            <span class="tournament-bracket__number">${team1Score}</span> 
-                        </td>
-                    </tr>
-                    <tr class="tournament-bracket__team">
-                        <td class="tournament-bracket__country">
-                            <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
-                        </td>
-                        <td class="tournament-bracket__score">
-                            <span class="tournament-bracket__number">${team2Score}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <script>checkWinner(${team1Score}, ${team2Score})</script>
-    `;
-}
-
-function renderEditableMatches(matches, calendarListHTML) {
-    matches.forEach(match => {
-        const location = match.matchLocation;
-        const date = match.date;
-        const team1 = match.team1.name;
-        const team2 = match.team2.name;
-
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <h3>${date}</h3>
-            <p>${team1} VS ${team2}</p>
-            <p>${location}</p>
-            <button class="modify-date-button" onclick="modifyDate(${match.id}, ${id})">Modificar fecha</button>
-        `;
-        calendarListHTML.appendChild(listItem);
-    });
-}
-
-function checkWinner(team1Score, team2Score) {
-    if (team1Score !== "-" && team2Score !== "-") {
-        return team1Score > team2Score ? 1 : 2;
-    }
-    return null;
-}*/
-
 // Posible implementacion
-
-function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
+function fetchKnockoutFixture(participatingTeams, id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response =>{
             if (!response.ok) {
@@ -250,6 +120,7 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
         })
 
         .then(matches => {
+            console.log("Matches: ", matches);
             const results = document.createElement('div');
             results.id = 'result';
             results.innerHTML = `
@@ -257,20 +128,29 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                 <h3 class="tournament-bracket__round-title">Octavos de Final</h3>
             `;
 
-            // Todo: Es muy probable que tengas que sacar el h3 de ahi, hace lio nada mas. 
             calendarListHTML.appendChild(results);
 
             let winners = [];
 
+            let roundCompleted = true;
+
             matches.forEach(match => {
-                const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : "-";
-                const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : "-";
+                const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
+                const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
+
                 const winner = checkWinner(team1Score, team2Score);
 
                 if (winner !== null) {
                     const winningTeam = winner === 1 ? match.team1 : match.team2;
+
+                    console.log("Winning team: ",winningTeam);
+
                     winners.push(winningTeam);
+
+                } else{
+                    roundCompleted = false;
                 }
+
                 const listItem = document.createElement('li');
                 listItem.className = 'tournament-bracket__item';
                 listItem.innerHTML = `
@@ -309,63 +189,300 @@ function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, 
                 calendarListHTML.appendChild(listItem);
             });
 
-            fillNextRound(calendarListHTML, winners, 'Cuartos de Final');
+            if(roundCompleted){
+                const nextRoundTitle = getNextRoundTitle('Octavos de Final');
 
+                console.log("Winnners 8tavos: ", winners); // TODO: Si los winners son teams, debo volver a armar partidos con ellos.
+
+
+                if(winners.length === 8){ // Tienen que quedar 8 teams ganadores para armar 4 de final.
+                    fillNextRound(calendarListHTML, winners, nextRoundTitle);
+                    fetchKnockoutFixtureForQuarterFinals(winners, id, [], tournamentName, tournamentCreatorId, calendarListHTML, type); // Arma partidos con los winners.
+                }
+            }
         });
 }
 
-function fillNextRound(container, teams, roundTitle) {
+function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matchesOfQuarter, tournamentName, tournamentCreatorId, calendarListHTML, type){
+    console.log("ESTOY EN CUARTOS");
+    console.log("Equipos que participan: ", participatingTeams);
+    console.log("Partidos: ", matchesOfQuarter);
+    fetch(`/api/tournaments/${id}/${type}/calendarKnockoutOfQuarterFinals`) // Aca te trae a todos los partidos que almaceno, ese es el drama!
+        .then(response =>{
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+
+        .then(matchesOfQuarter => {
+            console.log("Matches de CUARTOS: ", matchesOfQuarter); // Deberia para estar altura, tener los matches armados con los winners.
+
+
+            let winners = [];
+
+            let roundCompleted = true;
+
+            matchesOfQuarter.forEach(match => {
+                const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
+                const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
+
+                console.log("Team1Score: ", team1Score);
+                console.log("Team2Score: ", team2Score);
+
+                const winner = checkWinner(team1Score, team2Score);
+
+                console.log("Winner: ", winner);
+
+                if (winner !== null) {
+                    const winningTeam = winner === 1 ? match.team1 : match.team2;
+
+                    console.log("Winning team: ",winningTeam);
+
+                    winners.push(winningTeam);
+
+                } else{
+                    roundCompleted = false;
+                }
+
+                const listItem = document.createElement('li');
+                listItem.className = 'tournament-bracket__item';
+                listItem.innerHTML = `
+                    <div class="tournament-bracket__match" tabindex="0">
+                        <table class="tournament-bracket__table">
+                            <caption class="tournament-bracket__caption">
+                                <p>${match.date}</p>
+                            </caption>
+                            <thead class="sr-only">
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tournament-bracket__content">
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team1Score}</span>
+                                    </td>
+                                </tr>
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                calendarListHTML.appendChild(listItem);
+            });
+
+            if(roundCompleted){
+                const nextRoundTitle = getNextRoundTitle('Cuartos de Final');
+
+                console.log("Winnners 4tos: ", winners); // TODO: Si los winners son teams, debo volver a armar partidos con ellos.
+
+                if(winners.length === 4){
+                    fillNextRound(calendarListHTML, winners, nextRoundTitle);
+                    fetchKnockoutFixtureForSemifinals(winners, id, [], tournamentName, tournamentCreatorId, calendarListHTML, type); // Arma partidos con los winners.
+                }
+            }
+        });
+
+}
+
+function fetchKnockoutFixtureForSemifinals(participatingTeams, id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
+    fetch(`/api/tournaments/${id}/${type}/calendarKnockoutOfSemifinals`)
+        .then(response =>{
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+
+        .then(matches => {
+
+            let winners = [];
+
+            let roundCompleted = true;
+
+            matches.forEach(match => {
+                const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
+                const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
+
+                console.log("Team1Score: ", team1Score);
+                console.log("Team2Score: ", team2Score);
+
+                const winner = checkWinner(team1Score, team2Score);
+
+                console.log("Winner: ", winner);
+
+                if (winner !== null) {
+                    const winningTeam = winner === 1 ? match.team1 : match.team2;
+
+                    console.log("Winning team: ",winningTeam);
+
+                    winners.push(winningTeam);
+
+                } else{
+                    roundCompleted = false;
+                }
+
+                const listItem = document.createElement('li');
+                listItem.className = 'tournament-bracket__item';
+                listItem.innerHTML = `
+                    <div class="tournament-bracket__match" tabindex="0">
+                        <table class="tournament-bracket__table">
+                            <caption class="tournament-bracket__caption">
+                                <p>${match.date}</p>
+                            </caption>
+                            <thead class="sr-only">
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tournament-bracket__content">
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team1Score}</span>
+                                    </td>
+                                </tr>
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                calendarListHTML.appendChild(listItem);
+            });
+
+            if(roundCompleted){
+                const nextRoundTitle = getNextRoundTitle('Semifinal');
+
+                console.log("Winnners Semi: ", winners); // TODO: Si los winners son teams, debo volver a armar partidos con ellos.
+
+                if(winners.length === 2){
+                    fillNextRound(calendarListHTML, winners, nextRoundTitle);
+                    fetchKnockoutFixtureForSemifinals(winners, id, [], tournamentName, tournamentCreatorId, calendarListHTML, type); // Arma partidos con los winners.
+                }
+            }
+        });
+}
+
+
+function fetchKnockoutFixtureForFinal(participatingTeams, id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response =>{
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+
+        .then(matches => {
+            let winners = [];
+
+            let roundCompleted = true;
+
+            matches.forEach(match => {
+                const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
+                const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
+
+                console.log("Team1Score: ", team1Score);
+                console.log("Team2Score: ", team2Score);
+
+                const winner = checkWinner(team1Score, team2Score);
+
+                console.log("Winner: ", winner);
+
+                if (winner !== null) {
+                    const winningTeam = winner === 1 ? match.team1 : match.team2;
+
+                    console.log("Winning team: ",winningTeam);
+
+                    winners.push(winningTeam); // TODO: Este es el team que gano el torneo. Podes usarlo.
+
+                } else{
+                    roundCompleted = false;
+                }
+
+                const listItem = document.createElement('li');
+                listItem.className = 'tournament-bracket__item';
+                listItem.innerHTML = `
+                    <div class="tournament-bracket__match" tabindex="0">
+                        <table class="tournament-bracket__table">
+                            <caption class="tournament-bracket__caption">
+                                <p>${match.date}</p>
+                            </caption>
+                            <thead class="sr-only">
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tournament-bracket__content">
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team1Score}</span>
+                                    </td>
+                                </tr>
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                calendarListHTML.appendChild(listItem);
+            });
+
+            if(roundCompleted){
+                // TODO: Que hacemos con el que gana?
+                /*Podrian probablemente, tenerse en consideracion, los siguientes aspectos:
+                * - Ver aca la logica de terminar el torneo, o informar que el team tanto gano.
+                * En base a eso, como ya tenemos un winner, tenemos la posibilidad de terminar un torneo knockout, y asignarle los puntos de prestigio correspondientes.
+                * TODO: Fijate como haces para tener en cuenta estas cuestiones.
+                *  Tenes la lista de Winners, que ahora, va a tener a un winner solo.*/
+            }
+        });
+}
+
+function fillNextRound(calendarListHTML, teams, roundTitle) {
     if (teams.length <= 1) {
         return; // Final stage already reached
     }
-
+    // Check if calendarListHTML is a valid DOM element
+    if (!(calendarListHTML instanceof HTMLElement)) {
+        console.error("calendarListHTML is not a valid DOM element");
+        return;
+    }
     const round = document.createElement('div');
     round.innerHTML = `<h3 class="tournament-bracket__round-title">${roundTitle}</h3>`;
-    container.appendChild(round);
-
-    let nextRoundWinners = [];
-
-    for (let i = 0; i < teams.length; i += 2) {
-        const match = document.createElement('li');
-        match.className = 'tournament-bracket__item';
-        match.innerHTML = `
-            <div class="tournament-bracket__match" tabindex="0">
-                <table class="tournament-bracket__table">
-                    <tbody class="tournament-bracket__content">
-                        <tr class="tournament-bracket__team">
-                            <td class="tournament-bracket__country">
-                                <abbr class="tournament-bracket__code">${teams[i].name}</abbr>
-                            </td>
-                        </tr>
-                        <tr class="tournament-bracket__team">
-                            <td class="tournament-bracket__country">
-                                <abbr class="tournament-bracket__code">${teams[i + 1].name}</abbr>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        `;
-
-        container.appendChild(match);
-
-        console.log("Teams[i]: ", teams[i]);
-        console.log("Teams[i+1]: ", teams[i+1]);
-
-        // Aquí se deberían obtener los puntajes reales para los partidos de las siguientes rondas
-        const team1Score = teams[i].team1Score;
-        const team2Score = teams[i + 1].team2Score;
-        const nextRoundWinner = checkWinner(team1Score, team2Score);
-
-
-        if (nextRoundWinner !== null) {
-            nextRoundWinners.push(nextRoundWinner === 1 ? teams[i] : teams[i + 1]);
-        }
-
-    }
-
-    const nextRoundTitle = getNextRoundTitle(roundTitle);
-    fillNextRound(container, nextRoundWinners, nextRoundTitle);
+    calendarListHTML.appendChild(round);
 }
 
 function getNextRoundTitle(currentRoundTitle) {
@@ -381,122 +498,11 @@ function getNextRoundTitle(currentRoundTitle) {
     }
 }
 
+// TODO: Que pasa si es empate? Que informe, que pasan a penales y de ahi forma random quien gana. dudoso
 function checkWinner(team1Score, team2Score) {
-    if (team1Score !== "-" && team2Score !== "-") {
-        return team1Score > team2Score ? 1 : 2;
-    }
-    return null;
+    return team1Score > team2Score ? 1 : 2;
 }
 
-        /* Primer implementacion
-        function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
-            fetch(`/api/tournaments/${id}/${type}/calendar`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(matches => {
-                    calendarListHTML.innerHTML = `
-                        <div id="result">
-                            <h2>${tournamentName} - Calendario</h2>
-                            <h3 class="tournament-bracket__round-title"> Octavos de Final </h3>
-
-                        </div>
-                    `;
-
-                    if (tournamentCreatorId !== localStorage.getItem("userId")) {
-                        matches.forEach(match => {
-
-                            console.log("Match: ", match)
-
-                            let team1Score = match.firstTeamScore;
-                            console.log(team1Score)
-
-                            if (team1Score === null) {
-                                team1Score = "-"
-                            }
-
-                            let team2Score = match.secondTeamScore;
-                            console.log(team2Score)
-
-                            if (team2Score === null) {
-                                team2Score = "-"
-                            }
-
-
-                            const listItem = document.createElement('li');
-                            listItem.className = 'tournament-bracket__item';
-                            const title = ''; // TODO: Tiene que ir variando acorde la etapa del torneo. APLICA A 16 Equipos maximo esta logica.
-                            listItem.innerHTML = `
-                                         <div class="tournament-bracket__match" tabindex="0">
-                                                <table class="tournament-bracket__table">
-                                                     <caption class="tournament-bracket__caption">
-                                                            <p>${match.date}</p>
-                                                     </caption>
-                                                     <thead class="sr-only">
-                                                        <tr>
-                                                            <th>Country</th>
-                                                            <th>Score</th>
-                                                        </tr>
-                                                     </thead>
-                                                     <tbody class="tournament-bracket__content">
-                                                        <tr class="tournament-bracket__team">
-                                                            <td class="tournament-bracket__country">
-                                                                <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
-                                                            </td>
-                                                            <td class="tournament-bracket__score">
-                                                                 <span class="tournament-bracket__number">${team1Score}</span>
-                                                            </td>
-                                                        </tr>
-
-
-                                                        <tr class="tournament-bracket__team">
-                                                            <td class="tournament-bracket__country">
-                                                                <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
-                                                            </td>
-                                                            <td class="tournament-bracket__score">
-                                                                <span class="tournament-bracket__number">${team2Score}</span>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                         </div>
-                                         <script>checkWinner(team1Score, team2Score)</script>
-
-                        `;
-                            calendarListHTML.appendChild(listItem);
-
-                        })
-                    } else {
-                        matches.forEach(match => {
-                            const location = match.matchLocation;
-                            const date = match.date;
-                            const team1 = match.team1.name; // fetch team
-                            const team2 = match.team2.name; // fetch team
-
-                            const listItem = document.createElement('li');
-
-                            listItem.innerHTML = `
-                            <h3>${date}</h3>
-                            <p>${team1} VS ${team2}</p>
-                            <p>${location}</p>
-                            <button class="modify-date-button" onclick="modifyDate(${match.id}, ${id})">Modificar fecha</button>
-                        `;
-                            calendarListHTML.appendChild(listItem);
-                        })
-                    }
-                })
-        }*/
-
-/*
-function checkWinner(team1Score, team2Score) {
-    if (team1Score !== "-" && team2Score !== "-") {
-        return team1Score > team2Score ? 1 : 2;
-    }
-    return null;
-}*/
 
 
 
@@ -516,8 +522,6 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                     
                 </div>
             `;
-
-
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
 
                 const groupedMatches = {};
@@ -618,115 +622,3 @@ function modifyDate(matchId, tournamentId) {
     window.location.replace(`modifyDate.html?match-id=${matchId}&tournament-id=${tournamentId}`);
 }
 
-
-/*
-  <h3 class="tournament-bracket__round-title"> Cuartos de Final </h3>
-                                 <div class="tournament-bracket__match" tabindex="0">
-                                        <table class="tournament-bracket__table">
-                                             <caption class="tournament-bracket__caption">
-                                                    <p>${match.date}</p>
-                                             </caption>
-                                             <thead class="sr-only">
-                                                <tr>
-                                                    <th>Country</th>
-                                                    <th>Score</th>
-                                                </tr>
-                                             </thead>
-                                             <tbody class="tournament-bracket__content">
-                                                <tr class="tournament-bracket__team tournament-bracket__team--winner">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number">${team1Score}</span>
-                                                    </td>
-                                                </tr>
-
-
-                                                <tr class="tournament-bracket__team tournament-bracket__team--winner">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr> <!--Este equipo debe ser distinto al que inicialmente era, es decir, el ganador del otro partido. -->
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number">${team2Score}</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                 </div>
-
-                                 <script>checkWinner(team1Score, team2Score)</script>
-
-                                 <h3 class="tournament-bracket__round-title"> Semifinal </h3>
-                                 <div class="tournament-bracket__match" tabindex="0">
-                                        <table class="tournament-bracket__table">
-                                             <caption class="tournament-bracket__caption">
-                                                    <p>${match.date}</p>
-                                             </caption>
-                                             <thead class="sr-only">
-                                                <tr>
-                                                    <th>Country</th>
-                                                    <th>Score</th>
-                                                </tr>
-                                             </thead>
-                                             <tbody class="tournament-bracket__content">
-                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number">${team1Score}</span>
-                                                    </td>
-                                                </tr>
-
-
-                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr> <!--Este equipo debe ser distinto al que inicialmente era, es decir, el ganador del otro partido. -->
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number">${team2Score}</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                 </div>
-
-                                 <script>checkWinner(team1Score, team2Score)</script>
-
-                                 <h3 class="tournament-bracket__round-title"> Final </h3>
-                                 <div class="tournament-bracket__match" tabindex="0">
-                                        <table class="tournament-bracket__table">
-                                             <caption class="tournament-bracket__caption">
-                                                    <p>${match.date}</p>
-                                             </caption>
-                                             <thead class="sr-only">
-                                                <tr>
-                                                    <th>Country</th>
-                                                    <th>Score</th>
-                                                </tr>
-                                             </thead>
-                                             <tbody class="tournament-bracket__content">
-                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner tournament-bracket__team--winner">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number">${team1Score}</span>
-                                                    </td>
-                                                </tr>
-
-
-                                                <tr class="tournament-bracket__team tournament-bracket__team--winner tournament-bracket__team--winner tournament-bracket__team--winner">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr> <!--Este equipo debe ser distinto al que inicialmente era, es decir, el ganador del otro partido. -->
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number">${team2Score}</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                 </div>
-
-                                 <script>checkWinner(team1Score, team2Score)</script>   <!--El que gana aca gana el torneo entero.--> */
