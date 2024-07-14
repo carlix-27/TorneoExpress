@@ -19,9 +19,8 @@ function loadActiveMatches(tournamentId) {
             return response.json();
         })
         .then(matches => {
-            console.log("Matches: ", matches);
             const now = new Date();
-            const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played);
+            const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played); // Es asi para que el admin no agregue cosas de partidos que aun no se jugaron!
             populateMatchSelector(activeMatches);
             populateActiveMatches(activeMatches);
         })

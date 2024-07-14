@@ -50,19 +50,13 @@ public class TournamentService {
 
         // Verificar si todos los partidos han sido jugados
         boolean allMatchesPlayed = matches.stream().allMatch(Match::isPlayed);
-
-        if (!allMatchesPlayed) {
-            return matches; // Devuelve la lista de partidos si aun no se terminaron de jugar todos los partidos
-        }
-
-        List<Team> winners = getWinnersFromMatches(matches);
-
-        if(winners.isEmpty()){
-            return matches;
-        }
-
-        if (tournament.getType() == Type.KNOCKOUT && !winners.isEmpty()) {
-            switch (winners.size()) {
+        if(allMatchesPlayed){
+            List<Team> winners = getWinnersFromMatches(matches);
+            if(winners.isEmpty()){
+                return matches;
+            }
+            if (tournament.getType() == Type.KNOCKOUT && !winners.isEmpty()) {
+                switch (winners.size()) {
                     case 8:
                         return getTournamentFixtureKnockoutQuarterFinals(tournamentId, Type.KNOCKOUT);
                     case 4:
@@ -70,6 +64,7 @@ public class TournamentService {
                     case 2:
                         return getTournamentFixtureKnockoutFinals(tournamentId, Type.KNOCKOUT);
                 }
+            }
         }
 
         return matches;
