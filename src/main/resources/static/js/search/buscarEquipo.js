@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("find-team-form");
     const teamList = document.getElementById("lista-equipos");
 
-    // Function to fetch active teams
     function fetchActiveTeams() {
         fetch('/api/teams/allTeams')
             .then(response => {
@@ -105,53 +104,77 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
     function filterTeams(event) {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault();
+
+        console.log("Filtering teams...");
 
         const teamName = form.querySelector("#team-name").value.trim().toLowerCase();
         const teamIsPrivate = form.querySelector("#team-isPrivate").value;
         const userLat = parseFloat(form.querySelector("#location").dataset.latitude);
         const userLng = parseFloat(form.querySelector("#location").dataset.longitude);
 
-        fetch("/api/teams/allTeams")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(teams => {
-                const filteredTeams = teams.filter(team => {
-                    const [lat, lng] = team.location.split(',').map(Number);
-                    const distance = calculateDistance(userLat, userLng, lat, lng);
-                    const lowerCaseTeamName = team.name.toLowerCase();
-                    const nameIncludesLocation = team.location.toLowerCase().includes(teamName);
-                    const nameMatches = lowerCaseTeamName.includes(teamName);
-                    const isPrivateMatches = teamIsPrivate === "all" || (team.private && teamIsPrivate === "private") || (!team.private && teamIsPrivate === "public");
-                    const locationMatches = distance <= 50 || nameIncludesLocation;
-                    return nameMatches && isPrivateMatches && locationMatches;
-                });
+        const geocoder = new google.maps.Geocoder();
+        const userLatLng = { lat: userLat, lng: userLng };
 
-                console.log("Filtered Teams: ", filteredTeams);
-                renderTeams(filteredTeams);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                displayErrorMessage('Error filtering teams.');
-            });
-    }
+        geocoder.geocode({ location: userLatLng }, function(results, status) {
+            if (status === "OK" && results[0]) {
+                const userAddress = results[0].formatted_address.toLowerCase();
 
-    function calculateDistance(lat1, lng1, lat2, lng2) {
-        const toRad = value => value * Math.PI / 180;
-        const R = 6371; // Radius of the Earth in km
-        const dLat = toRad(lat2 - lat1);
-        const dLng = toRad(lat2 - lng1);
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-            Math.sin(dLng / 2) * Math.sin(dLng / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
+                fetch("/api/teams/allTeams")
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(teams => {
+                        console.log("Teams:", teams);
+
+                        const reverseGeocodedTeams = teams.map(team => {
+                            const [lat, lng] = team.location.split(',').map(Number);
+                            const latLng = { lat, lng };
+
+                            return new Promise((resolve, reject) => {
+                                geocoder.geocode({ location: latLng }, function(results, status) {
+                                    if (status === "OK" && results[0]) {
+                                        team.formattedAddress = results[0].formatted_address.toLowerCase();
+                                        resolve(team);
+                                    } else {
+                                        console.error(`Geocoding failed for team location: ${team.location}`);
+                                        reject(`Geocoding failed for team location: ${team.location}`);
+                                    }
+                                });
+                            });
+                        });
+
+                        Promise.all(reverseGeocodedTeams)
+                            .then(teams => {
+                                const filteredTeams = teams.filter(team => {
+                                    const lowerCaseTeamName = team.name.toLowerCase();
+                                    const isPrivateMatches = teamIsPrivate === "all" || (team.private && teamIsPrivate === "private") || (!team.private && teamIsPrivate === "public");
+                                    const locationMatches = team.formattedAddress.includes(userAddress);
+                                    const nameMatches = lowerCaseTeamName.includes(teamName) || locationMatches || teamName === "";
+                                    return nameMatches && isPrivateMatches;
+                                });
+
+                                console.log("Filtered Teams: ", filteredTeams);
+                                renderTeams(filteredTeams);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                displayErrorMessage('Error filtering teams.');
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        displayErrorMessage('Error filtering teams.');
+                    });
+            } else {
+                console.error('Geocoder failed due to: ' + status);
+                displayErrorMessage('Error with location geocoding.');
+            }
+        });
     }
 
     form.addEventListener("submit", filterTeams);
