@@ -152,10 +152,10 @@ document.addEventListener("DOMContentLoaded", function () {
                             .then(teams => {
                                 const filteredTeams = teams.filter(team => {
                                     const lowerCaseTeamName = team.name.toLowerCase();
-                                    const isPrivateMatches = teamIsPrivate === "all" || (team.private && teamIsPrivate === "private") || (!team.private && teamIsPrivate === "public");
+                                    const isPrivateMatches = teamIsPrivate === "all" || (team.isPrivate && teamIsPrivate === "private") || (!team.isPrivate && teamIsPrivate === "public");
                                     const locationMatches = team.formattedAddress.includes(userAddress);
-                                    const nameMatches = lowerCaseTeamName.includes(teamName) || locationMatches || teamName === "";
-                                    return nameMatches && isPrivateMatches;
+                                    const nameMatches = lowerCaseTeamName.includes(teamName);
+                                    return (nameMatches || locationMatches) && isPrivateMatches;
                                 });
 
                                 console.log("Filtered Teams: ", filteredTeams);
