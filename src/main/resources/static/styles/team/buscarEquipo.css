@@ -38,6 +38,7 @@ header h1 {
 nav ul {
     list-style: none;
     padding: 0;
+    text-align: center; /* Center align the navigation items */
 }
 
 nav ul li {
@@ -50,7 +51,7 @@ nav ul li a {
     text-decoration: none;
 }
 
-/*  STYLES FOR EACH RESULT  */
+/* Styles for each result */
 
 h2 {
     text-align: center;
@@ -66,7 +67,6 @@ h2 {
     margin-right: 30px;
 }
 
-
 /* Team name style */
 #lista-equipos li h3 {
     margin: 0;
@@ -81,7 +81,7 @@ h2 {
     color: #666;
 }
 
-/* STYLES FOR FORM */
+/* Styles for the form */
 
 .search-team-box {
     width: 80%;
@@ -138,4 +138,62 @@ h2 {
     background: #342160;
 }
 
+/* Results column styles */
+.results-column {
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 10px;
+}
 
+/* Clearfix for floats */
+#results::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Style for the map */
+#map {
+    height: 400px;
+    width: 100%;
+    background-color: #e0e0e0;
+}
+
+/* Success and error messages */
+.message {
+    display: none;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 5px;
+    width: 80%;
+    text-align: center;
+    font-size: 16px;
+}
+
+.message.success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.message.error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+/* Style for the back button */
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #3d1f7f;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.back-button i {
+    margin-right: 5px;
+}
+
+.back-button:hover {
+    text-decoration: underline;
+}
