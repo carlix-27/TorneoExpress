@@ -77,8 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function renderTeams(teams) {
-        teamList.innerHTML = ""; // Clear previous results
-        clearMarkers(); // Clear previous markers
+        teamList.innerHTML = "";
+        clearMarkers();
 
         teams.forEach(function (team) {
             const listItem = document.createElement("li");
