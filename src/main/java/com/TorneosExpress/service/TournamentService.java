@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,27 +49,79 @@ public class TournamentService {
     }
 
     public List<Match> getTournamentFixture(Long tournamentId, Type type) {
-
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> fixtureMatches;
-
         if (tournament.getMatches() == null || tournament.getMatches().isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
             teamRepository.saveAll(teams);
-
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
-
             fixtureMatches = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                 .build(teams, type);
-
             tournament.setMatches(fixtureMatches);
             tournamentRepository.save(tournament);
         } else {
             fixtureMatches = tournament.getMatches();
         }
-
         return fixtureMatches;
     }
+
+    public List<Match> getTournamentFixtureKnockoutQuarterFinals(Long tournamentId, Type type) {
+        Tournament tournament = getTournamentById(tournamentId);
+        List<Match> matchesWinner;
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Altero el original, para adecuarlo a los proximos partidos.
+        List<Match> emptyMatches = List.of();
+
+        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT) {
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+            return matchesWinner;
+        } else{
+            return emptyMatches;
+        }
+
+    }
+
+    public List<Match> getTournamentFixtureKnockoutSemifinals(Long tournamentId, Type type) {
+        Tournament tournament = getTournamentById(tournamentId);
+        List<Match> matchesWinner;
+        List<Match> emptyMatches = List.of();
+
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Semis. Tiene que haber 4 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 4) {
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+            return matchesWinner;
+        } else{
+            return emptyMatches; // No muestro nada hasta que haya resultados de lo anterior.
+        }
+    }
+
+
+    public List<Match> getTournamentFixtureKnockoutFinals(Long tournamentId, Type type) {
+        Tournament tournament = getTournamentById(tournamentId);
+        List<Match> matchesWinner;
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Altero el original, para adecuarlo a los proximos partidos.
+        List<Match> emptyMatches = List.of();
+        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT) {
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+            return matchesWinner;
+        } else{
+            return emptyMatches; // No muestro nada hasta que haya resultados de lo anterior.
+        }
+    }
+
+
+    private List<Team> getWinnersFromMatches(List<Match> matches) {
+        List<Team> winners = new ArrayList<>();
+        for (Match match : matches) {
+            Optional<Team> winner = teamRepository.findById(match.getWinner());
+            winner.ifPresent(winners::add);
+        }
+        return winners;
+    }
+
 
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorIdOrParticipatingTeamsUserId(userId);

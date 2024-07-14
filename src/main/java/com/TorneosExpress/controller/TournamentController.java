@@ -77,6 +77,21 @@ public class TournamentController {
         return tournamentService.getTournamentFixture(tournamentId, type);
     }
 
+    @GetMapping("/{tournamentId}/{type}/calendarKnockoutOfQuarterFinals")
+    public List<Match> getTournamentCalendarKnockoutOfQuarterFinals(@PathVariable Long tournamentId, @PathVariable Type type) {
+        return tournamentService.getTournamentFixtureKnockoutQuarterFinals(tournamentId, type);
+    }
+
+    @GetMapping("/{tournamentId}/{type}/calendarKnockoutOfSemifinals")
+    public List<Match> getTournamentCalendarKnockoutOfSemifinals(@PathVariable Long tournamentId, @PathVariable Type type) {
+        return tournamentService.getTournamentFixtureKnockoutSemifinals(tournamentId, type);
+    }
+
+    @GetMapping("/{tournamentId}/{type}/calendarKnockoutOfFinals")
+    public List<Match> getTournamentCalendarKnockoutOfFinals(@PathVariable Long tournamentId, @PathVariable Type type) {
+        return tournamentService.getTournamentFixtureKnockoutFinals(tournamentId, type);
+    }
+
 
     @GetMapping("/matches/{matchId}")
     public Match getMatch(@PathVariable Long matchId) {
