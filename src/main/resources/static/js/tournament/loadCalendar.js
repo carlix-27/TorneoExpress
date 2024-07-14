@@ -82,7 +82,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                         <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number">${team1Score}</span> 
+                                                         <span class="tournament-bracket__number">${match.firstTeamScore}</span> 
                                                     </td>
                                                 </tr>
                                                 
@@ -92,7 +92,7 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
                                                         <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                                        <span class="tournament-bracket__number">${match.secondTeamScore}</span>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -565,20 +565,6 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                     groupedMatches[groupCounter].matches.push(match);
                 });
 
-
-                let team1Score = match.firstTeamScore;
-
-                if (team1Score === null) {
-                    team1Score = "-"
-                }
-
-                let team2Score = match.secondTeamScore;
-
-                if (team2Score === null) {
-                    team2Score = "-"
-                }
-
-
                 // Iterar sobre cada grupo y mostrar los partidos
                 Object.values(groupedMatches).forEach(group => {
                     // Crear elemento HTML para el grupo
@@ -611,7 +597,7 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                                                         <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number">${team1Score}</span> 
+                                                         <span class="tournament-bracket__number">${match.firstTeamScore}</span> 
                                                     </td>
                                                 </tr>
                                                 
@@ -621,7 +607,7 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                                                         <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                                        <span class="tournament-bracket__number">${match.secondTeamScore}</span>
                                                     </td>
                                                 </tr>
                                             </tbody>
