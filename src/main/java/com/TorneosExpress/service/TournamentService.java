@@ -207,18 +207,24 @@ public class TournamentService {
         return optionalMatch.orElseThrow();
     }
 
+    public Team findTeamById(long id) {
+        return teamRepository.findById(id);
+    }
+
     public TournamentTeam addPointsToTeam(Long tournamentId, Long teamId) {
 
-        TournamentTeam team = tournamentTeamRepository.findByTeam_idAndTournament_Id(teamId, tournamentId);
         Tournament tournament = getTournamentById(tournamentId);
+        Team team = findTeamById(teamId);
+
+        TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament);
 
         Type tournamentType = tournament.getType();
 
         if (tournamentType != Type.KNOCKOUT){
-            team.addPoints(3);
+            tournamentTeam.addPoints(3);
         }
 
-        return tournamentTeamRepository.save(team);
+        return tournamentTeamRepository.save(tournamentTeam);
     }
 
 }
