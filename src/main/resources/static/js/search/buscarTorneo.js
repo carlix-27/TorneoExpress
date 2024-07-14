@@ -122,17 +122,13 @@ function filterTournaments(event) {
         .then(tournaments => {
             // Filter tournaments based on user input
             const filteredTournaments = tournaments.filter(function (tournament) {
-                // Convert filter values to lower case for case-insensitive matching
                 const lowerCaseTournamentName = tournament.name.toLowerCase();
                 const lowerCaseTournamentSport = tournament.sport.sportName.toLowerCase();
 
-                // Check if the tournament name contains the search query
                 const nameMatches = lowerCaseTournamentName.includes(tournamentName.toLowerCase()) || tournamentName === "";
 
-                // Check if the tournament type matches the selected type
                 const typeMatches = tournamentType === "all" || (tournament.private && tournamentType === "private") || (!tournament.private && tournamentType === "public");
 
-                // Check if the tournament sport name contains the search query
                 const sportMatches = lowerCaseTournamentSport.includes(tournamentSport.toLowerCase()) || tournamentSport === "";
 
                 return nameMatches && typeMatches && sportMatches;

@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     const lowerCaseTeamName = team.name.toLowerCase();
                                     const isPrivateMatches = teamIsPrivate === "all" || (team.isPrivate && teamIsPrivate === "private") || (!team.isPrivate && teamIsPrivate === "public");
                                     const locationMatches = team.formattedAddress.includes(userAddress);
-                                    const nameMatches = lowerCaseTeamName.includes(teamName);
+                                    const nameMatches = lowerCaseTeamName.includes(teamName.toLowerCase()) || teamName === "";
                                     return (nameMatches || locationMatches) && isPrivateMatches;
                                 });
 
