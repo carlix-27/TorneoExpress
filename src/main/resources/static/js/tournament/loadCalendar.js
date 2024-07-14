@@ -153,10 +153,7 @@ function fetchKnockoutFixture(participatingTeams, id, matches, tournamentName, t
             matches.forEach(match => {
                 const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
                 const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
-
-
-                let team2Score = match.secondTeamScore;
-
+                
                 const winner = checkWinner(team1Score, team2Score);
 
                 if (winner !== null) {
