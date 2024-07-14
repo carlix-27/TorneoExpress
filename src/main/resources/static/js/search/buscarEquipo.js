@@ -28,29 +28,37 @@ function initializeAutocomplete() {
             console.error('No details available for input: ' + place.name);
         }
     });
+
     initMap();
 }
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8
-    });
+    const mapOptions = {
+        zoom: 6,
+        center: { lat: 40.416775, lng: -3.70379 }, // Centered on Spain by default
+    };
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
 }
 
-function addMarker(location, teamName) {
+function clearMarkers() {
+    markers.forEach(marker => marker.setMap(null));
+    markers = [];
+}
+
+function addMarker(location, title) {
     const marker = new google.maps.Marker({
         position: location,
         map: map,
-        title: teamName
+        title: title,
     });
     markers.push(marker);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("find-team-form");
     const teamList = document.getElementById("lista-equipos");
 
+    // Function to fetch active teams
     function fetchActiveTeams() {
         fetch('/api/teams/allTeams')
             .then(response => {
@@ -60,9 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.json();
             })
             .then(teams => {
-                console.log("Fetched teams:", teams);
                 renderTeams(teams);
-                addTeamMarkers(teams);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -70,24 +76,29 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
+    // Function to render teams
     function renderTeams(teams) {
-        teamList.innerHTML = "";
+        teamList.innerHTML = ""; // Clear previous results
+        clearMarkers(); // Clear previous markers
+
         teams.forEach(function (team) {
             const listItem = document.createElement("li");
-            listItem.textContent = team.name + " - " + team.location;
+            listItem.innerHTML = `<h3>${team.name}</h3><p>${team.location}</p>`;
             teamList.appendChild(listItem);
+
+            const [lat, lng] = team.location.split(',').map(Number);
+            addMarker({ lat: lat, lng: lng }, team.name);
         });
     }
 
     function filterTeams(event) {
-        event.preventDefault();
+        event.preventDefault(); // Prevent form submission
 
         const teamName = form.querySelector("#team-name").value.trim().toLowerCase();
-        const teamLocation = form.querySelector("#location").value.trim().toLowerCase();
         const teamIsPrivate = form.querySelector("#team-isPrivate").value;
-        const latitude = parseFloat(form.querySelector("#location").dataset.latitude);
-        const longitude = parseFloat(form.querySelector("#location").dataset.longitude);
-        const radius = 10; // radius in kilometers for proximity search
+
+        const userLat = parseFloat(form.querySelector("#location").dataset.latitude);
+        const userLng = parseFloat(form.querySelector("#location").dataset.longitude);
 
         fetch("/api/teams/allTeams")
             .then(response => {
@@ -98,20 +109,18 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(teams => {
                 const filteredTeams = teams.filter(function (team) {
+                    const [lat, lng] = team.location.split(',').map(Number);
+
+                    const distance = calculateDistance(userLat, userLng, lat, lng);
+
                     const lowerCaseTeamName = team.name.toLowerCase();
-                    const lowerCaseTeamLocation = team.location.toLowerCase();
                     const nameMatches = lowerCaseTeamName.includes(teamName) || teamName === "";
-                    const locationMatches = lowerCaseTeamLocation.includes(teamLocation) || teamLocation === "";
                     const isPrivateMatches = teamIsPrivate === "all" || (team.private && teamIsPrivate === "private") || (!team.private && teamIsPrivate === "public");
 
-                    const distance = calculateDistance(latitude, longitude, team.latitude, team.longitude);
-                    const isWithinRadius = distance <= radius;
-
-                    return nameMatches && locationMatches && isPrivateMatches && isWithinRadius;
+                    return nameMatches && isPrivateMatches && (distance <= 50 || team.location.toLowerCase().includes(teamName)); // Adjusted proximity filtering
                 });
 
                 renderTeams(filteredTeams);
-                addTeamMarkers(filteredTeams);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -119,35 +128,21 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    function addTeamMarkers(teams) {
-        clearMarkers();
-        teams.forEach(team => {
-            if (team.latitude && team.longitude) {
-                const location = { lat: team.latitude, lng: team.longitude };
-                addMarker(location, team.name);
-            }
-        });
-    }
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+        const toRad = value => value * Math.PI / 180;
 
-    function clearMarkers() {
-        markers.forEach(marker => marker.setMap(null));
-        markers = [];
-    }
-
-    function calculateDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // Radius of the Earth in km
-        const dLat = toRadians(lat2 - lat1);
-        const dLon = toRadians(lon2 - lon1);
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const dLat = toRad(lat2 - lat1);
+        const dLng = toRad(lng2 - lng1);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
     }
 
-    function toRadians(degrees) {
-        return degrees * (Math.PI / 180);
-    }
-
     form.addEventListener("submit", filterTeams);
+
     fetchActiveTeams();
 });
 
@@ -161,9 +156,7 @@ function displaySuccessMessage(message) {
 }
 
 function displayErrorMessage(message) {
-    const errorMessage
-
-        = document.getElementById("errorMessage");
+    const errorMessage = document.getElementById("errorMessage");
     errorMessage.textContent = message;
     errorMessage.style.display = "block";
     setTimeout(() => {

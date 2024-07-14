@@ -38,7 +38,6 @@ header h1 {
 nav ul {
     list-style: none;
     padding: 0;
-    text-align: center; /* Center align the navigation items */
 }
 
 nav ul li {
@@ -51,7 +50,7 @@ nav ul li a {
     text-decoration: none;
 }
 
-/* Styles for each result */
+/*  STYLES FOR EACH RESULT  */
 
 h2 {
     text-align: center;
@@ -64,7 +63,6 @@ h2 {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    margin-right: 30px;
 }
 
 /* Team name style */
@@ -81,7 +79,7 @@ h2 {
     color: #666;
 }
 
-/* Styles for the form */
+/* STYLES FOR FORM */
 
 .search-team-box {
     width: 80%;
@@ -138,62 +136,20 @@ h2 {
     background: #342160;
 }
 
-/* Results column styles */
+/* Flexbox container for results and map */
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+}
+
 .results-column {
-    float: left;
-    width: 50%;
+    width: 45%; /* Adjust width as needed */
     box-sizing: border-box;
     padding: 10px;
 }
 
-/* Clearfix for floats */
-#results::after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Style for the map */
 #map {
-    height: 400px;
     width: 100%;
-    background-color: #e0e0e0;
-}
-
-/* Success and error messages */
-.message {
-    display: none;
-    margin: 20px auto;
-    padding: 15px;
-    border-radius: 5px;
-    width: 80%;
-    text-align: center;
-    font-size: 16px;
-}
-
-.message.success {
-    background-color: #dff0d8;
-    color: #3c763d;
-}
-
-.message.error {
-    background-color: #f2dede;
-    color: #a94442;
-}
-
-/* Style for the back button */
-.back-button {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #3d1f7f;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.back-button i {
-    margin-right: 5px;
-}
-
-.back-button:hover {
-    text-decoration: underline;
+    height: 400px; /* Adjust height as needed */
+    border-radius: 10px;
 }

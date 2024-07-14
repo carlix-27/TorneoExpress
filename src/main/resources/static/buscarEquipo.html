@@ -33,7 +33,7 @@
         <div class="form-group">
             <i class="fas fa-map-marker-alt"></i>
             <label for="location">Ubicación:</label>
-            <input type="text" id="location" name="location" required>
+            <input type="text" id="location" name="location">
         </div>
 
         <div class="form-group">
@@ -51,12 +51,16 @@
     </form>
 </div>
 
-<section id="results">
-    <div id="team-list" class="results-column">
+<section id="results" class="flex-container">
+    <div class="results-column">
+        <h2>Resultados:</h2>
         <ul id="lista-equipos">
         </ul>
     </div>
-    <div id="map" class="results-column" style="height: 400px; width: 100%;"></div>
+    <div class="results-column">
+        <h2>Mapa:</h2>
+        <div id="map"></div>
+    </div>
 </section>
 
 <div id="successMessage" class="message success"></div>
