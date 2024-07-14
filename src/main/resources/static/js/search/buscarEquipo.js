@@ -76,18 +76,31 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // Function to render teams
     function renderTeams(teams) {
         teamList.innerHTML = ""; // Clear previous results
         clearMarkers(); // Clear previous markers
 
         teams.forEach(function (team) {
             const listItem = document.createElement("li");
-            listItem.innerHTML = `<h3>${team.name}</h3><p>${team.location}</p>`;
-            teamList.appendChild(listItem);
 
+            const geocoder = new google.maps.Geocoder();
             const [lat, lng] = team.location.split(',').map(Number);
-            addMarker({ lat: lat, lng: lng }, team.name);
+            const latLng = { lat: lat, lng: lng };
+
+            geocoder.geocode({ location: latLng }, function(results, status) {
+                if (status === "OK") {
+                    if (results[0]) {
+                        listItem.innerHTML = `<h3>${team.name}</h3><p>${results[0].formatted_address}</p>`;
+                    } else {
+                        listItem.innerHTML = `<h3>${team.name}</h3><p>Location not found</p>`;
+                    }
+                } else {
+                    listItem.innerHTML = `<h3>${team.name}</h3><p>Geocoder failed due to: ${status}</p>`;
+                }
+                teamList.appendChild(listItem);
+            });
+
+            addMarker(latLng, team.name);
         });
     }
 
@@ -96,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const teamName = form.querySelector("#team-name").value.trim().toLowerCase();
         const teamIsPrivate = form.querySelector("#team-isPrivate").value;
-
         const userLat = parseFloat(form.querySelector("#location").dataset.latitude);
         const userLng = parseFloat(form.querySelector("#location").dataset.longitude);
 
@@ -108,17 +120,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.json();
             })
             .then(teams => {
-                const filteredTeams = teams.filter(function (team) {
+                const filteredTeams = teams.filter(team => {
                     const [lat, lng] = team.location.split(',').map(Number);
-
                     const distance = calculateDistance(userLat, userLng, lat, lng);
-
                     const lowerCaseTeamName = team.name.toLowerCase();
-                    const nameMatches = lowerCaseTeamName.includes(teamName) || teamName === "";
-                    const isPrivateMatches = teamIsPrivate === "all" || (team.private && teamIsPrivate === "private") || (!team.private && teamIsPrivate === "public");
 
-                    return nameMatches && isPrivateMatches && (distance <= 50 || team.location.toLowerCase().includes(teamName)); // Adjusted proximity filtering
+                    const nameIncludesLocation = team.location.toLowerCase().includes(teamName)
+
+                    const nameMatches = lowerCaseTeamName.includes(teamName) || teamName === "";
+
+                    const isPrivateMatches = teamIsPrivate === "all" || (team.private && teamIsPrivate === "private") || (!team.private && teamIsPrivate === "public");
+                    const locationMatches = distance <= 50 || nameIncludesLocation;
+
+                    return nameMatches && isPrivateMatches && locationMatches;
                 });
+
+                console.log("Filtered Teams: ", filteredTeams);
 
                 renderTeams(filteredTeams);
             })
@@ -130,7 +147,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function calculateDistance(lat1, lng1, lat2, lng2) {
         const toRad = value => value * Math.PI / 180;
-
         const R = 6371; // Radius of the Earth in km
         const dLat = toRad(lat2 - lat1);
         const dLng = toRad(lng2 - lng1);
