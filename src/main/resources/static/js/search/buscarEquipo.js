@@ -85,12 +85,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const geocoder = new google.maps.Geocoder();
             const [lat, lng] = team.location.split(',').map(Number);
-            const latLng = { lat: lat, lng: lng };
+            const latLng = {lat: lat, lng: lng};
 
-            geocoder.geocode({ location: latLng }, function(results, status) {
+            geocoder.geocode({location: latLng}, function (results, status) {
                 if (status === "OK") {
                     if (results[0]) {
-                        listItem.innerHTML = `<h3>${team.name}</h3><p>${results[0].formatted_address}</p>`;
+                        let formattedAddress = results[0].formatted_address.split(', ').slice(1).join(', ');
+                        listItem.innerHTML = `<a href="loadTeam.html?id=${team.id}"><h3>${team.name}</h3></a><p>${formattedAddress}</p>`;
                     } else {
                         listItem.innerHTML = `<h3>${team.name}</h3><p>Location not found</p>`;
                     }
@@ -103,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
             addMarker(latLng, team.name);
         });
     }
+
 
     function filterTeams(event) {
         event.preventDefault(); // Prevent form submission
@@ -124,19 +126,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     const [lat, lng] = team.location.split(',').map(Number);
                     const distance = calculateDistance(userLat, userLng, lat, lng);
                     const lowerCaseTeamName = team.name.toLowerCase();
-
-                    const nameIncludesLocation = team.location.toLowerCase().includes(teamName)
-
-                    const nameMatches = lowerCaseTeamName.includes(teamName) || teamName === "";
-
+                    const nameIncludesLocation = team.location.toLowerCase().includes(teamName);
+                    const nameMatches = lowerCaseTeamName.includes(teamName);
                     const isPrivateMatches = teamIsPrivate === "all" || (team.private && teamIsPrivate === "private") || (!team.private && teamIsPrivate === "public");
                     const locationMatches = distance <= 50 || nameIncludesLocation;
-
                     return nameMatches && isPrivateMatches && locationMatches;
                 });
 
                 console.log("Filtered Teams: ", filteredTeams);
-
                 renderTeams(filteredTeams);
             })
             .catch(error => {
@@ -149,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const toRad = value => value * Math.PI / 180;
         const R = 6371; // Radius of the Earth in km
         const dLat = toRad(lat2 - lat1);
-        const dLng = toRad(lng2 - lng1);
+        const dLng = toRad(lat2 - lng1);
         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
             Math.sin(dLng / 2) * Math.sin(dLng / 2);
