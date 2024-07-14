@@ -4,10 +4,7 @@ import com.TorneosExpress.dto.tournament.SaveMatchStatsDto;
 import com.TorneosExpress.dto.tournament.UpdateMatchDto;
 import com.TorneosExpress.dto.tournament.CreateTournamentDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
-import com.TorneosExpress.model.Match;
-import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
-import com.TorneosExpress.model.Type;
+import com.TorneosExpress.model.*;
 import com.TorneosExpress.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -96,8 +93,6 @@ public class TournamentController {
     }
 
 
-
-    //cambie el getMatchCalendar a esto a un simple getMatch, ya que es exactamente lo mismo y se puede usar en todos lados
     @GetMapping("/matches/{matchId}")
     public Match getMatch(@PathVariable Long matchId) {
         return tournamentService.getMatchById(matchId);
@@ -139,5 +134,11 @@ public class TournamentController {
     public List<Match> getAllMatches(@PathVariable Long tournamentId) {
         return tournamentService.getAllMatches(tournamentId);
     }
+
+    @GetMapping("/{tournamentId}/addPoints/{teamId}")
+    public TournamentTeam addPoints(@PathVariable Long tournamentId, @PathVariable Long teamId) {
+        return tournamentService.addPointsToTeam(tournamentId, teamId);
+    }
+
 
 }

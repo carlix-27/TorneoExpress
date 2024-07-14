@@ -30,7 +30,6 @@ public class Match {
   @JoinColumn(name = "team2_id", nullable = false)
   private Team team2;
 
-
   @Column
   private String matchLocation;
 

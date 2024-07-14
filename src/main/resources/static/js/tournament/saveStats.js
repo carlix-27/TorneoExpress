@@ -6,26 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const formularioEstadisticas = document.getElementById('formularioEstadisticas');
     formularioEstadisticas.addEventListener('submit', saveStats);
 
-    loadUnplayedMatches(tournamentId);
     loadActiveMatches(tournamentId);
 });
 
-function loadUnplayedMatches(tournamentId) {
-    fetch(`/api/tournaments/${tournamentId}/matches`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(matches => {
-            const unplayedMatches = matches.filter(match => !match.played);
-            populateMatchSelector(unplayedMatches);
-        })
-        .catch(error => {
-            console.error('Error fetching matches:', error);
-        });
-}
 
 function loadActiveMatches(tournamentId) {
     fetch(`/api/tournaments/${tournamentId}/matches`)
@@ -38,6 +21,7 @@ function loadActiveMatches(tournamentId) {
         .then(matches => {
             const now = new Date();
             const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played);
+            populateMatchSelector(activeMatches);
             populateActiveMatches(activeMatches);
         })
         .catch(error => {
@@ -111,9 +95,9 @@ function saveStats(event) {
 
     let winnerId = null;
     if (ganador === "Empate") {
-        winnerId = 0; // Si es empate, asignar 0 como Long para el ganador
+        winnerId = 0;
     } else {
-        winnerId = parseInt(ganador); // Si es un equipo, asignar el ID del equipo como Long
+        winnerId = parseInt(ganador);
     }
 
     const data = {
@@ -134,10 +118,38 @@ function saveStats(event) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
 
-                // Refrescar la página después de un segundo
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                fetch(`/api/tournaments/matches/${matchId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch match details');
+                        }
+                        return response.json();
+                    })
+                    .then(matchDetails => {
+
+                        console.log("MatchDetails", matchDetails);
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const tournamentId = urlParams.get('id');
+
+                        const teamId = (winnerId === 0) ? null : winnerId;
+
+                        console.log("TournamentId: " + tournamentId);
+                        console.log("TeamId: " + teamId);
+
+                        fetch(`/api/tournaments/${tournamentId}/addPoints/${teamId}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Failed to update team points');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error updating team points:', error);
+                            });
+
+                    })
+                    .catch(error => {
+                        console.error('Error fetching match details:', error);
+                    });
             } else {
                 displayErrorMessage("Hubo un problema al agregar las estadísticas");
             }
@@ -146,6 +158,7 @@ function saveStats(event) {
             displayErrorMessage("Error al guardar las estadísticas");
         });
 }
+
 
 
 function isValidScore(score) {

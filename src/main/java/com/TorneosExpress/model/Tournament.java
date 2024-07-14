@@ -48,11 +48,9 @@ public class Tournament {
   private Long Id;
 
   @Column
-  @Setter
   private Long creatorId;
 
   @Column(unique = true)
-  @Setter
   private String name;
 
   @Column
@@ -60,32 +58,25 @@ public class Tournament {
   private String location;
 
   @Column
-  @Setter
   private LocalDate startDate;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @Setter
   @JoinColumn(name = "sport_id", referencedColumnName = "sport_Id")
   private Sport sport;
 
   @Column
-  @Setter
   private boolean isPrivate;
 
   @Column
-  @Setter
   private Difficulty difficulty;
 
-  @Setter
   @Column
   private boolean isActive;
 
-  @Setter
   @Column
   private int maxTeams;
 
   @ManyToMany
-  @Setter
   @JoinTable(
           name = "tournament_teams",
           joinColumns = @JoinColumn(name = "tournament_id"),
@@ -96,7 +87,6 @@ public class Tournament {
 
 
   @OneToMany
-  @Setter
   private List<Match> matches = new ArrayList<>();
 
 
