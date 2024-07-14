@@ -21,7 +21,7 @@ function loadActiveMatches(tournamentId) {
         .then(matches => {
             console.log("Matches: ", matches);
             const now = new Date();
-            const activeMatches = matches.filter(match => new Date(match.date) > now && !match.played); // Las fechas de los partidos, deben ser despues del dia de hoy. No pueden ser antes
+            const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played);
             populateMatchSelector(activeMatches);
             populateActiveMatches(activeMatches);
         })
