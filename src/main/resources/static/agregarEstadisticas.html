@@ -20,8 +20,7 @@
 <div class="container">
     <div id="partidosActivos" class="section">
         <h2>Partidos Activos</h2>
-        <ul id="matchResult">
-        </ul>
+        <ul id="matchResult"></ul>
     </div>
 
     <div id="agregarEstadisticas" class="section">
@@ -40,6 +39,25 @@
 
         <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
         <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+    </div>
+
+    <div id="beneficiosUsados" class="section">
+        <h2>Beneficios Usados</h2>
+        <form id="formularioBeneficios">
+            <div id="beneficiosEquipo1" class="beneficios-group">
+                <label>Beneficios usados del Equipo 1</label>
+                <select name="beneficioEquipo1" class="beneficioSelector" required>
+                    <option value="">Seleccione un beneficio</option>
+                </select>
+            </div>
+            <div id="beneficiosEquipo2" class="beneficios-group">
+                <label>Beneficios usados del Equipo 2</label>
+                <select name="beneficioEquipo2" class="beneficioSelector" required>
+                    <option value="">Seleccione un beneficio</option>
+                </select>
+            </div>
+            <button type="submit">Guardar Beneficios</button>
+        </form>
     </div>
 </div>
 

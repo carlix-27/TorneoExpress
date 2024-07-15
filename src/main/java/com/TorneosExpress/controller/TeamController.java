@@ -1,6 +1,7 @@
 package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.team.UpdateTeamDto;
 import com.TorneosExpress.dto.team.CreateTeamDto;
+import com.TorneosExpress.model.Article;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
@@ -118,4 +119,8 @@ public class TeamController {
     return teamService.updateTeam(teamId, updatedTeam);
   }
 
+  @GetMapping("/articles/{teamId}")
+  public List<Article> getArticlesByTeamId(@PathVariable Long teamId) {
+    return teamService.getArticlesOfTeam(teamId);
+  }
 }

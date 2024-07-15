@@ -1,6 +1,7 @@
 package com.TorneosExpress.service;
 
 import com.TorneosExpress.dto.team.UpdateTeamDto;
+import com.TorneosExpress.model.Article;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
@@ -131,6 +132,11 @@ public class TeamService {
     team.setPrivate(isPrivate);
 
     return teamRepository.save(team);
+  }
+
+  public List<Article> getArticlesOfTeam(Long teamId) {
+    Team team = findById(teamId);
+    return team.getArticles();
   }
 
 }

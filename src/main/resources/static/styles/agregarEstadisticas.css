@@ -1,19 +1,4 @@
-nav ul li:last-child {
-    margin-right: 0;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #333333;
-}
-
+/* General styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -46,14 +31,21 @@ nav ul li {
 nav ul li a {
     color: #fff;
     text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-/* Estilos para la nueva estructura */
+nav ul li a:hover {
+    background-color: #333;
+}
+
+/* Container and section styles */
 .container {
     display: flex;
-    justify-content: space-between;
-    margin: 20px;
+    flex-direction: column;
     gap: 20px;
+    margin: 20px;
 }
 
 .section {
@@ -61,7 +53,6 @@ nav ul li a {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    flex: 1;
 }
 
 .section h2 {
@@ -80,19 +71,19 @@ nav ul li a {
     border-bottom: 1px solid #ddd;
 }
 
-#formularioEstadisticas {
+#formularioEstadisticas, #formularioBeneficios {
     display: flex;
     flex-direction: column;
 }
 
-#formularioEstadisticas input {
+#formularioEstadisticas input, #formularioEstadisticas select, #formularioBeneficios select {
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
 }
 
-#formularioEstadisticas button {
+#formularioEstadisticas button, #formularioBeneficios button {
     padding: 10px;
     border: none;
     background-color: #333;
@@ -102,16 +93,11 @@ nav ul li a {
     transition: background-color 0.3s ease;
 }
 
-#formularioEstadisticas button:hover {
+#formularioEstadisticas button:hover, #formularioBeneficios button:hover {
     background-color: #555;
 }
 
-#error-message,
-#success-message {
-    color: red;
+#successMessage, #errorMessage {
     display: none;
-}
-
-.success {
-    color: green;
+    margin-top: 10px;
 }

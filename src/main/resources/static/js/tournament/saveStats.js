@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadActiveMatches(tournamentId);
 });
 
-
 function loadActiveMatches(tournamentId) {
     fetch(`/api/tournaments/${tournamentId}/matches`)
         .then(response => {
@@ -64,6 +63,10 @@ function populateMatchSelector(matches) {
             empateOption.value = '0';
             empateOption.textContent = 'Empate';
             ganadorSelector.appendChild(empateOption);
+
+            // Cargar beneficios para ambos equipos
+            loadBenefits(selectedMatch.team1.id, 'beneficiosEquipo1');
+            loadBenefits(selectedMatch.team2.id, 'beneficiosEquipo2');
         }
     });
 }
@@ -79,6 +82,44 @@ function populateActiveMatches(matches) {
     });
 }
 
+
+function loadBenefits(teamId, elementId) {
+    fetch(`/api/articles/${teamId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(articles => {
+            const container = document.getElementById(elementId);
+            container.innerHTML = ''; // Limpiar antes de agregar nuevos elementos
+
+            articles.forEach(article => {
+                const select = document.createElement('select');
+                select.className = 'beneficioSelector';
+                select.name = `beneficio${teamId}`;
+                select.innerHTML = `<option value="">Seleccione un beneficio</option>`;
+
+                const option = document.createElement('option');
+                option.value = article.id;
+                option.textContent = article.name;
+                select.appendChild(option);
+
+                container.appendChild(select);
+
+                // Agregar evento para añadir más selectores
+                select.addEventListener('change', () => {
+                    if (select.value !== '') {
+                        loadBenefits(teamId, elementId);
+                    }
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching articles:', error);
+        });
+}
 
 function saveStats(event) {
     event.preventDefault();
@@ -117,6 +158,7 @@ function saveStats(event) {
             if (response.ok) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
+                setTimeout(() => location.reload(), 2000); // Recargar página después de 2 segundos
 
                 fetch(`/api/tournaments/matches/${matchId}`)
                     .then(response => {
@@ -126,11 +168,9 @@ function saveStats(event) {
                         return response.json();
                     })
                     .then(matchDetails => {
-
                         console.log("MatchDetails", matchDetails);
                         const urlParams = new URLSearchParams(window.location.search);
                         const tournamentId = urlParams.get('id');
-
                         const teamId = (winnerId === 0) ? null : winnerId;
 
                         console.log("TournamentId: " + tournamentId);
@@ -158,8 +198,6 @@ function saveStats(event) {
             displayErrorMessage("Error al guardar las estadísticas");
         });
 }
-
-
 
 function isValidScore(score) {
     return !isNaN(parseInt(score)) && isFinite(score) && parseInt(score) >= 0;
