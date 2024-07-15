@@ -155,7 +155,7 @@ function saveStats(event) {
             if (response.ok) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
-                setTimeout(() => location.reload(), 2000); // Recargar página después de 2 segundos
+                setTimeout(() => location.reload()); 
 
                 fetch(`/api/tournaments/matches/${matchId}`)
                     .then(response => {
