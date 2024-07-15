@@ -9,6 +9,17 @@ document.addEventListener('DOMContentLoaded', function() {
     loadActiveMatches(tournamentId);
 });
 
+function populateActiveMatches(matches) {
+    const matchResult = document.getElementById('matchResult');
+    matchResult.innerHTML = ''; // Limpiar la lista antes de agregar elementos nuevos
+
+    matches.forEach(match => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${match.team1.name} vs ${match.team2.name}`;
+        matchResult.appendChild(listItem);
+    });
+}
+
 
 function loadActiveMatches(tournamentId) {
     fetch(`/api/tournaments/${tournamentId}/matches`)
@@ -64,21 +75,48 @@ function populateMatchSelector(matches) {
             empateOption.value = '0';
             empateOption.textContent = 'Empate';
             ganadorSelector.appendChild(empateOption);
+
+            loadBenefits(selectedMatch.team1.id, 'beneficiosEquipo1', selectedMatch.team1.name);
+            loadBenefits(selectedMatch.team2.id, 'beneficiosEquipo2', selectedMatch.team2.name);
         }
     });
 }
 
-function populateActiveMatches(matches) {
-    const matchResult = document.getElementById('matchResult');
-    matchResult.innerHTML = ''; // Limpiar la lista antes de agregar elementos nuevos
+function loadBenefits(teamId, elementId, teamName) {
+    fetch(`/api/articles/${teamId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(articles => {
+            const container = document.getElementById(elementId);
+            container.innerHTML = ''; // Limpiar antes de agregar nuevos elementos
 
-    matches.forEach(match => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${match.team1.name} vs ${match.team2.name}`;
-        matchResult.appendChild(listItem);
-    });
+            // Crear el label con el nombre del equipo dinámico
+            const label = document.createElement('label');
+            label.textContent = `Beneficios usados del ${teamName}`;
+            container.appendChild(label);
+
+            const select = document.createElement('select');
+            select.className = 'beneficioSelector';
+            select.name = `beneficio${teamId}`;
+            select.innerHTML = `<option value="">Seleccione un beneficio</option>`;
+
+            articles.forEach(article => {
+                const option = document.createElement('option');
+                option.value = article.id;
+                option.textContent = article.name;
+                select.appendChild(option);
+            });
+
+            container.appendChild(select);
+        })
+        .catch(error => {
+            console.error('Error fetching articles:', error);
+        });
 }
-
 
 function saveStats(event) {
     event.preventDefault();
@@ -117,6 +155,7 @@ function saveStats(event) {
             if (response.ok) {
                 displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
+                setTimeout(() => location.reload()); 
 
                 fetch(`/api/tournaments/matches/${matchId}`)
                     .then(response => {
@@ -126,11 +165,9 @@ function saveStats(event) {
                         return response.json();
                     })
                     .then(matchDetails => {
-
                         console.log("MatchDetails", matchDetails);
                         const urlParams = new URLSearchParams(window.location.search);
                         const tournamentId = urlParams.get('id');
-
                         const teamId = (winnerId === 0) ? null : winnerId;
 
                         console.log("TournamentId: " + tournamentId);
@@ -158,8 +195,6 @@ function saveStats(event) {
             displayErrorMessage("Error al guardar las estadísticas");
         });
 }
-
-
 
 function isValidScore(score) {
     return !isNaN(parseInt(score)) && isFinite(score) && parseInt(score) >= 0;
