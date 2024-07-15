@@ -31,23 +31,31 @@ function loadArticle() {
                         <option value="-1">Seleccione un equipo</option>
                     </select> <br>
                     
-                    <label for="tournaments-for-team"> Torneo: </label>
-                    <select id="tournaments-for-team" name="tournaments-for-team" required>
-                        <option value="-1">Seleccione un torneo</option>
-                    </select>
+                    <p id="prestige-points"></p>
                     
-                    <p>Sus puntos en el torneo: </p>
+                    <div id="purchase-button">
+                        <button id="buy-button">Comprar</button>
+                    </div>
+                    
+                    <div id="successMessage" style="display: none; color: green; margin-top: 10px;">
+                    
+                    </div>
+                    
+                    <div id="errorMessage" style="display: none; color: red; margin-top: 10px;">
+                    
+                    </div>
+                    
                 </div>
             `;
 
-            fetchMyTeams();
+            fetchMyTeams(article);
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-function fetchMyTeams() {
+function fetchMyTeams(article) {
     const userId = localStorage.getItem("userId");
 
     fetch(`/api/teams/user/${userId}`) // Assuming this endpoint returns the list of teams
@@ -58,8 +66,9 @@ function fetchMyTeams() {
             return response.json();
         })
         .then(data => {
-            const { teamsAsCaptain, teamsAsMember } = data;
+            const { teamsAsCaptain } = data;
             const teamDropDown = document.getElementById('my-teams');
+            const points = document.getElementById("prestige-points");
 
             if (teamsAsCaptain.length === 0) {
                 const option = document.createElement('option');
@@ -71,54 +80,75 @@ function fetchMyTeams() {
                     const {
                         id: teamId,
                         name,
+                        prestigePoints,
                     } = team;
 
                     const option = document.createElement('option');
                     option.value = teamId;
                     option.text = name;
                     teamDropDown.appendChild(option);
+
+                    teamDropDown.addEventListener('change', () => {
+                        const selectedTeamId = teamDropDown.value;
+                        const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
+                        points.innerHTML = `Sus puntos de prestigio: ${selectedTeam ? selectedTeam.prestigePoints : 0}`;
+
+                        //const buyButton = document.getElementById('buy-button');
+                        //buyButton.disabled = !(selectedTeam && selectedTeam.prestigePoints >= article.article_price);
+                        const buyButton = document.getElementById("buy-button");
+                        //buyButton.onclick = validateTransaction(article.article_price, selectedTeam.prestigePoints);
+                        buyButton.addEventListener('click', () => {
+                            const selectedTeamId = teamDropDown.value;
+                            const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
+                            points.innerHTML = `Sus puntos de prestigio: ${selectedTeam ? selectedTeam.prestigePoints : 0}`;
+
+                            if (selectedTeam) {
+                                validateTransaction(article.article_price, selectedTeam.prestigePoints);
+                            } else {
+                                displayErrorMessage("Seleccione un equipo válido");
+                            }
+                        });
+                    });
                 });
             }
 
-            // Add event listener to fetch tournaments when a team is selected
-            teamDropDown.addEventListener('change', fetchTournamentsForTeam);
+            // Trigger change event to set initial button state
+            teamDropDown.dispatchEvent(new Event('change'));
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-function fetchTournamentsForTeam() {
-    const teamDropDown = document.getElementById('my-teams');
-    const teamId = teamDropDown.value;
-    const tournamentDropDown = document.getElementById('tournaments-for-team');
-    tournamentDropDown.innerHTML = '<option value="-1">Seleccione un torneo</option>'; // Clear existing options
+function validateTransaction(price, prestigePoints) {
+  if (prestigePoints >= price) {
+    displaySuccessMessage("Artículo comprado con éxito");
+    handleTransaction();
+  } else {
+    displayErrorMessage("No tiene suficientes puntos");
+  }
+}
 
-    if (teamId && teamId !== "-1") {
-        fetch(`/api/tournaments/teams/${teamId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch tournaments: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                data.forEach(tournament => {
-                    const {
-                        id: tournamentId,
-                        name: tournamentName,
-                    } = tournament;
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+    setTimeout(() => {
+        successMessage.style.display = "none";
+    }, 3000);
+}
 
-                    const option = document.createElement('option');
-                    option.value = tournamentId;
-                    option.text = tournamentName;
-                    tournamentDropDown.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+    }, 3000);
+}
+
+function handleTransaction() {
+
 }
 
 document.addEventListener("DOMContentLoaded", loadArticle);
