@@ -1,4 +1,5 @@
 package com.TorneosExpress.controller;
+import com.TorneosExpress.dto.team.UpdateTeamDto;
 import com.TorneosExpress.dto.team.CreateTeamDto;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
@@ -112,6 +113,9 @@ public class TeamController {
     return teamService.removePlayerFromTeam(teamId, userId);
   }
 
-
+  @PutMapping("/{teamId}")
+  public Team updateTeam(@PathVariable Long teamId, @RequestBody UpdateTeamDto updatedTeam) {
+    return teamService.updateTeam(teamId, updatedTeam);
+  }
 
 }
