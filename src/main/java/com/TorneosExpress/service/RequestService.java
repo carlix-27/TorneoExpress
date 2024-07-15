@@ -44,6 +44,10 @@ public class RequestService {
         return inviteRepository.findById(id);
     }
 
+    public List<Invite> invitesTo(Long toId){
+        return inviteRepository.findByInviteTo(toId);
+    }
+
     public Optional<TeamRequest> getTeamRequestById(Long id) {
         return teamRequestRepository.findById(id);
     }

@@ -42,6 +42,12 @@ public class RequestController {
         return requestService.getInvitesById(id);
     }
 
+
+    @GetMapping("/invite/to/{toId}")
+    public List<Invite> getInvitesTo(@PathVariable Long toId) {
+        return requestService.invitesTo(toId);
+    }
+
     @GetMapping("/team/details/{id}")
     public Optional<TeamRequest> getTeamRequestById(@PathVariable Long id) {
         return requestService.getTeamRequestById(id);
@@ -56,6 +62,8 @@ public class RequestController {
     public Optional<Invite> getInvite(@PathVariable Long requestId) {
         return requestService.getInvite(requestId);
     }
+
+
 
 
     @DeleteMapping("/invite/deny/{inviteId}")
