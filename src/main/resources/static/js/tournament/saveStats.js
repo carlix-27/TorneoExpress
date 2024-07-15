@@ -9,6 +9,18 @@ document.addEventListener('DOMContentLoaded', function() {
     loadActiveMatches(tournamentId);
 });
 
+function populateActiveMatches(matches) {
+    const matchResult = document.getElementById('matchResult');
+    matchResult.innerHTML = ''; // Limpiar la lista antes de agregar elementos nuevos
+
+    matches.forEach(match => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${match.team1.name} vs ${match.team2.name}`;
+        matchResult.appendChild(listItem);
+    });
+}
+
+
 function loadActiveMatches(tournamentId) {
     fetch(`/api/tournaments/${tournamentId}/matches`)
         .then(response => {
@@ -64,26 +76,13 @@ function populateMatchSelector(matches) {
             empateOption.textContent = 'Empate';
             ganadorSelector.appendChild(empateOption);
 
-            // Cargar beneficios para ambos equipos
-            loadBenefits(selectedMatch.team1.id, 'beneficiosEquipo1');
-            loadBenefits(selectedMatch.team2.id, 'beneficiosEquipo2');
+            loadBenefits(selectedMatch.team1.id, 'beneficiosEquipo1', selectedMatch.team1.name);
+            loadBenefits(selectedMatch.team2.id, 'beneficiosEquipo2', selectedMatch.team2.name);
         }
     });
 }
 
-function populateActiveMatches(matches) {
-    const matchResult = document.getElementById('matchResult');
-    matchResult.innerHTML = ''; // Limpiar la lista antes de agregar elementos nuevos
-
-    matches.forEach(match => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${match.team1.name} vs ${match.team2.name}`;
-        matchResult.appendChild(listItem);
-    });
-}
-
-
-function loadBenefits(teamId, elementId) {
+function loadBenefits(teamId, elementId, teamName) {
     fetch(`/api/articles/${teamId}`)
         .then(response => {
             if (!response.ok) {
@@ -95,26 +94,24 @@ function loadBenefits(teamId, elementId) {
             const container = document.getElementById(elementId);
             container.innerHTML = ''; // Limpiar antes de agregar nuevos elementos
 
-            articles.forEach(article => {
-                const select = document.createElement('select');
-                select.className = 'beneficioSelector';
-                select.name = `beneficio${teamId}`;
-                select.innerHTML = `<option value="">Seleccione un beneficio</option>`;
+            // Crear el label con el nombre del equipo dinámico
+            const label = document.createElement('label');
+            label.textContent = `Beneficios usados del ${teamName}`;
+            container.appendChild(label);
 
+            const select = document.createElement('select');
+            select.className = 'beneficioSelector';
+            select.name = `beneficio${teamId}`;
+            select.innerHTML = `<option value="">Seleccione un beneficio</option>`;
+
+            articles.forEach(article => {
                 const option = document.createElement('option');
                 option.value = article.id;
                 option.textContent = article.name;
                 select.appendChild(option);
-
-                container.appendChild(select);
-
-                // Agregar evento para añadir más selectores
-                select.addEventListener('change', () => {
-                    if (select.value !== '') {
-                        loadBenefits(teamId, elementId);
-                    }
-                });
             });
+
+            container.appendChild(select);
         })
         .catch(error => {
             console.error('Error fetching articles:', error);

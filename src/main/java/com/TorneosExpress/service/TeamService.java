@@ -134,9 +134,6 @@ public class TeamService {
     return teamRepository.save(team);
   }
 
-  public List<Article> getArticlesOfTeam(Long teamId) {
-    Team team = findById(teamId);
-    return team.getArticles();
-  }
+
 
 }
