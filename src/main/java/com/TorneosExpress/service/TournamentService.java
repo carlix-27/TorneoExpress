@@ -277,22 +277,23 @@ public class TournamentService {
 
     public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
-        endTournamentWithWinner(tournament, tournament.getParticipatingTeams());                                            // Debo setear el winner. Aca el winner es null.
+        // Todo, debe hacerse un chequeo de quienes fueron los winners.
+        endTournamentWithWinner(tournament, tournament.getParticipatingTeams());  // FIXME: Los equipos participantes, no todos van a ganar partidos. Si hay alguno que no gane partidos, se rompe.                                          // Debo setear el winner. Aca el winner es null.
         tournament.setActive(false);
         return tournamentRepository.save(tournament);
     }
 
 
-    private void endTournamentWithWinner(Tournament tournament, List<Team> winnersOfMatches) {
+    private void endTournamentWithWinner(Tournament tournament, List<Team> matchesOfTournament) {
         switch (tournament.getType()){
             case ROUNDROBIN:
-                endTournamentForRoundRobin(tournament, winnersOfMatches); // Aca debo determinar cual es el winner segun los winners de cada partido.
+                endTournamentForRoundRobin(tournament, matchesOfTournament); // Aca debo determinar cual es el winner segun los winners de cada partido.
                 break;
             case KNOCKOUT:
-                endTournamentForKnockout(tournament, winnersOfMatches);
+                endTournamentForKnockout(tournament, matchesOfTournament);
                 break;
             case GROUPSTAGE:
-                endTournamentForGroupStage(tournament, winnersOfMatches);
+                endTournamentForGroupStage(tournament, matchesOfTournament);
                 break;
         }
     }
@@ -301,14 +302,19 @@ public class TournamentService {
 
 
     // TODO
-    private void endTournamentForRoundRobin(Tournament tournament, List<Team> winnersOfMatches){
+    private void endTournamentForRoundRobin(Tournament tournament, List<Team> matchesOfTournament){
         List<Integer> listWithTeamPoints = new ArrayList<>(tournament.getMaxTeams());                               // Guarda los puntos que hizo cada Team. Como maximo la lista no puede exceder el tamano de los teams registrados.
         int maxPoints = -1;
-        for(Team team : winnersOfMatches){
+        for(Team team : matchesOfTournament){
             if(team != null) {
                 TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament); // Fijate aca de buscarlo por id.
-                int teamPoints = tournamentTeam.getTournamentPoints();                                              // No se aun si estos puntos, son los del winner, pero los voy a ir acumulando, en listWithTeamPoints
-                                                                                                                    // TODO: Este tournamentTeam no es el mismo que tiene seteado los points de cada uno.. es raro eso.
+
+                if(tournamentTeam.getTournamentPoints() == null){ // Si algun equipo, no tiene puntos, porque perdio todos los partidos, le asignamos a 0 el puntaje.
+                    tournamentTeam.setTournamentPoints(0);
+                }
+
+                int teamPoints = tournamentTeam.getTournamentPoints(); // No se aun si estos puntos, son los del winner, pero los voy a ir acumulando, en listWithTeamPoints
+
                 listWithTeamPoints.add(teamPoints);
             }
         }
