@@ -277,7 +277,7 @@ public class TournamentService {
 
     public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
-        endTournamentWithWinner(tournament, tournament.getParticipatingTeams()); // Debo setear el winner. Aca el winner es null.
+        endTournamentWithWinner(tournament, tournament.getParticipatingTeams());                                            // Debo setear el winner. Aca el winner es null.
         tournament.setActive(false);
         return tournamentRepository.save(tournament);
     }
@@ -302,24 +302,23 @@ public class TournamentService {
 
     // TODO
     private void endTournamentForRoundRobin(Tournament tournament, List<Team> winnersOfMatches){
-        List<Integer> listWithTeamPoints = new ArrayList<>(tournament.getMaxTeams()); // Guarda los puntos que hizo cada Team. Como maximo la lista no puede exceder el tamano de los teams registrados.
+        List<Integer> listWithTeamPoints = new ArrayList<>(tournament.getMaxTeams());                               // Guarda los puntos que hizo cada Team. Como maximo la lista no puede exceder el tamano de los teams registrados.
         int maxPoints = -1;
         for(Team team : winnersOfMatches){
             if(team != null) {
                 TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament); // Fijate aca de buscarlo por id.
-                int teamPoints = tournamentTeam.getTournamentPoints(); // No se aun si estos puntos, son los del winner, pero los voy a ir acumulando, en listWithTeamPoints
-                // TODO: Este tournamentTeam no es el mismo que tiene seteado los points de cada uno.. es raro eso.
+                int teamPoints = tournamentTeam.getTournamentPoints();                                              // No se aun si estos puntos, son los del winner, pero los voy a ir acumulando, en listWithTeamPoints
+                                                                                                                    // TODO: Este tournamentTeam no es el mismo que tiene seteado los points de cada uno.. es raro eso.
                 listWithTeamPoints.add(teamPoints);
             }
         }
-
         for(int teamPoints: listWithTeamPoints){
             if(teamPoints > maxPoints){
-                maxPoints = teamPoints; // Voy comparando hasta hallar el team con maximos puntos
+                maxPoints = teamPoints;    // Voy comparando hasta hallar el team con maximos puntos
             }
         }
-
-        TournamentTeam tournamentTeamWithMaxPoints = tournamentTeamRepository.findByTournamentPointsAndTournament(maxPoints, tournament); // Busco al team con esa cantidad de puntos y el torneo en el que esta, para evitar problemas de busqueda por repeticion de puntaje.
+        // Busco al team con esa cantidad de puntos y el torneo en el que esta, para evitar problemas de busqueda por repeticion de puntaje.
+        TournamentTeam tournamentTeamWithMaxPoints = tournamentTeamRepository.findByTournamentPointsAndTournament(maxPoints, tournament);
 
         Team teamWinner = tournamentTeamWithMaxPoints.getTeam(); // El que encuentre, es el ganador del torneo.
 
@@ -429,8 +428,6 @@ public class TournamentService {
         if (tournamentType != Type.KNOCKOUT){ // Sino es null, agregar puntaje.
             tournamentTeam.addPoints(3);
         }
-
-
         return tournamentTeamRepository.save(tournamentTeam);
     }
 
