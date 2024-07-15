@@ -93,4 +93,30 @@ public class Tournament {
   @Column
   private Type type;
 
+
+  /*@OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
+  private List<Match> quarterFinalMatches = new ArrayList<>();
+
+  @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
+  private List<Match> semifinalMatches = new ArrayList<>();
+
+  @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
+  private List<Match> finalMatches = new ArrayList<>();
+
+
+  public Match addQuarterFinalMatch(Match match) {
+    this.quarterFinalMatches.add(match);
+    return match;
+  }
+
+  public Match addSemifinalMatch(Match match) {
+    this.semifinalMatches.add(match);
+    return match;
+  }
+
+  public Match addFinalMatch(Match match) {
+    this.finalMatches.add(match);
+    return match;
+  }*/
+
 }

@@ -103,10 +103,12 @@ public class TournamentController {
         return tournamentService.updateMatch(matchId, updateMatchDto);
     }
 
-    @PutMapping("/matches/stats/{matchId}")
+    @PutMapping("/matches/stats/{matchId}") // TODO
     public Match updateMatchStats(@PathVariable Long matchId, @RequestBody SaveMatchStatsDto saveMatchStatsDto) {
         return tournamentService.updateMatchStats(matchId, saveMatchStatsDto);
     }
+
+
     
 
     @PutMapping("/{tournamentId}")
@@ -135,7 +137,7 @@ public class TournamentController {
         return tournamentService.getAllMatches(tournamentId);
     }
 
-    @GetMapping("/{tournamentId}/addPoints/{teamId}")
+    @GetMapping("/{tournamentId}/addPoints/{teamId}") // TODO
     public TournamentTeam addPoints(@PathVariable Long tournamentId, @PathVariable Long teamId) {
         return tournamentService.addPointsToTeam(tournamentId, teamId);
     }

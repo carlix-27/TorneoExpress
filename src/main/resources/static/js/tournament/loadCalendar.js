@@ -207,10 +207,10 @@ function fetchKnockoutFixture(participatingTeams, id, matches, tournamentName, t
         });
 }
 
-function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matchesOfQuarter, tournamentName, tournamentCreatorId, calendarListHTML, type){
+function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
     console.log("ESTOY EN CUARTOS");
     console.log("Equipos que participan: ", participatingTeams);
-    console.log("Partidos: ", matchesOfQuarter);
+
     fetch(`/api/tournaments/${id}/${type}/calendarKnockoutOfQuarterFinals`) // Aca te trae a todos los partidos que almaceno, ese es el drama!
         .then(response =>{
             if (!response.ok) {
@@ -219,14 +219,14 @@ function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matchesOfQ
             return response.json();
         })
 
-        .then(matchesOfQuarter => {
-            console.log("Matches de CUARTOS: ", matchesOfQuarter); // Deberia para estar altura, tener los matches armados con los winners.
+        .then(matches => {
+            console.log("Matches de CUARTOS: ", matches); // Deberia para estar altura, tener los matches armados con los winners.
 
             let winners = [];
 
             let roundCompleted = true;
 
-            matchesOfQuarter.forEach(match => {
+            matches.forEach(match => {
                 const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
                 const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
 

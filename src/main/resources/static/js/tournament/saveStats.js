@@ -106,7 +106,7 @@ function saveStats(event) {
         winner: winnerId
     };
 
-    fetch(`/api/tournaments/matches/stats/${matchId}`, {
+    fetch(`/api/tournaments/matches/stats/${matchId}`, { // Sirve para octavos de final.
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -145,6 +145,9 @@ function saveStats(event) {
                             .catch(error => {
                                 console.error('Error updating team points:', error);
                             });
+
+                        console.log("Tournament Id: ", tournamentId);
+                        console.log("Team Id: ", teamId);
 
                     })
                     .catch(error => {

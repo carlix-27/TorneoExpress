@@ -10,6 +10,7 @@ import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import com.TorneosExpress.repository.TournamentTeamRepository;
+import com.zaxxer.hikari.util.FastList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -89,52 +90,103 @@ public class TournamentService {
         return fixtureMatches;
     }
 
+    // Todo: Voy a resolver la primer vinculacion que hay aca. Luego con el resto. De esa forma encaro el problema a pedazos.
+    // Todo: En lugar de volver a llamar a tournament, no habra una forma de hacerlo mas sencillo en base a el estado que tiene tournament.getMatches()?
     public List<Match> getTournamentFixtureKnockoutQuarterFinals(Long tournamentId, Type type) {
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> matchesWinner;
-        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Altero el original, para adecuarlo a los proximos partidos.
+        // List<Match> matchesOfQuarterFinals = tournament.getQuarterFinalMatches();
         List<Match> emptyMatches = List.of();
 
-        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT) {
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Cuartos. Tiene que haber 8 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
             matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                     .build(teamsWinners, type);
             return matchesWinner;
-        } else{
-            return emptyMatches;
         }
 
+        return emptyMatches;
     }
+
+
+
+    /* if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8 && matchesOfQuarterFinals.size() != 4) { // Si no es 4, no agrego. Por tanto se asume que ya agregue los partidos correspondientes.
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+
+            for(Match match : matchesWinner){
+                matchesOfQuarterFinals.add(tournament.addQuarterFinalMatch(match));
+            }
+        } else{
+            return matchesOfQuarterFinals; // Devuelvo los partidos que corresponden.
+        }
+        return emptyMatches;
+    } */
 
     public List<Match> getTournamentFixtureKnockoutSemifinals(Long tournamentId, Type type) {
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> matchesWinner;
+        // List<Match> matchesOfSemifinals = tournament.getSemifinalMatches();
         List<Match> emptyMatches = List.of();
 
-        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Semis. Tiene que haber 4 ganadores para mostrar, los resultados de semifinal.
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Cuartos. Tiene que haber 8 ganadores para mostrar, los resultados de semifinal.
 
-        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 4) {
+        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
             matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                     .build(teamsWinners, type);
             return matchesWinner;
-        } else{
-            return emptyMatches; // No muestro nada hasta que haya resultados de lo anterior.
         }
+
+        return emptyMatches;
     }
+
+
+
+        /*List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Semis. Tiene que haber 4 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 4 && matchesOfSemifinals.size() != 2) { // Si no es 2, no agrego. Por tanto se asume que ya agregue los partidos correspondientes.
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+
+            for(Match match : matchesWinner){
+                matchesOfSemifinals.add(tournament.addSemifinalMatch(match));
+            }
+        } else{
+            return matchesOfSemifinals; // Devuelvo los partidos que corresponden.
+        }
+        return emptyMatches;*/
 
 
     public List<Match> getTournamentFixtureKnockoutFinals(Long tournamentId, Type type) {
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> matchesWinner;
-        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Altero el original, para adecuarlo a los proximos partidos.
+        // List<Match> matchesOfFinal = tournament.getFinalMatches();
         List<Match> emptyMatches = List.of();
-        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT) {
+
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Semis. Tiene que haber 4 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
             matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                     .build(teamsWinners, type);
             return matchesWinner;
-        } else{
-            return emptyMatches; // No muestro nada hasta que haya resultados de lo anterior.
         }
+
+        return emptyMatches;
+
     }
+
+        /*if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 2 && matchesOfFinal.size() != 1) { // Si no es 1, no agrego. Por tanto se asume que ya agregue los partidos correspondientes.
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+
+            for(Match match : matchesWinner){
+                matchesOfFinal.add(tournament.addFinalMatch(match));
+            }
+        } else{
+            return matchesOfFinal; // Devuelvo los partidos que corresponden.
+        }
+        return emptyMatches;*/
 
 
     private List<Team> getWinnersFromMatches(List<Match> matches) {
@@ -263,21 +315,26 @@ public class TournamentService {
         return matchRepository.save(match);
     }
 
-    public Match updateMatchStats(Long matchId, SaveMatchStatsDto statsDto) {
-
+    public Match updateMatchStats(Long matchId, SaveMatchStatsDto statsDto) { // Todo. Solo funciona para octavos de final.
         Match match = getMatchById(matchId);
 
-        int team1score = statsDto.getTeam1Score();
-        int team2score = statsDto.getTeam2Score();
-        Long winnerId = statsDto.getWinner();
+        if(!match.isPlayed()){
+            int team1score = statsDto.getTeam1Score();
+            int team2score = statsDto.getTeam2Score();
+            Long winnerId = statsDto.getWinner();
 
-        match.setFirstTeamScore(team1score);
-        match.setSecondTeamScore(team2score);
-        match.setWinner(winnerId);
-        match.setPlayed(true);
+            match.setFirstTeamScore(team1score);
+            match.setSecondTeamScore(team2score);
+            match.setWinner(winnerId);
+            match.setPlayed(true);
 
-        return matchRepository.save(match);
+            return matchRepository.save(match);
+        }
+
+        return null;
     }
+
+
 
     public Tournament getTournamentById(Long id) {
         Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
