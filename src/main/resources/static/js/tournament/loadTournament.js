@@ -15,7 +15,7 @@ function loadTournament() {
 
             const tournamentList = document.getElementById("tournament-result");
 
-            console.log(tournament);
+            console.log("Tournament: ", tournament);
 
             console.log("Matches del torneo: ", tournament.matches);
 
@@ -31,12 +31,7 @@ function loadTournament() {
 
             console.log("Tournament Matches: ", tournament.matches);
 
-            let idOfWinner = tournament.matches.winner; // No equivale al winner de todo el torneo. Quiza para asignar puntos puede tenerse en cuenta la cantidad de goles, fijate eso.
-            // Condicionalmente construir el enlace endTournament
-            let endTournamentLink = '';
-            if (idOfWinner !== null) {
-                endTournamentLink = `<a class="action-link" onclick="endTournament(${tournament.id}, ${idOfWinner})">Terminar Torneo</a>`;
-            }
+
 
             tournamentList.innerHTML = `
                 <div id="result">
@@ -51,7 +46,7 @@ function loadTournament() {
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
                     <a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>
-                    ${endTournamentLink}
+                    <a class="action-link" onclick="endTournament(${tournament.id})">Terminar Torneo</a>
                 </div> 
             `;
         })
@@ -63,11 +58,13 @@ function loadTournament() {
 document.addEventListener("DOMContentLoaded", loadTournament);
 
 // TODO: El teamWinner lo determinan las estadisticas.
-function endTournament(tournamentId, teamId){
+function endTournament(tournamentId){
+
+    console.log("Tournament ID: ", tournamentId);
     // Confirmar finalización del torneo
     if (confirm('¿Estás seguro de que deseas terminar el torneo? Esta acción es irreversible.')) {
         // Enviar datos al servidor para finalizar el torneo
-        fetch(`/api/tournaments/${tournamentId}/${teamId}/end`, {
+        fetch(`/api/tournaments/${tournamentId}/end`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

@@ -100,10 +100,13 @@ public class TournamentService {
 
         List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Cuartos. Tiene que haber 8 ganadores para mostrar, los resultados de semifinal.
 
-
         if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
-            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
-                    .build(teamsWinners, type);
+            //matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+            //      .build(teamsWinners, type);
+            matchesWinner = tournament.getMatches();
+            matchesWinner.addAll(new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type));
+
             return matchesWinner;
         }
 
@@ -271,9 +274,70 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-    public Tournament endTournament(Long tournamentId, Long teamId) {
+
+    public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
-        Team teamWinner = teamRepository.findById(teamId).orElse(null);
+        endTournamentWithWinner(tournament, tournament.getParticipatingTeams()); // Debo setear el winner. Aca el winner es null.
+        tournament.setActive(false);
+        return tournamentRepository.save(tournament);
+    }
+
+
+    private void endTournamentWithWinner(Tournament tournament, List<Team> winnersOfMatches) {
+        switch (tournament.getType()){
+            case ROUNDROBIN:
+                endTournamentForRoundRobin(tournament, winnersOfMatches); // Aca debo determinar cual es el winner segun los winners de cada partido.
+                break;
+            case KNOCKOUT:
+                endTournamentForKnockout(tournament, winnersOfMatches);
+                break;
+            case GROUPSTAGE:
+                endTournamentForGroupStage(tournament, winnersOfMatches);
+                break;
+        }
+    }
+
+    // winnersOfMatches equivalen a los winners de cada partido. Se determina el winner de todo el torneo, en base a su cantidad de tournamentPoints.
+
+
+    // TODO
+    private void endTournamentForRoundRobin(Tournament tournament, List<Team> winnersOfMatches){
+        List<Integer> listWithTeamPoints = new ArrayList<>(tournament.getMaxTeams()); // Guarda los puntos que hizo cada Team. Como maximo la lista no puede exceder el tamano de los teams registrados.
+        int maxPoints = -1;
+        for(Team team : winnersOfMatches){
+            if(team != null) {
+                TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament); // Fijate aca de buscarlo por id.
+                int teamPoints = tournamentTeam.getTournamentPoints(); // No se aun si estos puntos, son los del winner, pero los voy a ir acumulando, en listWithTeamPoints
+                // TODO: Este tournamentTeam no es el mismo que tiene seteado los points de cada uno.. es raro eso.
+                listWithTeamPoints.add(teamPoints);
+            }
+        }
+
+        for(int teamPoints: listWithTeamPoints){
+            if(teamPoints > maxPoints){
+                maxPoints = teamPoints; // Voy comparando hasta hallar el team con maximos puntos
+            }
+        }
+
+        TournamentTeam tournamentTeamWithMaxPoints = tournamentTeamRepository.findByTournamentPointsAndTournament(maxPoints, tournament); // Busco al team con esa cantidad de puntos y el torneo en el que esta, para evitar problemas de busqueda por repeticion de puntaje.
+
+        Team teamWinner = tournamentTeamWithMaxPoints.getTeam(); // El que encuentre, es el ganador del torneo.
+
+        setPrestigePointsForTeam(tournamentTeamWithMaxPoints.getTournament(), teamWinner); // Seteo los puntos de prestigio al team que corresponda.
+
+        tournamentTeamWithMaxPoints.getTournament().setWinner(teamWinner); // Seteo el winner del tournament.
+    }
+
+
+    private void endTournamentForKnockout(Tournament tournament, List<Team> teamWinner){
+
+    }
+
+    private void endTournamentForGroupStage(Tournament tournament, List<Team> teamWinner){
+
+    }
+
+    private void setPrestigePointsForTeam(Tournament tournament, Team teamWinner) {
         Difficulty difficulty = tournament.getDifficulty();
         switch (difficulty){
             case BEGINNER:
@@ -293,8 +357,6 @@ public class TournamentService {
                 teamWinner.addPrestigePoints(100);
                 break;
         }
-        tournament.setActive(false);
-        return tournamentRepository.save(tournament);
     }
 
     public Match updateMatch(Long matchId, UpdateMatchDto newMatch) {
@@ -360,11 +422,21 @@ public class TournamentService {
 
         Type tournamentType = tournament.getType();
 
-        if (tournamentType != Type.KNOCKOUT){
+        if(tournamentTeam.getTournamentPoints() == null){
+            tournamentTeam.setTournamentPoints(0); // aseguro que sea 0 si es null.
+        }
+
+        if (tournamentType != Type.KNOCKOUT){ // Sino es null, agregar puntaje.
             tournamentTeam.addPoints(3);
         }
 
         return tournamentTeamRepository.save(tournamentTeam);
     }
+
+    /*private Integer getPointsToTeam(Tournament tournament,  Team team) {
+        TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament);
+        TournamentTeam tournamentTeam1 = tournamentTeamRepository.findByTournamentPointsAndTournament(tournamentTeam.getTournamentPoints(), tournament);
+        return tournamentTeam1.getTournamentPoints();
+    }*/
 
 }

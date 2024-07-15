@@ -41,6 +41,7 @@ public class Tournament {
     this.participatingTeams = new ArrayList<>();
     this.matches = new ArrayList<>();
     this.type = request.getType();
+    this.winner = request.getWinner();
   }
 
   @Id
@@ -88,6 +89,10 @@ public class Tournament {
 
   @OneToMany
   private List<Match> matches = new ArrayList<>();
+
+  @OneToOne
+  @JoinColumn(name = "team_id") // Toma el equipo de Bruno, debe ser null en primer instancia, luego debe setearse.
+  private Team winner;
 
 
   @Column

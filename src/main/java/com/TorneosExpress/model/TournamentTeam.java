@@ -22,13 +22,14 @@ public class TournamentTeam {
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
-    @Column
+    @Column(nullable = false)
     private Integer tournamentPoints = 0;
 
+    public TournamentTeam(){
+        this.tournamentPoints = 0; // Se inicializa siempre en 0, evitamos nulos.
+    }
+
     public void addPoints(Integer points) {
-        if (this.tournamentPoints == null) {
-            this.tournamentPoints = 0;
-        }
         this.tournamentPoints += points;
     }
 

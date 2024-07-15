@@ -31,10 +31,12 @@ public class TournamentController {
         return tournamentService.createTournament(request);
     }
 
-    @PutMapping("{tournamentId}/{teamId}/end")
-    public Tournament endTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
-        return tournamentService.endTournament(tournamentId, teamId);
+    @PutMapping("{tournamentId}/end")
+    public Tournament endTournament(@PathVariable Long tournamentId) {
+        return tournamentService.endTournament(tournamentId);
     }
+
+
 
     @GetMapping("/history")
     public List<Tournament> getTournamentHistory() {

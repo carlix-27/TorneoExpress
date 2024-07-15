@@ -138,6 +138,7 @@ function saveStats(event) {
 
                         fetch(`/api/tournaments/${tournamentId}/addPoints/${teamId}`)
                             .then(response => {
+                                console.log("Response: ", response);
                                 if (!response.ok) {
                                     throw new Error('Failed to update team points');
                                 }
