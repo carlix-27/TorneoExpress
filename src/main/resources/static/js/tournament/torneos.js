@@ -150,6 +150,7 @@ function joinPublicTournament(tournament, teamId) {
             return response.json();
         })
         .then(data => {
+            setTimeout(() => location.reload());
             console.log("Successfully joined tournament:", data);
             displaySuccessMessage("Éxito al anotarse a torneo!");
         })
