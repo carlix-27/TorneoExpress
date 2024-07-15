@@ -81,14 +81,23 @@ public class RequestController {
 
 
     @GetMapping("/team/{toId}/{teamId}")
-    public List<TeamRequest> getTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
-        return requestService.getRequestsByTeam(toId, teamId);
+    public List<TeamRequest> getSpecificTeamRequests(@PathVariable Long toId, @PathVariable Long teamId) {
+        return requestService.getRequestsBySpecificTeam(toId, teamId);
     }
 
+    @GetMapping("/team/{toId}")
+    public List<TeamRequest> getTeamRequests(@PathVariable Long toId) {
+        return requestService.getRequestsByTeam(toId);
+    }
 
     @GetMapping("/tournament/{toId}/{tournamentId}")
-    public List<TournamentRequest> getTournamentRequests(@PathVariable Long toId, @PathVariable Long tournamentId) {
-        return requestService.getRequestsByTournament(toId, tournamentId);
+    public List<TournamentRequest> getSpecificTournamentRequests(@PathVariable Long toId, @PathVariable Long tournamentId) {
+        return requestService.getRequestsBySpecificTournament(toId, tournamentId);
+    }
+
+    @GetMapping("/tournament/{toId}")
+    public List<TournamentRequest> getTournamentRequests(@PathVariable Long toId) {
+        return requestService.getRequestsByTournament(toId);
     }
 
     @DeleteMapping("/team/{requestId}/accept")
