@@ -211,7 +211,14 @@ function fetchKnockoutFixtureForQuarterFinals(participatingTeams, id, matches, t
     console.log("ESTOY EN CUARTOS");
     console.log("Equipos que participan: ", participatingTeams);
 
-    fetch(`/api/tournaments/${id}/${type}/calendarKnockoutOfQuarterFinals`) // Aca te trae a todos los partidos que almaceno, ese es el drama!
+    fetch(`/api/tournaments/${id}/${type}/calendarKnockoutOfQuarterFinals`,{
+        method: 'PUT', // Especificar el método HTTP como PUT
+        headers: {
+            'Content-Type': 'application/json' // Indicar que el cuerpo de la solicitud es JSON
+        },
+
+    }) // Aca te trae a todos los partidos que almaceno, ese es el drama!
+
         .then(response =>{
             if (!response.ok) {
                 throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
@@ -507,7 +514,7 @@ function getNextRoundTitle(currentRoundTitle) {
 function checkWinner(team1Score, team2Score) {
     if(team1Score === team2Score){
         return 0;
-    } else if(team1Score > team1Score){
+    } else if(team1Score > team2Score){
         return 1;
     } else{
         return 2;

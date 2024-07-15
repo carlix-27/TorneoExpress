@@ -100,6 +100,7 @@ public class TournamentService {
 
         List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Cuartos. Tiene que haber 8 ganadores para mostrar, los resultados de semifinal.
 
+
         if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
             matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                     .build(teamsWinners, type);
