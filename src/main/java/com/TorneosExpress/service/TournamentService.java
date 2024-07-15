@@ -231,12 +231,10 @@ public class TournamentService {
     private Tournament updateTournamentData(Tournament existingTournament, UpdateTournamentDto updateTournamentDto) {
 
         String updatedTournamentName = updateTournamentDto.getName();
-        String updatedTournamentLocation = updateTournamentDto.getLocation();
         Boolean updatedTournamentPrivate = updateTournamentDto.getIsPrivate();
         Difficulty updatedTournamentDifficulty = updateTournamentDto.getDifficulty();
 
         existingTournament.setName(updatedTournamentName);
-        existingTournament.setLocation(updatedTournamentLocation);
         existingTournament.setPrivate(updatedTournamentPrivate);
         existingTournament.setDifficulty(updatedTournamentDifficulty);
         return existingTournament;

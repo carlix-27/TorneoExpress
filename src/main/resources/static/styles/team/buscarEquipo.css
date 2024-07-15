@@ -63,9 +63,7 @@ h2 {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    margin-right: 30px;
 }
-
 
 /* Team name style */
 #lista-equipos li h3 {
@@ -138,4 +136,20 @@ h2 {
     background: #342160;
 }
 
+/* Flexbox container for results and map */
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+}
 
+.results-column {
+    width: 45%; /* Adjust width as needed */
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+#map {
+    width: 100%;
+    height: 400px; /* Adjust height as needed */
+    border-radius: 10px;
+}

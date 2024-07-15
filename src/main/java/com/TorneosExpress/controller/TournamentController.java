@@ -114,8 +114,8 @@ public class TournamentController {
     
 
     @PutMapping("/{tournamentId}")
-    public Tournament updateTournament(@PathVariable Long tournamentId, @RequestBody UpdateTournamentDto updatedTournamentDto) {
-        return tournamentService.updateTournament(tournamentId, updatedTournamentDto);
+    public Tournament updateTournament(@PathVariable Long tournamentId, @RequestBody UpdateTournamentDto updatedTournamentTournamentDto) {
+        return tournamentService.updateTournament(tournamentId, updatedTournamentTournamentDto);
     }
 
 

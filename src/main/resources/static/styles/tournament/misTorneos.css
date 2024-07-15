@@ -107,3 +107,8 @@ nav ul li a:hover {
 .action-link:hover {
     background-color: #342160;
 }
+
+.request-count {
+    color: red; /* Cambia este color al que prefieras */
+    font-weight: bold;
+}

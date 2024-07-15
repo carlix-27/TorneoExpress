@@ -2,23 +2,17 @@ function fetchTeamDetails(teamId) {
     fetch(`/api/teams/${teamId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch tournament details: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to fetch team details: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(team => {
-            // Populate form fields with tournament details
             document.getElementById('team-id').value = team.id;
             document.getElementById('team-name').value = team.name;
-            document.getElementById('location').value = team.location;
-
-            // Checkbox needs to be checked based on 'isPrivate' value
-            const privacyCheckbox = document.getElementById('privacy');
-            privacyCheckbox.checked = team.isPrivate;
+            document.getElementById('privacy').checked = team.private;
         })
         .catch(error => {
             console.error('Error:', error);
-            // Handle error, show message to user
         });
 }
 
@@ -27,15 +21,14 @@ function updateTeam(event) {
 
     const teamId = document.getElementById('team-id').value;
     const name = document.getElementById('team-name').value;
-    const location = document.getElementById('location').value;
     const isPrivate = document.getElementById('privacy').checked;
 
     const updatedTeam = {
-        id: teamId, // Include the ID in the updated data
         name: name,
-        location: location,
-        private: isPrivate
+        isPrivate: isPrivate
     };
+
+    console.log(updatedTeam)
 
     fetch(`/api/teams/${teamId}`, {
         method: 'PUT',
@@ -48,7 +41,7 @@ function updateTeam(event) {
             if (!response.ok) {
                 throw new Error(`Failed to update team: ${response.status} ${response.statusText}`);
             }
-            window.location.href = 'misEquipos.html';
+            displaySuccessMessage("Equipo editado exitosamente")
         })
         .catch(error => {
             console.error('Error:', error);
@@ -61,10 +54,17 @@ function getTeamIdFromUrl() {
     return urlParams.get('id');
 }
 
+function displaySuccessMessage(message) {
+    const successMessage = document.getElementById("successMessage");
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
+}
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const teamId = getTeamIdFromUrl();
     if (teamId) {
-        // Fetch and populate tournament details
+        // Fetch and populate team details
         fetchTeamDetails(teamId);
 
         // Add event listener to form submission

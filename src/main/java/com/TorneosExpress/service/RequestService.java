@@ -44,6 +44,10 @@ public class RequestService {
         return inviteRepository.findById(id);
     }
 
+    public List<Invite> invitesTo(Long toId){
+        return inviteRepository.findByInviteTo(toId);
+    }
+
     public Optional<TeamRequest> getTeamRequestById(Long id) {
         return teamRequestRepository.findById(id);
     }
@@ -116,11 +120,19 @@ public class RequestService {
     }
 
 
-    public List<TeamRequest> getRequestsByTeam(Long toId, Long teamId) {
+    public List<TeamRequest> getRequestsBySpecificTeam(Long toId, Long teamId) {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);
     }
 
-    public List<TournamentRequest> getRequestsByTournament(Long toId, Long teamId) {
+    public List<TeamRequest> getRequestsByTeam(Long toId) {
+        return teamRequestRepository.findByRequestTo(toId);
+    }
+
+    public List<TournamentRequest> getRequestsByTournament(Long toId) {
+        return tournamentRequestRepository.findByRequestTo(toId);
+    }
+
+    public List<TournamentRequest> getRequestsBySpecificTournament(Long toId, Long teamId) {
         return tournamentRequestRepository.findByRequestToAndTournamentId(toId, teamId);
     }
 

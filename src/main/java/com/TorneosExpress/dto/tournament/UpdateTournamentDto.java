@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class UpdateTournamentDto {
     private String name;
-    private String location;
     private Boolean isPrivate;
     private Difficulty difficulty;
 }

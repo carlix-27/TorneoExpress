@@ -1,3 +1,4 @@
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     background-color: #f0f0f0;
 }
 
+/* Estilos del encabezado */
 header {
     background-color: #000;
     color: #fff;
@@ -28,66 +30,82 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #fff;
     text-decoration: none;
+    color: #fff;
     padding: 10px 15px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
 nav ul li a:hover {
-    background-color: #333;
+    background-color: #333333;
 }
 
-nav ul li:last-child {
-    margin-right: 0;
-}
-
-h2 {
-    text-align: center;
-}
-
+/* Estilos para la sección de equipos */
 #mis-equipos {
     display: flex;
-    justify-content: space-between;
-    margin: 2rem;
+    justify-content: space-around;
+    margin: 20px 0;
 }
 
 .column {
-    width: 45%;
+    width: 48%;
 }
 
-#lista-equipos li {
+#lista-equipos-capitan, #lista-equipos-miembro {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#lista-equipos-capitan h2, #lista-equipos-miembro h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#lista-equipos-capitan ul, #lista-equipos-miembro ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#lista-equipos-capitan li, #lista-equipos-miembro li {
     margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    margin-right: 30px;
 }
 
-#lista-equipos li h3 {
+#lista-equipos-capitan li h3, #lista-equipos-miembro li h3 {
     margin: 0;
     font-size: 20px;
     color: #333;
 }
 
-#lista-equipos li p {
+#lista-equipos-capitan li p, #lista-equipos-miembro li p {
     margin: 5px 0;
     font-size: 16px;
     color: #666;
 }
 
-#lista-equipos li button {
+.action-link {
+    display: inline-block;
     margin-top: 10px;
     padding: 8px 16px;
-    border: none;
     border-radius: 5px;
     background-color: #3d1f7f;
     color: #fff;
+    text-decoration: none;
     cursor: pointer;
 }
 
-#lista-equipos li button:hover {
+.action-link:hover {
     background-color: #342160;
+}
+
+.request-count {
+    color: red; /* Cambia este color al que prefieras */
+    font-weight: bold;
 }

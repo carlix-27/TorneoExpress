@@ -16,8 +16,11 @@
         #verified-icon {
             display: none; /* Ocultar por defecto */
         }
+        #request-asterisk {
+            display: none; /* Ocultar por defecto */
+            color: red; /* You can change the color as needed */
+        }
     </style>
-
 </head>
 <body>
 
@@ -61,7 +64,7 @@
     <h2>Torneos</h2>
     <ul id="tournament-options">
         <li><a href="#" onclick="redirectToCreateTournament()">Crear Torneo</a></li>
-        <li><a href="misTorneos.html">Ver Mis Torneos</a></li>
+        <li><a href="misTorneos.html">Ver Mis Torneos<span id="request-asterisk">*</span></a></li>
         <li><a href="torneos.html">Ver Todos los Torneos</a></li>
         <li><a href="historial.html">Historial</a></li>
     </ul>
@@ -87,6 +90,33 @@
     }
 
     document.getElementById("logout-link").addEventListener("click", confirmLogout);
+
+    // Function to check if there are any pending team requests
+    function checkTeamRequests() {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+            console.error("User ID not found in localStorage");
+            return;
+        }
+
+        fetch(`/api/requests/tournament/${userId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length > 0) {
+                    document.getElementById("request-asterisk").style.display = "inline";
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching team requests:', error);
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", checkTeamRequests);
 </script>
 
 </body>

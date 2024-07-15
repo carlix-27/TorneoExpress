@@ -1,34 +1,3 @@
-function fetchAndPopulateSports(selectedSport) {
-    fetch('/api/sports')
-        .then(response => {
-            if (!response.ok) {
-                console.log(`Failed to fetch sports: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const sportSelect = document.getElementById('sport');
-            sportSelect.innerHTML = ''; // Clear existing options
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = selectedSport.sportId;
-            defaultOption.textContent = selectedSport.sportName;
-            sportSelect.appendChild(defaultOption);
-
-            data.forEach(sport => {
-                if (sport.sportId !== selectedSport.sportId) {
-                    const option = document.createElement('option');
-                    option.value = sport.sportId;
-                    option.textContent = sport.sportName;
-                    sportSelect.appendChild(option);
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching sports:', error);
-        });
-}
-
 function fetchTournamentDetails(tournamentId) {
     fetch(`/api/tournaments/${tournamentId}`)
         .then(response => {
@@ -38,18 +7,15 @@ function fetchTournamentDetails(tournamentId) {
             return response.json();
         })
         .then(tournament => {
+
             document.getElementById('tournament-id').value = tournament.id;
             document.getElementById('tournament-name').value = tournament.name;
-            document.getElementById('location').value = tournament.location;
             document.getElementById('difficulty').value = tournament.difficulty;
 
-            const privacyCheckbox = document.getElementById('privacy');
-            privacyCheckbox.checked = tournament.isPrivate;
+            document.getElementById('privacy').checked = tournament.private;
 
-            // Fetch sports and set the selected sport
-            fetchAndPopulateSports(tournament.sport);
         })
-        .catch(error => {
+        .catch(error =>{
             console.error('Error:', error);
         });
 }
@@ -59,7 +25,6 @@ function updateTournament(event) {
 
     const tournamentId = document.getElementById('tournament-id').value;
     const name = document.getElementById('tournament-name').value;
-    const location = document.getElementById('location').value;
     const isTournamentPrivate = document.getElementById('privacy').checked;
 
     console.log(isTournamentPrivate)

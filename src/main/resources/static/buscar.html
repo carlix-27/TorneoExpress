@@ -8,6 +8,13 @@
     <script src="js/auth/checkRedirect.js"></script>
     <link rel="stylesheet" href="styles/home.css">
     <script src="js/notification/notificationBell.js"></script>
+
+    <style>
+        #invite-asterisk {
+            display: none; /* Hide by default */
+            color: red; /* You can change the color as needed */
+        }
+    </style>
 </head>
 <body>
 
@@ -37,10 +44,10 @@
 <section id="busqueda">
     <h2>Buscar</h2>
     <ul id="search-options">
-        <li> <a href = "buscarEquipo.html">Buscar equipo</a> </li>
-        <li> <a href = "buscarTorneo.html">Buscar torneo</a> </li>
-        <li> <a href = "buscarJugador.html">Buscar jugador</a> </li>
-        <li> <a href = "manejarInvitacionesJugador.html">Invitaciones Personales</a> </li>
+        <li><a href="buscarEquipo.html">Buscar equipo</a></li>
+        <li><a href="buscarTorneo.html">Buscar torneo</a></li>
+        <li><a href="buscarJugador.html">Buscar jugador</a></li>
+        <li><a href="manejarInvitacionesJugador.html">Invitaciones Personales<span id="invite-asterisk">*</span></a></li>
     </ul>
 </section>
 
@@ -54,6 +61,33 @@
     }
 
     document.getElementById("logout-link").addEventListener("click", confirmLogout);
+
+    // Function to check if there are any pending personal invitations
+    function checkPersonalInvitations() {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+            console.error("User ID not found in localStorage");
+            return;
+        }
+
+        fetch(`/api/requests/invite/to/${userId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch personal invitations: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length > 0) {
+                    document.getElementById("invite-asterisk").style.display = "inline";
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching personal invitations:', error);
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", checkPersonalInvitations);
 </script>
 
 </body>
