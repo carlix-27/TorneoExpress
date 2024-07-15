@@ -275,6 +275,7 @@ public class TournamentService {
     }
 
 
+    // TODO Logica para terminar un torneo!
     public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
         // Todo, debe hacerse un chequeo de quienes fueron los winners.
@@ -299,7 +300,6 @@ public class TournamentService {
     }
 
     // winnersOfMatches equivalen a los winners de cada partido. Se determina el winner de todo el torneo, en base a su cantidad de tournamentPoints.
-
 
     // TODO
     private void endTournamentForRoundRobin(Tournament tournament, List<Team> matchesOfTournament){
