@@ -48,10 +48,9 @@ public class TournamentService {
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> matches = tournament.getMatches();
 
-
-        // Verificar si todos los partidos han sido jugados
+        // Verificar si todos los partidos han sido jugados / Sirve para el Knockout
         boolean allMatchesPlayed = matches.stream().allMatch(Match::isPlayed);
-        if(allMatchesPlayed){
+        if(allMatchesPlayed && tournament.getType() == Type.KNOCKOUT){
             List<Team> winners = getWinnersFromMatches(matches);
             if(winners.isEmpty()){
                 return matches;
@@ -92,6 +91,7 @@ public class TournamentService {
 
     // Todo: Voy a resolver la primer vinculacion que hay aca. Luego con el resto. De esa forma encaro el problema a pedazos.
     // Todo: En lugar de volver a llamar a tournament, no habra una forma de hacerlo mas sencillo en base a el estado que tiene tournament.getMatches()?
+    // Todo: el get, hace que el codigo siempre se ejecute. Por tanto, el new FixtureBuilder va a volver a hacerse. La idea es evitar eso para evitar duplicaciones de id.
     public List<Match> getTournamentFixtureKnockoutQuarterFinals(Long tournamentId, Type type) {
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> matchesWinner;

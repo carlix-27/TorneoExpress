@@ -29,6 +29,15 @@ function loadTournament() {
             const maxTeams = tournament.maxTeams
             const type = tournament.type
 
+            console.log("Tournament Matches: ", tournament.matches);
+
+            let idOfWinner = tournament.matches.winner; // No equivale al winner de todo el torneo. Quiza para asignar puntos puede tenerse en cuenta la cantidad de goles, fijate eso.
+            // Condicionalmente construir el enlace endTournament
+            let endTournamentLink = '';
+            if (idOfWinner !== null) {
+                endTournamentLink = `<a class="action-link" onclick="endTournament(${tournament.id}, ${idOfWinner})">Terminar Torneo</a>`;
+            }
+
             tournamentList.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName}</h2>
@@ -42,7 +51,7 @@ function loadTournament() {
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
                     <a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>
-                    <!--<a class="action-link" onclick="endTournament({tournament.id}, {tournament.matches.winner.id})">Terminar Torneo</a>-->
+                    ${endTournamentLink}
                 </div> 
             `;
         })
@@ -53,7 +62,7 @@ function loadTournament() {
 
 document.addEventListener("DOMContentLoaded", loadTournament);
 
-// TODO: El teamWinner lo determinan las estadisticas. Marcos debe refinar eso.
+// TODO: El teamWinner lo determinan las estadisticas.
 function endTournament(tournamentId, teamId){
     // Confirmar finalización del torneo
     if (confirm('¿Estás seguro de que deseas terminar el torneo? Esta acción es irreversible.')) {
@@ -75,7 +84,6 @@ function endTournament(tournamentId, teamId){
                     document.getElementById('success-message').style.color = 'green';
                     document.getElementById('success-message').style.display = 'block';
                     document.getElementById('error-message').style.display = 'none';
-                    //window.location.href = `verEstadisticas.html?id=${tournamentId}`;
                 } else {
                     document.getElementById('error-message').innerText = "Hubo un problema al terminar el torneo";
                     document.getElementById('error-message').style.color = 'red';

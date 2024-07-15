@@ -26,6 +26,9 @@ public class TournamentTeam {
     private Integer tournamentPoints = 0;
 
     public void addPoints(Integer points) {
+        if (this.tournamentPoints == null) {
+            this.tournamentPoints = 0;
+        }
         this.tournamentPoints += points;
     }
 
