@@ -1,5 +1,6 @@
 package com.TorneosExpress.controller;
 import com.TorneosExpress.dto.team.CreateTeamDto;
+import com.TorneosExpress.model.Article;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
@@ -111,6 +112,13 @@ public class TeamController {
   public Team deletePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long userId) {
     return teamService.removePlayerFromTeam(teamId, userId);
   }
+
+  // Store LOGIC
+  @GetMapping("/myArticles/{teamId}")
+  public List<Article> getMyArticles(@PathVariable Long teamId) {
+      return teamService.getMyArticles(teamId);
+  }
+
 
 
 
