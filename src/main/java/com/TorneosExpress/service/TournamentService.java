@@ -430,6 +430,7 @@ public class TournamentService {
             tournamentTeam.addPoints(3);
         }
 
+
         return tournamentTeamRepository.save(tournamentTeam);
     }
 
@@ -438,5 +439,6 @@ public class TournamentService {
         TournamentTeam tournamentTeam1 = tournamentTeamRepository.findByTournamentPointsAndTournament(tournamentTeam.getTournamentPoints(), tournament);
         return tournamentTeam1.getTournamentPoints();
     }*/
+
 
 }
