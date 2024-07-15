@@ -31,32 +31,62 @@ function loadTeams() {
                 const maxNumberOfPlayersPerTeam = sportNumOfPlayers * 2;
 
                 const li = document.createElement("li");
-                li.innerHTML = `
+
+                // Function to fetch team requests
+                const fetchTeamRequests = () => {
+                    fetch(`/api/requests/team/${userId}/${teamId}`)
+                        .then(response => response.json())
+                        .then(requests => {
+                            const numOfRequests = requests.length;
+                            li.innerHTML = `
+                            <div>
+                                <a href="visualizarJugadoresEquipo.html?id=${team.id}"><h3>${teamName}</h3></a>
+                                <p>Ubicación: ${teamLocation}</p>
+                                <p>Privacidad: ${teamPrivate ? "Privado" : "Público"}</p>
+                                <p>Jugadores inscritos: ${numberOfPlayersInTeam} / ${maxNumberOfPlayersPerTeam}</p>
+                                ${isCaptain ? `
+                                <a class="action-link" onclick="editarEquipo(${teamId})">Editar</a>
+                                <a class="action-link" onclick="borrarEquipo(${teamId})">Borrar</a>
+                                ${teamPrivate ? `<a class="action-link" onclick="manejarSolicitudes(${teamId})">Manejar Solicitudes${numOfRequests > 0 ? ` <span class="request-count">(${numOfRequests})</span>` : ''}</a>` : ''}` : ''}
+                            </div>
+                            `;
+                        })
+                        .catch(error => console.error('Error fetching team requests:', error));
+                };
+
+                if (teamPrivate && isCaptain) {
+                    fetchTeamRequests();
+                } else {
+                    li.innerHTML = `
                     <div>
                         <a href="visualizarJugadoresEquipo.html?id=${team.id}"><h3>${teamName}</h3></a>
                         <p>Ubicación: ${teamLocation}</p>
                         <p>Privacidad: ${teamPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores inscritos: ${numberOfPlayersInTeam} / ${maxNumberOfPlayersPerTeam}</p>
                         ${isCaptain ? `
-                        <button onclick="editarEquipo(${teamId})">Editar</button>
-                        <button onclick="borrarEquipo(${teamId})">Borrar</button>
-                        ${teamPrivate ? `<button onclick="manejarSolicitudes(${teamId})">Manejar Solicitudes</button>` : ''}` : ''}
+                        <a class="action-link" onclick="editarEquipo(${teamId})">Editar</a>
+                        <a class="action-link" onclick="borrarEquipo(${teamId})">Borrar</a>` : ''}
                     </div>
-                `;
-                return li;
+                    `;
+                }
+
+                if (isCaptain) {
+                    listaEquiposCapitan.appendChild(li);
+                } else {
+                    listaEquiposMiembro.appendChild(li);
+                }
             };
 
             teamsAsCaptain.forEach(team => {
-                listaEquiposCapitan.appendChild(createTeamElement(team, true));
+                createTeamElement(team, true);
             });
 
             teamsAsMember.forEach(team => {
-                listaEquiposMiembro.appendChild(createTeamElement(team, false));
+                createTeamElement(team, false);
             });
         })
         .catch(error => {
             console.error('Error:', error);
-            // Handle error, show message to user
         });
 }
 
@@ -64,8 +94,8 @@ function editarEquipo(teamId) {
     window.location.href = `editar-equipo.html?id=${teamId}`;
 }
 
-function manejarSolicitudes(torneoId) {
-    window.location.href = `manejarSolicitudesEquipo.html?id=${torneoId}`;
+function manejarSolicitudes(teamId) {
+    window.location.href = `manejarSolicitudesEquipo.html?id=${teamId}`;
 }
 
 function borrarEquipo(teamId) {
