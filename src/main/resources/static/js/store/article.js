@@ -36,7 +36,7 @@ function loadArticle() {
                     <div id="purchase-button">
                         <button id="buy-button">Comprar</button>
                     </div>
-                    
+
                     <div id="successMessage" style="display: none; color: green; margin-top: 10px;">
                     
                     </div>
@@ -163,6 +163,10 @@ function handleTransaction(articleId, teamId) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function goBack() {
+    window.history.back();
 }
 
 document.addEventListener("DOMContentLoaded", loadArticle);
