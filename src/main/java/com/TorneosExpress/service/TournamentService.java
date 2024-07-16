@@ -273,7 +273,7 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-    
+
     @Transactional
     public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);

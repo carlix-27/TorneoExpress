@@ -75,7 +75,7 @@ function endTournament(tournamentId){
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.active === false) {
                     // Display success message in green
                     document.getElementById('success-message').innerText = "Torneo terminado con éxito";
                     document.getElementById('success-message').style.color = 'green';
