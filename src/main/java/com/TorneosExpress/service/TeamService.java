@@ -5,9 +5,11 @@ import com.TorneosExpress.model.Article;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Sport;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.repository.ArticleRepository;
 import com.TorneosExpress.repository.PlayerRepository;
 import com.TorneosExpress.repository.SportRepository;
 import com.TorneosExpress.repository.TeamRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,14 @@ public class TeamService {
   private final TeamRepository teamRepository;
   private final PlayerRepository playerRepository;
   private final SportRepository sportRepository;
+  private final ArticleRepository articleRepository;
 
   @Autowired
-  public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository, SportRepository sportRepository) {
+  public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository, SportRepository sportRepository, ArticleRepository articleRepository) {
     this.teamRepository = teamRepository;
     this.playerRepository = playerRepository;
     this.sportRepository = sportRepository;
+    this.articleRepository = articleRepository;
   }
 
   public Team findById(long id) {
@@ -134,6 +138,13 @@ public class TeamService {
     return teamRepository.save(team);
   }
 
-
+  @Transactional
+  public Team purchaseArticle(Long teamId, Long articleId) {
+    Team team = findById(teamId);
+    Article article = articleRepository.findArticleById(articleId);
+    team.getArticles().add(article);
+    team.setPrestigePoints(team.getPrestigePoints() - article.getPrice());
+    return teamRepository.save(team);
+  }
 
 }

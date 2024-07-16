@@ -103,7 +103,7 @@ function fetchMyTeams(article) {
                             points.innerHTML = `Sus puntos de prestigio: ${selectedTeam ? selectedTeam.prestigePoints : 0}`;
 
                             if (selectedTeam) {
-                                validateTransaction(article.article_price, selectedTeam.prestigePoints);
+                                validateTransaction(article.article_price, selectedTeam.prestigePoints, article.id, selectedTeamId);
                             } else {
                                 displayErrorMessage("Seleccione un equipo válido");
                             }
@@ -120,10 +120,9 @@ function fetchMyTeams(article) {
         });
 }
 
-function validateTransaction(price, prestigePoints) {
+function validateTransaction(price, prestigePoints, articleId, teamId) {
   if (prestigePoints >= price) {
-    displaySuccessMessage("Artículo comprado con éxito");
-    handleTransaction();
+    handleTransaction(articleId, teamId);
   } else {
     displayErrorMessage("No tiene suficientes puntos");
   }
@@ -147,8 +146,25 @@ function displayErrorMessage(message) {
     }, 3000);
 }
 
-function handleTransaction() {
-
+function handleTransaction(articleId, teamId) {
+    fetch(`/api/teams/${teamId}/purchase/${articleId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            displaySuccessMessage("Artículo comprado con éxito");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 document.addEventListener("DOMContentLoaded", loadArticle);

@@ -118,4 +118,9 @@ public class TeamController {
     return teamService.updateTeam(teamId, updatedTeam);
   }
 
+  @PostMapping("/{teamId}/purchase/{articleId}")
+  public Team purchaseArticle(@PathVariable Long teamId, @PathVariable Long articleId) {
+    return teamService.purchaseArticle(teamId, articleId);
+  }
+
 }

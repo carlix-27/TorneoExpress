@@ -25,6 +25,6 @@ public class Article {
 
   @Column()
   @JsonProperty("article_price")
-  private float price;
+  private int price;
 
 }

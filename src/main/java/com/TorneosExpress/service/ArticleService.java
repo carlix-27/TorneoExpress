@@ -24,7 +24,7 @@ public class ArticleService  {
   }
 
   public Article findById(long id) {
-    return articleRepository.findById(id);
+    return articleRepository.findArticleById(id);
   }
 
   public List<Article> getArticlesOfTeam(Long teamId) {
