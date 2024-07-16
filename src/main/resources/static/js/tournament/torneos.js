@@ -72,7 +72,9 @@ function showSignupModal(tournamentId) {
                 .then(teams => {
 
                     populateTeamSelect(teams);
-                    const userIsInTournament = tournament.participatingTeams.some(team => team.captainId == userId);
+                    const userIsInTournament = tournament.participatingTeams.some(team =>
+                        team.captainId == userId || team.players.some(player => player.id == userId)
+                    );
 
                     if (userIsInTournament) {
                         permaDisplayErrorMessage("Ya estás inscrito en este torneo con otro equipo.");
