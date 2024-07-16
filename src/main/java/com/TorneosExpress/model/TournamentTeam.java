@@ -23,9 +23,12 @@ public class TournamentTeam {
     private Tournament tournament;
 
     @Column
-    private int tournamentPoints = 0;
+    private Integer tournamentPoints = 0;
 
-    public void addPoints(int points) {
+    public TournamentTeam() {
+    }
+
+    public void addPoints(Integer points) {
         this.tournamentPoints += points;
     }
 
