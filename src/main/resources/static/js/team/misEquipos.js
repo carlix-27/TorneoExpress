@@ -48,6 +48,7 @@ function loadTeams() {
                                 <a class="action-link" onclick="editarEquipo(${teamId})">Editar</a>
                                 <a class="action-link" onclick="borrarEquipo(${teamId})">Borrar</a>
                                 ${teamPrivate ? `<a class="action-link" onclick="manejarSolicitudes(${teamId})">Manejar Solicitudes${numOfRequests > 0 ? ` <span class="request-count">(${numOfRequests})</span>` : ''}</a>` : ''}` : ''}
+                                <a class="action-link" onclick="verBeneficios(${teamId})">Ver beneficios</a>
                             </div>
                             `;
                         })
@@ -114,6 +115,23 @@ function borrarEquipo(teamId) {
                 console.error('Error:', error);
             });
     }
+}
+
+function verBeneficios(teamId){
+    fetch(`/api/teams/myArticles/${teamId}`,{
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to get articles team: ${response.status} ${response.statusText}`);
+            }
+            // loadTeams();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
 }
 
 document.addEventListener("DOMContentLoaded", loadTeams);
