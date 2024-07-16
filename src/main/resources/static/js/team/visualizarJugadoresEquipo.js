@@ -70,47 +70,38 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    /*function renderArticles(articles) {
-        const articlesDiv = document.getElementById("articles");
-        articlesDiv.innerHTML = ``;
-        if (articles.length === 0) {
-            articlesDiv.innerHTML = `
-                <p>No posee beneficios para este equipo</p>
-            `;
-        }
-        articles.forEach(article => {
-            const div = document.createElement("div");
-            div.innerHTML = `
-                <h3>${article.article_name}</h3>
-                <p>${article.article_description}</p>
-            `;
-            articlesDiv.appendChild(div);
-        });
-    }*/
     function renderArticles(articles) {
         const articlesDiv = document.getElementById("articles");
         articlesDiv.innerHTML = ``;
+
         if (articles.length === 0) {
             articlesDiv.innerHTML = `
-            <p>No posee beneficios para este equipo</p>
+            <p class="no-articles">No posee beneficios para este equipo</p>
         `;
             return;
         }
 
-        const articleCounts = new Map();
-        articles.forEach(article => {
-            if (articleCounts.has(article.article_name)) {
-                articleCounts.set(article.article_name, articleCounts.get(article.article_name) + 1);
-            } else {
-                articleCounts.set(article.article_name, 1);
-            }
+        // Create a map to count occurrences of each article
+        const articleCounts = articles.reduce((acc, article) => {
+            acc[article.article_name] = (acc[article.article_name] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Convert the map back to an array of articles with counts
+        const uniqueArticles = Object.keys(articleCounts).map(articleName => {
+            return {
+                article_name: articleName,
+                article_description: articles.find(article => article.article_name === articleName).article_description,
+                count: articleCounts[articleName]
+            };
         });
 
-        articleCounts.forEach((count, articleName) => {
+        uniqueArticles.forEach(article => {
             const div = document.createElement("div");
             div.innerHTML = `
-            <h3>${articleName} ${count > 1 ? `(x${count})` : ''}</h3>
-        `;
+                <h3 class="article-title">${article.article_name} (x${article.count})</h3>
+                <p class="article-description">${article.article_description}</p>
+            `;
             articlesDiv.appendChild(div);
         });
     }
@@ -191,5 +182,9 @@ function sendExpulsionNotification(teamId, playerId) {
         .catch(error => {
             console.error('Error sending expulsion notification:', error);
         });
+}
+
+function goBack() {
+    window.history.back();
 }
 
