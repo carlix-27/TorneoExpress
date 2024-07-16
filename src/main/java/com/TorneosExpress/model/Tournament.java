@@ -18,7 +18,7 @@ public class Tournament {
 
   public Tournament() {}
 
-  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty, Type type) {
+  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty, Type type, Team winner) {
     this.name = tournamentName;
     this.location = tournamentLocation;
     this.sport = sport;
@@ -26,6 +26,7 @@ public class Tournament {
     this.difficulty = difficulty;
     this.isActive = true;
     this.type = type;
+    this.winner = winner;
   }
 
   public Tournament(CreateTournamentDto request){
@@ -41,6 +42,7 @@ public class Tournament {
     this.participatingTeams = new ArrayList<>();
     this.matches = new ArrayList<>();
     this.type = request.getType();
+    this.winner = request.getWinner();
   }
 
   @Id
@@ -89,8 +91,13 @@ public class Tournament {
   @OneToMany
   private List<Match> matches = new ArrayList<>();
 
+  @ManyToOne
+  @JoinColumn(name = "team_id") // Es null en primer instancia, luego debe setearse.
+  private Team winner;
+
 
   @Column
   private Type type;
+
 
 }
