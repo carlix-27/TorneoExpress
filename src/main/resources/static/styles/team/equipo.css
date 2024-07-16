@@ -83,3 +83,11 @@ ul#team-options li a {
 ul#team-options li a:hover {
     background-color: #342160;
 }
+
+#verified-icon {
+    color: #00f4ff; /* Adjust the color as needed */
+}
+
+#verified-icon {
+    display: none; /* Ocultar por defecto */
+}
