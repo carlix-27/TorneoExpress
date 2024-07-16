@@ -25,6 +25,8 @@ function initializeAutocomplete() {
             input.dataset.latitude = location.lat();
             input.dataset.longitude = location.lng();
         } else {
+            input.dataset.latitude = "";
+            input.dataset.longitude = "";
             console.error('No details available for input: ' + place.name);
         }
     });
@@ -107,74 +109,54 @@ document.addEventListener("DOMContentLoaded", function () {
     function filterTeams(event) {
         event.preventDefault();
 
-        console.log("Filtering teams...");
-
         const teamName = form.querySelector("#team-name").value.trim().toLowerCase();
         const teamIsPrivate = form.querySelector("#team-isPrivate").value;
-        const userLat = parseFloat(form.querySelector("#location").dataset.latitude);
-        const userLng = parseFloat(form.querySelector("#location").dataset.longitude);
+        const locationInput = form.querySelector("#location");
 
-        const geocoder = new google.maps.Geocoder();
-        const userLatLng = { lat: userLat, lng: userLng };
+        if (!locationInput.value.trim()) {
+            locationInput.dataset.latitude = "";
+            locationInput.dataset.longitude = "";
+        }
 
-        geocoder.geocode({ location: userLatLng }, function(results, status) {
-            if (status === "OK" && results[0]) {
-                const userAddress = results[0].formatted_address.toLowerCase();
+        const userLat = parseFloat(locationInput.dataset.latitude);
+        const userLng = parseFloat(locationInput.dataset.longitude);
+        const locationProvided = !isNaN(userLat) && !isNaN(userLng);
 
-                fetch("/api/teams/allTeams")
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+        fetch("/api/teams/allTeams")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(teams => {
+                const filteredTeams = teams.filter(team => {
+                    const lowerCaseTeamName = team.name.toLowerCase();
+                    const isPrivateMatches = teamIsPrivate === "all" ||
+                        (team.private && teamIsPrivate === "private") ||
+                        (!team.private && teamIsPrivate === "public");
+                    const nameMatches = lowerCaseTeamName.includes(teamName);
+
+                    if (!locationProvided) {
+                        return nameMatches && isPrivateMatches;
+                    } else {
+                        const [teamLat, teamLng] = team.location.split(',').map(Number);
+                        if (isNaN(teamLat) || isNaN(teamLng)) {
+                            console.error('Invalid team location:', team.location);
+                            return false;
                         }
-                        return response.json();
-                    })
-                    .then(teams => {
-                        console.log("Teams:", teams);
+                        const distance = getDistanceFromLatLonInKm(userLat, userLng, teamLat, teamLng);
+                        const withinRadius = distance <= 50; // Establece el radio en km (por ejemplo, 50 km)
+                        return nameMatches && isPrivateMatches && withinRadius;
+                    }
+                });
 
-                        const reverseGeocodedTeams = teams.map(team => {
-                            const [lat, lng] = team.location.split(',').map(Number);
-                            const latLng = { lat, lng };
-
-                            return new Promise((resolve, reject) => {
-                                geocoder.geocode({ location: latLng }, function(results, status) {
-                                    if (status === "OK" && results[0]) {
-                                        team.formattedAddress = results[0].formatted_address.toLowerCase();
-                                        resolve(team);
-                                    } else {
-                                        console.error(`Geocoding failed for team location: ${team.location}`);
-                                        reject(`Geocoding failed for team location: ${team.location}`);
-                                    }
-                                });
-                            });
-                        });
-
-                        Promise.all(reverseGeocodedTeams)
-                            .then(teams => {
-                                const filteredTeams = teams.filter(team => {
-                                    const lowerCaseTeamName = team.name.toLowerCase();
-                                    const isPrivateMatches = teamIsPrivate === "all" || (team.isPrivate && teamIsPrivate === "private") || (!team.isPrivate && teamIsPrivate === "public");
-                                    const locationMatches = team.formattedAddress.includes(userAddress);
-                                    const nameMatches = lowerCaseTeamName.includes(teamName.toLowerCase()) || teamName === "";
-                                    return (nameMatches || locationMatches) && isPrivateMatches;
-                                });
-
-                                console.log("Filtered Teams: ", filteredTeams);
-                                renderTeams(filteredTeams);
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                displayErrorMessage('Error filtering teams.');
-                            });
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        displayErrorMessage('Error filtering teams.');
-                    });
-            } else {
-                console.error('Geocoder failed due to: ' + status);
-                displayErrorMessage('Error with location geocoding.');
-            }
-        });
+                renderTeams(filteredTeams);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayErrorMessage('Error filtering teams.');
+            });
     }
 
     form.addEventListener("submit", filterTeams);
@@ -198,6 +180,22 @@ function displayErrorMessage(message) {
     setTimeout(() => {
         errorMessage.style.display = "none";
     }, 3000);
+}
+
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in km
+    return distance;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
