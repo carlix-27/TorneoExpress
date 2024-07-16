@@ -81,7 +81,9 @@ function renderTournaments(tournaments) {
             if (status === "OK") {
                 if (results[0]) {
                     let formattedAddress = results[0].formatted_address.split(', ').slice(1).join(', ');
-                    listItem.innerHTML = `<a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a><p>${formattedAddress}</p>`;
+                    const tournamentSport = tournament.sport
+                    const sportName = tournamentSport.sportName
+                    listItem.innerHTML = `<a href="loadTournament.html?id=${tournament.id}"><h3>${tournament.name}</h3></a><p>Ubicacon: ${formattedAddress}</p><p>Deporte: ${sportName}</p>`;
                 } else {
                     listItem.innerHTML = `<h3>${tournament.name}</h3><p>Location not found</p>`;
                 }
@@ -168,6 +170,22 @@ function displayErrorMessage(message) {
     setTimeout(() => {
         errorMessage.style.display = "none";
     }, 3000);
+}
+
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in km
+    return distance;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
 }
 
 // Fetch Google Maps API key and initialize autocomplete
