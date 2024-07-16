@@ -60,14 +60,25 @@ function showSignupModal(tournamentId) {
     const signupButton = modal.querySelector("#sendInviteButton");
     const userId = localStorage.getItem("userId");
 
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.style.display = 'none';
+
     fetchTournamentDetails(tournamentId)
         .then(tournament => {
-
-            const tournamentSport = tournament.sport
+            const tournamentSport = tournament.sport;
             displayTournamentDetails(tournament, signupButton);
+
             fetchUserTeams(tournamentSport, userId)
                 .then(teams => {
+
                     populateTeamSelect(teams);
+                    const userIsInTournament = tournament.participatingTeams.some(team => team.captainId == userId);
+
+                    if (userIsInTournament) {
+                        permaDisplayErrorMessage("Ya estás inscrito en este torneo con otro equipo.");
+                        return;
+                    }
+
                     addSignupButtonListener(tournament, userId, signupButton);
                 })
                 .catch(error => {
@@ -99,27 +110,21 @@ function addSignupButtonListener(tournament, userId, signupButton) {
         signupButton.removeEventListener("click", signupButtonClickHandler);
     }
 
-    signupButtonClickHandler = function() {
-
+    signupButtonClickHandler = function () {
         const maxTeams = tournament.maxTeams;
-        const tournamentParticipatingTeams = tournament.participatingTeams
+        const tournamentParticipatingTeams = tournament.participatingTeams;
         const numOfParticipatingTeams = tournamentParticipatingTeams.length;
-        const tournamentCreator = tournament.creatorId;
         const teamId = document.getElementById("teamSelect").value;
-        const user = localStorage.getItem("userId");
 
-        const isTeamInTournament = tournamentParticipatingTeams.some(team => {
-            console.log("Comparing team ID:", teamId, "with team ID:", team.id);
-            return teamId == team.id;
-        });
+        const isTeamInTournament = tournamentParticipatingTeams.some(team => teamId == team.id);
 
-        if (isTeamInTournament){
-            displayErrorMessage("Este equipo ya esta en el torneo")
+        if (isTeamInTournament) {
+            displayErrorMessage("Este equipo ya está en el torneo.");
             return;
         }
 
         if (numOfParticipatingTeams < maxTeams) {
-            const {private: tournamentIsPrivate} = tournament;
+            const { private: tournamentIsPrivate } = tournament;
 
             if (tournamentIsPrivate) {
                 sendTournamentRequest(tournament, teamId, userId);
@@ -127,7 +132,7 @@ function addSignupButtonListener(tournament, userId, signupButton) {
                 joinPublicTournament(tournament, teamId);
             }
         } else {
-            displayErrorMessage("Error al inscribirse: Numero máximo de equipos.");
+            displayErrorMessage("Error al inscribirse: Número máximo de equipos alcanzado.");
         }
     };
 
@@ -360,6 +365,12 @@ function displayErrorMessage(message) {
     }, 3000);
 }
 
+function permaDisplayErrorMessage(message) {
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.innerText = message;
+    errorMessage.style.display = 'block';
+}
+
 document.addEventListener("DOMContentLoaded", function() {
-    fetchActiveTournaments(); // Llamar a la función para cargar los torneos activos
+    fetchActiveTournaments();
 });
