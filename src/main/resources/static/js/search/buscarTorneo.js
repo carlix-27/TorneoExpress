@@ -18,17 +18,15 @@ function initializeAutocomplete() {
         return;
     }
     autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', function () {
+    autocomplete.addListener('place_changed', function() {
         const place = autocomplete.getPlace();
         if (place.geometry) {
             const location = place.geometry.location;
             input.dataset.latitude = location.lat();
             input.dataset.longitude = location.lng();
-            map.setCenter(location);
-            map.setZoom(12); // Zoom level can be adjusted as needed
-            clearMarkers();
-            addMarker(location, place.name);
         } else {
+            input.dataset.latitude = "";
+            input.dataset.longitude = "";
             console.error('No details available for input: ' + place.name);
         }
     });
@@ -42,11 +40,6 @@ function initMap() {
         center: { lat: 40.416775, lng: -3.70379 }, // Centered on Spain by default
     };
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
-}
-
-function clearMarkers() {
-    markers.forEach(marker => marker.setMap(null));
-    markers = [];
 }
 
 function addMarker(location, title) {
@@ -110,8 +103,17 @@ function filterTournaments(event) {
     const tournamentName = form.querySelector("#tournament-name").value.trim().toLowerCase();
     const tournamentType = form.querySelector("#tournament-type").value;
     const tournamentSport = form.querySelector("#tournament-sport").value.trim().toLowerCase();
+    const locationInput = form.querySelector("#location");
 
-    // Fetch active tournaments based on user input
+    if (!locationInput.value.trim()) {
+        locationInput.dataset.latitude = "";
+        locationInput.dataset.longitude = "";
+    }
+
+    const userLat = parseFloat(locationInput.dataset.latitude);
+    const userLng = parseFloat(locationInput.dataset.longitude);
+    const locationProvided = !isNaN(userLat) && !isNaN(userLng);
+
     fetch('/api/tournaments/active')
         .then(response => {
             if (!response.ok) {
@@ -120,21 +122,28 @@ function filterTournaments(event) {
             return response.json();
         })
         .then(tournaments => {
-            // Filter tournaments based on user input
             const filteredTournaments = tournaments.filter(function (tournament) {
                 const lowerCaseTournamentName = tournament.name.toLowerCase();
                 const lowerCaseTournamentSport = tournament.sport.sportName.toLowerCase();
 
-                const nameMatches = lowerCaseTournamentName.includes(tournamentName.toLowerCase()) || tournamentName === "";
-
+                const nameMatches = lowerCaseTournamentName.includes(tournamentName) || tournamentName === "";
                 const typeMatches = tournamentType === "all" || (tournament.private && tournamentType === "private") || (!tournament.private && tournamentType === "public");
+                const sportMatches = lowerCaseTournamentSport.includes(tournamentSport) || tournamentSport === "";
 
-                const sportMatches = lowerCaseTournamentSport.includes(tournamentSport.toLowerCase()) || tournamentSport === "";
-
-                return nameMatches && typeMatches && sportMatches;
+                if (!locationProvided) {
+                    return nameMatches && typeMatches && sportMatches;
+                } else {
+                    const [tournamentLat, tournamentLng] = tournament.location.split(',').map(Number);
+                    if (isNaN(tournamentLat) || isNaN(tournamentLng)) {
+                        console.error('Invalid tournament location:', tournament.location);
+                        return false;
+                    }
+                    const distance = getDistanceFromLatLonInKm(userLat, userLng, tournamentLat, tournamentLng);
+                    const withinRadius = distance <= 50; // Set the radius in km (e.g., 50 km)
+                    return nameMatches && typeMatches && sportMatches && withinRadius;
+                }
             });
 
-            // Render filtered tournaments
             renderTournaments(filteredTournaments);
         })
         .catch(error => {
