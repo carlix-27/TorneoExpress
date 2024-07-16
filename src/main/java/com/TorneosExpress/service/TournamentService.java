@@ -11,6 +11,7 @@ import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import com.TorneosExpress.repository.TournamentTeamRepository;
 import com.zaxxer.hikari.util.FastList;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -274,12 +275,13 @@ public class TournamentService {
 
 
     // TODO Logica para terminar un torneo!
+    @Transactional
     public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
-        // Todo, debe hacerse un chequeo de quienes fueron los winners.
-        endTournamentWithWinner(tournament, tournament.getParticipatingTeams());  // FIXME: Los equipos participantes, no todos van a ganar partidos. Si hay alguno que no gane partidos, se rompe.                                          // Debo setear el winner. Aca el winner es null.
+        endTournamentWithWinner(tournament, tournament.getParticipatingTeams()); // Solucionado esto.
+
         tournament.setActive(false);
-        return tournamentRepository.save(tournament);
+        return tournamentRepository.save(tournament); // Fixme: Hay error con la db.
     }
 
 
@@ -310,9 +312,7 @@ public class TournamentService {
                 if(tournamentTeam.getTournamentPoints() == null){ // Si algun equipo, no tiene puntos, porque perdio todos los partidos, le asignamos a 0 el puntaje.
                     tournamentTeam.setTournamentPoints(0);
                 }
-
                 int teamPoints = tournamentTeam.getTournamentPoints(); // No se aun si estos puntos, son los del winner, pero los voy a ir acumulando, en listWithTeamPoints
-
                 listWithTeamPoints.add(teamPoints);
             }
         }
@@ -323,12 +323,11 @@ public class TournamentService {
         }
         // Busco al team con esa cantidad de puntos y el torneo en el que esta, para evitar problemas de busqueda por repeticion de puntaje.
         TournamentTeam tournamentTeamWithMaxPoints = tournamentTeamRepository.findByTournamentPointsAndTournament(maxPoints, tournament);
-
         Team teamWinner = tournamentTeamWithMaxPoints.getTeam(); // El que encuentre, es el ganador del torneo.
-
         setPrestigePointsForTeam(tournamentTeamWithMaxPoints.getTournament(), teamWinner); // Seteo los puntos de prestigio al team que corresponda.
+        tournament.setWinner(teamWinner); // Seteo el winner del tournament.
 
-        tournamentTeamWithMaxPoints.getTournament().setWinner(teamWinner); // Seteo el winner del tournament.
+        teamWinner.addTournamentsWon(tournament); // Seteo el tournament en la lista de torneos ganados del equipo
     }
 
 

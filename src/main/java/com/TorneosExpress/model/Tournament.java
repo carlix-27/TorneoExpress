@@ -18,7 +18,7 @@ public class Tournament {
 
   public Tournament() {}
 
-  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty, Type type) {
+  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty, Type type, Team winner) {
     this.name = tournamentName;
     this.location = tournamentLocation;
     this.sport = sport;
@@ -26,6 +26,7 @@ public class Tournament {
     this.difficulty = difficulty;
     this.isActive = true;
     this.type = type;
+    this.winner = winner;
   }
 
   public Tournament(CreateTournamentDto request){
@@ -90,38 +91,13 @@ public class Tournament {
   @OneToMany
   private List<Match> matches = new ArrayList<>();
 
-  @OneToOne
-  @JoinColumn(name = "team_id") // Toma el equipo de Bruno, debe ser null en primer instancia, luego debe setearse.
+  @ManyToOne
+  @JoinColumn(name = "team_id") // Es null en primer instancia, luego debe setearse.
   private Team winner;
 
 
   @Column
   private Type type;
 
-
-  /*@OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
-  private List<Match> quarterFinalMatches = new ArrayList<>();
-
-  @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
-  private List<Match> semifinalMatches = new ArrayList<>();
-
-  @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
-  private List<Match> finalMatches = new ArrayList<>();
-
-
-  public Match addQuarterFinalMatch(Match match) {
-    this.quarterFinalMatches.add(match);
-    return match;
-  }
-
-  public Match addSemifinalMatch(Match match) {
-    this.semifinalMatches.add(match);
-    return match;
-  }
-
-  public Match addFinalMatch(Match match) {
-    this.finalMatches.add(match);
-    return match;
-  }*/
 
 }

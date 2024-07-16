@@ -21,6 +21,7 @@ public class Team {
     this.prestigePoints = 0;
     this.captainId = createTeamDto.getCaptainId();
     this.sport = createTeamDto.getSport();
+    this.tournamentsWon = new ArrayList<>();
   }
 
   @Id
@@ -51,6 +52,14 @@ public class Team {
   @JsonIgnore
   private List<Tournament> activeTournaments = new ArrayList<>();
 
+  @OneToMany(mappedBy = "winner")
+  @JsonIgnore
+  private List<Tournament> tournamentsWon = new ArrayList<>();
+
+
+  public void addTournamentsWon(Tournament tournament){
+    tournamentsWon.add(tournament);
+  }
 
   @ManyToMany
   @JoinTable(
@@ -68,13 +77,14 @@ public class Team {
   )
   private List<Article> articles = new ArrayList<>();
 
-  public Team(Long captainId, String teamName, Sport sport, String teamLocation, boolean isPrivate) {
+  public Team(Long captainId, String teamName, Sport sport, String teamLocation, boolean isPrivate, List<Tournament> tournamentWon) {
     this.name = teamName;
     this.location = teamLocation;
     this.sport = sport;
     this.isPrivate = isPrivate;
     this.prestigePoints = 0;
     this.captainId = captainId;
+    this.tournamentsWon = tournamentWon;
   }
 
   public Team(String name) {
