@@ -273,8 +273,7 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-
-    // TODO Logica para terminar un torneo!
+    
     @Transactional
     public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
