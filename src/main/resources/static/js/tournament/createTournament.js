@@ -83,6 +83,11 @@ function createTournament() {
         return;
     }
 
+    if (maxTeams < 0) {
+        displayErrorMessage("No se puede ingresar números negativos")
+        return;
+    }
+
     const tournamentData = {
         name: name,
         sport: { sportId: sportId },
