@@ -144,7 +144,7 @@ function saveStats(event) {
         winner: winnerId
     };
 
-    fetch(`/api/tournaments/matches/stats/${matchId}`, { // Sirve para octavos de final.
+    fetch(`/api/tournaments/matches/stats/${matchId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
