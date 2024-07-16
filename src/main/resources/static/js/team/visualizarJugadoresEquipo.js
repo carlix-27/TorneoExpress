@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fetchPlayersOfTeam(teamId, userId);
 
+    fetchArticlesOfTeam(teamId);
+
     function fetchPlayersOfTeam(teamId, userId) {
         fetch(`/api/teams/all/${teamId}`)
             .then(response => {
@@ -19,6 +21,20 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(players => {
                 renderPlayers(teamId, players, userId);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function fetchArticlesOfTeam(teamId) {
+        fetch(`/api/teams/${teamId}/articles`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch players of team: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(articles => {
+                renderArticles(articles);
             })
             .catch(error => console.error('Error:', error));
     }
@@ -52,6 +68,24 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => {
                 console.error('Error fetching team details:', error);
             });
+    }
+
+    function renderArticles(articles) {
+        const articlesDiv = document.getElementById("articles");
+        articlesDiv.innerHTML = ``;
+        if (articles.length === 0) {
+            articlesDiv.innerHTML = `
+                <p>No posee beneficios para este equipo</p>
+            `;
+        }
+        articles.forEach(article => {
+            const div = document.createElement("div");
+            div.innerHTML = `
+                <h3>${article.article_name}</h3>
+                <p>${article.article_description}</p>
+            `;
+            articlesDiv.appendChild(div);
+        });
     }
 
     function handleRemovePlayer(event) {
