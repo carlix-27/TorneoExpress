@@ -171,6 +171,7 @@ function joinPublicTeam(team, userId) {
                     name: playerDetails.name
                 }
 
+                setTimeout(() => location.reload());
                 displaySuccessMessage("Te has unido al equipo exitosamente!");
                 createTeamNotification(teamRequest)
             })

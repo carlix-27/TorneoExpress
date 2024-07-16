@@ -26,6 +26,8 @@ function populateMatches(matches) {
     const listaPartidosTerminados = document.getElementById('listaPartidosTerminados');
     const listaPartidosPendientes = document.getElementById('listaPartidosPendientes');
 
+    console.log("Matches: ", matches);
+
     matches.forEach(match => {
         if (match.played) {
             console.log("Match", match)

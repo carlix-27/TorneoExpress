@@ -31,7 +31,7 @@ function loadActiveMatches(tournamentId) {
         })
         .then(matches => {
             const now = new Date();
-            const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played);
+            const activeMatches = matches.filter(match => new Date(match.date) < now && !match.played); // Es asi para que el admin no agregue cosas de partidos que aun no se jugaron!
             populateMatchSelector(activeMatches);
             populateActiveMatches(activeMatches);
         })
@@ -144,7 +144,7 @@ function saveStats(event) {
         winner: winnerId
     };
 
-    fetch(`/api/tournaments/matches/stats/${matchId}`, {
+    fetch(`/api/tournaments/matches/stats/${matchId}`, { // Sirve para octavos de final.
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -153,9 +153,9 @@ function saveStats(event) {
     })
         .then(response => {
             if (response.ok) {
-                displaySuccessMessage("Estadísticas agregadas con éxito");
                 document.getElementById('formularioEstadisticas').reset();
-                setTimeout(() => location.reload()); 
+                setTimeout(() => location.reload());
+                displaySuccessMessage("Estadísticas agregadas con éxito");
 
                 fetch(`/api/tournaments/matches/${matchId}`)
                     .then(response => {
@@ -175,6 +175,7 @@ function saveStats(event) {
 
                         fetch(`/api/tournaments/${tournamentId}/addPoints/${teamId}`)
                             .then(response => {
+                                console.log("Response: ", response);
                                 if (!response.ok) {
                                     throw new Error('Failed to update team points');
                                 }
@@ -182,6 +183,9 @@ function saveStats(event) {
                             .catch(error => {
                                 console.error('Error updating team points:', error);
                             });
+
+                        console.log("Tournament Id: ", tournamentId);
+                        console.log("Team Id: ", teamId);
 
                     })
                     .catch(error => {

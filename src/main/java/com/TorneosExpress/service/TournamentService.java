@@ -10,12 +10,15 @@ import com.TorneosExpress.repository.MatchRepository;
 import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.repository.TournamentRepository;
 import com.TorneosExpress.repository.TournamentTeamRepository;
+import com.zaxxer.hikari.util.FastList;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,31 +47,167 @@ public class TournamentService {
 
     public List<Match> getAllMatches(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
-        return tournament.getMatches();
+        List<Match> matches = tournament.getMatches();
+
+        // Verificar si todos los partidos han sido jugados / Sirve para el Knockout
+        boolean allMatchesPlayed = matches.stream().allMatch(Match::isPlayed);
+        if(allMatchesPlayed && tournament.getType() == Type.KNOCKOUT){
+            List<Team> winners = getWinnersFromMatches(matches);
+            if(winners.isEmpty()){
+                return matches;
+            }
+            if (tournament.getType() == Type.KNOCKOUT && !winners.isEmpty()) {
+                switch (winners.size()) {
+                    case 8:
+                        return getTournamentFixtureKnockoutQuarterFinals(tournamentId, Type.KNOCKOUT);
+                    case 4:
+                        return getTournamentFixtureKnockoutSemifinals(tournamentId, Type.KNOCKOUT);
+                    case 2:
+                        return getTournamentFixtureKnockoutFinals(tournamentId, Type.KNOCKOUT);
+                }
+            }
+        }
+
+        return matches;
     }
 
-    public List<Match> getTournamentFixture(Long tournamentId, Type type) {
 
+
+    public List<Match> getTournamentFixture(Long tournamentId, Type type) {
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> fixtureMatches;
-
         if (tournament.getMatches() == null || tournament.getMatches().isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
             teamRepository.saveAll(teams);
-
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
-
             fixtureMatches = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                 .build(teams, type);
-
             tournament.setMatches(fixtureMatches);
             tournamentRepository.save(tournament);
         } else {
             fixtureMatches = tournament.getMatches();
         }
-
         return fixtureMatches;
     }
+
+    // Todo: Voy a resolver la primer vinculacion que hay aca. Luego con el resto. De esa forma encaro el problema a pedazos.
+    // Todo: En lugar de volver a llamar a tournament, no habra una forma de hacerlo mas sencillo en base a el estado que tiene tournament.getMatches()?
+    // Todo: el get, hace que el codigo siempre se ejecute. Por tanto, el new FixtureBuilder va a volver a hacerse. La idea es evitar eso para evitar duplicaciones de id.
+    public List<Match> getTournamentFixtureKnockoutQuarterFinals(Long tournamentId, Type type) {
+        Tournament tournament = getTournamentById(tournamentId);
+        List<Match> matchesWinner;
+        // List<Match> matchesOfQuarterFinals = tournament.getQuarterFinalMatches();
+        List<Match> emptyMatches = List.of();
+
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Cuartos. Tiene que haber 8 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
+            //matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+            //      .build(teamsWinners, type);
+            matchesWinner = tournament.getMatches();
+            matchesWinner.addAll(new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type));
+
+            return matchesWinner;
+        }
+
+        return emptyMatches;
+    }
+
+
+
+    /* if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8 && matchesOfQuarterFinals.size() != 4) { // Si no es 4, no agrego. Por tanto se asume que ya agregue los partidos correspondientes.
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+
+            for(Match match : matchesWinner){
+                matchesOfQuarterFinals.add(tournament.addQuarterFinalMatch(match));
+            }
+        } else{
+            return matchesOfQuarterFinals; // Devuelvo los partidos que corresponden.
+        }
+        return emptyMatches;
+    } */
+
+    public List<Match> getTournamentFixtureKnockoutSemifinals(Long tournamentId, Type type) {
+        Tournament tournament = getTournamentById(tournamentId);
+        List<Match> matchesWinner;
+        // List<Match> matchesOfSemifinals = tournament.getSemifinalMatches();
+        List<Match> emptyMatches = List.of();
+
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Cuartos. Tiene que haber 8 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+            return matchesWinner;
+        }
+
+        return emptyMatches;
+    }
+
+
+
+        /*List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Semis. Tiene que haber 4 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 4 && matchesOfSemifinals.size() != 2) { // Si no es 2, no agrego. Por tanto se asume que ya agregue los partidos correspondientes.
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+
+            for(Match match : matchesWinner){
+                matchesOfSemifinals.add(tournament.addSemifinalMatch(match));
+            }
+        } else{
+            return matchesOfSemifinals; // Devuelvo los partidos que corresponden.
+        }
+        return emptyMatches;*/
+
+
+    public List<Match> getTournamentFixtureKnockoutFinals(Long tournamentId, Type type) {
+        Tournament tournament = getTournamentById(tournamentId);
+        List<Match> matchesWinner;
+        // List<Match> matchesOfFinal = tournament.getFinalMatches();
+        List<Match> emptyMatches = List.of();
+
+        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Semis. Tiene que haber 4 ganadores para mostrar, los resultados de semifinal.
+
+        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+            return matchesWinner;
+        }
+
+        return emptyMatches;
+
+    }
+
+        /*if (tournament.getMatches() != null && tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 2 && matchesOfFinal.size() != 1) { // Si no es 1, no agrego. Por tanto se asume que ya agregue los partidos correspondientes.
+            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+                    .build(teamsWinners, type);
+
+            for(Match match : matchesWinner){
+                matchesOfFinal.add(tournament.addFinalMatch(match));
+            }
+        } else{
+            return matchesOfFinal; // Devuelvo los partidos que corresponden.
+        }
+        return emptyMatches;*/
+
+
+    private List<Team> getWinnersFromMatches(List<Match> matches) {
+        List<Team> winners = new ArrayList<>();
+        List<Team> emptyMatches = List.of();
+        if(!matches.isEmpty()) {
+            for (Match match : matches) {
+                Optional<Team> winner = teamRepository.findById(match.getWinner());
+                winner.ifPresent(winners::add);
+            }
+            return winners;
+        } else{
+            return emptyMatches;
+        }
+    }
+
 
     public List<Tournament> getTournamentsByUser(Long userId) {
         return tournamentRepository.findByCreatorIdOrParticipatingTeamsUserId(userId);
@@ -134,9 +273,72 @@ public class TournamentService {
         return tournamentRepository.save(tournament);
     }
 
-    public Tournament endTournament(Long tournamentId, Long teamId) {
+
+    @Transactional
+    public Tournament endTournament(Long tournamentId){
         Tournament tournament = getTournamentById(tournamentId);
-        Team teamWinner = teamRepository.findById(teamId).orElse(null);
+        endTournamentWithWinner(tournament, tournament.getParticipatingTeams()); // Solucionado esto.
+
+        tournament.setActive(false);
+        return tournamentRepository.save(tournament); // Fixme: Hay error con la db.
+    }
+
+
+    private void endTournamentWithWinner(Tournament tournament, List<Team> matchesOfTournament) {
+        switch (tournament.getType()){
+            case ROUNDROBIN:
+                endTournamentForRoundRobin(tournament, matchesOfTournament); // Aca debo determinar cual es el winner segun los winners de cada partido.
+                break;
+            case KNOCKOUT:
+                endTournamentForKnockout(tournament, matchesOfTournament);
+                break;
+            case GROUPSTAGE:
+                endTournamentForGroupStage(tournament, matchesOfTournament);
+                break;
+        }
+    }
+
+    // winnersOfMatches equivalen a los winners de cada partido. Se determina el winner de todo el torneo, en base a su cantidad de tournamentPoints.
+
+    // TODO
+    private void endTournamentForRoundRobin(Tournament tournament, List<Team> matchesOfTournament){
+        List<Integer> listWithTeamPoints = new ArrayList<>(tournament.getMaxTeams());                               // Guarda los puntos que hizo cada Team. Como maximo la lista no puede exceder el tamano de los teams registrados.
+        int maxPoints = -1;
+        for(Team team : matchesOfTournament){
+            if(team != null) {
+                TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament); // Fijate aca de buscarlo por id.
+
+                if(tournamentTeam.getTournamentPoints() == null){ // Si algun equipo, no tiene puntos, porque perdio todos los partidos, le asignamos a 0 el puntaje.
+                    tournamentTeam.setTournamentPoints(0);
+                }
+                int teamPoints = tournamentTeam.getTournamentPoints(); // No se aun si estos puntos, son los del winner, pero los voy a ir acumulando, en listWithTeamPoints
+                listWithTeamPoints.add(teamPoints);
+            }
+        }
+        for(int teamPoints: listWithTeamPoints){
+            if(teamPoints > maxPoints){
+                maxPoints = teamPoints;    // Voy comparando hasta hallar el team con maximos puntos
+            }
+        }
+        // Busco al team con esa cantidad de puntos y el torneo en el que esta, para evitar problemas de busqueda por repeticion de puntaje.
+        TournamentTeam tournamentTeamWithMaxPoints = tournamentTeamRepository.findByTournamentPointsAndTournament(maxPoints, tournament);
+        Team teamWinner = tournamentTeamWithMaxPoints.getTeam(); // El que encuentre, es el ganador del torneo.
+        setPrestigePointsForTeam(tournamentTeamWithMaxPoints.getTournament(), teamWinner); // Seteo los puntos de prestigio al team que corresponda.
+        tournament.setWinner(teamWinner); // Seteo el winner del tournament.
+
+        teamWinner.addTournamentsWon(tournament); // Seteo el tournament en la lista de torneos ganados del equipo
+    }
+
+
+    private void endTournamentForKnockout(Tournament tournament, List<Team> teamWinner){
+
+    }
+
+    private void endTournamentForGroupStage(Tournament tournament, List<Team> teamWinner){
+
+    }
+
+    private void setPrestigePointsForTeam(Tournament tournament, Team teamWinner) {
         Difficulty difficulty = tournament.getDifficulty();
         switch (difficulty){
             case BEGINNER:
@@ -156,8 +358,6 @@ public class TournamentService {
                 teamWinner.addPrestigePoints(100);
                 break;
         }
-        tournament.setActive(false);
-        return tournamentRepository.save(tournament);
     }
 
     public Match updateMatch(Long matchId, UpdateMatchDto newMatch) {
@@ -179,21 +379,26 @@ public class TournamentService {
         return matchRepository.save(match);
     }
 
-    public Match updateMatchStats(Long matchId, SaveMatchStatsDto statsDto) {
-
+    public Match updateMatchStats(Long matchId, SaveMatchStatsDto statsDto) { // Todo. Solo funciona para octavos de final.
         Match match = getMatchById(matchId);
 
-        int team1score = statsDto.getTeam1Score();
-        int team2score = statsDto.getTeam2Score();
-        Long winnerId = statsDto.getWinner();
+        if(!match.isPlayed()){
+            int team1score = statsDto.getTeam1Score();
+            int team2score = statsDto.getTeam2Score();
+            Long winnerId = statsDto.getWinner();
 
-        match.setFirstTeamScore(team1score);
-        match.setSecondTeamScore(team2score);
-        match.setWinner(winnerId);
-        match.setPlayed(true);
+            match.setFirstTeamScore(team1score);
+            match.setSecondTeamScore(team2score);
+            match.setWinner(winnerId);
+            match.setPlayed(true);
 
-        return matchRepository.save(match);
+            return matchRepository.save(match);
+        }
+
+        return null;
     }
+
+
 
     public Tournament getTournamentById(Long id) {
         Optional<Tournament> optionalTournament = tournamentRepository.findById(id);
@@ -218,11 +423,21 @@ public class TournamentService {
 
         Type tournamentType = tournament.getType();
 
-        if (tournamentType != Type.KNOCKOUT){
-            tournamentTeam.addPoints(3);
+        if(tournamentTeam.getTournamentPoints() == null){
+            tournamentTeam.setTournamentPoints(0); // aseguro que sea 0 si es null.
         }
 
+        if (tournamentType != Type.KNOCKOUT){ // Sino es null, agregar puntaje.
+            tournamentTeam.addPoints(3);
+        }
         return tournamentTeamRepository.save(tournamentTeam);
     }
+
+    /*private Integer getPointsToTeam(Tournament tournament,  Team team) {
+        TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament);
+        TournamentTeam tournamentTeam1 = tournamentTeamRepository.findByTournamentPointsAndTournament(tournamentTeam.getTournamentPoints(), tournament);
+        return tournamentTeam1.getTournamentPoints();
+    }*/
+
 
 }
