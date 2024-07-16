@@ -173,9 +173,16 @@ function saveStats(event) {
     })
         .then(response => {
             if (response.ok) {
-                document.getElementById('formularioEstadisticas').reset();
-                setTimeout(() => location.reload());
+                // Mostrar mensaje de éxito después de guardar las estadísticas
                 displaySuccessMessage("Estadísticas agregadas con éxito");
+
+                // Recargar la página después de 3 segundos
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+
+                // Opcionalmente, puedes omitir la recarga de página y manejar la actualización de la interfaz de otra manera
+                // Si decides no recargar la página, elimina la línea setTimeout(() => location.reload()); y ajusta según sea necesario
 
                 fetch(`/api/tournaments/matches/${matchId}`)
                     .then(response => {
@@ -206,9 +213,6 @@ function saveStats(event) {
 
                         console.log("Tournament Id: ", tournamentId);
                         console.log("Team Id: ", teamId);
-                        displaySuccessMessage("Estadísticas agregadas con éxito");
-
-
                     })
                     .catch(error => {
                         console.error('Error fetching match details:', error);
