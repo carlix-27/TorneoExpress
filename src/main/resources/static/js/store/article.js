@@ -87,28 +87,27 @@ function fetchMyTeams(article) {
                     option.value = teamId;
                     option.text = name;
                     teamDropDown.appendChild(option);
+                });
 
-                    teamDropDown.addEventListener('change', () => {
-                        const selectedTeamId = teamDropDown.value;
-                        const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
-                        points.innerHTML = `Sus puntos de prestigio: ${selectedTeam ? selectedTeam.prestigePoints : 0}`;
+                teamDropDown.addEventListener('change', () => {
+                    const selectedTeamId = teamDropDown.value;
+                    const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
+                    points.innerHTML = `Sus puntos de prestigio: ${selectedTeam ? selectedTeam.prestigePoints : 0}`;
 
-                        //const buyButton = document.getElementById('buy-button');
-                        //buyButton.disabled = !(selectedTeam && selectedTeam.prestigePoints >= article.article_price);
-                        const buyButton = document.getElementById("buy-button");
-                        //buyButton.onclick = validateTransaction(article.article_price, selectedTeam.prestigePoints);
-                        buyButton.addEventListener('click', () => {
-                            const selectedTeamId = teamDropDown.value;
-                            const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
-                            points.innerHTML = `Sus puntos de prestigio: ${selectedTeam ? selectedTeam.prestigePoints : 0}`;
+                    const buyButton = document.getElementById("buy-button");
+                    buyButton.disabled = !(selectedTeam && selectedTeam.prestigePoints >= article.article_price);
+                });
 
-                            if (selectedTeam) {
-                                validateTransaction(article.article_price, selectedTeam.prestigePoints, article.id, selectedTeamId);
-                            } else {
-                                displayErrorMessage("Seleccione un equipo válido");
-                            }
-                        });
-                    });
+                const buyButton = document.getElementById("buy-button");
+                buyButton.addEventListener('click', () => {
+                    const selectedTeamId = teamDropDown.value;
+                    const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
+
+                    if (selectedTeam) {
+                        validateTransaction(article.article_price, selectedTeam.prestigePoints, article.id, selectedTeamId);
+                    } else {
+                        displayErrorMessage("Seleccione un equipo válido");
+                    }
                 });
             }
 
@@ -121,11 +120,12 @@ function fetchMyTeams(article) {
 }
 
 function validateTransaction(price, prestigePoints, articleId, teamId) {
-  if (prestigePoints >= price) {
-    handleTransaction(articleId, teamId);
-  } else {
-    displayErrorMessage("No tiene suficientes puntos");
-  }
+    console.log("validando transaccion");
+    if (prestigePoints >= price) {
+        handleTransaction(articleId, teamId);
+    } else {
+        displayErrorMessage("No tiene suficientes puntos");
+    }
 }
 
 function displaySuccessMessage(message) {
@@ -160,6 +160,7 @@ function handleTransaction(articleId, teamId) {
             return response.json();
         })
         .then(data => {
+            console.log("Transaccion exitosa");
             displaySuccessMessage("Artículo comprado con éxito");
         })
         .catch(error => {
