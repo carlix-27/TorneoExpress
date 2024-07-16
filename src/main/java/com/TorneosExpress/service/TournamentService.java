@@ -23,15 +23,15 @@ public class TournamentService {
     private final TeamRepository teamRepository;
     private final MatchRepository matchRepository;
     private final TournamentTeamRepository tournamentTeamRepository;
-    private final ArticleRepository articleRepository;
+    private final TeamService teamService;
 
     @Autowired
-    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository, TournamentTeamRepository tournamentTeamRepository, ArticleRepository articleRepository) {
+    public TournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, MatchRepository matchRepository, TournamentTeamRepository tournamentTeamRepository, TeamService teamService) {
         this.tournamentRepository = tournamentRepository;
         this.teamRepository = teamRepository;
         this.matchRepository = matchRepository;
         this.tournamentTeamRepository = tournamentTeamRepository;
-        this.articleRepository = articleRepository;
+        this.teamService = teamService;
     }
 
     public List<Team> getTeamsOfTournament(Long tournamentId) {
@@ -338,14 +338,17 @@ public class TournamentService {
             match.setWinner(winnerId);
             match.setPlayed(true);
 
+            markBenefitAsUsed(statsDto);
+
             return matchRepository.save(match);
         }
+        return matchRepository.save(match);
+    }
 
+    private void markBenefitAsUsed(SaveMatchStatsDto statsDto) {
         for (ArticleUsageDto benefitUsage : statsDto.getArticleUsageDtos()) {
-            articleRepository.deleteById(benefitUsage.getArticleId());
+            teamService.deleteArticleById(benefitUsage.getArticleId(), benefitUsage.getTeamId());
         }
-
-        return null;
     }
 
     public Tournament getTournamentById(Long id) {

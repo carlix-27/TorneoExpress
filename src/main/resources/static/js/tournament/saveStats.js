@@ -44,7 +44,6 @@ function populateMatchSelector(matches) {
     const partidoSelector = document.getElementById('partidoSelector');
     const ganadorSelector = document.getElementById('ganadorSelector');
 
-    // Limpiar el selector de partidos y ganador
     partidoSelector.innerHTML = '<option value="">Seleccione un partido</option>';
     ganadorSelector.innerHTML = '<option value="">Seleccione el ganador</option>';
 
@@ -52,11 +51,13 @@ function populateMatchSelector(matches) {
         const option = document.createElement('option');
         option.value = match.matchId;
         option.textContent = `${match.team1.name} vs ${match.team2.name}`;
+        option.dataset.team1Id = match.team1.id;
+        option.dataset.team2Id = match.team2.id;
         partidoSelector.appendChild(option);
     });
 
     partidoSelector.addEventListener('change', () => {
-        ganadorSelector.innerHTML = '<option value="">Seleccione el ganador</option>'; // Reset the winner options
+        ganadorSelector.innerHTML = '<option value="">Seleccione el ganador</option>';
         const selectedMatch = matches.find(m => m.matchId == partidoSelector.value);
 
         if (selectedMatch) {
@@ -70,7 +71,6 @@ function populateMatchSelector(matches) {
             team2Option.textContent = selectedMatch.team2.name;
             ganadorSelector.appendChild(team2Option);
 
-            // Agregar opción de empate
             const empateOption = document.createElement('option');
             empateOption.value = '0';
             empateOption.textContent = 'Empate';
@@ -81,6 +81,7 @@ function populateMatchSelector(matches) {
         }
     });
 }
+
 
 function loadBenefits(teamId, elementId, teamName) {
     fetch(`/api/articles/${teamId}`)
@@ -107,7 +108,7 @@ function loadBenefits(teamId, elementId, teamName) {
             articles.forEach(article => {
                 const option = document.createElement('option');
                 option.value = article.id;
-                option.textContent = article.name;
+                option.textContent = article.article_name;
                 select.appendChild(option);
             });
 
@@ -138,10 +139,29 @@ function saveStats(event) {
         winnerId = parseInt(ganador);
     }
 
+    // Get selected benefits for both teams
+    const beneficioEquipo1 = document.querySelector(`#beneficiosEquipo1 .beneficioSelector`).value;
+    const beneficioEquipo2 = document.querySelector(`#beneficiosEquipo2 .beneficioSelector`).value;
+
+    const articleUsageDtos = [];
+    if (beneficioEquipo1) {
+        articleUsageDtos.push({
+            teamId: document.querySelector('#partidoSelector').selectedOptions[0].dataset.team1Id,
+            articleId: parseInt(beneficioEquipo1)
+        });
+    }
+    if (beneficioEquipo2) {
+        articleUsageDtos.push({
+            teamId: document.querySelector('#partidoSelector').selectedOptions[0].dataset.team2Id,
+            articleId: parseInt(beneficioEquipo2)
+        });
+    }
+
     const data = {
         team1Score: parseInt(team1Score),
         team2Score: parseInt(team2Score),
-        winner: winnerId
+        winner: winnerId,
+        articleUsageDtos: articleUsageDtos
     };
 
     fetch(`/api/tournaments/matches/stats/${matchId}`, {
@@ -199,6 +219,7 @@ function saveStats(event) {
             displayErrorMessage("Error al guardar las estadísticas");
         });
 }
+
 
 function isValidScore(score) {
     return !isNaN(parseInt(score)) && isFinite(score) && parseInt(score) >= 0;

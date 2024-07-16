@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    function renderArticles(articles) {
+    /*function renderArticles(articles) {
         const articlesDiv = document.getElementById("articles");
         articlesDiv.innerHTML = ``;
         if (articles.length === 0) {
@@ -84,6 +84,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 <h3>${article.article_name}</h3>
                 <p>${article.article_description}</p>
             `;
+            articlesDiv.appendChild(div);
+        });
+    }*/
+    function renderArticles(articles) {
+        const articlesDiv = document.getElementById("articles");
+        articlesDiv.innerHTML = ``;
+        if (articles.length === 0) {
+            articlesDiv.innerHTML = `
+            <p>No posee beneficios para este equipo</p>
+        `;
+            return;
+        }
+
+        const articleCounts = new Map();
+        articles.forEach(article => {
+            if (articleCounts.has(article.article_name)) {
+                articleCounts.set(article.article_name, articleCounts.get(article.article_name) + 1);
+            } else {
+                articleCounts.set(article.article_name, 1);
+            }
+        });
+
+        articleCounts.forEach((count, articleName) => {
+            const div = document.createElement("div");
+            div.innerHTML = `
+            <h3>${articleName} ${count > 1 ? `(x${count})` : ''}</h3>
+        `;
             articlesDiv.appendChild(div);
         });
     }

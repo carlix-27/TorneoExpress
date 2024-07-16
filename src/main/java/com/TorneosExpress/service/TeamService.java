@@ -147,4 +147,12 @@ public class TeamService {
     return teamRepository.save(team);
   }
 
+  @Transactional
+  public Team deleteArticleById(Long articleId, Long teamId) {
+    Team team = findById(teamId);
+    Article article = articleRepository.findArticleById(articleId);
+    team.getArticles().remove(article);
+    return teamRepository.save(team);
+  }
+
 }
