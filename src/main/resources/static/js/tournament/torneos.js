@@ -126,9 +126,9 @@ function addSignupButtonListener(tournament, userId, signupButton) {
         }
 
         if (numOfParticipatingTeams < maxTeams) {
-            const { private: tournamentIsPrivate } = tournament;
+            const { private: tournamentIsPrivate, creatorId} = tournament;
 
-            if (tournamentIsPrivate) {
+            if (tournamentIsPrivate && creatorId != userId) {
                 sendTournamentRequest(tournament, teamId, userId);
             } else {
                 joinPublicTournament(tournament, teamId);
