@@ -93,9 +93,6 @@ function fetchMyTeams(article) {
                     const selectedTeamId = teamDropDown.value;
                     const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
                     points.innerHTML = `Sus puntos de prestigio: ${selectedTeam ? selectedTeam.prestigePoints : 0}`;
-
-                    const buyButton = document.getElementById("buy-button");
-                    buyButton.disabled = !(selectedTeam && selectedTeam.prestigePoints >= article.article_price);
                 });
 
                 const buyButton = document.getElementById("buy-button");
