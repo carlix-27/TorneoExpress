@@ -90,4 +90,5 @@ ul#team-options li a:hover {
 
 #verified-icon {
     display: none; /* Ocultar por defecto */
+    margin: 5px;
 }
