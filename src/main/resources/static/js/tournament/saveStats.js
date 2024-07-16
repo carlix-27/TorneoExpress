@@ -206,6 +206,8 @@ function saveStats(event) {
 
                         console.log("Tournament Id: ", tournamentId);
                         console.log("Team Id: ", teamId);
+                        displaySuccessMessage("Estadísticas agregadas con éxito");
+
 
                     })
                     .catch(error => {
