@@ -2,7 +2,7 @@ function loadArticle() {
     const urlParams = new URLSearchParams(window.location.search);
     const articleId = urlParams.get('article-id');
 
-    fetch(`/api/articles/${articleId}`)
+    fetch(`/api/articles/article/${articleId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch article: ${response.status} ${response.statusText}`);
