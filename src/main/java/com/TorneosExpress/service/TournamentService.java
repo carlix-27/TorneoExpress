@@ -342,7 +342,7 @@ public class TournamentService {
         }
 
         for (ArticleUsageDto benefitUsage : statsDto.getArticleUsageDtos()) {
-            articleRepository.deleteById(benefitUsage.getBenefitId());
+            articleRepository.deleteById(benefitUsage.getArticleId());
         }
 
         return null;
