@@ -45,7 +45,7 @@ function loadTournament() {
                     <p>Equipos anotados:</p>
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
-                    <a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>
+                     ${tournament.active ? `<a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>` : ''}
                     <a class="action-link" onclick="endTournament(${tournament.id})">Terminar Torneo</a>
                 </div> 
             `;
