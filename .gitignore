@@ -1,5 +1,3 @@
-null
-out
 .gradle
 .DS_STORE
 .idea
@@ -9,3 +7,5 @@ target
 src/main/resources/application.properties
 db
 .env
+node_modules
+.vscode
