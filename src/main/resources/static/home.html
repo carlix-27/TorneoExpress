@@ -14,11 +14,11 @@
 
     <style>
         #verified-icon {
-            display: none; /* Ocultar por defecto */
+            display: none;
         }
         #request-asterisk {
-            display: none; /* Ocultar por defecto */
-            color: red; /* You can change the color as needed */
+            display: none;
+            color: red;
         }
     </style>
 </head>
@@ -55,13 +55,8 @@
     </nav>
 </header>
 
-<section id="bienvenida">
-    <h2>Bienvenido a Torneos Express</h2>
-    <p>Descubre los torneos más emocionantes y únete a la comunidad.</p>
-</section>
 
 <section id="torneos">
-    <h2>Torneos</h2>
     <ul id="tournament-options">
         <li><a href="#" onclick="redirectToCreateTournament()">Crear Torneo</a></li>
         <li><a href="misTorneos.html">Ver Mis Torneos<span id="request-asterisk">*</span></a></li>
@@ -70,28 +65,18 @@
     </ul>
 </section>
 
-<br>
-
-<section id="deportes">
-    <h2>Deportes</h2>
-    <ul id="sport-options">
-        <li><a href="#" onclick="createSportRedirect()">Agregar Deporte</a></li>
-        <li><a href="deportes.html">Ver Deportes</a></li>
-    </ul>
-</section>
 
 <script>
     function confirmLogout() {
         const logoutConfirmed = window.confirm('Do you want to logout?');
         if (logoutConfirmed) {
-            localStorage.removeItem("userId"); // Remove userId from localStorage
+            localStorage.removeItem("userId");
             window.location.href = "login.html";
         }
     }
 
     document.getElementById("logout-link").addEventListener("click", confirmLogout);
 
-    // Function to check if there are any pending team requests
     function checkTeamRequests() {
         const userId = localStorage.getItem("userId");
         if (!userId) {

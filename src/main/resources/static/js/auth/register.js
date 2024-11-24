@@ -34,10 +34,10 @@ function register() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const address = document.getElementById('location'); // Corrected here
+    const address = document.getElementById('location');
 
-    const latitude = address.dataset.latitude; // Corrected here
-    const longitude = address.dataset.longitude; // Corrected here
+    const latitude = address.dataset.latitude;
+    const longitude = address.dataset.longitude;
 
     console.log(latitude);
     console.log(longitude);
@@ -49,7 +49,7 @@ function register() {
 
     const location = `${latitude},${longitude}`;
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|io|co)$/i;
 
     if (!emailPattern.test(email)) {
         displayErrorMessage("Por favor, ingrese un email válido.");
