@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="styles/button.css">
     <link rel="stylesheet" href="styles/back-button.css">
     <link rel="stylesheet" href="styles/link.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
 
         .wrapper {
@@ -19,7 +21,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f9;
+            background-color: #3d1f7f;
             padding: 20px;
             box-sizing: border-box;
         }
@@ -31,7 +33,11 @@
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="js/auth/register.js"></script>
+    <script src="js/auth/errorMessage.js"></script>
+    <script src="js/maps/googleMaps.js"></script>
 </head>
+
 <body>
 <div class="wrapper">
     <div class="box">
@@ -43,22 +49,22 @@
 
             <div class="textbox">
                 <i class="fas fa-user"></i>
-                <input type="text" id="name" placeholder="Nombre" required>
+                <label for="name"></label><input type="text" id="name" placeholder="Nombre" required>
             </div>
 
             <div class="textbox">
                 <i class="fas fa-envelope"></i>
-                <input type="email" id="email" placeholder="Email" required>
+                <label for="email"></label><input type="email" id="email" placeholder="Email" required>
             </div>
 
             <div class="textbox">
                 <i class="fas fa-map-marker-alt"></i>
-                <input type="text" id="location" placeholder="Enter your address" required>
+                <label for="location"></label><input type="text" id="location" placeholder="Enter your address" required>
             </div>
 
             <div class="textbox">
                 <i class="fas fa-lock"></i>
-                <input type="password" id="password" placeholder="Contraseña" required>
+                <label for="password"></label><input type="password" id="password" placeholder="Contraseña" required>
             </div>
 
             <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div>
@@ -69,7 +75,6 @@
             <p><a href="index.html">¿Ya estás registrado? Ingresa aquí </a></p>
         </div>
 
-        <script src="js/auth/register.js"></script>
     </div>
 </div>
 </body>
