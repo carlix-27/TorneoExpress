@@ -1,0 +1,42 @@
+.toast {
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    z-index: 1000;
+}
+
+.toast .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.toast .close-btn:hover {
+    color: #333;
+}
+
+.toast-success {
+    color: green;
+}
+
+.toast-error {
+    color: red;
+}
