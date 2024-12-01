@@ -5,7 +5,6 @@
     <title>Torneos Express - Registro</title>
 
     <link rel="stylesheet" href="styles/base.css">
-
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/box.css">
     <link rel="stylesheet" href="styles/textbox.css">
@@ -16,19 +15,36 @@
 
     <style>
 
-        .wrapper {
+        .split-screen {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #3d1f7f;
-            padding: 20px;
-            box-sizing: border-box;
+            background-color: #f4f4f9;
+            padding: 0 60px;
         }
+
+        .illustration {
+            max-width: 250px;
+            margin: 0 20px;
+        }
+
+        .illustration-left {
+            order: -1;
+            margin-left: 30px;
+        }
+
+        .illustration-right {
+            order: 1;
+            margin-right: 30px;
+        }
+
         .box {
             width: 100%;
             max-width: 400px;
+            margin: 0 100px;
         }
+
 
     </style>
 
@@ -39,44 +55,48 @@
 </head>
 
 <body>
-<div class="wrapper">
-    <div class="box">
-        <h2>Registrar nueva cuenta</h2>
 
-        <form id="registration-form" action="api/auth/submit_registration" method="post">
-            <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
-            <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+<div class="split-screen">
+        <img src="illustrations/Goal%20Illustration.svg" alt="Goal Illustration" class="illustration illustration-left">
 
-            <div class="textbox">
-                <i class="fas fa-user"></i>
-                <label for="name"></label><input type="text" id="name" placeholder="Nombre" required>
+        <div class="box">
+            <h2>Registrar nueva cuenta</h2>
+
+            <form id="registration-form" action="api/auth/submit_registration" method="post">
+                <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+                <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+
+                <div class="textbox">
+                    <i class="fas fa-user"></i>
+                    <label for="name"></label><input type="text" id="name" placeholder="Nombre" required>
+                </div>
+
+                <div class="textbox">
+                    <i class="fas fa-envelope"></i>
+                    <label for="email"></label><input type="email" id="email" placeholder="Email" required>
+                </div>
+
+                <div class="textbox">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <label for="location"></label><input type="text" id="location" placeholder="Enter your address" required>
+                </div>
+
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <label for="password"></label><input type="password" id="password" placeholder="Contraseña" required>
+                </div>
+
+                <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div>
+                <input type="button" value="Registrar" name="register_button" onclick="register()">
+            </form>
+
+            <div class="link">
+                <p><a href="index.html">¿Ya estás registrado? Ingresa aquí </a></p>
             </div>
-
-            <div class="textbox">
-                <i class="fas fa-envelope"></i>
-                <label for="email"></label><input type="email" id="email" placeholder="Email" required>
-            </div>
-
-            <div class="textbox">
-                <i class="fas fa-map-marker-alt"></i>
-                <label for="location"></label><input type="text" id="location" placeholder="Enter your address" required>
-            </div>
-
-            <div class="textbox">
-                <i class="fas fa-lock"></i>
-                <label for="password"></label><input type="password" id="password" placeholder="Contraseña" required>
-            </div>
-
-            <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div>
-            <input type="button" value="Registrar" name="register_button" onclick="register()">
-        </form>
-
-        <div class="link">
-            <p><a href="index.html">¿Ya estás registrado? Ingresa aquí </a></p>
         </div>
 
+        <img src="illustrations/Greek%20Freak%20Illustration.svg" alt="Greek Freak Illustration" class="illustration illustration-right">
     </div>
-</div>
-</body>
 
+</body>
 </html>
