@@ -4,6 +4,7 @@ import com.TorneosExpress.dto.auth.LoginRequest;
 import com.TorneosExpress.dto.auth.RegisterRequest;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.service.PlayerService;
+import com.TorneosExpress.security.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private final JwtUtil jwtUtil;
+
     private final PlayerService playerService;
 
     @Autowired
-    public AuthController(PlayerService playerService) {
+    public AuthController(PlayerService playerService, JwtUtil jwtUtil) {
         this.playerService = playerService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody LoginRequest request) {
+    public String  login(@RequestBody LoginRequest request) {
 
         String requestEmail = request.email();
         String requestPassword = request.password();
@@ -34,9 +38,8 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Long userId = player.getId();
-
-        return new ResponseEntity<>(userId, HttpStatus.OK);
+        String token = jwtUtil.generateToken(request.getUsername());
+        return token;
     }
 
 

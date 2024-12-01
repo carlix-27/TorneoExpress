@@ -2,7 +2,6 @@ package com.TorneosExpress.fixture;
 
 import com.TorneosExpress.model.Match;
 import com.TorneosExpress.model.Team;
-import com.TorneosExpress.model.Tournament;
 import com.TorneosExpress.model.Type;
 import com.TorneosExpress.repository.MatchRepository;
 
