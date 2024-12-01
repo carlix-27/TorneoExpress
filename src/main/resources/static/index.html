@@ -15,30 +15,95 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="js/auth/login.js" defer></script>
     <script src="js/auth/register.js" defer></script>
+    <style>
+        .split-screen {
+            display: flex;
+            height: 100vh;
+        }
+
+        .left {
+            flex: 1;
+            background: #3d1f7f;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .left h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .left p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f4f4f9;
+        }
+
+        .box {
+            width: 90%;
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .left {
+                display: none;
+            }
+
+            .right {
+                flex: none;
+                width: 100%;
+            }
+
+            .box {
+                margin: auto;
+            }
+        }
+    </style>
+
 </head>
 <body>
 
+<div class="split-screen">
+    <div class="left">
+        <h1>Bienvenido a Torneos Express!</h1>
+        <p>La plataforma para manejar y jugar tus propios torneos <br> ¡Inicia session para jugar!</p>
+    </div>
 
-<div class="box">
-    <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
-    <h2>Login</h2>
+    <div class="right">
+        <div class="box">
+            <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+            <h2>Login</h2>
 
-    <div id="error-message" class="toast toast-error" style="display: none;">Invalid email or password. Please try again.</div>
+            <div id="error-message" class="toast toast-error" style="display: none;">Invalid email or password. Please try again.</div>
 
-    <form id="login-form" action="/api/auth/login" method="post">
-        <div class="textbox">
-            <i class="fas fa-user"></i>
-            <label for="email"></label><input type="text" id="email" placeholder="Email" required>
+            <form id="login-form" action="/api/auth/login" method="post">
+                <div class="textbox">
+                    <i class="fas fa-user"></i>
+                    <label for="email"></label><input type="text" id="email" placeholder="Email" required>
+                </div>
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <label for="password"></label><input type="password" id="password" placeholder="Password" required>
+                </div>
+                <input type="button" value="Login" name="login_button" onclick="login()">
+            </form>
+
+            <div class="link">
+                <p><a href="register.html">Register here</a></p>
+            </div>
         </div>
-        <div class="textbox">
-            <i class="fas fa-lock"></i>
-            <label for="password"></label><input type="password" id="password" placeholder="Password" required>
-        </div>
-        <input type="button" value="Login" name="login_button" onclick="login()">
-    </form>
-
-    <div class="link">
-        <p><a href="register.html">Register here</a></p>
     </div>
 </div>
 
