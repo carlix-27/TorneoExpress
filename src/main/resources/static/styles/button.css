@@ -1,0 +1,16 @@
+button, input[type="button"] {
+    background: #3d1f7f;
+    color: #fff;
+    font-size: 18px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 7px;
+    transition: background 0.3s ease;
+}
+
+button:hover, input[type="button"]:hover {
+    background: #342160;
+}

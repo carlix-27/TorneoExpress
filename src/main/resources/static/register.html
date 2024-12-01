@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Torneos Express - Registro</title>
-    <link rel="stylesheet" href="styles/styleRegister.css">
+
+    <link rel="stylesheet" href="styles/base.css">
+
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
@@ -12,9 +21,9 @@
     <h1>Torneos Express</h1>
 </header>
 
-<div class="register-box">
+<div class="box">
     <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
-    <h2>Registar nueva cuenta</h2>
+    <h2>Registrar nueva cuenta</h2>
 
     <form id="registration-form" action="api/auth/submit_registration" method="post">
 
@@ -45,8 +54,8 @@
         <input type="button" value="Registrar" name="register_button" onclick="register()">
     </form>
 
-    <div class="login-link">
-        <p><a href="login.html">Ya estas registrado? Ingresa aqui </a></p>
+    <div class="link">
+        <p><a href="login.html">¿Ya estás registrado? Ingresa aquí </a></p>
     </div>
 
     <script src="js/auth/register.js"></script>
