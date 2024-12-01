@@ -66,7 +66,7 @@ function logout() {
     // Implement your logout logic, such as clearing local storage
     localStorage.clear();
     // Redirect to login page
-    window.location.href = "login.html";
+    window.location.href = "index.html";
 }
 
 // Entry point when the page loads

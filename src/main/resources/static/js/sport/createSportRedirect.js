@@ -2,7 +2,7 @@ function createSportRedirect() {
     const userId = localStorage.getItem("userId");
     if (!userId) {
         // User is not logged in, redirect to login or handle appropriately
-        window.location.href = "login.html"; // Redirect to login page
+        window.location.href = "index.html"; // Redirect to login page
         return;
     }
 
