@@ -4,11 +4,8 @@
 }
 
 .bell {
-    width: 13px;
-}
-
-.bell path {
-    fill: rgb(0, 206, 62);
+    width: 24px;
+    fill: #6a0dad;
 }
 
 .arrow {
@@ -35,16 +32,16 @@
 }
 
 .notification-button {
-    width: 200px;
-    height: 40px;
+    width: auto;
+    height: auto;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
-    padding: 0 15px;
-    background-color: rgb(66, 66, 66);
-    border-radius: 10px;
-    color: white;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 50%;
+    color: transparent;
     border: none;
     position: relative;
     cursor: pointer;
@@ -52,27 +49,14 @@
 }
 
 .notification-button:hover {
-    background-color: rgb(77, 77, 77);
-    transition-duration: .2s;
+    background-color: transparent;
 }
 
 .notification-button:hover .arrow {
     animation: slide-right .6s ease-out both;
 }
 
-@keyframes slide-right {
-    0% {
-        transform: translateX(-10px);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
 .notification-button:active {
-    transform: translate(1px , 1px);
+    transform: translate(1px, 1px);
     transition-duration: .2s;
 }

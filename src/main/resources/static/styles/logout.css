@@ -1,0 +1,11 @@
+.logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.logout-icon {
+    width: 24px;
+    height: 24px;
+    fill: #333;
+}
