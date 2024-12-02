@@ -25,10 +25,12 @@ function login() {
 
             localStorage.setItem("userId", response);
 
+            window.location.href='/home.html'
+
             showToast();
         } else {
             console.error(xhr.responseText);
-            const errorMessage = document.getElementById('error-message');
+            const errorMessage = document.getElementById('error-toast');
             errorMessage.style.display = 'block';
         }
     };
