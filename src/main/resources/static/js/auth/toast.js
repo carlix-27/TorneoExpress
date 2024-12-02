@@ -16,4 +16,7 @@ window.onload = showToast;
 function closeToast() {
     const successToast = document.getElementById('success-toast');
     successToast.style.display = 'none';
+
+    const errorToast = document.getElementById('error-toast');
+    errorToast.style.display = 'none';
 }
