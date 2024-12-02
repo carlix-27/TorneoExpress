@@ -19,11 +19,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 const unreadCountValue = unreadNotifications.length;
 
                 if (unreadCountValue > 0) {
-                    notificationText.textContent = 'Notifications (' + unreadCountValue + ')';
-                    unreadCount.style.display = 'inline-block';
+                    unreadCount.textContent = unreadCountValue; // Show unread count
+                    unreadCount.style.display = 'inline-block'; // Make count visible
+                    notificationText.textContent = 'Notifications (' + unreadCountValue + ')'; // Update notification text with count
+                    notificationText.classList.add('has-notifications'); // Change color for unread notifications
+                    notificationText.classList.remove('no-notifications');
                 } else {
-                    notificationText.textContent = 'Notifications';
-                    unreadCount.style.display = 'none'; // Hide the unread count if no unread notifications
+                    unreadCount.style.display = 'none'; // Hide unread count if no unread notifications
+                    notificationText.textContent = 'Notifications'; // Show plain text
+                    notificationText.classList.add('no-notifications'); // Default color when no notifications
+                    notificationText.classList.remove('has-notifications');
                 }
 
             })
@@ -33,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function transcurridoMasDe24Horas(createdAt) {
         const milisegundosPorDia = 24 * 60 * 60 * 1000;
         const ahora = new Date();
-
         return (ahora - createdAt) > milisegundosPorDia;
     }
 

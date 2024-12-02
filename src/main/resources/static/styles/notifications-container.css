@@ -1,62 +1,21 @@
-.user-notification-container {
-    display: flex;
-    align-items: center;
-}
-
-.bell {
-    width: 24px;
-    fill: #6a0dad;
-}
-
-.arrow {
-    position: absolute;
-    right: 0;
-    width: 30px;
-    height: 100%;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-@keyframes slide-right {
-    0% {
-        transform: translateX(-10px);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-.notification-button {
-    width: auto;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    padding: 0;
-    background-color: transparent;
-    border-radius: 50%;
-    color: transparent;
-    border: none;
-    position: relative;
+.notifications-container {
     cursor: pointer;
-    transition-duration: .2s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: auto;
 }
 
-.notification-button:hover {
-    background-color: transparent;
+.notifications-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0 10px;
+    transition: color 0.3s ease;
 }
 
-.notification-button:hover .arrow {
-    animation: slide-right .6s ease-out both;
-}
 
-.notification-button:active {
-    transform: translate(1px, 1px);
-    transition-duration: .2s;
+.notifications-container:hover {
+    cursor: pointer;
+    opacity: 0.8;
 }

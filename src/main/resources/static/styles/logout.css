@@ -1,11 +1,15 @@
-.logout-button {
-    background: none;
-    border: none;
+.logout-container {
     cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: auto;
 }
 
-.logout-icon {
-    width: 24px;
-    height: 24px;
-    fill: #333;
+.logout-text {
+    color: #6a0dad;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0 10px;
 }

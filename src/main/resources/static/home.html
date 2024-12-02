@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles/card.css">
     <link rel="stylesheet" href="styles/button.css">
     <link rel="stylesheet" href="styles/userInfo.css">
+    <link rel="stylesheet" href="styles/logout.css">
     <link rel="stylesheet" href="styles/nav.css">
     <link rel="stylesheet" href="styles/notifications-container.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
@@ -22,7 +23,6 @@
     <script src="js/user/userVip.js"></script>
     <script src="js/team/checkTeamRequests.js"></script>
     <style>
-
         #user-name {
             color: #6a0dad;
         }
@@ -39,8 +39,32 @@
             font-size: 1.5rem;
             margin: 20px;
         }
-    </style>
 
+        #notification-text.no-notifications {
+            color: #6a0dad;
+        }
+
+        #notification-text.has-notifications {
+            color: dodgerblue;
+        }
+
+        #unread-count {
+            background-color: #e60000;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        .notifications-container:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -49,16 +73,13 @@
         Bienvenido <span id="user-name">Nombre del usuario</span>
     </div>
     <div class="user-actions">
-        <button class="notification-button" onclick="window.location.href='notifications.html'">
-            <svg class="bell" viewBox="0 0 448 512">
-                <path d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path>
-            </svg>
-        </button>
-        <button class="logout-button" onclick="logout()">
-            <svg class="logout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M10 3H8v18h2V3zm4.707 11.293-1.414 1.414L17.586 16H7v2h10.586l-4.293 4.293 1.414 1.414L21.414 18l-6.707-6.707z"></path>
-            </svg>
-        </button>
+        <div class="notifications-container" onclick="window.location.href='notifications.html'">
+            <span id="notification-text" class="notifications-text">Notifications</span>
+            <span id="unread-count" style="display:none;"></span>
+        </div>
+        <div class="logout-container" onclick="logout()">
+            <span class="logout-text">Logout</span>
+        </div>
     </div>
 </div>
 
@@ -89,7 +110,6 @@
         </div>
     </div>
 </section>
-
 
 </body>
 </html>
