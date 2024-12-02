@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos Express - Home</title>
-    <link rel="stylesheet" href="styles/home.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/grid-container.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/card.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/userInfo.css">
+    <link rel="stylesheet" href="styles/nav.css">
+    <link rel="stylesheet" href="styles/notifications-container.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="js/tournament/createTournamentRedirect.js"></script>
     <script src="js/sport/createSportRedirect.js"></script>
     <script src="js/auth/checkRedirect.js"></script>
+    <script src="js/auth/logout.js"></script>
     <script src="js/notification/notificationBell.js"></script>
     <script src="js/user/userVip.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-
+    <script src="js/team/checkTeamRequests.js"></script>
     <style>
         #verified-icon {
             display: none;
@@ -19,6 +28,13 @@
         #request-asterisk {
             display: none;
             color: red;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 20px;
+            text-align: left;
         }
     </style>
 </head>
@@ -42,7 +58,7 @@
                     <span id="user-name"></span>
                 </div>
 
-                <button class="button" onclick="window.location.href='notifications.html'">
+                <button class="notification-button" onclick="window.location.href='notifications.html'">
                     <svg class="bell" viewBox="0 0 448 512">
                         <path id="bell-path" d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path>
                     </svg>
@@ -57,52 +73,33 @@
 
 
 <section id="torneos">
-    <ul id="tournament-options">
-        <li><a href="#" onclick="redirectToCreateTournament()">Crear Torneo</a></li>
-        <li><a href="misTorneos.html">Ver Mis Torneos<span id="request-asterisk">*</span></a></li>
-        <li><a href="torneos.html">Ver Todos los Torneos</a></li>
-        <li><a href="historial.html">Historial</a></li>
-    </ul>
+    <h2 class="section-title">Torneos</h2>
+    <div class="grid-container">
+        <div class="card" onclick="redirectToCreateTournament()">
+            <h3>Crear Torneo</h3>
+            <p>Crea un nuevo torneo y administra equipos.</p>
+        </div>
+        <div class="card">
+            <a href="misTorneos.html" class="card-link">
+                <h3>Mis Torneos<span id="request-asterisk">*</span></h3>
+                <p>Revisa y gestiona tus torneos.</p>
+            </a>
+        </div>
+        <div class="card">
+            <a href="torneos.html" class="card-link">
+                <h3>Ver Todos los Torneos</h3>
+                <p>Explora los torneos disponibles.</p>
+            </a>
+        </div>
+        <div class="card">
+            <a href="historial.html" class="card-link">
+                <h3>Historial</h3>
+                <p>Consulta el historial de torneos.</p>
+            </a>
+        </div>
+    </div>
 </section>
 
-
-<script>
-    function confirmLogout() {
-        const logoutConfirmed = window.confirm('Do you want to logout?');
-        if (logoutConfirmed) {
-            localStorage.removeItem("userId");
-            window.location.href = "login.html";
-        }
-    }
-
-    document.getElementById("logout-link").addEventListener("click", confirmLogout);
-
-    function checkTeamRequests() {
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-            console.error("User ID not found in localStorage");
-            return;
-        }
-
-        fetch(`/api/requests/tournament/${userId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch team requests: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.length > 0) {
-                    document.getElementById("request-asterisk").style.display = "inline";
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching team requests:', error);
-            });
-    }
-
-    document.addEventListener("DOMContentLoaded", checkTeamRequests);
-</script>
 
 </body>
 </html>
