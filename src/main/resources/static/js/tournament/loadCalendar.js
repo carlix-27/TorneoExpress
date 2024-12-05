@@ -31,18 +31,16 @@ function loadCalendar() {
                         fetchRoundRobinFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'KNOCKOUT':
-                        // TODO: Ver como podes hacer para tener en cuenta la cantidad de equipos, por tanto la estructura del fixture va a ser distinta.
                         fetchKnockoutFixture(tournament.participatingTeams, tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'GROUPSTAGE':
-                        fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+                        fetchGroupStage(tournament.participatingTeams, tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                 }
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            // Handle error, show message to user
         });
 }
 
@@ -190,7 +188,12 @@ function fetchKnockoutFixture(participatingTeams, id, matches, tournamentName, t
 
 
 
-// FIXME: Que pasa si es empate? Que informe, que pasan a penales y de ahi forma random quien gana. dudoso
+// FIXME: Que pasa si es empate? Que informe, que pasan a penales y de ahi forma random quien gana. Es la mejor forma de resolverlo.
+
+
+// todo: considera tener en cuenta el isPlayed de cada partido, de esa forma resolvemos mediante el uso de resolveTie y listo.
+// esta resolucion aplicaria a cada caso.
+
 
 function checkWinner(team1Score, team2Score) {
     if(team1Score === team2Score){
@@ -205,8 +208,12 @@ function checkWinner(team1Score, team2Score) {
 
 
 
-// fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
-function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+function fetchGroupStage(participatingTeams, id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
+
+    console.log("Participating Teams", participatingTeams); // Trae a los equipos bien!
+    console.log("Matches", matches);
+    console.log("Type", type);
+
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response => {
             if (!response.ok) {
@@ -252,6 +259,9 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                     // Agregar el partido al grupo actual
                     groupedMatches[groupCounter].matches.push(match);
                 });
+
+                console.log("groupedMatches: ", groupedMatches);
+
 
                 // Iterar sobre cada grupo y mostrar los partidos
                 Object.values(groupedMatches).forEach(group => {

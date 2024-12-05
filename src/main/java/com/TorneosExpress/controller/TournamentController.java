@@ -81,27 +81,6 @@ public class TournamentController {
 
 
 
-//
-//    @PutMapping("/{tournamentId}/{type}/calendarKnockout")
-//    public List<Match> getTournamentKnockout(@PathVariable Long tournamentId, @PathVariable StageType type) {
-//        return tournamentService.getTournamentFixture(tournamentId, type);
-//    }
-//    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfQuarterFinals")
-//    public List<Match> getTournamentCalendarKnockoutOfQuarterFinals(@PathVariable Long tournamentId, @PathVariable StageType type) {
-//        return tournamentService.getTournamentFixtureKnockoutQuarterFinals(tournamentId, type);
-//    }
-//
-//    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfSemifinals")
-//    public List<Match> getTournamentCalendarKnockoutOfSemifinals(@PathVariable Long tournamentId, @PathVariable StageType type) {
-//        return tournamentService.getTournamentFixtureKnockoutSemifinals(tournamentId, type);
-//    }
-//
-//    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfFinals")
-//    public List<Match> getTournamentCalendarKnockoutOfFinals(@PathVariable Long tournamentId, @PathVariable StageType type) {
-//        return tournamentService.getTournamentFixtureKnockoutFinals(tournamentId, type);
-//    }
-
-
     @GetMapping("/matches/{matchId}")
     public Match getMatch(@PathVariable Long matchId) {
         return tournamentService.getMatchById(matchId);
@@ -118,7 +97,6 @@ public class TournamentController {
     }
 
 
-    
 
     @PutMapping("/{tournamentId}")
     public Tournament updateTournament(@PathVariable Long tournamentId, @RequestBody UpdateTournamentDto updatedTournamentTournamentDto) {
