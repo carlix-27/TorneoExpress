@@ -43,21 +43,17 @@ public class Match {
   private int secondTeamScore;
 
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private StageType stageType;
 
 
   public Match() {}
 
-  public Match(Team team1, Team team2, String matchLocation, LocalDate date, Long winner, StageType stageType) {
+  public Match(Team team1, Team team2, String matchLocation, LocalDate date, Long winner) {
     this.team1 = team1;
     this.team2 = team2;
     this.matchLocation = matchLocation;
     this.date = date;
     this.winner = winner;
     this.played = false;
-    this.stageType = stageType;
   }
 
 }

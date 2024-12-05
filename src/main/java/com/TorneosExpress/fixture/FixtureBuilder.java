@@ -28,8 +28,9 @@ public class FixtureBuilder {
       case KNOCKOUT:
         calculateKnockoutMatches(teams, fixtureMatches);
         break;
-      case GROUPSTAGE:
-        calculateGroupMatches(teams, teams.size(), fixtureMatches);
+        case GROUPSTAGE:
+        calculateGroupMatches(teams, fixtureMatches);
+        break;
     }
 
     return fixtureMatches;
@@ -59,7 +60,7 @@ public class FixtureBuilder {
       Team team1 = teamsCopy.get(i);
       Team team2 = teamsCopy.get(numTeams - i - 1);
       if (!team1.getName().equals("Dummy") && !team2.getName().equals("Dummy")) {
-        Match match = new Match(team1, team2, location, matchDate, null, StageType.ROUNDROBIN);
+        Match match = new Match(team1, team2, location, matchDate, null);
         matches.add(match);
         matchRepository.save(match);
       }
@@ -77,7 +78,7 @@ public class FixtureBuilder {
       for (int i = 0; i < numMatches; i++) {
         Team team1 = teamQueue.poll();
         Team team2 = teamQueue.poll();
-        Match match = new Match(team1, team2, location, matchDate, null, StageType.KNOCKOUT);
+        Match match = new Match(team1, team2, location, matchDate, null);
         fixtureMatches.add(match);
         matchRepository.save(match);
       }
@@ -88,44 +89,38 @@ public class FixtureBuilder {
 
 
 
-//  private void calculateGroupMatches(List<Team> teams, int groupSize, List<Match> fixtureMatches) {
-//    int numTeams = teams.size();
-//    int numGroups = (int) Math.ceil((double) numTeams / groupSize);
-//
-//    for (int group = 0; group < numGroups; group++) {
-//      List<Team> groupTeams = teams.subList(group * groupSize, Math.min((group + 1) * groupSize, numTeams));
-//      for (int i = 0; i < groupTeams.size(); i++) {
-//        for (int j = i + 1; j < groupTeams.size(); j++) {
-//          LocalDate matchDate = startDate.plusDays((i + j) % groupTeams.size());
-//          Match match = new Match(groupTeams.get(i), groupTeams.get(j), location, matchDate, null, StageType.GROUPSTAGE);
-//          fixtureMatches.add(match);
-//          matchRepository.save(match);
-//        }
-//      }
-//    }
-//  }
+    private void calculateGroupMatches(List<Team> teams, List<Match> fixtureMatches) {
+        // Comprobar si el número total de equipos no es múltiplo de 4 y rellenar con "Dummy"
+        while (teams.size() % 4 != 0) {
+            teams.add(new Team("Dummy"));
+        }
 
-    private void calculateGroupMatches(List<Team> teams, int groupSize, List<Match> fixtureMatches) {
-        int numTeams = teams.size();
-        int numGroups = (int) Math.ceil((double) numTeams / groupSize);
+        int numGroups = teams.size() / 4; // Número total de grupos
+        List<Team> teamsCopy = new ArrayList<>(teams); // Copia de los equipos para manipular
 
-        int matchDay = 0; // Para controlar las fechas de los partidos
+        // Iterar sobre cada grupo
         for (int group = 0; group < numGroups; group++) {
-            // Asegúrate de que el subgrupo sea una nueva lista
-            List<Team> groupTeams = new ArrayList<>(
-                    teams.subList(group * groupSize, Math.min((group + 1) * groupSize, numTeams))
-            );
+            // Extraer los equipos del grupo actual
+            List<Team> groupTeams = teamsCopy.subList(group * 4, (group + 1) * 4);
 
-            // Genera los partidos del grupo
-            for (int i = 0; i < groupTeams.size(); i++) {
-                for (int j = i + 1; j < groupTeams.size(); j++) {
-                    LocalDate matchDate = startDate.plusDays(matchDay); // Incrementa la fecha
-                    Match match = new Match(groupTeams.get(i), groupTeams.get(j), location, matchDate, null, StageType.GROUPSTAGE);
-                    fixtureMatches.add(match);
-                    matchRepository.save(match); // Guarda el partido
-                    matchDay++;
-                }
+            // Generar partidos del grupo
+            LocalDate groupStartDate = startDate.plusWeeks(group); // Escalar fechas por grupo
+            buildGroupMatches(groupTeams, fixtureMatches, groupStartDate);
+        }
+    }
+
+    private void buildGroupMatches(List<Team> groupTeams, List<Match> fixtureMatches, LocalDate matchDate) {
+        for (int i = 0; i < groupTeams.size(); i++) {
+            for (int j = i + 1; j < groupTeams.size(); j++) {
+                Team team1 = groupTeams.get(i);
+                Team team2 = groupTeams.get(j);
+
+                Match match = new Match(team1, team2, location, matchDate, null);
+                fixtureMatches.add(match);
+                matchRepository.save(match);
             }
+
+            matchDate = matchDate.plusDays(1);
         }
     }
 
