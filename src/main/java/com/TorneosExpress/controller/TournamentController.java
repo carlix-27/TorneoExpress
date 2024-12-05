@@ -75,24 +75,31 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/{type}/calendar")
-    public List<Match> getTournamentCalendar(@PathVariable Long tournamentId, @PathVariable Type type) {
+    public List<Match> getTournamentCalendar(@PathVariable Long tournamentId, @PathVariable StageType type) {
         return tournamentService.getTournamentFixture(tournamentId, type);
     }
 
-    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfQuarterFinals")
-    public List<Match> getTournamentCalendarKnockoutOfQuarterFinals(@PathVariable Long tournamentId, @PathVariable Type type) {
-        return tournamentService.getTournamentFixtureKnockoutQuarterFinals(tournamentId, type);
-    }
 
-    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfSemifinals")
-    public List<Match> getTournamentCalendarKnockoutOfSemifinals(@PathVariable Long tournamentId, @PathVariable Type type) {
-        return tournamentService.getTournamentFixtureKnockoutSemifinals(tournamentId, type);
-    }
 
-    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfFinals")
-    public List<Match> getTournamentCalendarKnockoutOfFinals(@PathVariable Long tournamentId, @PathVariable Type type) {
-        return tournamentService.getTournamentFixtureKnockoutFinals(tournamentId, type);
-    }
+//
+//    @PutMapping("/{tournamentId}/{type}/calendarKnockout")
+//    public List<Match> getTournamentKnockout(@PathVariable Long tournamentId, @PathVariable StageType type) {
+//        return tournamentService.getTournamentFixture(tournamentId, type);
+//    }
+//    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfQuarterFinals")
+//    public List<Match> getTournamentCalendarKnockoutOfQuarterFinals(@PathVariable Long tournamentId, @PathVariable StageType type) {
+//        return tournamentService.getTournamentFixtureKnockoutQuarterFinals(tournamentId, type);
+//    }
+//
+//    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfSemifinals")
+//    public List<Match> getTournamentCalendarKnockoutOfSemifinals(@PathVariable Long tournamentId, @PathVariable StageType type) {
+//        return tournamentService.getTournamentFixtureKnockoutSemifinals(tournamentId, type);
+//    }
+//
+//    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfFinals")
+//    public List<Match> getTournamentCalendarKnockoutOfFinals(@PathVariable Long tournamentId, @PathVariable StageType type) {
+//        return tournamentService.getTournamentFixtureKnockoutFinals(tournamentId, type);
+//    }
 
 
     @GetMapping("/matches/{matchId}")

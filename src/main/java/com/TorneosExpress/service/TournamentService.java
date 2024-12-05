@@ -40,25 +40,31 @@ public class TournamentService {
     }
 
 
+    // todo: hacer que todos laburen con un mismo fixture builder, para evitar hacer un new en cada uno de los metodos.
+    // si ya esta creado, directamente no hagas un new, devolve los partidos y listo.
+    // hace falta hacer un new cuando sea necesario, pero si los partidos ya existen, no hacemos el new y listo.
+
     public List<Match> getAllMatches(Long tournamentId) {
         Tournament tournament = getTournamentById(tournamentId);
         List<Match> matches = tournament.getMatches();
 
         // Verificar si todos los partidos han sido jugados / Sirve para el Knockout
         boolean allMatchesPlayed = matches.stream().allMatch(Match::isPlayed);
-        if(allMatchesPlayed && tournament.getType() == Type.KNOCKOUT){
+        if(allMatchesPlayed){
             List<Team> winners = getWinnersFromMatches(matches);
             if(winners.isEmpty()){
                 return matches;
             }
-            if (tournament.getType() == Type.KNOCKOUT) {
+            if (tournament.getType() == StageType.KNOCKOUT) {
                 switch (winners.size()) {
                     case 8:
-                        return getTournamentFixtureKnockoutQuarterFinals(tournamentId, Type.KNOCKOUT);
-                    case 4:
-                        return getTournamentFixtureKnockoutSemifinals(tournamentId, Type.KNOCKOUT);
-                    case 2:
-                        return getTournamentFixtureKnockoutFinals(tournamentId, Type.KNOCKOUT);
+                        return getOrBuildKnockoutFixture(tournamentId, winners);
+                    case 12: // Tenes 12 winners en total
+                        List<Team> winnersQuarterFinals = winners.subList(winners.size() - 4, winners.size()); // Tomo los ultimos 4 winners.
+                        return getOrBuildKnockoutFixture(tournamentId, winnersQuarterFinals); // Armo con esos 4 los partidos para Semis
+                    case 14: // Tenes 14 winners en total
+                        List<Team> winnersSemifinals = winners.subList(winners.size() - 2, winners.size()); // Tomo los ultimos 2 winners.
+                        return getOrBuildKnockoutFixture(tournamentId, winnersSemifinals); // Armo con esos 2 el partido de final
                 }
             }
         }
@@ -67,80 +73,159 @@ public class TournamentService {
     }
 
 
+    public List<Match> getOrBuildKnockoutFixture(Long tournamentId, List<Team> teams){
 
-    public List<Match> getTournamentFixture(Long tournamentId, Type type) {
         Tournament tournament = getTournamentById(tournamentId);
-        List<Match> fixtureMatches;
-        if (tournament.getMatches() == null || tournament.getMatches().isEmpty()) {
+
+        List<Match> matches = tournament.getMatches();
+
+
+        if(matches.stream().allMatch(Match::isPlayed)){
+            FixtureBuilder fixtureBuilder = new FixtureBuilder(
+                    tournament.getLocation(),
+                    tournament.getStartDate(),
+                    matchRepository
+            );
+
+            List<Match> newMatches = fixtureBuilder.build(teams, StageType.KNOCKOUT);
+
+            tournament.getMatches().addAll(newMatches);
+            tournamentRepository.save(tournament);
+            return newMatches;
+        }
+
+        return List.of();
+    }
+
+
+
+
+    public List<Match> getTournamentFixture(Long tournamentId, StageType type) {
+        Tournament tournament = getTournamentById(tournamentId);
+
+        List<Match> matches = tournament.getMatches();
+
+        if (matches == null || matches.isEmpty()) {
             List<Team> teams = tournament.getParticipatingTeams();
             teamRepository.saveAll(teams);
             teams = teamRepository.findAllById(teams.stream().map(Team::getId).collect(Collectors.toList()));
-            fixtureMatches = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+            matches = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
                 .build(teams, type);
-            tournament.setMatches(fixtureMatches);
+            tournament.setMatches(matches);
             tournamentRepository.save(tournament);
         } else {
-            fixtureMatches = tournament.getMatches();
+            matches = tournament.getMatches();
         }
-        return fixtureMatches;
-    }
-
-    public List<Match> getTournamentFixtureKnockoutQuarterFinals(Long tournamentId, Type type) {
-        Tournament tournament = getTournamentById(tournamentId);
-        List<Match> matchesWinner;
-        // List<Match> matchesOfQuarterFinals = tournament.getQuarterFinalMatches();
-        List<Match> emptyMatches = List.of();
-
-        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches()); // Partidos de Cuartos. Tiene que haber 8 ganadores para mostrar, los resultados de semifinal.
-
-        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
-            //matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
-            //      .build(teamsWinners, type);
-            matchesWinner = tournament.getMatches();
-            matchesWinner.addAll(new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
-                    .build(teamsWinners, type));
-
-            return matchesWinner;
-        }
-
-        return emptyMatches;
-    }
-
-
-    public List<Match> getTournamentFixtureKnockoutSemifinals(Long tournamentId, Type type) {
-        Tournament tournament = getTournamentById(tournamentId);
-        List<Match> matchesWinner;
-        List<Match> emptyMatches = List.of();
-
-        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches());
-
-        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
-            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
-                    .build(teamsWinners, type);
-            return matchesWinner;
-        }
-
-        return emptyMatches;
+        return matches;
     }
 
 
 
-    public List<Match> getTournamentFixtureKnockoutFinals(Long tournamentId, Type type) {
-        Tournament tournament = getTournamentById(tournamentId);
-        List<Match> matchesWinner;
-        List<Match> emptyMatches = List.of();
+//    public List<Match> getTournamentFixtureKnockoutQuarterFinals(Long tournamentId, StageType type) {
+//        Tournament tournament = getTournamentById(tournamentId);
+//        List<Match> emptyMatches = List.of();
+//        List<Match> matches = tournament.getMatches();
+//
+//        // Validar que el torneo sea de tipo KO y todos los partidos estén jugados
+//        if (tournament.getType() == StageType.KNOCKOUT && matches.stream().allMatch(Match::isPlayed)) {
+//            // Obtener ganadores de los partidos jugados
+//            List<Team> teamsWinners = getWinnersFromMatches(matches);
+//
+//            // Si hay exactamente 8 ganadores, crear partidos para cuartos
+//            if (teamsWinners.size() == 8) {
+//                return new FixtureBuilder(
+//                        tournament.getLocation(),
+//                        tournament.getStartDate(),
+//                        matchRepository
+//                ).build(teamsWinners, type);
+//            }
+//        }
+//
+//        return emptyMatches;
+//    }
+//
+//    public List<Match> getTournamentFixtureKnockoutSemifinals(Long tournamentId, StageType type){
+//        Tournament tournament = getTournamentById(tournamentId);
+//        List<Match> emptyMatches = List.of();
+//        List<Match> matches = tournament.getMatches();
+//
+//        // Validar que el torneo sea de tipo KO y todos los partidos estén jugados
+//        if (tournament.getType() == StageType.KNOCKOUT && matches.stream().allMatch(Match::isPlayed)) {
+//            // Obtener ganadores de los partidos jugados
+//            List<Team> teamsWinners = getWinnersFromMatches(matches);
+//
+//            // Si hay exactamente 4 ganadores, crear partidos para cuartos
+//            if (teamsWinners.size() == 4) {
+//
+//                return new FixtureBuilder(
+//                        tournament.getLocation(),
+//                        tournament.getStartDate(),
+//                        matchRepository
+//                ).build(teamsWinners, type);
+//            }
+//        }
+//
+//        return emptyMatches;
+//    }
 
-        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches());
 
-        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
-            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
-                    .build(teamsWinners, type);
-            return matchesWinner;
-        }
+//    public List<Match> getTournamentFixtureKnockoutSemifinals(Long tournamentId, Type type) {
+//        Tournament tournament = getTournamentById(tournamentId);
+//        List<Match> matchesWinner;
+//        List<Match> emptyMatches = List.of();
+//
+//        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches());
+//
+//        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
+//            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+//                    .build(teamsWinners, type);
+//            return matchesWinner;
+//        }
+//
+//        return emptyMatches;
+//    }
 
-        return emptyMatches;
 
-    }
+//    public List<Match> getTournamentFixtureKnockoutFinals(Long tournamentId, StageType type){
+//        Tournament tournament = getTournamentById(tournamentId);
+//        List<Match> emptyMatches = List.of();
+//        List<Match> matches = tournament.getMatches();
+//
+//        // Validar que el torneo sea de tipo KO y todos los partidos estén jugados
+//        if (tournament.getType() == StageType.KNOCKOUT_FINALS && matches.stream().allMatch(Match::isPlayed)) {
+//            // Obtener ganadores de los partidos jugados
+//            List<Team> teamsWinners = getWinnersFromMatches(matches);
+//
+//            // Si hay exactamente 2 ganadores, crear partidos para cuartos
+//            if (teamsWinners.size() == 2) {
+//
+//                return new FixtureBuilder(
+//                        tournament.getLocation(),
+//                        tournament.getStartDate(),
+//                        matchRepository
+//                ).build(teamsWinners, type);
+//            }
+//        }
+//
+//        return emptyMatches;
+//    }
+
+//    public List<Match> getTournamentFixtureKnockoutFinals(Long tournamentId, Type type) {
+//        Tournament tournament = getTournamentById(tournamentId);
+//        List<Match> matchesWinner;
+//        List<Match> emptyMatches = List.of();
+//
+//        List<Team> teamsWinners = getWinnersFromMatches(tournament.getMatches());
+//
+//        if (tournament.getType() == Type.KNOCKOUT && teamsWinners.size() == 8) {
+//            matchesWinner = new FixtureBuilder(tournament.getLocation(), tournament.getStartDate(), matchRepository)
+//                    .build(teamsWinners, type);
+//            return matchesWinner;
+//        }
+//
+//        return emptyMatches;
+//
+//    }
 
 
     private List<Team> getWinnersFromMatches(List<Match> matches) {
@@ -372,13 +457,13 @@ public class TournamentService {
 
         TournamentTeam tournamentTeam = tournamentTeamRepository.findByTeamAndTournament(team, tournament);
 
-        Type tournamentType = tournament.getType();
+        StageType tournamentType = tournament.getType();
 
         if(tournamentTeam.getTournamentPoints() == null){
             tournamentTeam.setTournamentPoints(0);
         }
 
-        if (tournamentType != Type.KNOCKOUT){
+        if (tournamentType != StageType.KNOCKOUT){
             tournamentTeam.addPoints(3);
         }
         return tournamentTeamRepository.save(tournamentTeam);

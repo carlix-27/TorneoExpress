@@ -72,16 +72,17 @@ function createTournament() {
         return
     }
 
-    const today = new Date();
-    const selectedDate = new Date(date);
-
-    today.setHours(0, 0, 0, 0);
-    selectedDate.setHours(0, 0, 0, 0);
-
-    if (selectedDate < today) {
-        displayErrorMessage("La fecha del torneo no puede ser anterior a la fecha actual.");
-        return;
-    }
+    // Solo toqueteo esto para poder poner la fecha que quiera y testear tranquilo para la creacion de torneos.
+    // const today = new Date();
+    // const selectedDate = new Date(date);
+    //
+    // today.setHours(0, 0, 0, 0);
+    // selectedDate.setHours(0, 0, 0, 0);
+    //
+    // if (selectedDate < today) {
+    //     displayErrorMessage("La fecha del torneo no puede ser anterior a la fecha actual.");
+    //     return;
+    // }
 
     if (maxTeams < 0) {
         displayErrorMessage("No se puede ingresar números negativos")
