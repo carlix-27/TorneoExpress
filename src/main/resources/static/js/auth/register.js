@@ -7,9 +7,6 @@ function register() {
     const latitude = address.dataset.latitude;
     const longitude = address.dataset.longitude;
 
-    console.log(latitude);
-    console.log(longitude);
-
     if (!latitude || !longitude) {
         displayErrorMessage("Debe seleccionar una ubicación válida.");
         return;
@@ -44,12 +41,8 @@ function register() {
         body: JSON.stringify(formData)
     })
         .then(response => response.json())
-        .then(data => {
-            console.log('User registered successfully:', data);
+        .then(() => {
             window.location.replace("index.html?success=true");
         })
-        .catch(error => {
-            console.error('Error registering user:', error);
-        });
 }
 

@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="js/tournament/createTournamentRedirect.js"></script>
     <script src="js/sport/createSportRedirect.js"></script>
-    <script src="js/auth/checkRedirect.js"></script>
+    <script src="js/user/checkRedirect.js"></script>
     <script src="js/auth/logout.js"></script>
     <script src="js/notification/notificationBell.js"></script>
     <script src="js/user/userVip.js"></script>
@@ -117,6 +117,34 @@
 
 <section id="torneos">
     <h2 class="section-title">Torneos</h2>
+    <div class="grid-container">
+        <div class="card" onclick="redirectToCreateTournament(crearTorneo.html)">
+            <h3>Crear Torneo</h3>
+            <p>Crea un nuevo torneo y administra equipos.</p>
+        </div>
+        <div class="card">
+            <a href="misTorneos.html" class="card-link">
+                <h3>Mis Torneos</h3>
+                <p>Revisa y gestiona tus torneos.</p>
+            </a>
+        </div>
+        <div class="card">
+            <a href="torneos.html" class="card-link">
+                <h3>Ver Todos los Torneos</h3>
+                <p>Explora los torneos disponibles.</p>
+            </a>
+        </div>
+        <div class="card">
+            <a href="historial.html" class="card-link">
+                <h3>Historial</h3>
+                <p>Consulta el historial de torneos.</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section id="equipos">
+    <h2 class="section-title">Equipos</h2>
     <div class="grid-container">
         <div class="card" onclick="redirectToCreateTournament()">
             <h3>Crear Torneo</h3>
