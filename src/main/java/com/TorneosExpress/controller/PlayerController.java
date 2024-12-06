@@ -36,11 +36,8 @@ public class PlayerController {
     }
 
     @GetMapping("/{userId}/premium")
-    public ResponseEntity<Map<String, Boolean>> checkPremiumStatus(@PathVariable Long userId) {
-        boolean isPremium = playerService.isPremiumUser(userId);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("isPremium", isPremium);
-        return ResponseEntity.ok().body(response);
+    public Boolean checkPremiumStatus(@PathVariable Long userId) {
+        return playerService.isPremiumUser(userId);
     }
 
     @GetMapping("/{userId}/team-owner")

@@ -1,4 +1,4 @@
-function redirectToCreateTournament(newUrl) {
+function redirectToCreateTournament() {
     const userId = localStorage.getItem("userId");
 
     fetch(`/api/user/${userId}/premium`)
