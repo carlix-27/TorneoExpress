@@ -15,11 +15,17 @@
 </head>
 <body>
     <section class="shopping-cart dark">
+
+        <div class="illustrations">
+            <img src=illustrations/Fitness%20Stats%20Illustration.svg alt="Left Illustration" class="left-illustration">
+            <img src=illustrations/Grand%20Slam%20Illustration.svg alt="Right Illustration" class="right-illustration">
+        </div>
+
         <div class="content">
             <div class="block-heading">
                 <h1>Torneos Express - Premium</h1>
             </div>
-            <h2>Beneficios:</h2>
+            <h2>Beneficios de Premium:</h2>
             <ul>
                 <li>Creación de Torneos</li>
                 <li>Creación de Equipos</li>
@@ -30,8 +36,9 @@
                 <b>Precio:</b> $ <span id="unit-price">50 USD</span>
             </ul>
             <button class="button" id="checkout-btn">Checkout</button>
-            <button class="back-button" onclick="goBack()">Volver</button>
+            <button class="button back" onclick="goToBenefits()" >Volver</button>
         </div>
+
 
     </section>
     <section class="payment-form dark">
