@@ -6,35 +6,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (logoutButton) {
         logoutButton.addEventListener("click", () => {
-            console.log("Logout button clicked");
             if (logoutModal) {
                 logoutModal.style.display = "flex";
-            } else {
-                console.error("Logout modal not found");
             }
         });
     } else {
-        console.error("Logout button not found");
     }
 
     if (cancelLogoutButton) {
         cancelLogoutButton.addEventListener("click", () => {
-            console.log("Cancel button clicked");
             if (logoutModal) {
                 logoutModal.style.display = "none";
             }
         });
     } else {
-        console.error("Cancel logout button not found");
     }
 
     if (confirmLogoutButton) {
         confirmLogoutButton.addEventListener("click", () => {
-            console.log("Confirm logout clicked");
             localStorage.removeItem("userId");
             window.location.href = "index.html";
         });
     } else {
-        console.error("Confirm logout button not found");
     }
 });
