@@ -15,7 +15,6 @@ document.getElementById("checkout-btn").addEventListener("click", function () {
             return response.json();
         })
         .then(function (preference) {
-            console.log("Preference ID: ", preference.id)
             createCheckoutButton(preference.id);
 
             const unitPrice = 50
