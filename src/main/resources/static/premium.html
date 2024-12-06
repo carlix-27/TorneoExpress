@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/buyPremium.css">
+    <link rel="stylesheet" href="styles/premium.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="js/user/userIdCheck.js"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
@@ -16,26 +20,19 @@
     <section class="shopping-cart dark">
         <div class="content">
             <div class="block-heading">
-                <h1>Actualízate a Premium</h1>
-                <p>¡Bienvenido a Torneos Express!</p>
+                <h1>Torneos Express - Premium</h1>
             </div>
             <h2>Beneficios de Premium:</h2>
             <ul>
                 <li>Creación de Torneos</li>
                 <li>Creación de Equipos</li>
                 <li>Beneficios con la tienda</li>
-                <li>Prioridad en la lista de equipos</li>
             </ul>
             <h2>Precio:</h2>
             <ul>
-                <b>Precio:</b> $ <span id="unit-price">50</span>
+                <b>Precio:</b> $ <span id="unit-price">50 USD</span>
             </ul>
-            <h2>Tenés dudas?</h2>
-            <ul>
-                <li>Teléfono: 1-800-PREMIUM</li>
-                <li>Email: torneosExpress@dudas.com</li>
-            </ul>
-            <button class="btn btn-primary btn-lg btn-block" id="checkout-btn">Checkout</button>
+            <button class="button">Checkout</button>
         </div>
     </section>
     <section class="payment-form dark">
@@ -57,7 +54,7 @@
                         <br>
                         <div id="button-checkout"></div>
                         <br>
-                        <a id="go-back">
+                        <a id="go-back" onclick="goToBenefits()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 10 10" class="chevron-left">
                                 <path fill="#009EE3" fill-rule="nonzero" id="chevron_left"
                                       d="M7.05 1.4L6.2.552 1.756 4.997l4.449 4.448.849-.848-3.6-3.6z"></path>
@@ -70,11 +67,15 @@
         </div>
     </section>
 </main>
-<button type="button" class="button-back" onclick="volver()">Volver</button>
+<button type="button" class="button back" onclick="goBack()">Volver</button>
 <p id="upgrade-status"></p>
 <script>
-    function volver() {
+    function goBack() {
         window.history.back();
+    }
+
+    function goToBenefits(){
+        window.href.location='premium.html'
     }
 </script>
 </body>

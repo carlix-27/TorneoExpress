@@ -13,7 +13,7 @@ function redirectToCreateTournament() {
             if (isPremium) {
                 window.location.href = "crearTorneo.html";
             } else {
-                window.location.href = "buy_premium.html";
+                window.location.href = "premium.html";
             }
         })
 }

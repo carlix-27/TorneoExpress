@@ -19,7 +19,7 @@ function createSportRedirect() {
             if (isPremium) {
                 window.location.href = "addSport.html"; // Redirect to addSport.html
             } else {
-                window.location.href = "buy_premium.html"; // Redirect to buy_premium.html
+                window.location.href = "premium.html"; // Redirect to premium.html
             }
         })
         .catch(error => {

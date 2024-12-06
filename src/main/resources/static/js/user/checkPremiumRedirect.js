@@ -20,6 +20,6 @@ function checkPremiumAndRedirect(userId, premiumUrl, nonPremiumUrl) {
 
 function redirectToCreateTournament() {
     const userId = localStorage.getItem("userId");
-    checkPremiumAndRedirect(userId, "crearTorneo.html", "buy_premium.html");
+    checkPremiumAndRedirect(userId, "crearTorneo.html", "premium.html");
 }
 

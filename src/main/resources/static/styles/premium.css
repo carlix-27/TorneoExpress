@@ -1,68 +1,14 @@
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-main {
-    margin: 20px 0;
-    background-color: #f6f6f6;
-    padding: 20px;
-    width: 100%;
-    max-width: 1200px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    box-sizing: border-box;
-}
-
-header {
-    width: 100%;
-    background-color: #000;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2em;
-}
-
-
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 0 0;
-    text-align: center;
-}
-
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #fff;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #333;
-}
-
-.hidden {
-    display: none
-}
-
-/* Shopping Cart Section - Start */
 .shopping-cart {
     padding: 20px;
+}
+
+.button{
+    background: #3d1f7f;
+}
+
+.back {
+    background-color: #f0f0f0;
+    color: black;
 }
 
 .shopping-cart.hide {
@@ -93,7 +39,7 @@ nav ul li a:hover {
 .shopping-cart .block-heading h2,
 .shopping-cart .block-heading h3 {
     margin-bottom: 1.2rem;
-    color: #009EE3;
+    color: #6a0dad;
 }
 
 .shopping-cart .items {
@@ -116,7 +62,7 @@ nav ul li a:hover {
 }
 
 .shopping-cart .items .product .info .product-details h5 {
-    color: #009EE3;
+    color: #6a0dad;
     font-size: 19px;
 }
 
@@ -127,7 +73,7 @@ nav ul li a:hover {
 
 .shopping-cart .items .product .info .product-details label {
     width: 50px;
-    color: #009EE3;
+    color: #6a0dad;
     font-size: 19px;
 }
 
@@ -172,7 +118,7 @@ nav ul li a:hover {
 
 .shopping-cart .summary button {
     margin-top: 20px;
-    background-color: #009EE3;
+    background-color: #6a0dad;
 }
 
 @media (min-width: 768px) {
@@ -236,7 +182,7 @@ nav ul li a:hover {
 .payment-form .block-heading h2,
 .payment-form .block-heading h3 {
     margin-bottom: 1.2rem;
-    color: #009EE3;
+    color: #6a0dad;
 }
 
 .payment-form .form-payment {
@@ -312,12 +258,12 @@ nav ul li a:hover {
     margin: 0;
     padding: 0;
     font-size: 13px;
-    color: #009ee3;
+    color: #6a0dad;
     cursor:pointer;
 }
 
 .payment-form a:not([href]):hover{
-    color: #3483FA;
+    color: #6a0dad;
     cursor:pointer;
 }
 
@@ -340,12 +286,12 @@ footer {
 }
 
 footer p a {
-    color: #009ee3;
+    color: #6a0dad;
     text-decoration: none;
 }
 
 footer p a:hover {
-    color: #3483FA;
+    color: #6a0dad;
     text-decoration: none;
 }
 
