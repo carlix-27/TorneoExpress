@@ -88,7 +88,6 @@ public class FixtureBuilder {
   }
 
 
-
     private void calculateGroupMatches(List<Team> teams, List<Match> fixtureMatches) {
         // Comprobar si el número total de equipos no es múltiplo de 4 y rellenar con "Dummy"
         while (teams.size() % 4 != 0) {
@@ -123,7 +122,6 @@ public class FixtureBuilder {
             matchDate = matchDate.plusDays(1);
         }
     }
-
 
 
 }

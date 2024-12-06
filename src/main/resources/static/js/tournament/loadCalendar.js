@@ -34,7 +34,7 @@ function loadCalendar() {
                         fetchKnockoutFixture(tournament.participatingTeams, tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'GROUPSTAGE':
-                        fetchGroupStage(tournament.participatingTeams, tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+                        fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                 }
             }
@@ -207,10 +207,7 @@ function checkWinner(team1Score, team2Score) {
 
 
 
-
-function fetchGroupStage(participatingTeams, id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
-
-    console.log("Participating Teams", participatingTeams); // Trae a los equipos bien!
+function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     console.log("Matches", matches);
     console.log("Type", type);
 
@@ -221,96 +218,80 @@ function fetchGroupStage(participatingTeams, id, matches, tournamentName, tourna
             }
             return response.json();
         })
-        .then(matches => {
+        .then(calendarMatches => {
+            // Limpiar el contenido anterior
             calendarListHTML.innerHTML = `
                 <div id="result">
                     <h2>${tournamentName} - Calendario</h2>
-                    
                 </div>
             `;
+
+            console.log("MatchesCalendar", matches);
+
             if (tournamentCreatorId !== localStorage.getItem("userId")) {
 
-                const groupedMatches = {};
-                let groupCounter = 1;
-
-                // Crear un mapa para rastrear que equipos ya han sido emparejados
-                const pairedTeams = new Set();
-
-
-                // Iterar sobre los partidos y agrupar de a 2 por grupo
-                matches.forEach(match => {
-                    const { team1, team2 } = match;
-
-                    // Si uno de los equipos ya ha sido emparejado, saltar este partido
-                    if (pairedTeams.has(team1.name) || pairedTeams.has(team2.name)) return;
-
-                    // Agregar los equipos al conjunto de emparejados
-                    pairedTeams.add(team1.name);
-                    pairedTeams.add(team2.name);
-
-                    // Verificar si el grupo actual ya tiene 2 partidos
-                    if (!groupedMatches[groupCounter]) {
-                        groupedMatches[groupCounter] = { id: groupCounter, matches: [] };
-                    } else if (groupedMatches[groupCounter].matches.length >= 2) {
-                        groupCounter++;
-                        groupedMatches[groupCounter] = { id: groupCounter, matches: [] };
+                const groupedMatches = [];
+                let currentGroup = [];
+                matches.forEach((match, index) => {
+                    currentGroup.push(match);
+                    if (currentGroup.length === 6) {
+                        groupedMatches.push(currentGroup);
+                        currentGroup = []; // Limpiar el grupo para el siguiente
                     }
-
-                    // Agregar el partido al grupo actual
-                    groupedMatches[groupCounter].matches.push(match);
                 });
 
-                console.log("groupedMatches: ", groupedMatches);
+                // Si hay equipos restantes, asignarlos al último grupo
+                if (currentGroup.length > 0) {
+                    groupedMatches.push(currentGroup);
+                }
 
+                console.log("Grouped Teams:", groupedMatches);
 
-                // Iterar sobre cada grupo y mostrar los partidos
-                Object.values(groupedMatches).forEach(group => {
-                    // Crear elemento HTML para el grupo
+                // Iteramos sobre los grupos
+                groupedMatches.forEach((group, groupIndex) => {
+                    // Crear un elemento para el grupo
                     const groupElement = document.createElement('div');
-                    groupElement.classList.add('group'); // Estilo CSS para grupos
-
-                    // Encabezado del grupo (número de grupo)
+                    groupElement.classList.add('group');
                     const groupHeader = document.createElement('h2');
-                    groupHeader.textContent = `Grupo ${group.id}`;
+                    groupHeader.textContent = `Grupo ${groupIndex + 1}`;
                     groupElement.appendChild(groupHeader);
 
-                    group.matches.forEach(match => {
+                    // Iterar sobre los partidos del grupo
+                    group.forEach((match) => {
                         const listItem = document.createElement('li');
                         listItem.className = 'tournament-bracket__item';
                         listItem.innerHTML = `
-                                 <div class="tournament-bracket__match" tabindex="0">
-                                        <table class="tournament-bracket__table">
-                                             <caption class="tournament-bracket__caption">
-                                                    <p>${match.date}</p>
-                                             </caption>
-                                             <thead class="sr-only">
-                                                <tr>
-                                                    <th>Country</th>
-                                                    <th>Score</th>
-                                                </tr>
-                                             </thead>
-                                             <tbody class="tournament-bracket__content">
-                                                <tr class="tournament-bracket__team">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                         <span class="tournament-bracket__number">${match.firstTeamScore}</span> 
-                                                    </td>
-                                                </tr>
-                                                
-                                        
-                                                <tr class="tournament-bracket__team">
-                                                    <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                        <span class="tournament-bracket__number">${match.secondTeamScore}</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                 </div>                         
+                            <div class="tournament-bracket__match" tabindex="0">
+                                <table class="tournament-bracket__table">
+                                    <caption class="tournament-bracket__caption">
+                                        <p>${match.date}</p>
+                                    </caption>
+                                    <thead class="sr-only">
+                                        <tr>
+                                            <th>Equipo</th>
+                                            <th>Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tournament-bracket__content">
+                                        <tr class="tournament-bracket__team">
+                                            <td class="tournament-bracket__country">
+                                                <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                            </td>
+                                            <td class="tournament-bracket__score">
+                                                <span class="tournament-bracket__number">${match.firstTeamScore}</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="tournament-bracket__team">
+                                            <td class="tournament-bracket__country">
+                                                <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                            </td>
+                                            <td class="tournament-bracket__score">
+                                                <span class="tournament-bracket__number">${match.secondTeamScore}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         `;
                         groupElement.appendChild(listItem);
                     });
