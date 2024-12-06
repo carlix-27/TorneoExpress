@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="styles/card.css">
     <link rel="stylesheet" href="styles/button.css">
     <link rel="stylesheet" href="styles/userInfo.css">
-    <link rel="stylesheet" href="styles/logout.css">
     <link rel="stylesheet" href="styles/nav.css">
+    <link rel="stylesheet" href="styles/logout.css">
+    <link rel="stylesheet" href="styles/modal.css">
     <link rel="stylesheet" href="styles/notifications-container.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="js/tournament/createTournamentRedirect.js"></script>
@@ -72,23 +73,27 @@
     <div class="welcome-message">
         Bienvenido <span id="user-name">Nombre del usuario</span>
     </div>
+
     <div class="user-actions">
         <div class="notifications-container" onclick="window.location.href='notifications.html'">
             <span id="notification-text" class="notifications-text">Notifications</span>
             <span id="unread-count" style="display:none;"></span>
         </div>
 
-        <div class="logout-container" id="logout-button">
-            <span class="logout-text">Logout</span>
+        <span id="logout-button" class="logout-text">Logout</span>
+
+        <div id="logout-modal" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">Confirm Logout</div>
+                <p>Are you sure you want to log out?</p>
+                <div class="modal-buttons">
+                    <button id="confirm-logout" class="modal-button">Yes</button>
+                    <button id="cancel-logout" class="modal-button cancel">No</button>
+                </div>
+            </div>
         </div>
-
-        <div class="logout-buttons" id="logout-buttons" style="display: none;">
-            <button class="modal-button" id="confirm-logout">Confirm Logout</button>
-            <button class="modal-button" id="cancel-logout">Cancel</button>
-        </div>
-
-
     </div>
+
 </div>
 
 <section id="torneos">
