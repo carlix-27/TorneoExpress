@@ -2,14 +2,34 @@
     padding: 20px;
 }
 
+.content {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 20px;
+    text-align: center;
+    background: #fff;
+}
+
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
 .button{
     background: #3d1f7f;
 }
 
-.back {
+.back-button{
     background-color: #f0f0f0;
     color: black;
 }
+
 
 .shopping-cart.hide {
     max-height: 0;
@@ -157,7 +177,8 @@
 }
 
 .payment-form.dark {
-    background-color: #f6f6f6;
+    background-color: #f0f0f0;
+
 }
 
 .payment-form .content {
@@ -273,107 +294,3 @@
     background-color: #fff;
 }
 
-
-footer {
-    padding: 2% 10% 6% 10%;
-    margin: 0 auto;
-    position: relative;
-}
-
-#horizontal_logo {
-    width: 150px;
-    margin: 0;
-}
-
-footer p a {
-    color: #6a0dad;
-    text-decoration: none;
-}
-
-footer p a:hover {
-    color: #6a0dad;
-    text-decoration: none;
-}
-
-@media (min-width: 576px) {
-    .payment-form .title {
-        font-size: 1.2em;
-    }
-
-    .payment-form .products {
-        padding: 40px;
-    }
-
-    .payment-form .products .item-name {
-        font-size: 1em;
-    }
-
-    .payment-form .products .price {
-        font-size: 1em;
-    }
-
-    .payment-form .payment-details {
-        padding: 20px 40px;
-    }
-
-    .payment-form .payment-details button {
-        margin-top: 1em;
-        margin-bottom: 15px;
-    }
-
-    .footer_logo {
-        margin: 0 0 0 0;
-        width: 20%;
-        text-align: left;
-        position: absolute;
-    }
-
-    .footer_text {
-        margin: 0 0 0 65%;
-        width: 200px;
-        text-align: left;
-        position: absolute
-    }
-
-    footer p {
-        padding: 1px;
-        font-size: 13px;
-        color: RGBA(0,0,0,0.45);
-        margin-bottom: 0;
-    }
-}
-
-@media (max-width: 576px) {
-    footer {
-        width: 100%;
-        text-align: center;
-        padding: 2% 10% 6% 10%;
-        margin: 0 auto;
-    }
-
-    footer p {
-        padding: 1px;
-        font-size: 11px;
-        margin-bottom: 0;
-    }
-    .footer_text {
-        margin: 0 0 0 45%;
-        width: 180px;
-        position: absolute
-    }
-
-    .footer_logo {
-        margin: 0 0 0 0;
-        position: absolute;
-    }
-}
-
-@media (min-width: 768px) {
-    .shopping-cart .items .product .info .product-details {
-        flex-direction: row;
-    }
-
-    .shopping-cart .items .product .info .price {
-        align-self: center;
-    }
-}
