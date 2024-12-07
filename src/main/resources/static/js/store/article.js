@@ -19,7 +19,6 @@ function loadArticle() {
                 article_price: articlePrice,
             } = article;
 
-            /* Choose a team that user is captain of. Then choose tournament. */
             articleSection.innerHTML = `
                 <div id="article-result">
                     <h2>${articleName}</h2>
@@ -49,6 +48,7 @@ function loadArticle() {
             `;
 
             fetchMyTeams(article);
+            connectWebSocket();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -58,7 +58,7 @@ function loadArticle() {
 function fetchMyTeams(article) {
     const userId = localStorage.getItem("userId");
 
-    fetch(`/api/teams/user/${userId}`) // Assuming this endpoint returns the list of teams
+    fetch(`/api/teams/user/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
@@ -108,7 +108,6 @@ function fetchMyTeams(article) {
                 });
             }
 
-            // Trigger change event to set initial button state
             teamDropDown.dispatchEvent(new Event('change'));
         })
         .catch(error => {
@@ -163,6 +162,26 @@ function handleTransaction(articleId, teamId) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function connectWebSocket() {
+    var socket = new SockJS('/ws');
+    var stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/points', function (message) {
+            updatePrestigePoints(JSON.parse(message.body));
+        });
+    });
+}
+
+function updatePrestigePoints(team) {
+    const teamDropDown = document.getElementById('my-teams');
+    const selectedTeamId = teamDropDown.value;
+    if (team.id == selectedTeamId) {
+        const points = document.getElementById("prestige-points");
+        points.innerHTML = `Sus puntos de prestigio: ${team.prestigePoints}`;
+    }
 }
 
 function goBack() {
