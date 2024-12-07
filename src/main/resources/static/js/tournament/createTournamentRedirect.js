@@ -1,12 +1,6 @@
 function redirectToCreateTournament() {
     const userId = localStorage.getItem("userId");
-    if (!userId) {
-        // User is not logged in, redirect to login or handle appropriately
-        window.location.href = "index.html"; // Redirect to login page
-        return;
-    }
 
-    // Send a request to backend to check premium status
     fetch(`/api/user/${userId}/premium`)
         .then(response => {
             if (!response.ok) {
@@ -17,13 +11,9 @@ function redirectToCreateTournament() {
         .then(data => {
             const isPremium = data.isPremium;
             if (isPremium) {
-                window.location.href = "crearTorneo.html"; // Redirect to crear_torneo.html
+                window.location.href = "crearTorneo.html";
             } else {
-                window.location.href = "buy_premium.html"; // Redirect to buy_premium.html
+                window.location.href = "premium.html";
             }
         })
-        .catch(error => {
-            console.error('Error:', error);
-            // Handle error, maybe redirect to an error page
-        });
 }
