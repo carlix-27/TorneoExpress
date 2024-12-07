@@ -24,26 +24,26 @@ function loadArticle() {
                     <h2>${articleName}</h2>
                     <p>Descripcion: ${articleDescription}</p>
                     <p>Precio: ${articlePrice}</p>
-                    
+
                     <label for="my-teams">Equipo:</label>
                     <select id="my-teams" name="my-teams" required>
                         <option value="-1">Seleccione un equipo</option>
                     </select> <br>
-                    
+
                     <p id="prestige-points"></p>
-                    
+
                     <div id="purchase-button">
                         <button id="buy-button">Comprar</button>
                     </div>
 
                     <div id="successMessage" style="display: none; color: green; margin-top: 10px;">
-                    
+
                     </div>
-                    
+
                     <div id="errorMessage" style="display: none; color: red; margin-top: 10px;">
-                    
+
                     </div>
-                    
+
                 </div>
             `;
 
@@ -151,22 +151,23 @@ function handleTransaction(articleId, teamId) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to purchase article: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log("Transaccion exitosa");
-            displaySuccessMessage("Artículo comprado con éxito");
+            console.log("Transaction completed");
+            displaySuccessMessage("Compra exitosa");
         })
         .catch(error => {
             console.error('Error:', error);
+            displayErrorMessage("Fondos insuficientes");
         });
 }
 
 function connectWebSocket() {
-    var socket = new SockJS('/ws');
-    var stompClient = Stomp.over(socket);
+    let socket = new SockJS('/ws');
+    let stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/points', function (message) {
@@ -175,12 +176,17 @@ function connectWebSocket() {
     });
 }
 
-function updatePrestigePoints(team) {
+function updatePrestigePoints(updatedTeam) {
     const teamDropDown = document.getElementById('my-teams');
     const selectedTeamId = teamDropDown.value;
-    if (team.id == selectedTeamId) {
+    if (updatedTeam.id == selectedTeamId) {
         const points = document.getElementById("prestige-points");
-        points.innerHTML = `Sus puntos de prestigio: ${team.prestigePoints}`;
+        points.innerHTML = `Sus puntos de prestigio: ${updatedTeam.prestigePoints}`;
+
+        const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
+        if (selectedTeam) {
+            selectedTeam.prestigePoints = updatedTeam.prestigePoints;
+        }
     }
 }
 
