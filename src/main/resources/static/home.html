@@ -7,6 +7,7 @@
     <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/png">
     <title>Torneos Express - Home</title>
     <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="./styles/tienda.css">
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/grid-container.css">
     <link rel="stylesheet" href="styles/back-button.css">
@@ -24,6 +25,7 @@
     <script src="js/auth/logout.js"></script>
     <script src="js/notification/notificationBell.js"></script>
     <script src="js/user/userInfo.js"></script>
+    <script src="js/store/tienda.js"></script>
     <script src="js/team/checkTeamRequests.js"></script>
     <style>
         #user-name {
@@ -83,6 +85,11 @@
             font-size: 0.9rem;
             margin: 0;
             padding: 5px;
+        }
+
+        .product-item img {
+            width: 100%;
+            height: auto;
         }
 
     </style>
@@ -187,28 +194,45 @@
 <section id="tienda">
     <h2 class="section-title">Tienda</h2>
     <div class="grid-container">
-        <div class="card" onclick="redirectToCreateTournament()">
-            <h3>Crear Torneo</h3>
-            <p>Crea un nuevo torneo y administra equipos.</p>
-        </div>
-        <div class="card">
-            <a href="misTorneos.html" class="card-link">
-                <h3>Mis Torneos</h3>
-                <p>Revisa y gestiona tus torneos.</p>
-            </a>
-        </div>
-        <div class="card">
-            <a href="torneos.html" class="card-link">
-                <h3>Ver Todos los Torneos</h3>
-                <p>Explora los torneos disponibles.</p>
-            </a>
-        </div>
-        <div class="card">
-            <a href="historial.html" class="card-link">
-                <h3>Historial</h3>
-                <p>Consulta el historial de torneos.</p>
-            </a>
-        </div>
+        <section id="products" class="container">
+            <div id="product-list" class="product-list">
+                <div class="product-item">
+                    <img src="img/penal.webp" alt="Product 1">
+                    <h3>Penal</h3>
+                    <p>25 puntos</p>
+                    <button>Comprar</button>
+                </div>
+                <div class="product-item">
+                    <img src="/img/3v3.webp" alt="Product 2">
+                    <h3>3 vs 3</h3>
+                    <p>15 puntos</p>
+                    <button>Comprar</button>
+                </div>
+                <div class="product-item">
+                    <img src="/img/1v1.webp" alt="Product 3">
+                    <h3>1 vs 1</h3>
+                    <p>20 puntos</p>
+                    <button>Comprar</button>
+                </div>
+                <div class="product-item">
+                    <img src="/img/freekick.webp" alt="Product 4">
+                    <h3>Tiro libre</h3>
+                    <p>10 puntos</p>
+                    <button>Comprar</button>
+                </div>
+                <div class="product-item">
+                    <img src="/img/redcard.webp" alt="Product 5">
+                    <h3>Expulsar 2 minutos</h3>
+                    <p>25 puntos</p>
+                    <button>Comprar</button>
+                </div>
+                <div class="product-item">
+                    <img src="/img/corner.webp" alt="Product 6">
+                    <h3>Corner</h3>
+                    <p>10 puntos</p>
+                    <button>Comprar</button>
+                </div>
+            </div>
     </div>
 </section>
 
