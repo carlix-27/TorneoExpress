@@ -71,7 +71,7 @@ public class PlayerController {
                 .build();
 
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("http://127.0.0.1:8080/home.html")
+                .success("http://127.0.0.1:8080/buyPremiumSuccess.html")
                         .failure("http://127.0.0.1:8080/premium.html")
                 .build();
 
