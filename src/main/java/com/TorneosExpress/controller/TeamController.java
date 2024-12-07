@@ -6,6 +6,7 @@ import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
+import com.TorneosExpress.websockets.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,13 +23,14 @@ import java.util.Map;
 public class TeamController {
 
   private final TeamService teamService;
-
+  private final WebSocketService webSocketService;
   private final PlayerService playerService;
 
   @Autowired
-  public TeamController(TeamService teamService, PlayerService playerService) {
+  public TeamController(TeamService teamService, PlayerService playerService, WebSocketService webSocketService) {
     this.teamService = teamService;
     this.playerService = playerService;
+    this.webSocketService = webSocketService;
   }
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -121,7 +123,9 @@ public class TeamController {
 
   @PostMapping("/{teamId}/purchase/{articleId}")
   public Team purchaseArticle(@PathVariable Long teamId, @PathVariable Long articleId) {
-    return teamService.purchaseArticle(teamId, articleId);
+    Team team = teamService.purchaseArticle(teamId, articleId);
+    webSocketService.sendPointsUpdate(team);
+    return team;
   }
 
   @GetMapping("/{teamId}/articles")
