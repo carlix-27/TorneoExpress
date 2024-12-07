@@ -14,15 +14,26 @@
     <link rel="stylesheet" href="styles/back-button.css">
     <link rel="stylesheet" href="styles/link.css">
     <link rel="stylesheet" href="styles/toast.css">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <link rel="stylesheet" href="https://apis.google.com/css/api.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="js/auth/login.js" defer></script>
+    <script src="js/auth/googleSignIn.js" defer></script>
     <script src="js/auth/register.js" defer></script>
     <script src="js/message/toast.js" defer></script>
     <style>
         .split-screen {
             display: flex;
             height: 100vh;
+        }
+
+        .g-signin2 {
+            justify-content: center;
+            display: flex;
+            margin: 20px auto;
+            padding: 10px 20px;
+            max-width: 320px;
         }
 
         input[type="button"] {
@@ -84,6 +95,12 @@
 </head>
 <body>
 
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+     data-client_id="97552484616-kigqsrmvbf59klrm0k1hg0o1k6tv891m.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse">
+</div>
+
 <div id="success-toast" class="toast toast-success" style="display: none;">
     <span class="close-btn" onclick="closeToast()">×</span>
     Registro exitoso.
@@ -126,7 +143,8 @@
             <div class="link">
                 <p><a href="register.html">Register here</a></p>
             </div>
-        </div>
+
+            <div class="g_id_signin" data-type="standard"></div></div>
     </div>
 </div>
 

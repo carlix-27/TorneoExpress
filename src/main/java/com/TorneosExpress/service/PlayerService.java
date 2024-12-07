@@ -92,6 +92,10 @@ public class PlayerService {
         }
     }
 
+    public Boolean doesPlayerExist(String email) {
+        return playerRepository.existsByEmail(email);
+    }
+
     public List<Player> getAllPlayers() {
         return playerRepository.findAll();
     }
