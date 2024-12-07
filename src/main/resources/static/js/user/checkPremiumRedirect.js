@@ -7,7 +7,7 @@ function checkPremiumAndRedirect(userId, premiumUrl, nonPremiumUrl) {
             return response.json();
         })
         .then(data => {
-            if (data.isPremium) {
+            if (data === true) {
                 window.location.href = premiumUrl;
             } else {
                 window.location.href = nonPremiumUrl;
@@ -21,5 +21,10 @@ function checkPremiumAndRedirect(userId, premiumUrl, nonPremiumUrl) {
 function redirectToCreateTournament() {
     const userId = localStorage.getItem("userId");
     checkPremiumAndRedirect(userId, "crearTorneo.html", "premium.html");
+}
+
+function redirectToCreateSport() {
+    const userId = localStorage.getItem("userId");
+    checkPremiumAndRedirect(userId, "addSport.html", "premium.html");
 }
 
