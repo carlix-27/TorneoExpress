@@ -5,7 +5,7 @@ function handleIncompleteRegistration() {
     const name = urlParams.get('name');
 
     if (isIncomplete) {
-        showToast("You need to complete more fields to register an account.", "error");
+        showErrorToast("You need to complete more fields to register an account.", "error");
 
         if (email) {
             document.getElementById('email').value = email;
@@ -28,7 +28,7 @@ function register() {
     const longitude = address.dataset.longitude;
 
     if (!latitude || !longitude) {
-        showToast("Debe seleccionar una ubicación válida.", "error");
+        showErrorToast("Debe seleccionar una ubicación válida.", "error");
         return;
     }
 
@@ -37,12 +37,12 @@ function register() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|io|co)$/i;
 
     if (!emailPattern.test(email)) {
-        showToast("Por favor, ingrese un email válido.", "error");
+        showErrorToast("Por favor, ingrese un email válido.", "error");
         return;
     }
 
     if (name === "" || address.value === "" || password === "") {
-        showToast("Todos los campos son obligatorios.", "error");
+        showErrorToast("Todos los campos son obligatorios.", "error");
         return;
     }
 
@@ -62,11 +62,11 @@ function register() {
     })
         .then(response => response.json())
         .then(() => {
-            showToast("Registration successful!", "success");
+            showSuccessToast("Registration successful!");
             window.location.replace("index.html?success=true");
         })
         .catch(error => {
             console.error("Registration error:", error);
-            showToast("Hubo un error al registrar la cuenta.", "error");
+            showErrorToast("Hubo un error al registrar la cuenta.", "error");
         });
 }

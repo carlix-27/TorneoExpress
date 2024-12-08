@@ -1,17 +1,26 @@
-function showToast() {
-    const urlParams = new URLSearchParams(window.location.search);
+function showSuccessToast(message) {
+    const successToast = document.getElementById('success-toast');
+    const toastMessage = document.getElementById('toast-message');
+    toastMessage.textContent = message;
 
-    if (urlParams.get('success') === 'true') {
-        const successMessage = document.getElementById('success-toast');
-        successMessage.style.display = 'block';
+    successToast.style.display = 'block';
 
-        setTimeout(function() {
-            successMessage.style.display = 'none';
-        }, 3000);
-    }
+    setTimeout(function() {
+        successToast.style.display = 'none';
+    }, 3000);
 }
 
-window.onload = showToast;
+function showErrorToast(message) {
+    const errorToast = document.getElementById('error-toast');
+    const toastMessage = document.getElementById('toast-message');
+    toastMessage.textContent = message;
+
+    errorToast.style.display = 'block';
+
+    setTimeout(function() {
+        errorToast.style.display = 'none';
+    }, 3000);
+}
 
 function closeToast() {
     const successToast = document.getElementById('success-toast');

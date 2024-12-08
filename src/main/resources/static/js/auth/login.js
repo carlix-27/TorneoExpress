@@ -27,11 +27,8 @@ function login() {
 
             window.location.href='/home.html'
 
-            showToast();
         } else {
-            console.error(xhr.responseText);
-            const errorMessage = document.getElementById('error-toast');
-            errorMessage.style.display = 'block';
+            showToast(xhr.responseText)
         }
     };
     xhr.send(JSON.stringify(loginRequest));

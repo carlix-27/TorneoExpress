@@ -102,8 +102,7 @@
 
 <div id="success-toast" class="toast toast-success" style="display: none;">
     <span class="close-btn" onclick="closeToast()">×</span>
-    Registro exitoso.
-    Por favor ingrese su usuario.
+    <span id="toast-message"></span>
 </div>
 
 <div id="error-toast" class="toast toast-error" style="display: none;">
@@ -158,36 +157,46 @@
 
     function checkIfUserExists(email, name) {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `/api/user/players/email/${email}`, true);
+        xhr.open('POST', '/api/auth/submit_registration', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+
+        const data = {
+            email: email,
+            name: name,
+            location: "undefined",
+            password: generateRandomPassword()
+        };
 
         xhr.onload = function() {
             if (xhr.status === 200) {
                 try {
-                    const response = xhr.responseText.trim();
-                    const userId = response ? JSON.parse(response) : null;
-
-                    console.log("User ID: ", userId);
-
-                    if (userId) {
-                        localStorage.setItem("userId", userId);
-                        window.location.href = '/home.html';
-                    } else {
-                        window.location.href = `/register.html?incomplete=true&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
-                    }
+                    const response = JSON.parse(xhr.responseText);
+                    localStorage.setItem('userId', response.id);
+                    window.location.href = '/home.html';
                 } catch (error) {
                     console.error("Error parsing response:", error);
                 }
             } else {
-                console.error("Failed to check user existence. Status:", xhr.status);
+                console.error("Failed to register.");
             }
         };
 
         xhr.onerror = function() {
-            console.error("Error checking user existence.");
+            showToast("Failed to register.");
         };
 
-        xhr.send();
+        xhr.send(JSON.stringify(data));
+    }
+
+
+    function generateRandomPassword(length = 12) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let password = '';
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            password += characters.charAt(randomIndex);
+        }
+        return password;
     }
 
 </script>
