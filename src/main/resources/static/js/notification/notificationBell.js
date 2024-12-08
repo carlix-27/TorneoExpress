@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
 
     getNotifications(userId);
+    connectWebSocket();
 
     function getNotifications(userId) {
         fetch(`/api/notifications/${userId}`)
@@ -42,3 +43,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+
+function connectWebSocket() {
+  let socket = new SockJS('/ws');
+  let stompClient = Stomp.over(socket);
+  const userId = localStorage.getItem("userId");
+  stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+    stompClient.subscribe(`/topic/notifications/${userId}`, function (message) {
+      updateNotifications(JSON.parse(message.body));
+    });
+  });
+}
+
+function updateNotifications(notification) {
+  const updatedUnreadCount = document.getElementById('unread-count');
+  updatedUnreadCount.textContent += 1;
+  // const selectedTeamId = teamDropDown.value;
+  // if (updatedTeam.id == selectedTeamId) {
+  //   const points = document.getElementById("prestige-points");
+  //   points.innerHTML = `Sus puntos de prestigio: ${updatedTeam.prestigePoints}`;
+  //
+  //   const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
+  //   if (selectedTeam) {
+  //     selectedTeam.prestigePoints = updatedTeam.prestigePoints;
+  //   }
+  // }
+}
