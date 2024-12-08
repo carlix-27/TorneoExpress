@@ -1,11 +1,14 @@
 package com.TorneosExpress.controller;
+import com.TorneosExpress.dto.store.PurchaseResult;
 import com.TorneosExpress.dto.team.UpdateTeamDto;
 import com.TorneosExpress.dto.team.CreateTeamDto;
 import com.TorneosExpress.model.Article;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
+import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
+import com.TorneosExpress.websockets.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,15 +23,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/teams")
 public class TeamController {
-
   private final TeamService teamService;
-
+  private final WebSocketService webSocketService;
   private final PlayerService playerService;
+  private final TeamRepository teamRepository;
 
   @Autowired
-  public TeamController(TeamService teamService, PlayerService playerService) {
+  public TeamController(TeamService teamService, PlayerService playerService, WebSocketService webSocketService, TeamRepository teamRepository) {
     this.teamService = teamService;
     this.playerService = playerService;
+    this.webSocketService = webSocketService;
+    this.teamRepository = teamRepository;
   }
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -120,8 +125,14 @@ public class TeamController {
   }
 
   @PostMapping("/{teamId}/purchase/{articleId}")
-  public Team purchaseArticle(@PathVariable Long teamId, @PathVariable Long articleId) {
-    return teamService.purchaseArticle(teamId, articleId);
+  public ResponseEntity<Team> purchaseArticle(@PathVariable Long teamId, @PathVariable Long articleId) {
+    final PurchaseResult result = teamService.purchaseArticle(teamId, articleId);
+    webSocketService.sendPointsUpdate(result.getTeam());
+    if (result.isSuccessful()) {
+        return new ResponseEntity<>(result.getTeam(), HttpStatus.OK);
+    } else {
+        return new ResponseEntity<>(result.getTeam(), HttpStatus.BAD_REQUEST);
+    }
   }
 
   @GetMapping("/{teamId}/articles")
