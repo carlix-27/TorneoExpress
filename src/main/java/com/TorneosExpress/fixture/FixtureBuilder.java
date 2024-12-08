@@ -89,21 +89,15 @@ public class FixtureBuilder {
 
 
     private void calculateGroupMatches(List<Team> teams, List<Match> fixtureMatches) {
-        // Comprobar si el número total de equipos no es múltiplo de 4 y rellenar con "Dummy"
         while (teams.size() % 4 != 0) {
             teams.add(new Team("Dummy"));
         }
+        int numGroups = teams.size() / 4;
+        List<Team> teamsCopy = new ArrayList<>(teams);
 
-        int numGroups = teams.size() / 4; // Número total de grupos
-        List<Team> teamsCopy = new ArrayList<>(teams); // Copia de los equipos para manipular
-
-        // Iterar sobre cada grupo
         for (int group = 0; group < numGroups; group++) {
-            // Extraer los equipos del grupo actual
             List<Team> groupTeams = teamsCopy.subList(group * 4, (group + 1) * 4);
-
-            // Generar partidos del grupo
-            LocalDate groupStartDate = startDate.plusWeeks(group); // Escalar fechas por grupo
+            LocalDate groupStartDate = startDate.plusWeeks(group);
             buildGroupMatches(groupTeams, fixtureMatches, groupStartDate);
         }
     }

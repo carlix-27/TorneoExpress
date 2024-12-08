@@ -47,14 +47,10 @@ public class TournamentService {
 
         // Si todos los partidos han sido jugados, procesamos los resultados
         if (allMatchesPlayed) {
-            // Fase de Grupos: Asignar puntos a los equipos
             if (tournament.getType() == StageType.GROUPSTAGE && matches.size() == 24) {
 
                 Map<Team, Integer> teamPoints = new HashMap<>();
 
-                // todo: quiza alguna condicion extra, si por ejemplo ya tenemos menos de 24 todo bien, pero con mas de 24 matches pasamos a la logica de Knockout.
-                // De esa forma evitamos trabajar con los puntos.
-                // Asignar puntos en función de los resultados de cada partido
                 for (Match match : matches) {
                     Team team1 = match.getTeam1();
                     Team team2 = match.getTeam2();
@@ -85,23 +81,9 @@ public class TournamentService {
                         .collect(Collectors.toList());
 
 
-
-                // Aquí decides cuántos equipos avanzan a la siguiente fase. Por ejemplo, los primeros 8
-                List<Team> winners = rankedTeams.subList(0, 8); // Suponiendo que los 8 mejores pasan a la siguiente fase
+                List<Team> winners = rankedTeams.subList(0, 8);
 
                 return getOrBuildKnockoutFixture(tournamentId, winners);
-                // fixme: considero que aca hay un error en la logica de tomar 8 campeones siempre.
-                // Tengo que hacer que winners se llenen con los winners de los partidos. Los dos mejores, en base a los puntajes.
-//                switch (winners.size()) {
-//                    case 8:
-//                        return getOrBuildKnockoutFixture(tournamentId, winners);
-//                    case 32:
-//                        List<Team> winnersQuarterFinalsGroups = winners.subList(winners.size() - 4, winners.size()); // Tomamos los últimos 4 winners.
-//                        return getOrBuildKnockoutFixture(tournamentId, winnersQuarterFinalsGroups); // Armamos con esos 4 los partidos para Semis
-//                    case 28, 34:
-//                        List<Team> winnersSemifinalsGroups = winners.subList(winners.size() - 2, winners.size()); // Tomamos los últimos 2 winners.
-//                        return getOrBuildKnockoutFixture(tournamentId, winnersSemifinalsGroups); // Armamos con esos 2 el partido de final
-                //}
             }
 
             // Knockout
@@ -129,9 +111,7 @@ public class TournamentService {
                         List<Team> winnersSemifinalsGroups = winners.subList(winners.size() - 2, winners.size()); // Tomamos los últimos 2 winners.
                         return getOrBuildKnockoutFixture(tournamentId, winnersSemifinalsGroups); // Armamos con esos 2 el partido de final
                 }
-
             }
-
         }
 
         return matches;
@@ -162,7 +142,6 @@ public class TournamentService {
 
         return List.of();
     }
-
 
 
 

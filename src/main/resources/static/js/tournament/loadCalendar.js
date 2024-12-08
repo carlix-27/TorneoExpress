@@ -207,13 +207,6 @@ function checkWinner(team1Score, team2Score) {
 }
 
 
-// fetchKnockoutFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
-
-
-// Esta implementacion arma los partidos correctamente
-// todo: hacer que la implementacion haga el armado de knockout correctamente.
-// todo: evitar que haga un grupo extra con un ultimo partido!
-
 function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     console.log("Matches", matches);
     console.log("Type", type);
@@ -243,9 +236,9 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                 let winners = [];
                 let roundCompleted = true;
 
-                matches.forEach((match) => {
+                matches.forEach((match, index) => {
                     currentGroup.push(match);
-                    if (currentGroup.length === 6 && groupCount <= 4) {
+                    if (currentGroup.length === 6 && groupCount < 4) {
                         groupedMatches.push(currentGroup);
                         currentGroup = []; // Limpiar el grupo para el siguiente
                         groupCount++;
@@ -254,6 +247,10 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                         }
                     }
 
+                    // // Manejar el grupo 5
+                    // if (groupCount === 4 && index === matches.length - 1) {
+                    //     groupedMatches.push(currentGroup); // Añadir los elementos restantes al grupo 5
+                    // }
 
                     const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
                     const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
@@ -271,11 +268,10 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                     }
                 });
 
-
-                // Si hay equipos restantes, asignarlos al último grupo
-                if (groupCount === 5) {
+                if (groupCount === 4 && currentGroup.length > 0) {
                     groupedMatches.push(currentGroup);
                 }
+
 
                 console.log(groupCount);
                 console.log("Grouped Teams:", groupedMatches);
