@@ -2,6 +2,7 @@ function handleIncompleteRegistration() {
     const urlParams = new URLSearchParams(window.location.search);
     const isIncomplete = urlParams.get('incomplete');
     const email = urlParams.get('email');
+    const name = urlParams.get('name');
 
     if (isIncomplete) {
         showToast("You need to complete more fields to register an account.", "error");
@@ -9,10 +10,13 @@ function handleIncompleteRegistration() {
         if (email) {
             document.getElementById('email').value = email;
         }
+        if (name) {
+            document.getElementById('name').value = name;
+        }
     }
 }
 
-window.onload = handleIncompleteRegistration;
+document.addEventListener("DOMContentLoaded", handleIncompleteRegistration);
 
 function register() {
     const name = document.getElementById('name').value;

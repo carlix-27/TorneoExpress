@@ -151,11 +151,12 @@
         const token = response.credential;
         const payload = JSON.parse(atob(token.split('.')[1]));
         const email = payload.email;
+        const name = payload.name;
 
-        checkIfUserExists(email);
+        checkIfUserExists(email, name);
     };
 
-    function checkIfUserExists(email) {
+    function checkIfUserExists(email, name) {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', `/api/user/players/email/${email}`, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -172,7 +173,7 @@
                         localStorage.setItem("userId", userId);
                         window.location.href = '/home.html';
                     } else {
-                        window.location.href = `/register.html?incomplete=true&email=${encodeURIComponent(email)}`;
+                        window.location.href = `/register.html?incomplete=true&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
                     }
                 } catch (error) {
                     console.error("Error parsing response:", error);
