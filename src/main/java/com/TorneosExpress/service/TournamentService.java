@@ -48,10 +48,12 @@ public class TournamentService {
         // Si todos los partidos han sido jugados, procesamos los resultados
         if (allMatchesPlayed) {
             // Fase de Grupos: Asignar puntos a los equipos
-            if (tournament.getType() == StageType.GROUPSTAGE) {
-                // Mapa para acumular los puntos de cada equipo
+            if (tournament.getType() == StageType.GROUPSTAGE && matches.size() == 24) {
+
                 Map<Team, Integer> teamPoints = new HashMap<>();
 
+                // todo: quiza alguna condicion extra, si por ejemplo ya tenemos menos de 24 todo bien, pero con mas de 24 matches pasamos a la logica de Knockout.
+                // De esa forma evitamos trabajar con los puntos.
                 // Asignar puntos en función de los resultados de cada partido
                 for (Match match : matches) {
                     Team team1 = match.getTeam1();
@@ -82,29 +84,35 @@ public class TournamentService {
                         .map(Map.Entry::getKey)
                         .collect(Collectors.toList());
 
+
+
                 // Aquí decides cuántos equipos avanzan a la siguiente fase. Por ejemplo, los primeros 8
                 List<Team> winners = rankedTeams.subList(0, 8); // Suponiendo que los 8 mejores pasan a la siguiente fase
 
-
-                switch (winners.size()){
-                    case 28:
-                        List<Team> winnersQuarterFinals = winners.subList(winners.size() - 4, winners.size()); // Tomamos los últimos 4 winners.
-                        return getOrBuildKnockoutFixture(tournamentId, winnersQuarterFinals); // Armamos con esos 4 los partidos para Semis
-                    case 30:
-                        List<Team> winnersSemifinals = winners.subList(winners.size() - 2, winners.size()); // Tomamos los últimos 2 winners.
-                        return getOrBuildKnockoutFixture(tournamentId, winnersSemifinals); // Armamos con esos 2 el partido de final
-                    default:
-                        return getOrBuildKnockoutFixture(tournamentId, winners);
-                }
+                return getOrBuildKnockoutFixture(tournamentId, winners);
+                // fixme: considero que aca hay un error en la logica de tomar 8 campeones siempre.
+                // Tengo que hacer que winners se llenen con los winners de los partidos. Los dos mejores, en base a los puntajes.
+//                switch (winners.size()) {
+//                    case 8:
+//                        return getOrBuildKnockoutFixture(tournamentId, winners);
+//                    case 32:
+//                        List<Team> winnersQuarterFinalsGroups = winners.subList(winners.size() - 4, winners.size()); // Tomamos los últimos 4 winners.
+//                        return getOrBuildKnockoutFixture(tournamentId, winnersQuarterFinalsGroups); // Armamos con esos 4 los partidos para Semis
+//                    case 28, 34:
+//                        List<Team> winnersSemifinalsGroups = winners.subList(winners.size() - 2, winners.size()); // Tomamos los últimos 2 winners.
+//                        return getOrBuildKnockoutFixture(tournamentId, winnersSemifinalsGroups); // Armamos con esos 2 el partido de final
+                //}
             }
 
             // Knockout
             List<Team> winners = getWinnersFromMatches(matches);
+
             if (winners.isEmpty()) {
                 return matches; // Si no hay ganadores, retornamos los partidos actuales
             }
 
-            if (tournament.getType() == StageType.KNOCKOUT) {
+            if (tournament.getType() == StageType.KNOCKOUT || (tournament.getType() == StageType.GROUPSTAGE && matches.size() > 24))  {
+
                 switch (winners.size()) {
                     case 8:
                         return getOrBuildKnockoutFixture(tournamentId, winners);
@@ -114,7 +122,14 @@ public class TournamentService {
                     case 14: // Tienes 14 winners en total
                         List<Team> winnersSemifinals = winners.subList(winners.size() - 2, winners.size()); // Tomamos los últimos 2 winners.
                         return getOrBuildKnockoutFixture(tournamentId, winnersSemifinals); // Armamos con esos 2 el partido de final
+                    case 28, 32:
+                        List<Team> winnersQuarterFinalsGroups = winners.subList(winners.size() - 4, winners.size()); // Tomamos los últimos 4 winners.
+                        return getOrBuildKnockoutFixture(tournamentId, winnersQuarterFinalsGroups); // Armamos con esos 4 los partidos para Semis
+                    case 30, 34:
+                        List<Team> winnersSemifinalsGroups = winners.subList(winners.size() - 2, winners.size()); // Tomamos los últimos 2 winners.
+                        return getOrBuildKnockoutFixture(tournamentId, winnersSemifinalsGroups); // Armamos con esos 2 el partido de final
                 }
+
             }
 
         }
@@ -129,6 +144,7 @@ public class TournamentService {
         Tournament tournament = getTournamentById(tournamentId);
 
         List<Match> matches = tournament.getMatches();
+
 
         if(matches.stream().allMatch(Match::isPlayed)){
             FixtureBuilder fixtureBuilder = new FixtureBuilder(

@@ -31,7 +31,7 @@ function loadCalendar() {
                         fetchRoundRobinFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'KNOCKOUT':
-                        fetchKnockoutFixture(tournament.participatingTeams, tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+                        fetchKnockoutFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
                         break;
                     case 'GROUPSTAGE':
                         fetchGroupStage(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
@@ -107,7 +107,8 @@ function fetchRoundRobinFixture(id, matches, tournamentName, tournamentCreatorId
 
 
 
-function fetchKnockoutFixture(participatingTeams, id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
+function fetchKnockoutFixture(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
+
     fetch(`/api/tournaments/${id}/${type}/calendar`)
         .then(response =>{
             if (!response.ok) {
@@ -206,6 +207,12 @@ function checkWinner(team1Score, team2Score) {
 }
 
 
+// fetchKnockoutFixture(tournamentId, tournament.matches, tournament.name, tournament.creatorId, calendar, tournament.type);
+
+
+// Esta implementacion arma los partidos correctamente
+// todo: hacer que la implementacion haga el armado de knockout correctamente.
+// todo: evitar que haga un grupo extra con un ultimo partido!
 
 function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type) {
     console.log("Matches", matches);
@@ -232,35 +239,67 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
 
                 const groupedMatches = [];
                 let currentGroup = [];
-                matches.forEach((match, index) => {
+                let groupCount = 0;
+                let winners = [];
+                let roundCompleted = true;
+
+                matches.forEach((match) => {
                     currentGroup.push(match);
-                    if (currentGroup.length === 6) {
+                    if (currentGroup.length === 6 && groupCount <= 4) {
                         groupedMatches.push(currentGroup);
                         currentGroup = []; // Limpiar el grupo para el siguiente
+                        groupCount++;
+                        if (groupCount === 4){
+                            return;
+                        }
+                    }
+
+
+                    const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
+                    const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
+
+                    if(team1Score !== 0  || team2Score !== 0) { // Si son 0 quiere decir que aun no se agregaron estadisticas a ninguno de los equipos. Estan 0 a 0
+
+                        const winner = checkWinner(team1Score, team2Score);
+
+                        if (winner !== null) {
+                            const winningTeam = winner === 1 ? match.team1 : match.team2;
+                            winners.push(winningTeam);
+                        }
+                    } else{
+                        roundCompleted = false; // Aun no terminamos de hacer el agregado de estadisticas.
                     }
                 });
 
+
                 // Si hay equipos restantes, asignarlos al último grupo
-                if (currentGroup.length > 0) {
+                if (groupCount === 5) {
                     groupedMatches.push(currentGroup);
                 }
 
+                console.log(groupCount);
                 console.log("Grouped Teams:", groupedMatches);
 
                 // Iteramos sobre los grupos
-                groupedMatches.forEach((group, groupIndex) => {
-                    // Crear un elemento para el grupo
-                    const groupElement = document.createElement('div');
-                    groupElement.classList.add('group');
-                    const groupHeader = document.createElement('h2');
-                    groupHeader.textContent = `Grupo ${groupIndex + 1}`;
-                    groupElement.appendChild(groupHeader);
 
-                    // Iterar sobre los partidos del grupo
-                    group.forEach((match) => {
-                        const listItem = document.createElement('li');
-                        listItem.className = 'tournament-bracket__item';
-                        listItem.innerHTML = `
+                groupedMatches.forEach((group, groupIndex) => {
+                        // Crear un elemento para el grupo
+                        const groupElement = document.createElement('div');
+                        groupElement.classList.add('group');
+                        const groupHeader = document.createElement('h2');
+                        if (groupIndex < 4){
+                            groupHeader.textContent = `Grupo ${groupIndex + 1}`;
+                        } else {
+                            groupHeader.textContent = 'Fase Knockout';
+                        }
+
+                        groupElement.appendChild(groupHeader);
+
+                        // Iterar sobre los partidos del grupo
+                        group.forEach((match) => {
+                            const listItem = document.createElement('li');
+                            listItem.className = 'tournament-bracket__item';
+                            listItem.innerHTML = `
                             <div class="tournament-bracket__match" tabindex="0">
                                 <table class="tournament-bracket__table">
                                     <caption class="tournament-bracket__caption">
@@ -293,15 +332,129 @@ function fetchGroupStage(id, matches, tournamentName, tournamentCreatorId, calen
                                 </table>
                             </div>
                         `;
-                        groupElement.appendChild(listItem);
+                            groupElement.appendChild(listItem);
+                        });
+
+                        calendarListHTML.appendChild(groupElement);
                     });
 
-                    calendarListHTML.appendChild(groupElement);
-                });
+                // 4 grupos, logica de knockout
+                if(groupedMatches.length === 4 && roundCompleted && matches.length > 24){
+                    const groupMatches = groupedMatches.map(group => group.map(match => match.winner));
+                    // Aca, tiene que tomar los ultimos 4 partidos que hay
+                    const knockoutMatches = buildKnockoutFixture(groupMatches.flat());
+
+                    fetchKnockoutFixtureForGroups(id, knockoutMatches, "Fase Knockout", tournamentCreatorId, calendarListHTML, "KNOCKOUT");
+                }
+
             }
         })
         .catch(error => console.error(error));
 }
+
+function buildKnockoutFixture(groupMatches) {
+    const knockoutMatches = [];
+    for (let i = 0; i < groupMatches.length; i += 2) {
+        const match = {
+            team1: groupMatches[i],
+            team2: groupMatches[i + 1],
+        };
+        knockoutMatches.push(match);
+    }
+    return knockoutMatches;
+}
+
+
+
+function fetchKnockoutFixtureForGroups(id, matches, tournamentName, tournamentCreatorId, calendarListHTML, type){
+
+    fetch(`/api/tournaments/${id}/${type}/calendar`)
+        .then(response =>{
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tournament: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+
+        .then(matches => {
+
+            console.log("Matches que tengo en el metodo", matches);
+
+            const results = document.createElement('div');
+            results.id = 'result';
+            results.innerHTML = `
+                <h2>${tournamentName} - Calendario</h2>
+            `;
+
+            calendarListHTML.appendChild(results);
+
+            let winners = [];
+
+            let roundCompleted = true;
+
+            const lastFourMatches = matches.slice(-4);
+
+            lastFourMatches.forEach(match => {
+                console.log("Match: ", match);
+                const team1Score = match.firstTeamScore !== null ? match.firstTeamScore : 0;
+                const team2Score = match.secondTeamScore !== null ? match.secondTeamScore : 0;
+
+                if(team1Score !== 0  || team2Score !== 0) { // Si son 0 quiere decir que aun no se agregaron estadisticas a ninguno de los equipos. Estan 0 a 0
+
+                    const winner = checkWinner(team1Score, team2Score);
+
+                    if (winner !== null) {
+                        const winningTeam = winner === 1 ? match.team1 : match.team2;
+                        winners.push(winningTeam);
+                    }
+                } else{
+                    roundCompleted = false; // Aun no terminamos de hacer el agregado de estadisticas.
+                }
+
+
+                const listItem = document.createElement('li');
+                listItem.className = 'tournament-bracket__item';
+                listItem.innerHTML = `
+                    <div class="tournament-bracket__match" tabindex="0">
+                        <table class="tournament-bracket__table">
+                            <caption class="tournament-bracket__caption">
+                                <p>${match.date}</p>
+                            </caption>
+                            <thead class="sr-only">
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tournament-bracket__content">
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team1.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team1Score}</span>
+                                    </td>
+                                </tr>
+                                <tr class="tournament-bracket__team">
+                                    <td class="tournament-bracket__country">
+                                        <abbr class="tournament-bracket__code">${match.team2.name}</abbr>
+                                    </td>
+                                    <td class="tournament-bracket__score">
+                                        <span class="tournament-bracket__number">${team2Score}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                calendarListHTML.appendChild(listItem);
+            });
+        });
+}
+
+
+
+
 
 
 document.addEventListener("DOMContentLoaded", loadCalendar);
