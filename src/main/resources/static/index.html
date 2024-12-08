@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
     <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/x-icon">
     <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/png">
     <title>Torneos Express - Login</title>
@@ -14,6 +15,7 @@
     <link rel="stylesheet" href="styles/back-button.css">
     <link rel="stylesheet" href="styles/link.css">
     <link rel="stylesheet" href="styles/toast.css">
+    <link rel="stylesheet" href="https://apis.google.com/css/api.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="js/auth/login.js" defer></script>
@@ -23,6 +25,14 @@
         .split-screen {
             display: flex;
             height: 100vh;
+        }
+
+        .g_id_signin {
+            justify-content: center;
+            display: flex;
+            margin: 20px auto;
+            padding: 10px 20px;
+            max-width: 320px;
         }
 
         input[type="button"] {
@@ -84,6 +94,12 @@
 </head>
 <body>
 
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+     data-client_id="97552484616-kigqsrmvbf59klrm0k1hg0o1k6tv891m.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse">
+</div>
+
 <div id="success-toast" class="toast toast-success" style="display: none;">
     <span class="close-btn" onclick="closeToast()">×</span>
     Registro exitoso.
@@ -106,7 +122,6 @@
 
     <div class="right">
         <div class="box">
-            <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
             <h2>Login</h2>
 
             <div id="error-message" class="toast toast-error" style="display: none;">Invalid email or password. Please try again.</div>
@@ -126,9 +141,56 @@
             <div class="link">
                 <p><a href="register.html">Register here</a></p>
             </div>
-        </div>
+
+            <div class="g_id_signin" data-type="standard"></div></div>
     </div>
 </div>
+
+<script>
+    window.handleCredentialResponse = function(response) {
+        const token = response.credential;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const email = payload.email;
+        const name = payload.name;
+
+        checkIfUserExists(email, name);
+    };
+
+    function checkIfUserExists(email, name) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/api/user/players/email/${email}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    const response = xhr.responseText.trim();
+                    const userId = response ? JSON.parse(response) : null;
+
+                    console.log("User ID: ", userId);
+
+                    if (userId) {
+                        localStorage.setItem("userId", userId);
+                        window.location.href = '/home.html';
+                    } else {
+                        window.location.href = `/register.html?incomplete=true&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
+                    }
+                } catch (error) {
+                    console.error("Error parsing response:", error);
+                }
+            } else {
+                console.error("Failed to check user existence. Status:", xhr.status);
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error("Error checking user existence.");
+        };
+
+        xhr.send();
+    }
+
+</script>
 
 </body>
 </html>

@@ -27,6 +27,14 @@ public class PlayerService {
         return playerRepository.findById(id);
     }
 
+    public Long getUserIdByEmail(String email) {
+        Player player = playerRepository.findByemail(email);
+        if (player != null) {
+            return player.getId();
+        }
+        return null;
+    }
+
     public Player savePlayer(Player player) {
         return playerRepository.save(player);
     }
@@ -90,6 +98,10 @@ public class PlayerService {
         } else {
             return false;
         }
+    }
+
+    public Boolean doesPlayerExist(String email) {
+        return playerRepository.existsByEmail(email);
     }
 
     public List<Player> getAllPlayers() {

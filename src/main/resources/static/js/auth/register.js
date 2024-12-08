@@ -1,3 +1,23 @@
+function handleIncompleteRegistration() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isIncomplete = urlParams.get('incomplete');
+    const email = urlParams.get('email');
+    const name = urlParams.get('name');
+
+    if (isIncomplete) {
+        showToast("You need to complete more fields to register an account.", "error");
+
+        if (email) {
+            document.getElementById('email').value = email;
+        }
+        if (name) {
+            document.getElementById('name').value = name;
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", handleIncompleteRegistration);
+
 function register() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -8,7 +28,7 @@ function register() {
     const longitude = address.dataset.longitude;
 
     if (!latitude || !longitude) {
-        displayErrorMessage("Debe seleccionar una ubicación válida.");
+        showToast("Debe seleccionar una ubicación válida.", "error");
         return;
     }
 
@@ -17,12 +37,12 @@ function register() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|io|co)$/i;
 
     if (!emailPattern.test(email)) {
-        displayErrorMessage("Por favor, ingrese un email válido.");
+        showToast("Por favor, ingrese un email válido.", "error");
         return;
     }
 
     if (name === "" || address.value === "" || password === "") {
-        displayErrorMessage("Todos los campos son obligatorios.");
+        showToast("Todos los campos son obligatorios.", "error");
         return;
     }
 
@@ -42,7 +62,11 @@ function register() {
     })
         .then(response => response.json())
         .then(() => {
+            showToast("Registration successful!", "success");
             window.location.replace("index.html?success=true");
         })
+        .catch(error => {
+            console.error("Registration error:", error);
+            showToast("Hubo un error al registrar la cuenta.", "error");
+        });
 }
-

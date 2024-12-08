@@ -35,6 +35,16 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
+    @GetMapping("/players/email/{email}")
+    public Long getUserIdByEmail(@PathVariable String email) {
+        return playerService.getUserIdByEmail(email);
+    }
+
+    @GetMapping("/{email}")
+    public Boolean doesPlayerExist(@PathVariable String email) {
+        return playerService.doesPlayerExist(email);
+    }
+
     @GetMapping("/{userId}/premium")
     public Boolean checkPremiumStatus(@PathVariable Long userId) {
         return playerService.isPremiumUser(userId);
