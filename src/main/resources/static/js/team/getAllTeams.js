@@ -17,7 +17,7 @@ function loadTeams() {
                     location: teamLocation,
                     sport: teamSport,
                     name,
-                    private: isPrivate,
+                    isPrivate: isPrivate,
                     players,
                 }
                 = team
@@ -90,7 +90,7 @@ function displayTeamDetails(team, signupButton) {
     const teamLocation = team.location
     const playersInTeam = teamPlayers.length
     const maxPlayers = teamSport.num_players * 2
-    const isTeamPrivate = team.private
+    const isTeamPrivate = team.isPrivate
 
 
     teamDetails.innerHTML = `
@@ -113,7 +113,7 @@ function displayTeamDetails(team, signupButton) {
 function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
 
-        const isTeamPrivate = team.private;
+        const isTeamPrivate = team.isPrivate;
         const playersInTeam = team.players.length;
         const teamSport = team.sport
         const teamPlayers = team.players
@@ -230,7 +230,7 @@ function createTeamNotification(teamRequest) {
             const playerName = player.name;
             const teamName = team.name;
 
-            const isTeamPrivate = team.private
+            const isTeamPrivate = team.isPrivate
 
             let message
 
