@@ -1,3 +1,5 @@
+let notificationCount = 0;
+
 document.addEventListener("DOMContentLoaded", () => {
     const unreadCount = document.getElementById('unread-count');
     const notificationText = document.getElementById('notification-text');
@@ -18,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const unreadNotifications = notifications.filter(notification => !notification.read && !transcurridoMasDe24Horas(new Date(notification.createdAt)));
                 const unreadCountValue = unreadNotifications.length;
+                notificationCount = unreadCountValue;
 
                 if (unreadCountValue > 0) {
                     unreadCount.textContent = unreadCountValue; // Show unread count
@@ -50,23 +53,19 @@ function connectWebSocket() {
   const userId = localStorage.getItem("userId");
   stompClient.connect({}, function (frame) {
     console.log('Connected: ' + frame);
-    stompClient.subscribe(`/topic/notifications/${userId}`, function (message) {
+    stompClient.subscribe(`/user/${userId}/notification`, function (message) {
       updateNotifications(JSON.parse(message.body));
     });
   });
 }
 
 function updateNotifications(notification) {
+  notificationCount += 1;
   const updatedUnreadCount = document.getElementById('unread-count');
-  updatedUnreadCount.textContent += 1;
-  // const selectedTeamId = teamDropDown.value;
-  // if (updatedTeam.id == selectedTeamId) {
-  //   const points = document.getElementById("prestige-points");
-  //   points.innerHTML = `Sus puntos de prestigio: ${updatedTeam.prestigePoints}`;
-  //
-  //   const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
-  //   if (selectedTeam) {
-  //     selectedTeam.prestigePoints = updatedTeam.prestigePoints;
-  //   }
-  // }
+  const notificationText = document.getElementById('notification-text');
+  updatedUnreadCount.textContent = notificationCount;
+  updatedUnreadCount.style.display = 'inline-block';
+  notificationText.textContent = 'Notifications (' + notificationCount + ')';
+  notificationText.classList.add('has-notifications');
+  notificationText.classList.remove('no-notifications');
 }
