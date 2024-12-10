@@ -157,6 +157,55 @@
 
     function checkIfUserExists(email, name) {
         const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/api/user/${email}`, true);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const exists = xhr.responseText === 'true';
+                if (exists) {
+                    getUserIdByEmail(email);
+                } else {
+                    createAccount(email, name);
+                }
+            } else {
+                console.error("Failed to check if user exists.");
+            }
+        };
+
+        xhr.onerror = function() {
+            showToast("Failed to check if user exists.");
+        };
+
+        xhr.send();
+    }
+
+    function getUserIdByEmail(email) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/api/user/players/email/${email}`, true);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    const userId = parseInt(xhr.responseText, 10);
+                    localStorage.setItem('userId', userId);
+                    window.location.href = '/home.html';
+                } catch (error) {
+                    console.error("Error parsing userId response:", error);
+                }
+            } else {
+                console.error("Failed to fetch userId.");
+            }
+        };
+
+        xhr.onerror = function() {
+            showToast("Failed to fetch userId.");
+        };
+
+        xhr.send();
+    }
+
+    function createAccount(email, name) {
+        const xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/auth/submit_registration', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
