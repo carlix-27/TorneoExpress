@@ -5,23 +5,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos Express - Tournament - Create Tournament</title>
-    <link rel="stylesheet" href="styles/tournament/crearTorneo.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link rel="stylesheet" href="styles/message.css">
+    <link rel="stylesheet" href="styles/datePicker.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="js/user/userIdCheck.js"></script>
     <script src="js/message/fieldMessages.js" defer></script>
-
+    <script src="js/tournament/createTournament.js"></script>
+    <script src="js/sport/fetchSports.js"></script>
+    <script src="js/maps/googleMaps.js"></script>
 </head>
 
-<body>
-<div class="create-tournament-box">
+<style>
 
-    <button class="back-button" onclick="goBack()">Back</button>
+    .box{
+        max-width: 1000px;
+        margin-top: 50px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 18px;
+    }
+
+    .form-group input[type="text"],
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .form-group button[type="button"] {
+        display: block;
+        margin: 0 auto;
+        background: #3d1f7f;
+        color: #fff;
+        font-size: 18px;
+        padding: 10px 20px;
+        cursor: pointer;
+        border: none;
+        border-radius: 7px;
+    }
+
+    .form-group button[type="button"]:hover {
+        background: #342160;
+    }
+
+    .inline-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .location-container,
+    .date-container {
+        flex: 1;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+</style>
+
+<body>
+
+<a href="home.html" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+
+<div class="box">
 
     <h2>Crear Torneo</h2>
 
-    <form id="create-tournament-form" action="/api/tournaments/create" method="post">
+    <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+    <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
 
-        <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
-        <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+    <form id="create-tournament-form" action="/api/tournaments/create" method="post">
 
         <div class="form-group">
             <label for="tournament-name"> Nombre del torneo:</label>
@@ -33,27 +117,31 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <i class="fas fa-map-marker-alt"></i>
-            <label for="location">Ubicación:</label>
-            <input type="text" id="location" name="location" required>
+        <div class="form-group inline-group">
+            <div class="location-container">
+                <label for="location">Ubicación del Torneo:</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+
+            <div class="date-container">
+                <label for="start-date">Fecha de inicio:</label>
+                <input type="date" id="start-date" name="start-date" required>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="start-date">Fecha de inicio:</label>
-            <input type="date" id="start-date" name="start-date" required>
-        </div>
+
         <div class="form-group">
             <label for="privacy">Privacidad:</label>
             <input type="checkbox" id="privacy" name="privacy"> Private
         </div>
+
         <div class="form-group">
             <label for="difficulty">Dificultad:</label>
             <select id="difficulty" name="difficulty" required>
-                <option value="BEGINNER">Beginner</option>
-                <option value="INTERMEDIATE">Intermediate</option>
-                <option value="ADVANCED">Advanced</option>
-                <option value="EXPERT">Expert</option>
+                <option value="BEGINNER">Principiante</option>
+                <option value="INTERMEDIATE">Experimentado</option>
+                <option value="ADVANCED">Avanzado</option>
+                <option value="EXPERT">Experto</option>
             </select>
         </div>
 
@@ -78,17 +166,6 @@
     </form>
 
 </div>
-
-<script>
-    function goBack() {
-        window.history.back();
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-        fetchSports();
-    });
-</script>
-
-    <script src="js/tournament/createTournament.js"></script>
 
 </body>
 </html>
