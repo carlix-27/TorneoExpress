@@ -13,6 +13,9 @@ public class CreateTeamDto {
   private Long captainId;
   private Sport sport;
   private String location;
-  private boolean isPrivate;
+  private Boolean isPrivate;
 
+  public Boolean isPrivate() {
+    return isPrivate;
+  }
 }

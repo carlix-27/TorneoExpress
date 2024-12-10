@@ -3,54 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <title>Torneos Express - Registro</title>
-    <link rel="stylesheet" href="styles/styleRegister.css">
+
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        .split-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            padding: 0 60px;
+        }
+
+        input[type="button"] {
+            background: #3d1f7f;
+            color: white;
+        }
+
+        .illustration {
+            max-width: 250px;
+            margin: 0 20px;
+        }
+
+        .illustration-left {
+            order: -1;
+            margin-left: 30px;
+        }
+
+        .illustration-right {
+            order: 1;
+            margin-right: 30px;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 100px;
+        }
+
+
+    </style>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="js/auth/register.js"></script>
+    <script src="js/message/errorMessage.js"></script>
+    <script src="js/maps/googleMaps.js"></script>
+    <script src="js/message/toast.js"></script>
 </head>
+
 <body>
 
-<header>
-    <h1>Torneos Express</h1>
-</header>
+<div class="split-screen">
+        <img src="illustrations/Goal%20Illustration.svg" alt="Goal Illustration" class="illustration illustration-left">
 
-<div class="register-box">
-    <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
-    <h2>Registar nueva cuenta</h2>
+        <div class="box">
+            <h2>Registrar nueva cuenta</h2>
 
-    <form id="registration-form" action="api/auth/submit_registration" method="post">
+            <form id="registration-form" action="api/auth/submit_registration" method="post">
+                <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+                <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
 
-        <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
-        <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
+                <div class="textbox">
+                    <i class="fas fa-user"></i>
+                    <label for="name"></label><input type="text" id="name" placeholder="Nombre" required>
+                </div>
 
-        <div class="textbox">
-            <i class="fas fa-user"></i>
-            <input type="text" id="name" placeholder="Nombre" required>
+                <div class="textbox">
+                    <i class="fas fa-envelope"></i>
+                    <label for="email"></label><input type="email" id="email" placeholder="Email" required>
+                </div>
+
+                <div class="textbox">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <label for="location"></label><input type="text" id="location" placeholder="Enter your address" required>
+                </div>
+
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <label for="password"></label><input type="password" id="password" placeholder="Contraseña" required>
+                </div>
+
+                <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div>
+                <input type="button" value="Registrar" name="register_button" onclick="register()">
+            </form>
+
+            <div class="link">
+                <p><a href="index.html">¿Ya estás registrado? Ingresa aquí </a></p>
+            </div>
         </div>
 
-        <div class="textbox">
-            <i class="fas fa-envelope"></i>
-            <input type="email" id="email" placeholder="Email" required>
-        </div>
-
-        <div class="textbox">
-            <i class="fas fa-map-marker-alt"></i>
-            <input type="text" id="location" placeholder="Enter your address" required>
-        </div>
-
-        <div class="textbox">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="password" placeholder="Contraseña" required>
-        </div>
-
-        <div id="error-message" style="color: red; margin-bottom: 10px; display: none;"></div>
-        <input type="button" value="Registrar" name="register_button" onclick="register()">
-    </form>
-
-    <div class="login-link">
-        <p><a href="login.html">Ya estas registrado? Ingresa aqui </a></p>
+        <img src="illustrations/Greek%20Freak%20Illustration.svg" alt="Greek Freak Illustration" class="illustration illustration-right">
     </div>
-
-    <script src="js/auth/register.js"></script>
-</div>
 
 </body>
 </html>

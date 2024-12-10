@@ -1,0 +1,16 @@
+button, input[type="button"] {
+    color: #fff;
+    font-size: 18px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 7px;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button:hover, input[type="button"]:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

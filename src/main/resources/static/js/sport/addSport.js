@@ -41,7 +41,7 @@ function addSport() {
 
             xhr.send(JSON.stringify(createSportRequest));
         } else {
-            window.location.href = "buy_premium.html";
+            window.location.href = "premium.html";
         }
     });
 }

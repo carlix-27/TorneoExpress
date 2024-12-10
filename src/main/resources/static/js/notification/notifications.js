@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
     getNotifications(userId);
+    connectWebSocket();
 });
 
 function getNotifications(userId) {
@@ -88,4 +89,30 @@ function transcurridoMasDe24Horas(createdAt) {
     const ahora = new Date();
 
     return (ahora - createdAt) > milisegundosPorDia;
+}
+
+function connectWebSocket() {
+  let socket = new SockJS('/ws');
+  let stompClient = Stomp.over(socket);
+  const userId = localStorage.getItem("userId");
+  stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+    stompClient.subscribe(`/user/${userId}/notification`, function (message) {
+      updateNotifications(JSON.parse(message.body));
+    });
+  });
+}
+
+function updateNotifications(notification) {
+  console.log("notification: " + notification);
+  const updatedUnreadNotifications = document.getElementById('unread-notifications');
+  const notificationElement = document.createElement('div');
+  const createdAt = new Date(notification.createdAt);
+  const timeAgo = tiempoTranscurrido(new Date(), createdAt);
+  notificationElement.className = 'notification';
+  notificationElement.innerHTML = `
+    <p>${notification.message} - <span style="font-size: 12px; color: #999;">${timeAgo}</span></p>
+  `;
+  updatedUnreadNotifications.appendChild(notificationElement);
+  markNotificationsAsRead(localStorage.getItem("userId"));
 }

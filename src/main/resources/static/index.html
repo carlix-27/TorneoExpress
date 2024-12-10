@@ -3,29 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torneos Express</title>
-    <link rel="stylesheet" href="styles/styleIndex.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/x-icon">
+    <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/png">
+    <title>Torneos Express - Login</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link rel="stylesheet" href="https://apis.google.com/css/api.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="js/auth/login.js" defer></script>
+    <script src="js/auth/register.js" defer></script>
+    <script src="js/message/toast.js" defer></script>
+    <style>
+        .split-screen {
+            display: flex;
+            height: 100vh;
+        }
+
+        .g_id_signin {
+            justify-content: center;
+            display: flex;
+            margin: 20px auto;
+            padding: 10px 20px;
+            max-width: 320px;
+        }
+
+        input[type="button"] {
+            background: #3d1f7f;
+            color: white;
+        }
+
+        .left {
+            flex: 1;
+            background: #3d1f7f;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .left h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .left p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f4f4f9;
+        }
+
+        .box {
+            width: 90%;
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .left {
+                display: none;
+            }
+
+            .right {
+                flex: none;
+                width: 100%;
+            }
+
+            .box {
+                margin: auto;
+            }
+        }
+    </style>
+
 </head>
 <body>
-<header>
-    <div class="logo">
-        <img src="../assets/logo.png" alt="Torneos Express Logo">
-    </div>
-    <h1>Torneos Express</h1>
-    <nav>
-        <a href="login.html">Login</a>
-        <a href="register.html">Register</a>
-    </nav>
-</header>
 
-<main>
-    <p class="description">Simplificamos la gestión de torneos, inscripciones y seguimiento de partidos para participantes. Brindamos todo lo necesario para disfrutar al máximo de la competición deportiva.</p>
-</main>
-
-<div class="btn-container">
-    <a href="login.html" class="btn primary-btn">¡QUIERO JUGAR!</a>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+     data-client_id="97552484616-kigqsrmvbf59klrm0k1hg0o1k6tv891m.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse">
 </div>
+
+<div id="success-toast" class="toast toast-success" style="display: none;">
+    <span class="close-btn" onclick="closeToast()">×</span>
+    Registro exitoso.
+    Por favor ingrese su usuario.
+</div>
+
+<div id="error-toast" class="toast toast-error" style="display: none;">
+    <span class="close-btn" onclick="closeToast()">×</span>
+    Credenciales incorrectas.
+    Por favor pruebe nuevamente.
+</div>
+
+
+<div class="split-screen">
+    <div class="left">
+        <h1>Torneos Express</h1>
+        <p>La plataforma para manejar y jugar tus propios torneos <br> ¡Inicia session para jugar!</p>
+        <img src="illustrations/Fans%20Illustration.svg" alt="Torneos Express Logo" style="max-width: 50%; height: auto; margin-top: 20px;">
+    </div>
+
+    <div class="right">
+        <div class="box">
+            <h2>Login</h2>
+
+            <div id="error-message" class="toast toast-error" style="display: none;">Invalid email or password. Please try again.</div>
+
+            <form id="login-form" action="/api/auth/login" method="post">
+                <div class="textbox">
+                    <i class="fas fa-user"></i>
+                    <label for="email"></label><input type="text" id="email" placeholder="Email" required>
+                </div>
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <label for="password"></label><input type="password" id="password" placeholder="Password" required>
+                </div>
+                <input type="button" value="Login" name="login_button" onclick="login()">
+            </form>
+
+            <div class="link">
+                <p><a href="register.html">Register here</a></p>
+            </div>
+
+            <div class="g_id_signin" data-type="standard"></div></div>
+    </div>
+</div>
+
+<script>
+    window.handleCredentialResponse = function(response) {
+        const token = response.credential;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const email = payload.email;
+        const name = payload.name;
+
+        checkIfUserExists(email, name);
+    };
+
+    function checkIfUserExists(email, name) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/api/user/players/email/${email}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    const response = xhr.responseText.trim();
+                    const userId = response ? JSON.parse(response) : null;
+
+                    console.log("User ID: ", userId);
+
+                    if (userId) {
+                        localStorage.setItem("userId", userId);
+                        window.location.href = '/home.html';
+                    } else {
+                        window.location.href = `/register.html?incomplete=true&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
+                    }
+                } catch (error) {
+                    console.error("Error parsing response:", error);
+                }
+            } else {
+                console.error("Failed to check user existence. Status:", xhr.status);
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error("Error checking user existence.");
+        };
+
+        xhr.send();
+    }
+
+</script>
 
 </body>
 </html>

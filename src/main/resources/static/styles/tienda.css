@@ -1,97 +1,9 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-}
-
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
-
-/* CSS for the horizontal navbar */
-
-nav ul li:last-child {
-    margin-right: 0;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #333333;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
-}
-
-header {
-    background-color: #000;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2em;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
-
-/* HEADER STYLES */
-
-main {
-    padding: 20px 0;
-}
-
-.section-title {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-
 .product-list {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.product-list p {
-    display: flex;
-    text-align: center;
-    margin: auto;
-    font-size: 18px;
-    color: #333;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 20px;
 }
 
 .product-item {
@@ -103,7 +15,7 @@ main {
     padding: 20px;
     text-align: center;
     width: 300px;
-    height: 350px; /* Set a fixed height for uniformity */
+    height: 350px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -114,7 +26,7 @@ main {
     height: auto;
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
-    max-height: 200px; /* Adjust based on desired max height */
+    max-height: 200px;
     object-fit: cover;
 }
 
@@ -140,13 +52,4 @@ main {
 
 .product-item button:hover {
     background-color: #342160;
-}
-
-#verified-icon {
-    color: #00f4ff; /* Adjust the color as needed */
-}
-
-#verified-icon {
-    display: none; /* Ocultar por defecto */
-    margin: 5px;
 }

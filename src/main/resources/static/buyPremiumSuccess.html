@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="styles/successPremium.css">
-  <script src="js/auth/checkRedirect.js"></script>
-  <title>Upgrade to Premium</title>
+  <script src="js/user/userIdCheck.js"></script>
+  <title>Compra Premium</title>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const userId = localStorage.getItem("userId");
-      console.log(userId);
 
       fetch(`api/user/upgrade/${userId}`, {
         method: 'POST',
@@ -19,9 +18,9 @@
               .then(response => response.json())
               .then(data => {
                 if (data === true) {
-                  document.getElementById("status").innerText = "You have been upgraded to Premium!";
+                  document.getElementById("status").innerText = "Compra exitosa! Disfruta de los beneficios";
                 } else {
-                  document.getElementById("status").innerText = "Failed to upgrade to Premium.";
+                  document.getElementById("status").innerText = "Error con la compra";
                 }
               })
               .catch(error => {
@@ -36,8 +35,9 @@
   </script>
 </head>
 <body>
-<h1>Upgrade to Premium</h1>
+<h1>Torneos Express Premium</h1>
+<img src="illustrations/Fans%20Illustration.svg" alt="Illustration" style="display: block; margin: 0 auto; max-width: 20%; height: auto;">
 <p id="status">Upgrading...</p>
-<button onclick="goBack()">Back to Home</button>
+<button onclick="goBack()">Volver al Home</button>
 </body>
 </html>

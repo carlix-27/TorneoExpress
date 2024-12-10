@@ -35,12 +35,19 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
+    @GetMapping("/players/email/{email}")
+    public Long getUserIdByEmail(@PathVariable String email) {
+        return playerService.getUserIdByEmail(email);
+    }
+
+    @GetMapping("/{email}")
+    public Boolean doesPlayerExist(@PathVariable String email) {
+        return playerService.doesPlayerExist(email);
+    }
+
     @GetMapping("/{userId}/premium")
-    public ResponseEntity<Map<String, Boolean>> checkPremiumStatus(@PathVariable Long userId) {
-        boolean isPremium = playerService.isPremiumUser(userId);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("isPremium", isPremium);
-        return ResponseEntity.ok().body(response);
+    public Boolean checkPremiumStatus(@PathVariable Long userId) {
+        return playerService.isPremiumUser(userId);
     }
 
     @GetMapping("/{userId}/team-owner")
@@ -75,7 +82,7 @@ public class PlayerController {
 
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
                 .success("http://127.0.0.1:8080/buyPremiumSuccess.html")
-                        .failure("http://127.0.0.1:8080/buy_premium.html")
+                        .failure("http://127.0.0.1:8080/premium.html")
                 .build();
 
         List<PreferenceItemRequest> items = new ArrayList<>();

@@ -1,5 +1,3 @@
-
-// Vendedor Public KEY
 const mercadopago = new MercadoPago("APP_USR-6b76fcb4-909a-41bb-9abb-35e4910f698c", {
     locale: 'es-AR'
 });
@@ -17,12 +15,10 @@ document.getElementById("checkout-btn").addEventListener("click", function () {
             return response.json();
         })
         .then(function (preference) {
-            console.log("Preference ID: ", preference.id)
             createCheckoutButton(preference.id);
 
             const unitPrice = 50
 
-            // Populate the summary price and total elements
             document.getElementById("summary-price").textContent = `$${unitPrice}`;
             document.getElementById("summary-total").textContent = `$${unitPrice}`;
 
@@ -44,7 +40,7 @@ function createCheckoutButton(preferenceId) {
         if (window.checkoutButton) window.checkoutButton.unmount();
         await bricksBuilder.create(
             'wallet',
-            'button-checkout', // class/id where the payment button will be displayed
+            'button-checkout',
             {
                 initialization: {
                     preferenceId: preferenceId

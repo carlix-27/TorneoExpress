@@ -21,7 +21,7 @@ function loadTeams() {
 
             const createTeamElement = (team, isCaptain) => {
                 const teamId = team.id;
-                const teamPrivate = team.private;
+                const teamPrivate = team.isPrivate;
                 const teamLocation = team.location;
                 const teamName = team.name;
                 const teamPlayers = team.players;

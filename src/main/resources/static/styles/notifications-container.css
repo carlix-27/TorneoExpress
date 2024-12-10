@@ -1,0 +1,21 @@
+.notifications-container {
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: auto;
+}
+
+.notifications-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0 10px;
+    transition: color 0.3s ease;
+}
+
+
+.notifications-container:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}

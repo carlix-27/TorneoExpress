@@ -20,7 +20,7 @@ function loadTeam() {
         <div id="result">
             <h2>${team.name}</h2>
             <p>Ubicación: ${team.location}</p>
-            <p>Privacidad: ${team.private ? "Privado" : "Público"}</p>
+            <p>Privacidad: ${team.isPrivate ? "Privado" : "Público"}</p>
             <p>Puntos de prestigio: ${team.prestigePoints}</p>
             <p>Número de jugadores: ${team.players.length}</p>
             <p>Jugadores del equipo:</p>

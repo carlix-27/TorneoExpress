@@ -1,63 +1,48 @@
-let autocomplete;
+function handleIncompleteRegistration() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isIncomplete = urlParams.get('incomplete');
+    const email = urlParams.get('email');
+    const name = urlParams.get('name');
 
-function initAutocomplete(apiKey) {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
-    script.async = true;
-    script.defer = true;
-    script.onerror = function() {
-        console.error("Error loading Google Maps script");
-    };
-    document.head.appendChild(script);
-}
+    if (isIncomplete) {
+        showToast("You need to complete more fields to register an account.", "error");
 
-function initializeAutocomplete() {
-    const input = document.getElementById('location');
-    if (!input) {
-        console.error("No input element with ID 'location' found.");
-        return;
-    }
-    autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', function() {
-        const place = autocomplete.getPlace();
-        if (place.geometry) {
-            const location = place.geometry.location;
-            input.dataset.latitude = location.lat();
-            input.dataset.longitude = location.lng();
-        } else {
-            console.error('No details available for input: ' + place.name);
+        if (email) {
+            document.getElementById('email').value = email;
         }
-    });
+        if (name) {
+            document.getElementById('name').value = name;
+        }
+    }
 }
+
+document.addEventListener("DOMContentLoaded", handleIncompleteRegistration);
 
 function register() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const address = document.getElementById('location'); // Corrected here
+    const address = document.getElementById('location');
 
-    const latitude = address.dataset.latitude; // Corrected here
-    const longitude = address.dataset.longitude; // Corrected here
-
-    console.log(latitude);
-    console.log(longitude);
+    const latitude = address.dataset.latitude;
+    const longitude = address.dataset.longitude;
 
     if (!latitude || !longitude) {
-        displayErrorMessage("Debe seleccionar una ubicación válida.");
+        showToast("Debe seleccionar una ubicación válida.", "error");
         return;
     }
 
     const location = `${latitude},${longitude}`;
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|io|co)$/i;
 
     if (!emailPattern.test(email)) {
-        displayErrorMessage("Por favor, ingrese un email válido.");
+        showToast("Por favor, ingrese un email válido.", "error");
         return;
     }
 
     if (name === "" || address.value === "" || password === "") {
-        displayErrorMessage("Todos los campos son obligatorios.");
+        showToast("Todos los campos son obligatorios.", "error");
         return;
     }
 
@@ -76,37 +61,12 @@ function register() {
         body: JSON.stringify(formData)
     })
         .then(response => response.json())
-        .then(data => {
-            console.log('User registered successfully:', data);
-            window.location.replace("login.html?success=true");
+        .then(() => {
+            showToast("Registration successful!", "success");
+            window.location.replace("index.html?success=true");
         })
         .catch(error => {
-            console.error('Error registering user:', error);
+            console.error("Registration error:", error);
+            showToast("Hubo un error al registrar la cuenta.", "error");
         });
 }
-
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/api/googleMapsApiKey')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then(apiKey => {
-            initAutocomplete(apiKey);
-        })
-        .catch(error => {
-            console.error('Error fetching API key:', error);
-        });
-});

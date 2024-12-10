@@ -1,0 +1,13 @@
+.link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.link a {
+    color: #3d1f7f;
+    text-decoration: none;
+}
+
+.link a:hover {
+    text-decoration: underline;
+}

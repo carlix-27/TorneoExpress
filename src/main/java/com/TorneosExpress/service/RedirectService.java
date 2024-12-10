@@ -11,7 +11,7 @@ public class RedirectService {
             return "/Users/marcoshussey/Documents/Proyects/laboratorio-I/TorneosExpress/src/main/resources/static/home.html";
         } else {
             // Redirect to an error page
-            return "/Users/marcoshussey/Documents/Proyects/laboratorio-I/TorneosExpress/src/main/resources/static/login.html";
+            return "/Users/marcoshussey/Documents/Proyects/laboratorio-I/TorneosExpress/src/main/resources/static/index.html";
         }
     }
 }
