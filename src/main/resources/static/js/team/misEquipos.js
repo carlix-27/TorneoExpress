@@ -1,3 +1,13 @@
+document.addEventListener("DOMContentLoaded", () => {
+    loadTeams();
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+        })
+        .catch(error => {
+            console.error('Error fetching API key:', error);
+        });
+});
+
 function loadTeams() {
     const userId = localStorage.getItem("userId");
     if (!userId) {
@@ -32,7 +42,6 @@ function loadTeams() {
 
                 const li = document.createElement("li");
 
-                // Function to fetch team requests
                 const fetchTeamRequests = () => {
                     fetch(`/api/requests/team/${userId}/${teamId}`)
                         .then(response => response.json())
@@ -54,6 +63,18 @@ function loadTeams() {
                         })
                         .catch(error => console.error('Error fetching team requests:', error));
                 };
+
+                if (teamLocation) {
+                    const [lat, lng] = teamLocation.split(',').map(coord => parseFloat(coord.trim()));
+
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        reverseGeocode(lat, lng)
+                            .then(address => {
+                                li.querySelector('p').innerHTML = `Ubicación: ${address}`;
+                            })
+                            .catch(error => console.error('Error reverse geocoding:', error));
+                    }
+                }
 
                 if (teamPrivate && isCaptain) {
                     fetchTeamRequests();
@@ -91,6 +112,20 @@ function loadTeams() {
         });
 }
 
+function reverseGeocode(lat, lng) {
+    return new Promise((resolve, reject) => {
+        const geocoder = new google.maps.Geocoder();
+        const latLng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({ location: latLng }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK && results[0]) {
+                resolve(results[0].formatted_address);
+            } else {
+                reject('Geocode failed: ' + status);
+            }
+        });
+    });
+}
+
 function editarEquipo(teamId) {
     window.location.href = `editar-equipo.html?id=${teamId}`;
 }
@@ -125,13 +160,8 @@ function verBeneficios(teamId){
             if (!response.ok) {
                 throw new Error(`Failed to get articles team: ${response.status} ${response.statusText}`);
             }
-            // loadTeams();
         })
         .catch(error => {
             console.error('Error:', error);
         });
-
-
 }
-
-document.addEventListener("DOMContentLoaded", loadTeams);
