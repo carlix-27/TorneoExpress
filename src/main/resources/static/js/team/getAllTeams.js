@@ -1,56 +1,54 @@
 function loadTeams() {
-    fetch(`/api/teams/all`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(teams => {
-            const listaEquipos = document.getElementById("lista-todos-equipos");
+  fetch(`/api/teams/all`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(teams => {
+      const listaEquipos = document.getElementById("lista-todos-equipos");
+      const userId = localStorage.getItem("userId");
+      listaEquipos.innerHTML = '';
 
-            listaEquipos.innerHTML = '';
+      teams.forEach(team => {
+        const {
+          location: teamLocation,
+          sport: teamSport,
+          name,
+          isPrivate: isPrivate,
+          players,
+        } = team;
 
-            teams.forEach(team => {
+        const sport = teamSport.sportName;
+        const playersInTeam = players.length;
+        const isInTeam = isUserInTeam(players, userId);
+        const maxPlayers = teamSport.num_players * 2;
 
-                const {
-                    location: teamLocation,
-                    sport: teamSport,
-                    name,
-                    isPrivate: isPrivate,
-                    players,
-                }
-                = team
-
-                const sport = teamSport.sportName
-                const playersInTeam = players.length
-                const maxPlayers = teamSport.num_players * 2
-
-                const li = document.createElement("li");
-                li.innerHTML = `
+        const li = document.createElement("li");
+        li.innerHTML = `
                     <div>
                         <a href="loadTeam.html?id=${team.id}"><h3>${name}</h3></a>
                         <p>Ubicación: ${teamLocation}</p>
                         <p>Deporte: ${sport}</p>
                         <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores anotados: ${playersInTeam} / ${maxPlayers}</p>
-                        <button class="signup-button" data-team-id="${team.id}">Inscribirse</button>
+                        ${!isInTeam ? `<button class="signup-button" data-team-id="${team.id}">Inscribirse</button>` : ''}
                     </div>
                 `;
-                listaEquipos.appendChild(li);
-            });
+        listaEquipos.appendChild(li);
+      });
 
-            // Attach event listeners to the signup buttons
-            document.querySelectorAll('.signup-button').forEach(button => {
-                button.addEventListener('click', function () {
-                    showSignupModal(this.getAttribute('data-team-id'));
-                });
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Handle error, show message to user
+      // Attach event listeners to the signup buttons
+      document.querySelectorAll('.signup-button').forEach(button => {
+        button.addEventListener('click', function () {
+          showSignupModal(this.getAttribute('data-team-id'));
         });
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 function showSignupModal(teamId) {
@@ -293,6 +291,10 @@ function fetchPlayerDetails(playerId) {
             }
             return response.json();
         });
+}
+
+function isUserInTeam(players, userId) {
+  return players.some(player => player.id == userId);
 }
 
 document.addEventListener("DOMContentLoaded", loadTeams);
