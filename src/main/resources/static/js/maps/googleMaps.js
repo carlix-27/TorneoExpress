@@ -41,8 +41,18 @@ function reverseGeocode(latitude, longitude, locationInput) {
 
         geocoder.geocode({ location: latLng }, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK && results[0]) {
-                const placeName = results[0].formatted_address;
-                locationInput.placeholder = placeName || 'No location provided';
+                const components = results[0].address_components;
+                const city = components.find(c => c.types.includes('locality'))?.long_name || '';
+                const state = components.find(c => c.types.includes('administrative_area_level_1'))?.short_name || '';
+                const country = components.find(c => c.types.includes('country'))?.long_name || '';
+
+                // Create the readable address, omitting empty parts
+                let readableAddress = `${city ? city + ', ' : ''}${state ? state + ', ' : ''}${country}`;
+
+                // Remove any leading commas and spaces
+                readableAddress = readableAddress.replace(/^, /, '').trim();
+
+                locationInput.placeholder = readableAddress || 'No location provided';
             } else {
                 locationInput.placeholder = 'Unable to get location';
                 console.error('Geocode failed due to: ' + status);

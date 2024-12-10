@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
     fetchAndLoadGoogleMapsAPI()
         .then(() => {
-            console.log("Google Maps API loaded successfully.");
             fetchAndDisplayUserProfile(userId);
             initializeAutocomplete('location')
         })
@@ -34,7 +33,6 @@ function displayUserProfile(user, userId) {
         });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
         const locationInput = document.getElementById('location');
 
         if (user.location && user.location !== "undefined") {
@@ -50,6 +48,7 @@ function displayUserProfile(user, userId) {
         locationInput.readOnly = true;
 
         editLocationButton.addEventListener('click', () => {
+
             locationInput.readOnly = false;
             locationInput.focus();
 
@@ -60,7 +59,6 @@ function displayUserProfile(user, userId) {
         saveLocationButton.addEventListener('click', () => {
             saveLocation(userId);
         });
-    });
 }
 
 function fetchUserData(userId) {
