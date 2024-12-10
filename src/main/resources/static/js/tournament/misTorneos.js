@@ -40,76 +40,110 @@ function cargarTorneos() {
                 } = tournament;
 
                 const isCreator = userId == creatorId;
-
                 const numOfParticipatingTeams = participatingTeams.length;
                 const maxTeams = tournament.maxTeams;
                 const sportName = tournamentSport.sportName;
 
-                let tournamentAddress = tournamentLocation;
                 if (tournamentLocation) {
                     const [lat, lng] = tournamentLocation.split(',').map(coord => parseFloat(coord.trim()));
 
                     if (!isNaN(lat) && !isNaN(lng)) {
                         reverseGeocode(lat, lng)
                             .then(address => {
-                                tournamentAddress = address;
+                                renderTournament({
+                                    li,
+                                    tournamentName,
+                                    sportName,
+                                    address,
+                                    privateTournament,
+                                    numOfParticipatingTeams,
+                                    maxTeams,
+                                    isCreator,
+                                    tournamentId,
+                                    userId,
+                                    listaTorneosCreados,
+                                    listaTorneosParticipados
+                                });
                             })
                             .catch(error => {
-                                tournamentAddress = error;
                                 console.error(error);
                             });
                     }
-                }
-
-                if (privateTournament && isCreator) {
-                    fetch(`/api/requests/tournament/${userId}/${tournamentId}`)
-                        .then(response => response.json())
-                        .then(requests => {
-                            const numOfRequests = requests.length;
-                            li.innerHTML = `
-                                <div>
-                                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a> 
-                                    <p>Deporte: ${sportName}</p>
-                                    <p>Ubicación: ${tournamentAddress}</p>
-                                    <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
-                                    <p>Dificultad: ${tournament.difficulty}</p>
-                                    <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
-                                    ${isCreator ? `<a class="action-link" onclick="editarTorneo(${tournamentId})">Editar</a>
-                                    <a class="action-link" onclick="borrarTorneo(${tournamentId})">Borrar</a>` : ''}
-                                    ${privateTournament && isCreator ? `<a class="action-link" onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes${numOfRequests > 0 ? ` <span class="request-count">(${numOfRequests})</span>` : ''}</a>` : ''}
-                                </div>
-                            `;
-                            if (isCreator) {
-                                listaTorneosCreados.appendChild(li);
-                            } else {
-                                listaTorneosParticipados.appendChild(li);
-                            }
-                        })
-                        .catch(error => console.error('Error fetching tournament requests:', error));
                 } else {
-                    li.innerHTML = `
-                        <div>
-                            <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a> 
-                            <p>Deporte: ${sportName}</p>
-                            <p>Ubicación: ${tournamentAddress}</p>
-                            <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
-                            <p>Dificultad: ${tournament.difficulty}</p>
-                            <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
-                            ${isCreator ? `<a class="action-link" onclick="editarTorneo(${tournamentId})">Editar</a>
-                            <a class="action-link" onclick="borrarTorneo(${tournamentId})">Borrar</a>` : ''}
-                        </div>
-                    `;
-                    if (isCreator) {
-                        listaTorneosCreados.appendChild(li);
-                    } else {
-                        listaTorneosParticipados.appendChild(li);
-                    }
+                    renderTournament({
+                        li,
+                        tournamentName,
+                        sportName,
+                        address: "Ubicación no disponible",
+                        privateTournament,
+                        numOfParticipatingTeams,
+                        maxTeams,
+                        isCreator,
+                        tournamentId,
+                        userId,
+                        listaTorneosCreados,
+                        listaTorneosParticipados
+                    });
                 }
             });
         })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function renderTournament({
+                              li,
+                              tournamentName,
+                              sportName,
+                              address,
+                              privateTournament,
+                              numOfParticipatingTeams,
+                              maxTeams,
+                              isCreator,
+                              tournamentId,
+                              userId,
+                              listaTorneosCreados,
+                              listaTorneosParticipados
+                          }) {
+    if (privateTournament && isCreator) {
+        fetch(`/api/requests/tournament/${userId}/${tournamentId}`)
+            .then(response => response.json())
+            .then(requests => {
+                const numOfRequests = requests.length;
+                li.innerHTML = `
+                    <div>
+                        <a href="loadTournament.html?id=${tournamentId}"><h3>${tournamentName}</h3></a> 
+                        <p>Deporte: ${sportName}</p>
+                        <p>Ubicación: ${address}</p>
+                        <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
+                        <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+                        ${isCreator ? `<a class="action-link" onclick="editarTorneo(${tournamentId})">Editar</a>
+                        <a class="action-link" onclick="borrarTorneo(${tournamentId})">Borrar</a>` : ''}
+                        ${privateTournament && isCreator ? `<a class="action-link" onclick="manejarSolicitudes(${tournamentId})">Manejar Solicitudes${numOfRequests > 0 ? ` <span class="request-count">(${numOfRequests})</span>` : ''}</a>` : ''}
+                    </div>
+                `;
+                listaTorneosCreados.appendChild(li);
+            })
+            .catch(error => console.error('Error fetching tournament requests:', error));
+    } else {
+        li.innerHTML = `
+            <div>
+                <a href="loadTournament.html?id=${tournamentId}"><h3>${tournamentName}</h3></a> 
+                <p>Deporte: ${sportName}</p>
+                <p>Ubicación: ${address}</p>
+                <p>Privacidad: ${privateTournament ? "Privado" : "Público"}</p>
+                <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+                ${isCreator ? `<a class="action-link" onclick="editarTorneo(${tournamentId})">Editar</a>
+                <a class="action-link" onclick="borrarTorneo(${tournamentId})">Borrar</a>` : ''}
+            </div>
+        `;
+        if (isCreator) {
+            listaTorneosCreados.appendChild(li);
+        } else {
+            listaTorneosParticipados.appendChild(li);
+        }
+    }
 }
 
 function editarTorneo(torneoId) {
