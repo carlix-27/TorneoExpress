@@ -23,15 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 notificationCount = unreadCountValue;
 
                 if (unreadCountValue > 0) {
-                    unreadCount.textContent = unreadCountValue; // Show unread count
-                    unreadCount.style.display = 'inline-block'; // Make count visible
-                    notificationText.textContent = 'Notifications (' + unreadCountValue + ')'; // Update notification text with count
-                    notificationText.classList.add('has-notifications'); // Change color for unread notifications
+                    unreadCount.textContent = unreadCountValue;
+                    unreadCount.style.display = 'inline-block';
+                    notificationText.textContent = 'Notificaciones (' + unreadCountValue + ')';
+                    notificationText.classList.add('has-notifications');
                     notificationText.classList.remove('no-notifications');
                 } else {
-                    unreadCount.style.display = 'none'; // Hide unread count if no unread notifications
-                    notificationText.textContent = 'Notifications'; // Show plain text
-                    notificationText.classList.add('no-notifications'); // Default color when no notifications
+                    unreadCount.style.display = 'none';
+                    notificationText.textContent = 'Notificaciones';
+                    notificationText.classList.add('no-notifications');
                     notificationText.classList.remove('has-notifications');
                 }
 
