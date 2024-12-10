@@ -6,6 +6,7 @@ import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.model.TournamentRequest;
+import com.TorneosExpress.results.TeamRequestResult;
 import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,14 +73,18 @@ public class RequestController {
     }
 
     @PostMapping("/team/send")
-    public TeamRequest sendTeamRequest(@RequestBody TeamRequestDto teamRequestDto) {
+    public ResponseEntity<TeamRequest> sendTeamRequest(@RequestBody TeamRequestDto teamRequestDto) {
 
         Long requestFromId = teamRequestDto.getRequestFrom();
         Long requestToId = teamRequestDto.getRequestTo();
         Long teamId = teamRequestDto.getTeamId();
         String name = teamRequestDto.getName();
-
-        return requestService.sendTeamRequest(requestFromId, requestToId, teamId, name);
+        TeamRequestResult result = requestService.sendTeamRequest(requestFromId, requestToId, teamId, name);
+        if (result.getSuccessful()) {
+          return new ResponseEntity<>(result.getTeamRequest(), HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>(result.getTeamRequest(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/tournament/send")

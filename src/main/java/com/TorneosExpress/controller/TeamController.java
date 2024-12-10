@@ -1,5 +1,5 @@
 package com.TorneosExpress.controller;
-import com.TorneosExpress.dto.store.PurchaseResult;
+import com.TorneosExpress.results.PurchaseResult;
 import com.TorneosExpress.dto.team.UpdateTeamDto;
 import com.TorneosExpress.dto.team.CreateTeamDto;
 import com.TorneosExpress.model.Article;

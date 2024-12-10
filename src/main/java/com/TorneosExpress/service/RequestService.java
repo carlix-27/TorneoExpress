@@ -3,6 +3,7 @@ package com.TorneosExpress.service;
 import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.*;
+import com.TorneosExpress.results.TeamRequestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,9 +110,23 @@ public class RequestService {
     }
 
 
-    public TeamRequest sendTeamRequest(Long from, Long to, Long team, String name) {
+    public TeamRequestResult sendTeamRequest(Long from, Long to, Long team, String name) {
         TeamRequest request = new TeamRequest(from, to, team, name);
-        return teamRequestRepository.save(request);
+        if (hasNoPreviousRequests(request)) {
+          teamRequestRepository.save(request);
+          return new TeamRequestResult(request, true);
+        } else {
+          return new TeamRequestResult(request, false);
+        }
+    }
+
+    /* Include 'denied' field in case a rejected user wants to send a request again. */
+    private boolean hasNoPreviousRequests(TeamRequest req) {
+      return teamRequestRepository
+          .findByRequestToAndRequestFromAndTeamIdAndDenied(
+              req.getRequestTo(), req.getRequestFrom(), req.getTeamId(), req.isDenied()
+          )
+          .isEmpty();
     }
 
     public TournamentRequest sendTournamentRequest(TournamentRequestDto tournamentRequestDto) {

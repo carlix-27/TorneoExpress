@@ -212,10 +212,13 @@ function sendTeamRequest(team, userId) {
                     return response.json();
                 })
                 .then(teamRequest => {
-                    displaySuccessMessage("Solicitud mandada con éxito")
+                    displaySuccessMessage("Solicitud mandada con éxito");
                     createTeamNotification(teamRequest);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    displayErrorMessage("Ya tiene una solicitud pendiente.");
+                    console.error('Error:', error);
+                });
         })
         .catch(error => console.error('Error fetching player details:', error));
 }
