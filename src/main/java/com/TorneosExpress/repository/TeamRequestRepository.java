@@ -10,4 +10,7 @@ import java.util.List;
 public interface TeamRequestRepository extends JpaRepository<TeamRequest, Long> {
     List<TeamRequest> findByRequestTo(Long requestTo);
     List<TeamRequest> findByRequestToAndTeamId(Long toId, Long teamId);
+    List<TeamRequest> findByRequestToAndRequestFromAndTeamIdAndDenied(
+        Long toId, Long fromId, Long teamId, Boolean denied
+    );
 }

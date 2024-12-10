@@ -21,12 +21,10 @@ import java.util.List;
 public class TournamentController {
 
     private final TournamentService tournamentService;
-    private final WebSocketService webSocketService;
 
     @Autowired
     public TournamentController(TournamentService tournamentService, WebSocketService webSocketService) {
         this.tournamentService = tournamentService;
-        this.webSocketService = webSocketService;
     }
 
     @PostMapping("/create")
