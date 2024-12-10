@@ -1,55 +1,14 @@
-/* Estilos generales */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
-}
-
-/* Estilos del encabezado */
-header {
-    background-color: #000;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2em;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #fff;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #333333;
-}
-
-/* Estilos para la sección de equipos */
 #mis-equipos {
     display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
+    justify-content: center;
+    margin-top: 50px;
+    height: 100vh;
+    gap: 20px;
 }
 
 .column {
-    width: 48%;
+    width: 40%;
+    text-align: center;
 }
 
 #lista-equipos-capitan, #lista-equipos-miembro {
@@ -59,7 +18,7 @@ nav ul li a:hover {
 }
 
 #lista-equipos-capitan h2, #lista-equipos-miembro h2 {
-    font-size: 1.5em;
+    font-size: 1.8em;
     color: #333;
     margin-bottom: 20px;
 }
@@ -106,6 +65,6 @@ nav ul li a:hover {
 }
 
 .request-count {
-    color: red; /* Cambia este color al que prefieras */
+    color: white;
     font-weight: bold;
 }

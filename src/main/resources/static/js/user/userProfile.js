@@ -37,7 +37,13 @@ function displayUserProfile(user, userId) {
 
         if (user.location && user.location !== "undefined") {
             const [latitude, longitude] = user.location.split(',');
-            reverseGeocode(latitude, longitude, locationInput);
+            reverseGeocode(latitude, longitude)
+                .then(address => {
+                    locationInput.placeholder = address;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         } else {
             locationInput.placeholder = 'No location provided';
         }
