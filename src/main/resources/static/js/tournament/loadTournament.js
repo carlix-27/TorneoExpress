@@ -15,6 +15,8 @@ function loadTournament() {
 
             const tournamentList = document.getElementById("tournament-result");
 
+            const userId = localStorage.getItem("userId");
+
             console.log("Tournament: ", tournament);
 
             console.log("Matches del torneo: ", tournament.matches);
@@ -28,10 +30,9 @@ function loadTournament() {
             const teamsList = teams.map(team => `<li><a href="loadTeam.html?id=${team.id}">${team.name}</a></li>`).join('');
             const maxTeams = tournament.maxTeams
             const type = tournament.type
+            const creator = tournament.creatorId;
 
             console.log("Tournament Matches: ", tournament.matches);
-
-
 
             tournamentList.innerHTML = `
                 <div id="result">
@@ -46,13 +47,14 @@ function loadTournament() {
                     <ul>${teamsList}</ul>
                     <a href="calendario.html?id=${tournament.id}"><h3>Ver calendario</h3></a>
                      ${tournament.active ? `<a href="verEstadisticas.html?id=${tournament.id}"><h3>Ver estadisticas</h3></a>` : ''}
-                    <a class="action-link" onclick="endTournament(${tournament.id})">Terminar Torneo</a>
+                     ${creator == userId ?
+                      `<button id="danger-button" class="danger-button" onClick="endTournament(${tournament.id})">Terminar Torneo</button>` : ''}
                 </div> 
             `;
         })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
 document.addEventListener("DOMContentLoaded", loadTournament);
