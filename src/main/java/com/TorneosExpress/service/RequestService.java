@@ -4,6 +4,7 @@ import com.TorneosExpress.dto.tournament.TournamentRequestDto;
 import com.TorneosExpress.model.*;
 import com.TorneosExpress.repository.*;
 import com.TorneosExpress.results.TeamRequestResult;
+import com.TorneosExpress.results.TournamentRequestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -112,7 +113,7 @@ public class RequestService {
 
     public TeamRequestResult sendTeamRequest(Long from, Long to, Long team, String name) {
         TeamRequest request = new TeamRequest(from, to, team, name);
-        if (hasNoPreviousRequests(request)) {
+        if (hasNoPreviousTeamRequests(request)) {
           teamRequestRepository.save(request);
           return new TeamRequestResult(request, true);
         } else {
@@ -121,7 +122,7 @@ public class RequestService {
     }
 
     /* Include 'denied' field in case a rejected user wants to send a request again. */
-    private boolean hasNoPreviousRequests(TeamRequest req) {
+    private boolean hasNoPreviousTeamRequests(TeamRequest req) {
       return teamRequestRepository
           .findByRequestToAndRequestFromAndTeamIdAndDenied(
               req.getRequestTo(), req.getRequestFrom(), req.getTeamId(), req.isDenied()
@@ -129,11 +130,23 @@ public class RequestService {
           .isEmpty();
     }
 
-    public TournamentRequest sendTournamentRequest(TournamentRequestDto tournamentRequestDto) {
+    public TournamentRequestResult sendTournamentRequest(TournamentRequestDto tournamentRequestDto) {
         TournamentRequest request = new TournamentRequest(tournamentRequestDto);
-        return tournamentRequestRepository.save(request);
+        if (hasNoPreviousTournamentRequests(request)) {
+          tournamentRequestRepository.save(request);
+          return new TournamentRequestResult(request, true);
+        } else {
+          return new TournamentRequestResult(request, false);
+        }
     }
 
+    private boolean hasNoPreviousTournamentRequests(TournamentRequest req) {
+      return tournamentRequestRepository
+          .findByRequestToAndRequestFromAndTeamIdAndDenied(
+              req.getRequestTo(), req.getRequestFrom(), req.getTeamId(), req.isDenied()
+          )
+          .isEmpty();
+    }
 
     public List<TeamRequest> getRequestsBySpecificTeam(Long toId, Long teamId) {
         return teamRequestRepository.findByRequestToAndTeamId(toId, teamId);

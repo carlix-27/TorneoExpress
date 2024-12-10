@@ -7,13 +7,12 @@ import com.TorneosExpress.model.Invite;
 import com.TorneosExpress.model.TeamRequest;
 import com.TorneosExpress.model.TournamentRequest;
 import com.TorneosExpress.results.TeamRequestResult;
+import com.TorneosExpress.results.TournamentRequestResult;
 import com.TorneosExpress.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -88,8 +87,13 @@ public class RequestController {
     }
 
     @PostMapping("/tournament/send")
-    public TournamentRequest sendTournamentRequest(@RequestBody TournamentRequestDto tournamentRequestDto) {
-        return requestService.sendTournamentRequest(tournamentRequestDto);
+    public ResponseEntity<TournamentRequest> sendTournamentRequest(@RequestBody TournamentRequestDto tournamentRequestDto) {
+      TournamentRequestResult result = requestService.sendTournamentRequest(tournamentRequestDto);
+      if (result.getSuccessful()) {
+        return new ResponseEntity<>(result.getTournamentRequest(), HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(result.getTournamentRequest(), HttpStatus.BAD_REQUEST);
+      }
     }
 
 
