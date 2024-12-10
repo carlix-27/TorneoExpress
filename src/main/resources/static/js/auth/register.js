@@ -62,7 +62,6 @@ function register() {
     })
         .then(response => response.json())
         .then(() => {
-            showSuccessToast("Registration successful!");
             window.location.replace("index.html?success=true");
         })
         .catch(error => {
