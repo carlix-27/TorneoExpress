@@ -20,8 +20,41 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('email').textContent = user.email || 'No email provided';
         document.getElementById('premium').textContent = user.is_Premium ? 'Yes' : 'No';
 
+        const comparePremiumButton = document.getElementById('premium-button');
+        if (!user.is_Premium) {
+            comparePremiumButton.style.display = 'inline-block';
+        } else {
+            comparePremiumButton.style.display = 'none';
+        }
+
         const locationInput = document.getElementById('location');
-        locationInput.placeholder = user.location !== "undefined" ? user.location : 'No location provided';
+        if (user.location && user.location !== "undefined") {
+            const [latitude, longitude] = user.location.split(',');
+
+            reverseGeocode(latitude, longitude, locationInput);
+        } else {
+            locationInput.placeholder = 'No location provided';
+        }
+    }
+
+    function reverseGeocode(latitude, longitude, locationInput) {
+        if (typeof google === 'object' && google.maps && google.maps.Geocoder) {
+            const geocoder = new google.maps.Geocoder();
+
+            const latLng = new google.maps.LatLng(latitude, longitude);
+
+            geocoder.geocode({ location: latLng }, (results, status) => {
+                if (status === google.maps.GeocoderStatus.OK && results[0]) {
+                    const placeName = results[0].formatted_address;
+                    locationInput.placeholder = placeName || 'No location provided';
+                } else {
+                    locationInput.placeholder = 'Unable to get location';
+                    console.error('Geocode failed due to: ' + status);
+                }
+            });
+        } else {
+            console.error('Google Maps API is not loaded');
+        }
     }
 
     const editLocationButton = document.getElementById('edit-location-button');
@@ -45,12 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function saveLocation() {
-
         const address = document.getElementById('location');
-
         const latitude = address.dataset.latitude;
+        console.log(latitude);
         const longitude = address.dataset.longitude;
-
+        console.log(longitude);
         if (!latitude || !longitude) {
             showErrorToast("Debe seleccionar una ubicación válida.", "error");
             return;
@@ -64,12 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: newLocation,
+                body: JSON.stringify({ location: newLocation }),
             })
                 .then(response => {
                     if (response.ok) {
-                        locationInput.placeholder = newLocation;
-                        locationInput.readOnly = true;
+                        address.placeholder = newLocation;
+                        address.readOnly = true;
 
                         saveLocationButton.style.display = 'none';
                         editLocationButton.style.display = 'inline-block';
@@ -82,5 +114,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert('Error saving location');
                 });
         }
+    }
+
+    const comparePremiumButton = document.getElementById('premium-button');
+    if (comparePremiumButton) {
+        comparePremiumButton.addEventListener('click', () => {
+            window.location.href = 'premium.html';
+        });
     }
 });
