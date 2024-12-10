@@ -1,7 +1,7 @@
 package com.TorneosExpress.model;
 
-public enum Type {
+public enum StageType {
     ROUNDROBIN,
     KNOCKOUT,
-    GROUPSTAGE
+    GROUPSTAGE,
 }

@@ -42,9 +42,7 @@ public class Match {
   @Column
   private int secondTeamScore;
 
-  /*@ManyToOne
-  @JoinColumn(name = "Id", nullable = false)
-  private Tournament tournament;*/
+
 
 
   public Match() {}
