@@ -59,15 +59,6 @@ function updateMatch(event) {
         });
 }
 
-const displaySuccessMessage = message => {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-
-    setTimeout(() => {
-        successMessage.style.display = "none";
-    }, 3000);
-};
 
 function getTournamentIdFromUrl() {
     const queryString = window.location.search;

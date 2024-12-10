@@ -54,12 +54,6 @@ function getTeamIdFromUrl() {
     return urlParams.get('id');
 }
 
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-}
-
 
 document.addEventListener("DOMContentLoaded", function() {
     const teamId = getTeamIdFromUrl();
