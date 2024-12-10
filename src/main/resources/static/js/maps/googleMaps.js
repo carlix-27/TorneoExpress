@@ -45,8 +45,18 @@ function reverseGeocode(latitude, longitude, callback) {
 
         geocoder.geocode({ location: latLng }, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK && results[0]) {
-                const placeName = results[0].formatted_address;
-                callback(null, placeName);
+                const addressComponents = results[0].address_components;
+                let formattedAddress = '';
+
+                const city = addressComponents.find(component => component.types.includes('locality'));
+                const state = addressComponents.find(component => component.types.includes('administrative_area_level_1'));
+                const country = addressComponents.find(component => component.types.includes('country'));
+
+                if (city) formattedAddress += city.long_name;
+                if (state) formattedAddress += `, ${state.long_name}`;
+                if (country) formattedAddress += `, ${country.long_name}`;
+
+                callback(null, formattedAddress || 'Location not found');
             } else {
                 callback(`Geocode failed due to: ${status}`);
             }
@@ -55,3 +65,4 @@ function reverseGeocode(latitude, longitude, callback) {
         callback('Google Maps API is not loaded');
     }
 }
+
