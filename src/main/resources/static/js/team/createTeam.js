@@ -1,3 +1,14 @@
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+            initializeAutocomplete('location');
+        })
+        .catch(error => {
+            console.error("Error loading Google Maps API:", error);
+            showErrorToast("Error loading location services.", "error");
+        });
+});
+
 function createTeam(event) {
     event.preventDefault();
 
@@ -39,6 +50,7 @@ function createTeam(event) {
     })
         .then(response => {
             if (response.status === 201) {
+                window.location.href = "misEquipos.html";
                 displaySuccessMessage("Equipo creado exitosamente!");
             } else if (response.status === 500) {
                 displayErrorMessage("El nombre del equipo debe ser único. Por favor, elija un nombre diferente.");
