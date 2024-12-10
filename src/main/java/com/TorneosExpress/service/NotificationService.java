@@ -34,8 +34,8 @@ public class NotificationService {
         notificationRepository.deleteById(notificationId);
     }
 
-    public Notification createNotification(Long toId, String message) {
-        Notification notification = new Notification(toId, message);
+    public Notification createNotification(Long toId, String message, String url) {
+        Notification notification = new Notification(toId, message, url);
         Notification savedNotification = notificationRepository.save(notification);
         webSocketService.sendNotification(toId, notification);
         return savedNotification;
