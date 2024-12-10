@@ -24,11 +24,7 @@ function addSport() {
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            console.log('Deporte creado: ', response);
-
-            displaySuccessMessage("Deporte creado con éxito")
-            document.getElementById('add-sport-form').reset();
+            window.location.href = '/deportes.html?success=true';
         } else if (xhr.status === 500) {
             displayErrorMessage("Nombre del deporte debe ser único")
         } else {

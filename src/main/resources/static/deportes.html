@@ -7,7 +7,10 @@
         <link rel="stylesheet" href="styles/sport/sports.css">
         <link rel="stylesheet" href="styles/button.css">
         <link rel="stylesheet" href="styles/base.css">
+        <link rel="stylesheet" href="styles/toast.css">
         <script src="js/user/userIdCheck.js"></script>
+        <script src="js/message/toast.js"></script>
+        <script src="js/sport/sports.js"></script>
     </head>
     <body>
 
@@ -17,6 +20,24 @@
         </ul>
     </section>
 
-    <script src="js/sport/sports.js"></script>
+    <div id="success-toast" class="toast toast-success" style="display: none;">
+        <span class="close-btn" onclick="closeToast()">×</span>
+        <span id="success-toast-message"></span>
+    </div>
+
+    <div id="error-toast" class="toast toast-error" style="display: none;">
+        <span class="close-btn" onclick="closeToast()">×</span>
+        <span id="error-toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            handleToastFromQuery(
+                "success",
+                "Deporte agregado con exito!",
+                "Hubo un error al agregar deporte"
+            );
+        });
+    </script>
     </body>
 </html>
