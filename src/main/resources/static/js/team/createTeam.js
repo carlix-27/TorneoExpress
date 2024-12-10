@@ -58,7 +58,7 @@ function createTeam(event) {
     const latitude = document.getElementById('location').dataset.latitude;
     const longitude = document.getElementById('location').dataset.longitude;
 
-    const isPrivate = document.getElementById('privacy').checked;
+    const isPrivate = document.getElementById("privacy");
     const captainId = localStorage.getItem("userId");
 
     if (!name) {
@@ -79,7 +79,7 @@ function createTeam(event) {
         captainId: captainId,
         sport: { sportId: sportId },
         location: location,
-        isPrivate: isPrivate
+        isPrivate: isPrivate.checked
     };
 
     fetch('/api/teams/create', {
