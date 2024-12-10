@@ -1,8 +1,7 @@
 let notificationCount = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const unreadCount = document.getElementById('unread-count');
-    const notificationText = document.getElementById('notification-text');
+    const notificationIcon = document.getElementById('notification-icon'); // Select the icon
     const userId = localStorage.getItem("userId");
 
     getNotifications(userId);
@@ -17,24 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.json();
             })
             .then(notifications => {
-
                 const unreadNotifications = notifications.filter(notification => !notification.read && !transcurridoMasDe24Horas(new Date(notification.createdAt)));
                 const unreadCountValue = unreadNotifications.length;
                 notificationCount = unreadCountValue;
 
-                if (unreadCountValue > 0) {
-                    unreadCount.textContent = unreadCountValue;
-                    unreadCount.style.display = 'inline-block';
-                    notificationText.textContent = 'Notificaciones (' + unreadCountValue + ')';
-                    notificationText.classList.add('has-notifications');
-                    notificationText.classList.remove('no-notifications');
-                } else {
-                    unreadCount.style.display = 'none';
-                    notificationText.textContent = 'Notificaciones';
-                    notificationText.classList.add('no-notifications');
-                    notificationText.classList.remove('has-notifications');
-                }
-
+                updateNotificationUI(unreadCountValue);
             })
             .catch(error => console.error('Error:', error));
     }
@@ -45,27 +31,29 @@ document.addEventListener("DOMContentLoaded", () => {
         return (ahora - createdAt) > milisegundosPorDia;
     }
 
+    function updateNotificationUI(unreadCountValue) {
+        if (unreadCountValue > 0) {
+            notificationIcon.src = 'img/NewNotification.png';
+        } else {
+            notificationIcon.src = 'img/Notifications%20Icon.png';
+        }
+    }
 });
 
 function connectWebSocket() {
-  let socket = new SockJS('/ws');
-  let stompClient = Stomp.over(socket);
-  const userId = localStorage.getItem("userId");
-  stompClient.connect({}, function (frame) {
-    console.log('Connected: ' + frame);
-    stompClient.subscribe(`/user/${userId}/notification`, function (message) {
-      updateNotifications(JSON.parse(message.body));
+    let socket = new SockJS('/ws');
+    let stompClient = Stomp.over(socket);
+    const userId = localStorage.getItem("userId");
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe(`/user/${userId}/notification`, function (message) {
+            updateNotifications(JSON.parse(message.body));
+        });
     });
-  });
 }
 
 function updateNotifications(notification) {
-  notificationCount += 1;
-  const updatedUnreadCount = document.getElementById('unread-count');
-  const notificationText = document.getElementById('notification-text');
-  updatedUnreadCount.textContent = notificationCount;
-  updatedUnreadCount.style.display = 'inline-block';
-  notificationText.textContent = 'Notifications (' + notificationCount + ')';
-  notificationText.classList.add('has-notifications');
-  notificationText.classList.remove('no-notifications');
+    notificationCount += 1;
+    const notificationIcon = document.getElementById('notification-icon');
+    notificationIcon.src = 'img/NewNotification.png';
 }

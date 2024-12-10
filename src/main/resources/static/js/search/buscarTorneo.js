@@ -1,56 +1,3 @@
-let autocomplete;
-let map;
-let markers = [];
-
-function initAutocomplete(apiKey) {
-    const input = document.getElementById('location');
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-}
-
-function initializeAutocomplete() {
-    const input = document.getElementById('location');
-    if (!input) {
-        console.error("No input element with ID 'location' found.");
-        return;
-    }
-    autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', function() {
-        const place = autocomplete.getPlace();
-        if (place.geometry) {
-            const location = place.geometry.location;
-            input.dataset.latitude = location.lat();
-            input.dataset.longitude = location.lng();
-        } else {
-            input.dataset.latitude = "";
-            input.dataset.longitude = "";
-            console.error('No details available for input: ' + place.name);
-        }
-    });
-
-    initMap();
-}
-
-function initMap() {
-    const mapOptions = {
-        zoom: 6,
-        center: { lat: 40.416775, lng: -3.70379 }, // Centered on Spain by default
-    };
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
-}
-
-function addMarker(location, title) {
-    const marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        title: title,
-    });
-    markers.push(marker);
-}
-
 function fetchActiveTournaments() {
     fetch('/api/tournaments/active')
         .then(response => {
@@ -154,41 +101,7 @@ function filterTournaments(event) {
         });
 }
 
-
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the earth in km
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in km
-    return distance;
-}
-
-function deg2rad(deg) {
-    return deg * (Math.PI / 180);
-}
-
-// Fetch Google Maps API key and initialize autocomplete
-fetch('/api/googleMapsApiKey')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
-        }
-        return response.text();
-    })
-    .then(apiKey => {
-        initAutocomplete(apiKey);
-    })
-    .catch(error => {
-        console.error('Error fetching API key:', error);
-    });
-
-// Event listener for form submission
 const form = document.getElementById("find-tournament-form");
 form.addEventListener("submit", filterTournaments);
 
-// Fetch active tournaments when the page loads
 fetchActiveTournaments();

@@ -1,22 +1,13 @@
-function handleIncompleteRegistration() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const isIncomplete = urlParams.get('incomplete');
-    const email = urlParams.get('email');
-    const name = urlParams.get('name');
-
-    if (isIncomplete) {
-        showErrorToast("You need to complete more fields to register an account.", "error");
-
-        if (email) {
-            document.getElementById('email').value = email;
-        }
-        if (name) {
-            document.getElementById('name').value = name;
-        }
-    }
-}
-
-document.addEventListener("DOMContentLoaded", handleIncompleteRegistration);
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+            initializeAutocomplete('location');
+        })
+        .catch(error => {
+            console.error("Error loading Google Maps API:", error);
+            showErrorToast("Error loading location services.", "error");
+        });
+});
 
 function register() {
     const name = document.getElementById('name').value;

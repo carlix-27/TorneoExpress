@@ -1,21 +1,26 @@
 .notifications-container {
     cursor: pointer;
-    display: inline-flex;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#notification-icon {
+    width: 40px;
+    height: 40px;
+}
+
+#unread-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
     justify-content: center;
     align-items: center;
-    height: 40px;
-    width: auto;
-}
-
-.notifications-text {
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 0 10px;
-    transition: color 0.3s ease;
-}
-
-
-.notifications-container:hover {
-    cursor: pointer;
-    opacity: 0.8;
 }

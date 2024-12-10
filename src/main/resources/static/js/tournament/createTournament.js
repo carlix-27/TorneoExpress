@@ -1,29 +1,3 @@
-let autocomplete;
-
-function initAutocomplete(apiKey) {
-    const input = document.getElementById('location');
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-}
-
-function initializeAutocomplete() {
-    const input = document.getElementById('location');
-    autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', function() {
-        const place = autocomplete.getPlace();
-        if (place.geometry) {
-            const location = place.geometry.location;
-            document.getElementById('location').dataset.latitude = location.lat();
-            document.getElementById('location').dataset.longitude = location.lng();
-        } else {
-            console.error('No details available for input: ' + place.name);
-        }
-    });
-}
-
 function fetchSports() {
     fetch('/api/sports')
         .then(response => {
@@ -120,20 +94,3 @@ function createTournament() {
     xhr.send(JSON.stringify(tournamentData));
 
 }
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/api/googleMapsApiKey')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then(apiKey => {
-            initAutocomplete(apiKey);
-        })
-        .catch(error => {
-            console.error('Error fetching API key:', error);
-        });
-});

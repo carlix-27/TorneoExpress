@@ -42,28 +42,19 @@
             margin: 20px;
         }
 
+        #notification-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        #profile-icon {
+            width: 40px;
+            height: 40px;
+        }
+
         .section-title {
             font-size: 1.5rem;
             margin: 20px;
-        }
-
-        #notification-text.no-notifications {
-            color: #6a0dad;
-        }
-
-        #notification-text.has-notifications {
-            color: dodgerblue;
-        }
-
-        #unread-count {
-            background-color: #e60000;
-            color: white;
-            border-radius: 50%;
-            padding: 5px 10px;
-            font-size: 14px;
-            font-weight: bold;
-            display: inline-block;
-            margin-left: 8px;
         }
 
         .notifications-container:hover {
@@ -73,14 +64,8 @@
 
         #logout-button {
             cursor: pointer;
-            color: #6a0dad;
-            font-size: 1.2rem;
-            font-weight: bold;
-            padding: 0 10px;
-        }
-
-        #logout-button:hover {
-            opacity: 0.8;
+            width: 40px;
+            height: 40px;
         }
 
         #modal-message {
@@ -94,6 +79,17 @@
             height: auto;
         }
 
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.1);
+        }
+
+
     </style>
 </head>
 <body>
@@ -105,17 +101,17 @@
     </div>
 
     <div class="user-actions">
-        <span id="profile-link" onclick="window.location.href='profile.html'" style="cursor: pointer; color: #6a0dad; font-size: 1.2rem; font-weight: bold; margin-right: 20px;">
-            Mi perfil
-        </span>
+
+        <div id="profile-link" onclick="window.location.href='profile.html'" style="cursor: pointer; display: inline-flex; align-items: center">
+            <img src="img/Profile%20Avatar.png" alt="Mi perfil" title="Mi perfil" style="width: 40px; height: 40px;">
+        </div>
 
 
         <div class="notifications-container" onclick="window.location.href='notifications.html'">
-            <span id="notification-text" class="notifications-text">Notificaciones</span>
-            <span id="unread-count" style="display:none;"></span>
+            <img id="notification-icon" src="img/Notifications%20Icon.png" alt="Notifications" title="Notifications">
         </div>
 
-        <span id="logout-button" class="logout-text">Logout</span>
+        <img id="logout-button" src="img/Logout%20Icon.png" alt="Logout" title="Logout">
 
         <div id="logout-modal" class="modal-overlay" style="display: none;">
             <div class="modal">
