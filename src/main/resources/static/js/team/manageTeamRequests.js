@@ -117,6 +117,7 @@ function sendConfirmationNotification(request) {
             const teamName = team.name;
             const message = `${teamName} ha aceptado tu solicitud al equipo.`;
             const notificationTo = request.requestFrom;
+            const url = `http://localhost:8080/loadTeam.html?id=${team.id}`;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
@@ -126,7 +127,8 @@ function sendConfirmationNotification(request) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
-                })
+                    redirectUrl: url,
+                }),
             });
         })
         .then(response => {

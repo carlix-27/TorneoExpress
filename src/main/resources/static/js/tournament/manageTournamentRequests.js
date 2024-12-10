@@ -143,6 +143,7 @@ function sendConfirmationNotification(request) {
             const tournamentName = tournament.name;
             const message = `${tournamentName} ha aceptado tu solicitud al torneo para el equipo: ${teamName}.`;
             const notificationTo = request.requestFrom;
+            const url = `localhost:8080/loadTournament.html?id=${tournament.id}`;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
@@ -152,6 +153,7 @@ function sendConfirmationNotification(request) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
+                    redirectUrl: url,
                 })
             });
         })

@@ -5,7 +5,6 @@ import com.TorneosExpress.dto.team.CreateTeamDto;
 import com.TorneosExpress.model.Article;
 import com.TorneosExpress.model.Player;
 import com.TorneosExpress.model.Team;
-import com.TorneosExpress.repository.TeamRepository;
 import com.TorneosExpress.service.PlayerService;
 import com.TorneosExpress.service.TeamService;
 import com.TorneosExpress.websockets.WebSocketService;
@@ -26,14 +25,12 @@ public class TeamController {
   private final TeamService teamService;
   private final WebSocketService webSocketService;
   private final PlayerService playerService;
-  private final TeamRepository teamRepository;
 
   @Autowired
-  public TeamController(TeamService teamService, PlayerService playerService, WebSocketService webSocketService, TeamRepository teamRepository) {
+  public TeamController(TeamService teamService, PlayerService playerService, WebSocketService webSocketService) {
     this.teamService = teamService;
     this.playerService = playerService;
     this.webSocketService = webSocketService;
-    this.teamRepository = teamRepository;
   }
 
   @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)

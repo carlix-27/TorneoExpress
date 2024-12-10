@@ -149,6 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const message = `${playerName} ha aceptado tu invitacion al equipo ${teamName}.`;
                 const notificationFrom = invite.inviteFrom;
+                const url = `http://localhost:8080/visualizarJugadoresEquipo.html?id=${team.id}`
 
                 return fetch(`/api/notifications/create`, {
                     method: 'POST',
@@ -158,7 +159,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: JSON.stringify({
                         toId: notificationFrom,
                         message: message,
-                    })
+                        redirectUrl: url,
+                    }),
                 });
             })
             .then(response => {

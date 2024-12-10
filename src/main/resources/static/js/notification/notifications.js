@@ -38,6 +38,12 @@ function getNotifications(userId) {
                     <p>${notification.message} - <span style="font-size: 12px; color: #999;">${timeAgo}</span></p>
                 `;
 
+              notificationElement.addEventListener('click', () => {
+                if (notification.redirectUrl !== "no-redirect") {
+                  window.location.href = notification.redirectUrl;
+                }
+              });
+
                 if (!notification.read) {
                     unreadContainer.appendChild(notificationElement);
                 } else {

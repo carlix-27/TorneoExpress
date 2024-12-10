@@ -76,12 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function createInviteNotification(invite) {
         const requestTeamId = invite.team;
+        const userId = localStorage.getItem("userId");
 
         fetchTeamDetails(requestTeamId)
             .then(team => {
                 const teamName = team.name;
                 const message = `El equipo: ${teamName} te ha invitado a unirse a su equipo.`;
                 const notificationTo = invite.inviteTo;
+                const url = `http://localhost:8080/manejarInvitacionesJugador?id=${userId}`;
 
                 return fetch(`/api/notifications/create`, {
                     method: 'POST',
@@ -91,7 +93,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: JSON.stringify({
                         toId: notificationTo,
                         message: message,
-                    })
+                        redirectUrl: url,
+                    }),
                 });
             })
             .then(response => {

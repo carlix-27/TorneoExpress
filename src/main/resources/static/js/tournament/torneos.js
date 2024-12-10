@@ -289,6 +289,7 @@ function createRequestNotification(tournamentRequest) {
             const tournamentName = tournament.name;
             const teamName = team.name;
             const message = `${teamName} ha solicitado unirse al siguiente torneo: ${tournamentName}.`;
+            const url = `http://localhost:8080/manejarSolicitudesTorneo.html?id=${tournament.id}`;
 
             const notificationTo = tournamentRequest.requestTo;
 
@@ -300,6 +301,7 @@ function createRequestNotification(tournamentRequest) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
+                    redirectUrl: url,
                 })
 
             });
@@ -352,6 +354,16 @@ function permaDisplayErrorMessage(message) {
     const errorMessage = document.getElementById('errorMessage');
     errorMessage.innerText = message;
     errorMessage.style.display = 'block';
+}
+
+function displaySuccessMessage(message) {
+  const successMessage = document.getElementById("successMessage");
+  successMessage.textContent = message;
+  successMessage.style.display = "block";
+  successMessage.className = 'message success show';
+  setTimeout(() => {
+    successMessage.style.display = "none";
+  }, 3000);
 }
 
 document.addEventListener("DOMContentLoaded", function() {

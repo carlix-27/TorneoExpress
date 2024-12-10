@@ -20,7 +20,6 @@ public class WebSocketService {
   }
 
   public void sendNotification(Long to, Notification notification) {
-//    messagingTemplate.convertAndSend("/topic/notifications/" + to, notification);
     messagingTemplate.convertAndSendToUser(
         to.toString(),
         "/notification",

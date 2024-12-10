@@ -229,6 +229,7 @@ function createTeamNotification(teamRequest) {
         .then(([team, player]) => {
             const playerName = player.name;
             const teamName = team.name;
+            let url = "";
 
             const isTeamPrivate = team.isPrivate
 
@@ -236,9 +237,11 @@ function createTeamNotification(teamRequest) {
 
             if (isTeamPrivate){
                 message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
+                url = `http://localhost:8080/manejarSolicitudesEquipo.html?id=${team.id}`;
             }
             else {
                 message = `${playerName} se ha unido a tu equipo: ${teamName}`;
+                url = `http://localhost:8080/visualizarJugadoresEquipo?id=${team.id}`;
             }
 
             const notificationTo = teamRequest.requestTo;
@@ -251,7 +254,8 @@ function createTeamNotification(teamRequest) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
-                })
+                    redirectUrl: url,
+                }),
 
             });
         })
