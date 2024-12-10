@@ -46,10 +46,8 @@ function reverseGeocode(latitude, longitude, locationInput) {
                 const state = components.find(c => c.types.includes('administrative_area_level_1'))?.short_name || '';
                 const country = components.find(c => c.types.includes('country'))?.long_name || '';
 
-                // Create the readable address, omitting empty parts
                 let readableAddress = `${city ? city + ', ' : ''}${state ? state + ', ' : ''}${country}`;
 
-                // Remove any leading commas and spaces
                 readableAddress = readableAddress.replace(/^, /, '').trim();
 
                 locationInput.placeholder = readableAddress || 'No location provided';

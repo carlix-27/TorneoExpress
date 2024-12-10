@@ -81,7 +81,6 @@ function saveLocation(userId) {
 
     const newLocation = `${latitude},${longitude}`;
 
-    // Send the new location to the server
     fetch(`/api/user/${userId}/location`, {
         method: 'PUT',
         headers: {
