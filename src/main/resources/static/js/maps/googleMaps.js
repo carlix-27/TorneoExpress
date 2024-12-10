@@ -1,12 +1,12 @@
 let autocomplete;
 
-function initAutocomplete(apiKey) {
+function loadGoogleMapsAPI(apiKey, callback) {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=${callback.name}`;
     script.async = true;
     script.defer = true;
     script.onerror = function() {
-        console.error("Error loading Google Maps script");
+        console.error("Error loading Google Maps API");
     };
     document.head.appendChild(script);
 }
@@ -30,18 +30,28 @@ function initializeAutocomplete() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/api/googleMapsApiKey')
+function fetchGoogleMapsApiKey() {
+    return fetch('/api/googleMapsApiKey')
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
             return response.text();
-        })
-        .then(apiKey => {
-            initAutocomplete(apiKey);
-        })
-        .catch(error => {
-            console.error('Error fetching API key:', error);
         });
-});
+}
+
+function reverseGeocode(latitude, longitude, callback) {
+    if (typeof google === 'object' && google.maps && google.maps.Geocoder) {
+        const geocoder = new google.maps.Geocoder();
+        const latLng = new google.maps.LatLng(latitude, longitude);
+
+        geocoder.geocode({ location: latLng }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK && results[0]) {
+                const placeName = results[0].formatted_address;
+                callback(null, placeName);
+            } else {
+                callback(`Geocode failed due to: ${status}`);
+            }
+        });
+    } else {
+        callback('Google Maps API is not loaded');
+    }
+}
