@@ -1,22 +1,15 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
-    fetchGoogleMapsApiKey()
-        .then(apiKey => {
-            loadGoogleMapsAPI(apiKey, initializeAutocomplete);
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+            console.log("Google Maps API loaded successfully.");
             fetchAndDisplayUserProfile(userId);
+            initializeAutocomplete('location')
         })
         .catch(error => {
             console.error('Error fetching API key:', error);
         });
 });
-
-function fetchGoogleMapsApiKey() {
-    return fetch('/api/googleMapsApiKey')
-        .then(response => {
-            if (!response.ok) throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
-            return response.text();
-        });
-}
 
 function fetchAndDisplayUserProfile(userId) {
     fetchUserData(userId)
@@ -41,32 +34,32 @@ function displayUserProfile(user, userId) {
         });
     }
 
-    const locationInput = document.getElementById('location');
-    if (user.location && user.location !== "undefined") {
-        const [latitude, longitude] = user.location.split(',');
-        reverseGeocode(latitude, longitude, (err, placeName) => {
-            locationInput.placeholder = err ? 'Unable to get location' : placeName || 'No location provided';
-            if (err) console.error(err);
+    document.addEventListener("DOMContentLoaded", () => {
+        const locationInput = document.getElementById('location');
+
+        if (user.location && user.location !== "undefined") {
+            const [latitude, longitude] = user.location.split(',');
+            reverseGeocode(latitude, longitude, locationInput);
+        } else {
+            locationInput.placeholder = 'No location provided';
+        }
+
+        const editLocationButton = document.getElementById('edit-location-button');
+        const saveLocationButton = document.getElementById('save-location');
+
+        locationInput.readOnly = true;
+
+        editLocationButton.addEventListener('click', () => {
+            locationInput.readOnly = false;
+            locationInput.focus();
+
+            editLocationButton.style.display = 'none';
+            saveLocationButton.style.display = 'inline-block';
         });
-    } else {
-        locationInput.placeholder = 'No location provided';
-    }
 
-    const editLocationButton = document.getElementById('edit-location-button');
-    const saveLocationButton = document.getElementById('save-location');
-
-    locationInput.readOnly = true;
-
-    editLocationButton.addEventListener('click', () => {
-        locationInput.readOnly = false;
-        locationInput.focus();
-
-        editLocationButton.style.display = 'none';
-        saveLocationButton.style.display = 'inline-block';
-    });
-
-    saveLocationButton.addEventListener('click', () => {
-        saveLocation(userId); // Pass userId here
+        saveLocationButton.addEventListener('click', () => {
+            saveLocation(userId);
+        });
     });
 }
 

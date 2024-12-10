@@ -33,6 +33,26 @@ function initializeAutocomplete(inputId) {
     });
 }
 
+function reverseGeocode(latitude, longitude, locationInput) {
+    if (typeof google === 'object' && google.maps && google.maps.Geocoder) {
+        const geocoder = new google.maps.Geocoder();
+
+        const latLng = new google.maps.LatLng(latitude, longitude);
+
+        geocoder.geocode({ location: latLng }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK && results[0]) {
+                const placeName = results[0].formatted_address;
+                locationInput.placeholder = placeName || 'No location provided';
+            } else {
+                locationInput.placeholder = 'Unable to get location';
+                console.error('Geocode failed due to: ' + status);
+            }
+        });
+    } else {
+        console.error('Google Maps API is not loaded');
+    }
+}
+
 function fetchAndLoadGoogleMapsAPI() {
     return fetch('/api/googleMapsApiKey')
         .then(response => {
