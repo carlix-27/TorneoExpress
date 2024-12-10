@@ -35,6 +35,11 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
+    @PutMapping("/{id}/location")
+    public ResponseEntity<Player> updatePlayerLocation(@PathVariable Long id, @RequestBody String location) {
+        return playerService.updatePlayerLocation(id, location);
+    }
+
     @GetMapping("/players/email/{email}")
     public Long getUserIdByEmail(@PathVariable String email) {
         return playerService.getUserIdByEmail(email);

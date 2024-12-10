@@ -28,37 +28,51 @@ document.addEventListener("DOMContentLoaded", () => {
     const saveLocationButton = document.getElementById('save-location');
     const locationInput = document.getElementById('location');
 
-    // Initially disable editing the location
     locationInput.readOnly = true;
 
-    // Add event listener to "Edit Location" button
     editLocationButton.addEventListener('click', () => {
-        locationInput.readOnly = false;  // Enable input for editing
-        locationInput.focus();  // Focus on the input field
-        editLocationButton.textContent = 'Save Location';  // Change button text to "Save Location"
+        locationInput.readOnly = false;
+        locationInput.focus();
+
+        editLocationButton.style.display = 'none';
+        saveLocationButton.style.display = 'inline-block';
+
+        saveLocationButton.id = 'save-location';
     });
 
-    // Add event listener to "Save Location" button (optional)
     saveLocationButton.addEventListener('click', () => {
         saveLocation();
     });
 
-    // Function to save the new location
     function saveLocation() {
-        const newLocation = locationInput.value.trim();
+
+        const address = document.getElementById('location');
+
+        const latitude = address.dataset.latitude;
+        const longitude = address.dataset.longitude;
+
+        if (!latitude || !longitude) {
+            showErrorToast("Debe seleccionar una ubicación válida.", "error");
+            return;
+        }
+
+        const newLocation = `${latitude},${longitude}`;
+
         if (newLocation) {
-            fetch(`/api/user/players/${userId}/location`, {
+            fetch(`/api/user/${userId}/location`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ location: newLocation }),
+                body: newLocation,
             })
                 .then(response => {
                     if (response.ok) {
-                        locationInput.placeholder = newLocation;  // Update placeholder with the new location
-                        locationInput.readOnly = true;  // Disable editing after saving
-                        editLocationButton.textContent = 'Edit Location';  // Reset button text
+                        locationInput.placeholder = newLocation;
+                        locationInput.readOnly = true;
+
+                        saveLocationButton.style.display = 'none';
+                        editLocationButton.style.display = 'inline-block';
                     } else {
                         alert('Failed to save location');
                     }
