@@ -18,8 +18,6 @@ function fetchAllSports() {
                 listItem.innerHTML = `
                     <h3>${sport.sportName}</h3> 
                     <p>Cantidad de jugadores: ${sport.num_players}</p>
-                    <button onclick="editSport(${sport.sportId})">Editar</button>
-                    <button onclick="deleteSport(${sport.sportId})">Borrar</button>
                 `;
                 sportsList.appendChild(listItem);
             });
