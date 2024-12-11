@@ -14,23 +14,21 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(players => renderPlayers(players))
             .catch(error => {
                 console.error('Error:', error);
-                // Handle the error, display a message to the user
             });
     }
 
     function renderPlayers(players) {
-        playerList.innerHTML = ""; // Clear previous results
+        playerList.innerHTML = "";
 
         players.forEach(player => {
             const listItem = document.createElement("li");
-            listItem.textContent = player.name + " - " + player.location;
+            listItem.textContent = player.name;
 
-            // Create invite button
             const inviteButton = document.createElement("button");
+            inviteButton.className="invite-button";
             inviteButton.textContent = "Invite";
             inviteButton.addEventListener("click", () => showInviteModal(player));
 
-            // Append invite button to player list item
             listItem.appendChild(inviteButton);
             playerList.appendChild(listItem);
         });
@@ -40,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         const playerName = form.querySelector("#playerName").value.trim().toLowerCase();
-        const playerLocation = form.querySelector("#playerLocation").value.trim().toLowerCase();
 
         fetch(`/api/user/players`)
             .then(response => {
@@ -108,26 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    function displaySuccessMessage(message) {
-        const successMessageDiv = document.getElementById("successMessage");
-        successMessageDiv.textContent = message;
-        successMessageDiv.style.display = "block";
-
-        setTimeout(() => {
-            successMessageDiv.style.display = "none";
-        }, 5000);
-    }
-
-    function displayErrorMessage(message) {
-        const errorMessageDiv = document.getElementById("errorMessage");
-        errorMessageDiv.textContent = message;
-        errorMessageDiv.style.display = "block";
-
-        setTimeout(() => {
-            errorMessageDiv.style.display = "none";
-        }, 5000);
-    }
-
     function showInviteModal(player) {
         const modal = document.getElementById("inviteModal");
         const closeButton = document.getElementsByClassName("close")[0];
@@ -135,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const teamSelect = document.getElementById("teamInput");
 
         modal.style.display = "block";
-        document.querySelector(".modal-content h2").textContent = `Invite ${player.name} to Team`;
+        document.querySelector(".modal-content h2").textContent = `Invite ${player.name} to:`;
 
         closeButton.onclick = () => modal.style.display = "none";
         window.onclick = event => {
@@ -168,11 +145,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetchTeamDetails(teamId).then(team => {
                     const teamCaptain = team.captainId;
                     const isPrivate = team.isPrivate;
-                    const isCaptain = playerId === teamCaptain;
+                    const isCaptain = playerId == teamCaptain;
+
+                    console.log("team captain:", isCaptain);
+                    console.log("is teamPrivate:", isPrivate);
 
                     if (isPrivate && !isCaptain) {
                         displayErrorMessage("No eres el capitan del equipo.");
                     } else {
+                        displaySuccessMessage("Invitation enviada!")
                         sendInvite(player.id, teamId);
                     }
                 });
