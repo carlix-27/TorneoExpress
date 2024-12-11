@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateNotificationUI(unreadCountValue) {
+        console.log(unreadCountValue);
         if (unreadCountValue > 0) {
             notificationIcon.src = 'img/NewNotification.png';
         } else {

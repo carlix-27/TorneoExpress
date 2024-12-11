@@ -22,6 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 const requestsContainer = document.getElementById("team-invites");
                 requestsContainer.innerHTML = '';
 
+                if (invites.length === 0) {
+                    requestsContainer.innerHTML = '<p>No tienes invitaciones pendientes.</p>';
+                    return;
+                }
+
                 const list = document.createElement('ul');
 
                 const teamDetailsPromises = invites.map(request => {
@@ -35,11 +40,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         const teamName = team.name;
 
                         requestElement.innerHTML = `
-                        <p>From: ${teamName}</p>
-                        <div class="button-container">
-                            <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
-                            <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
-                        </div>
+                        <div class="team-invite">
+    <p class="team-info">From: ${teamName}</p>
+    <div class="button-container">
+        <button class="manage-button accept-button" data-request-id="${request.id}">Accept</button>
+        <button class="manage-button deny-button" data-request-id="${request.id}">Deny</button>
+    </div>
+</div>
+
+
                     `;
                         list.appendChild(requestElement);
                     });
@@ -182,21 +191,5 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 return response.json();
             });
-    }
-
-    function displaySuccessMessage(message) {
-        const successMessage = document.getElementById("successMessage");
-        successMessage.textContent = message;
-        successMessage.style.display = "block";
-    }
-
-    function displayErrorMessage(message) {
-        const errorMessage = document.getElementById("errorMessage");
-        errorMessage.textContent = message;
-        errorMessage.style.display = "block";
-
-        setTimeout(() => {
-            errorMessage.style.display = "none";
-        }, 3000);
     }
 });
