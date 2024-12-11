@@ -6,34 +6,32 @@
 
     <script src="js/user/userIdCheck.js"></script>
     <link rel="stylesheet" href="styles/history.css">
-
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link rel="stylesheet" href="styles/message.css">
+    <link rel="stylesheet" href="styles/datePicker.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="js/tournament/history.js"></script>
 </head>
 <body>
 
-<!-- Encabezado -->
-<header>
-    <h1>Historial</h1>
-    <!-- Menú de navegación -->
-    <nav>
-        <ul>
-            <li><a href="home.html">Inicio</a></li>
-            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
-</header>
-
-<!-- Contenido de la página -->
 <section id="historial">
     <h2>Historial de Torneos</h2>
     <ul id="lista-torneos">
-        <!-- Los torneos se cargarán dinámicamente aquí -->
     </ul>
 </section>
 
+<a href="javascript: window.history.back();" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
 
-<!-- Elemento oculto para almacenar el ID del torneo -->
+
 <input type="hidden" id="tournamentId">
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -46,7 +44,7 @@
 </script>
 
 
-<script src="js/tournament/history.js"></script>
+
 
 </body>
 </html>
