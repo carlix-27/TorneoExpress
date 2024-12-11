@@ -11,7 +11,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 return response.json();
             })
-            .then(players => renderPlayers(players))
+            .then(players => {
+                const filteredPlayers = players.filter(player => player.id != playerId);
+                renderPlayers(filteredPlayers);
+            })
             .catch(error => {
                 console.error('Error:', error);
             });
@@ -25,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
             listItem.textContent = player.name;
 
             const inviteButton = document.createElement("button");
-            inviteButton.className="invite-button";
+            inviteButton.className = "invite-button";
             inviteButton.textContent = "Invite";
             inviteButton.addEventListener("click", () => showInviteModal(player));
 
@@ -52,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const lowercaseLocation = player.location.toLowerCase();
                     const nameMatches = lowercasePlayerName.includes(playerName) || playerName === "";
                     const locationMatches = lowercaseLocation.includes(playerLocation) || playerLocation === "";
-                    return nameMatches && locationMatches;
+                    return nameMatches && locationMatches && player.id !== playerId; // Exclude the current user
                 });
                 renderPlayers(filteredPlayers);
             })
@@ -82,16 +85,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 const notificationTo = invite.inviteTo;
                 const url = `http://localhost:8080/manejarInvitacionesJugador?id=${userId}`;
 
+                const notification = {
+                    toId: notificationTo,
+                    message: message,
+                    redirectUrl: url,
+                };
+
                 return fetch(`/api/notifications/create`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        toId: notificationTo,
-                        message: message,
-                        redirectUrl: url,
-                    }),
+                    body: JSON.stringify(notification)
                 });
             })
             .then(response => {
@@ -147,13 +152,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     const isPrivate = team.isPrivate;
                     const isCaptain = playerId == teamCaptain;
 
-                    console.log("team captain:", isCaptain);
-                    console.log("is teamPrivate:", isPrivate);
-
                     if (isPrivate && !isCaptain) {
-                        displayErrorMessage("No eres el capitan del equipo.");
+                        displayErrorMessage("No eres el capitán del equipo.");
                     } else {
-                        displaySuccessMessage("Invitation enviada!")
+                        displaySuccessMessage("¡Invitación enviada!");
                         sendInvite(player.id, teamId);
                     }
                 });
@@ -190,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         return response.json();
                     })
                     .then(invite => {
-                        displaySuccessMessage("Invitación mandada.")
+                        displaySuccessMessage("Invitación enviada.");
                         createInviteNotification(invite);
                     })
                     .catch(error => console.error('Error:', error));
