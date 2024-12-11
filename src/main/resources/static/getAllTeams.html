@@ -5,10 +5,54 @@
     <meta charset="UTF-8">
     <title>Todos Los Equipos - Torneos Express</title>
     <link rel="stylesheet" href="styles/team/getAllTeams.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="js/user/userIdCheck.js"></script>
     <script src="js/message/fieldMessages.js" defer></script>
+    <script src="js/team/getAllTeams.js"></script>
+    <script src="js/maps/googleMaps.js" defer></script>
+
+    <style>
+        #sendInviteButton{
+            background-color:#3d1f7f;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-icon img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .search-icon:hover img {
+            opacity: 0.7;
+        }
+    </style>
 </head>
 <body>
+
+<a href="home.html" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+
+<a href="buscarEquipo.html" class="search-icon">
+    <img src="img/Search%20Icon.png" alt="Search Icon">
+</a>
+
 
     <section id="all-teams">
         <h2>Todos los equipos</h2>
@@ -28,10 +72,6 @@
         <div></div>
     </div>
 </div>
-
-
-    <script src="js/team/getAllTeams.js"></script>
-
 
 </body>
 </html>
