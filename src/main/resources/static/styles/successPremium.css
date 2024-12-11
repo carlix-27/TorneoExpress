@@ -14,7 +14,7 @@ body {
 h1 {
     font-size: 2em;
     margin-bottom: 20px;
-    color: #009EE3;
+    color: #6a0dad;
 }
 
 p {
@@ -26,7 +26,7 @@ button {
     padding: 10px 20px;
     font-size: 1em;
     color: #fff;
-    background-color: #009EE3;
+    background-color: #6a0dad;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -34,7 +34,7 @@ button {
 }
 
 button:hover {
-    background-color: #007bb5;
+    background-color:#6a0dad;
 }
 
 @media (min-width: 768px) {

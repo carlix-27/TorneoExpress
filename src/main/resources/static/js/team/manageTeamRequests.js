@@ -117,6 +117,7 @@ function sendConfirmationNotification(request) {
             const teamName = team.name;
             const message = `${teamName} ha aceptado tu solicitud al equipo.`;
             const notificationTo = request.requestFrom;
+            const url = `http://localhost:8080/loadTeam.html?id=${team.id}`;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
@@ -126,7 +127,8 @@ function sendConfirmationNotification(request) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
-                })
+                    redirectUrl: url,
+                }),
             });
         })
         .then(response => {
@@ -151,23 +153,6 @@ function fetchTeamDetails(teamId) {
         });
 }
 
-
-
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-}
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
 
 function fetchRequestDetails(requestId) {
     return fetch(`/api/requests/team/details/${requestId}`)

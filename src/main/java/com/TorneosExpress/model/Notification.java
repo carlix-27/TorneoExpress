@@ -31,13 +31,17 @@ public class Notification {
     @Column(nullable = false)
     private boolean read;
 
+    @Column(nullable = false)
+    private String redirectUrl;
+
     public Notification() {
     }
 
-    public Notification(Long toId, String message) {
+    public Notification(Long toId, String message, String url) {
         this.toId = toId;
         this.message = message;
         this.createdAt = LocalDateTime.now();
         this.read = false;
+        this.redirectUrl = url;
     }
 }

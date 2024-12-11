@@ -35,7 +35,7 @@ public class Team {
   private String location;
 
   @Column
-  private boolean isPrivate;
+  private Boolean isPrivate;
 
   @Column
   private int prestigePoints;
@@ -103,4 +103,7 @@ public class Team {
     this.prestigePoints += points;
   }
 
+  public void setPrivate(Boolean isPrivate) {
+    this.isPrivate = isPrivate;
+  }
 }

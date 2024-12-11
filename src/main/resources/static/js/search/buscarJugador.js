@@ -11,26 +11,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 return response.json();
             })
-            .then(players => renderPlayers(players))
+            .then(players => {
+                const filteredPlayers = players.filter(player => player.id != playerId);
+                renderPlayers(filteredPlayers);
+            })
             .catch(error => {
                 console.error('Error:', error);
-                // Handle the error, display a message to the user
             });
     }
 
     function renderPlayers(players) {
-        playerList.innerHTML = ""; // Clear previous results
+        playerList.innerHTML = "";
 
         players.forEach(player => {
             const listItem = document.createElement("li");
-            listItem.textContent = player.name + " - " + player.location;
+            listItem.textContent = player.name;
 
-            // Create invite button
             const inviteButton = document.createElement("button");
+            inviteButton.className = "invite-button";
             inviteButton.textContent = "Invite";
             inviteButton.addEventListener("click", () => showInviteModal(player));
 
-            // Append invite button to player list item
             listItem.appendChild(inviteButton);
             playerList.appendChild(listItem);
         });
@@ -40,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         const playerName = form.querySelector("#playerName").value.trim().toLowerCase();
-        const playerLocation = form.querySelector("#playerLocation").value.trim().toLowerCase();
 
         fetch(`/api/user/players`)
             .then(response => {
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const lowercaseLocation = player.location.toLowerCase();
                     const nameMatches = lowercasePlayerName.includes(playerName) || playerName === "";
                     const locationMatches = lowercaseLocation.includes(playerLocation) || playerLocation === "";
-                    return nameMatches && locationMatches;
+                    return nameMatches && locationMatches && player.id !== playerId; // Exclude the current user
                 });
                 renderPlayers(filteredPlayers);
             })
@@ -76,22 +76,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function createInviteNotification(invite) {
         const requestTeamId = invite.team;
+        const userId = localStorage.getItem("userId");
 
         fetchTeamDetails(requestTeamId)
             .then(team => {
                 const teamName = team.name;
                 const message = `El equipo: ${teamName} te ha invitado a unirse a su equipo.`;
                 const notificationTo = invite.inviteTo;
+                const url = `http://localhost:8080/manejarInvitacionesJugador?id=${userId}`;
+
+                const notification = {
+                    toId: notificationTo,
+                    message: message,
+                    redirectUrl: url,
+                };
 
                 return fetch(`/api/notifications/create`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        toId: notificationTo,
-                        message: message,
-                    })
+                    body: JSON.stringify(notification)
                 });
             })
             .then(response => {
@@ -105,26 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    function displaySuccessMessage(message) {
-        const successMessageDiv = document.getElementById("successMessage");
-        successMessageDiv.textContent = message;
-        successMessageDiv.style.display = "block";
-
-        setTimeout(() => {
-            successMessageDiv.style.display = "none";
-        }, 5000);
-    }
-
-    function displayErrorMessage(message) {
-        const errorMessageDiv = document.getElementById("errorMessage");
-        errorMessageDiv.textContent = message;
-        errorMessageDiv.style.display = "block";
-
-        setTimeout(() => {
-            errorMessageDiv.style.display = "none";
-        }, 5000);
-    }
-
     function showInviteModal(player) {
         const modal = document.getElementById("inviteModal");
         const closeButton = document.getElementsByClassName("close")[0];
@@ -132,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const teamSelect = document.getElementById("teamInput");
 
         modal.style.display = "block";
-        document.querySelector(".modal-content h2").textContent = `Invite ${player.name} to Team`;
+        document.querySelector(".modal-content h2").textContent = `Invite ${player.name} to:`;
 
         closeButton.onclick = () => modal.style.display = "none";
         window.onclick = event => {
@@ -165,11 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetchTeamDetails(teamId).then(team => {
                     const teamCaptain = team.captainId;
                     const isPrivate = team.isPrivate;
-                    const isCaptain = playerId === teamCaptain;
+                    const isCaptain = playerId == teamCaptain;
 
                     if (isPrivate && !isCaptain) {
-                        displayErrorMessage("No eres el capitan del equipo.");
+                        displayErrorMessage("No eres el capitán del equipo.");
                     } else {
+                        displaySuccessMessage("¡Invitación enviada!");
                         sendInvite(player.id, teamId);
                     }
                 });
@@ -206,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         return response.json();
                     })
                     .then(invite => {
-                        displaySuccessMessage("Invitación mandada.")
+                        displaySuccessMessage("Invitación enviada.");
                         createInviteNotification(invite);
                     })
                     .catch(error => console.error('Error:', error));

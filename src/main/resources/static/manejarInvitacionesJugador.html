@@ -3,17 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/x-icon">
+    <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/png">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/message.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link rel="stylesheet" href="https://apis.google.com/css/api.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <title>Invitaciones Personales</title>
     <link rel="stylesheet" href="styles/notifications.css">
-    <script src="js/auth/checkRedirect.js"></script>
+    <script src="js/user/userIdCheck.js"></script>
+    <script src="js/message/fieldMessages.js" defer></script>
+    <script src="js/invite/manageInvites.js"></script>
+    <style>
+        .box {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+
+        h1 {
+            text-align: left;
+        }
+
+        #team-invites {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .team-invite {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .team-info {
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .manage-button {
+            background-color: #3d1f7f;
+        }
+
+
+
+    </style>
 
 </head>
 <body>
 
-<div class="container">
+<div class="box">
     <h1>Invitaciones Personales</h1>
 
-    <a href="/buscar.html" class="back-button">Back</a>
+    <a href="javascript: window.history.back();" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
 
     <div id="successMessage" style="display:none; color: green;"></div>
     <div id="errorMessage" style="display:none; color: red;"></div>
@@ -22,7 +76,7 @@
     </div>
 </div>
 
-<script src="js/invite/manageInvites.js"></script>
+
 
 </body>
 </html>

@@ -38,7 +38,8 @@ public class NotificationController {
     public Notification createNotification(@RequestBody NotificationDto notificationDto) {
         Long toId = notificationDto.getToId();
         String message = notificationDto.getMessage();
-        return notificationService.createNotification(toId, message);
+        String url = notificationDto.getRedirectUrl();
+        return notificationService.createNotification(toId, message, url);
     }
 
     @GetMapping("/active/{userId}")

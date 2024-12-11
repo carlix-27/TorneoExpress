@@ -120,22 +120,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-}
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
-
 function fetchRequestDetails(requestId) {
     return fetch(`/api/requests/tournament/details/${requestId}`)
         .then(response => {
@@ -159,6 +143,7 @@ function sendConfirmationNotification(request) {
             const tournamentName = tournament.name;
             const message = `${tournamentName} ha aceptado tu solicitud al torneo para el equipo: ${teamName}.`;
             const notificationTo = request.requestFrom;
+            const url = `localhost:8080/loadTournament.html?id=${tournament.id}`;
 
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
@@ -168,6 +153,7 @@ function sendConfirmationNotification(request) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
+                    redirectUrl: url,
                 })
             });
         })

@@ -1,3 +1,14 @@
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+        })
+        .catch(error => {
+            console.error("Error loading Google Maps API:", error);
+            showErrorToast("Error loading location services.", "error");
+        });
+    loadTeams()
+});
+
 function loadTeams() {
     fetch(`/api/teams/all`)
         .then(response => {
@@ -11,36 +22,48 @@ function loadTeams() {
 
             listaEquipos.innerHTML = '';
 
+            const userId = localStorage.getItem("userId");
+
             teams.forEach(team => {
 
                 const {
                     location: teamLocation,
                     sport: teamSport,
                     name,
-                    private: isPrivate,
+                    isPrivate: isPrivate,
                     players,
-                }
-                = team
+                } = team;
 
-                const sport = teamSport.sportName
-                const playersInTeam = players.length
-                const maxPlayers = teamSport.num_players * 2
+                const sport = teamSport.sportName;
+                const playersInTeam = players.length;
+                const isInTeam = isUserInTeam(players, userId);
+                const maxPlayers = teamSport.num_players * 2;
 
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div>
                         <a href="loadTeam.html?id=${team.id}"><h3>${name}</h3></a>
-                        <p>Ubicación: ${teamLocation}</p>
+                        <p>Ubicación: <span id="location-${team.id}">Cargando...</span></p>
                         <p>Deporte: ${sport}</p>
                         <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores anotados: ${playersInTeam} / ${maxPlayers}</p>
-                        <button class="signup-button" data-team-id="${team.id}">Inscribirse</button>
+                        ${!isInTeam ? `<button class="signup-button" data-team-id="${team.id}">Inscribirse</button>` : ''}
                     </div>
                 `;
                 listaEquipos.appendChild(li);
+
+                const [lat, lng] = teamLocation.split(',');
+
+                reverseGeocode(lat, lng).then(address => {
+                    const locationElement = document.getElementById(`location-${team.id}`);
+                    locationElement.textContent = address;
+                }).catch(error => {
+                    console.error('Error fetching location address:', error);
+                    const locationElement = document.getElementById(`location-${team.id}`);
+                    locationElement.textContent = 'Dirección no disponible';
+                });
             });
 
-            // Attach event listeners to the signup buttons
             document.querySelectorAll('.signup-button').forEach(button => {
                 button.addEventListener('click', function () {
                     showSignupModal(this.getAttribute('data-team-id'));
@@ -49,7 +72,6 @@ function loadTeams() {
         })
         .catch(error => {
             console.error('Error:', error);
-            // Handle error, show message to user
         });
 }
 
@@ -84,17 +106,16 @@ function fetchTeamDetails(teamId) {
 function displayTeamDetails(team, signupButton) {
     const teamDetails = document.getElementById("teamDetails");
 
-    const teamSport = team.sport
-    const teamPlayers = team.players
-    const sportName = teamSport.sportName
-    const teamLocation = team.location
-    const playersInTeam = teamPlayers.length
-    const maxPlayers = teamSport.num_players * 2
-    const isTeamPrivate = team.private
-
+    const teamSport = team.sport;
+    const teamPlayers = team.players;
+    const sportName = teamSport.sportName;
+    const teamLocation = team.location;
+    const playersInTeam = teamPlayers.length;
+    const maxPlayers = teamSport.num_players * 2;
+    const isTeamPrivate = team.isPrivate;
 
     teamDetails.innerHTML = `
-        <h3>${name}</h3>
+        <h3>${team.name}</h3>
         <p>Ubicación: ${teamLocation}</p>
         <p>Deporte: ${sportName}</p>
         <p>Privacidad: ${isTeamPrivate ? "Privado" : "Público"}</p>
@@ -113,10 +134,10 @@ function displayTeamDetails(team, signupButton) {
 function addSignupButtonListener(team, userId, signupButton) {
     signupButton.addEventListener("click", function() {
 
-        const isTeamPrivate = team.private;
+        const isTeamPrivate = team.isPrivate;
         const playersInTeam = team.players.length;
-        const teamSport = team.sport
-        const teamPlayers = team.players
+        const teamSport = team.sport;
+        const teamPlayers = team.players;
 
         const maxPlayers = teamSport.num_players * 2;
 
@@ -142,8 +163,6 @@ function addSignupButtonListener(team, userId, signupButton) {
     });
 }
 
-
-
 function joinPublicTeam(team, userId) {
     fetch(`/api/teams/add/${team.id}/${userId}`, {
         method: 'POST',
@@ -156,12 +175,12 @@ function joinPublicTeam(team, userId) {
     })
         .then(response => {
             if (!response.ok) {
-                const statusError = response.statusText
+                const statusError = response.statusText;
                 throw new Error(`Error al unirse a equipo: ${statusError}`);
             }
             fetchPlayerDetails(userId).then(playerDetails => {
 
-                const teamRequest ={
+                const teamRequest = {
                     requestFrom: userId,
                     requestTo: team.captainId,
                     teamId: team.id,
@@ -169,19 +188,18 @@ function joinPublicTeam(team, userId) {
                     denied: false,
                     sent: true,
                     name: playerDetails.name
-                }
+                };
 
                 setTimeout(() => location.reload());
                 displaySuccessMessage("Te has unido al equipo exitosamente!");
-                createTeamNotification(teamRequest)
-            })
+                createTeamNotification(teamRequest);
+            });
             return response.json();
         })
         .catch(error => {
             displayErrorMessage(error.message);
         });
 }
-
 
 function sendTeamRequest(team, userId) {
     fetchPlayerDetails(userId)
@@ -212,14 +230,16 @@ function sendTeamRequest(team, userId) {
                     return response.json();
                 })
                 .then(teamRequest => {
-                    displaySuccessMessage("Solicitud mandada con éxito")
+                    displaySuccessMessage("Solicitud mandada con éxito");
                     createTeamNotification(teamRequest);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    displayErrorMessage("Ya tiene una solicitud pendiente.");
+                    console.error('Error:', error);
+                });
         })
         .catch(error => console.error('Error fetching player details:', error));
 }
-
 
 function createTeamNotification(teamRequest) {
     const requestTeamId = teamRequest.teamId;
@@ -229,16 +249,18 @@ function createTeamNotification(teamRequest) {
         .then(([team, player]) => {
             const playerName = player.name;
             const teamName = team.name;
+            let url;
 
-            const isTeamPrivate = team.private
+            const isTeamPrivate = team.isPrivate;
 
-            let message
+            let message;
 
-            if (isTeamPrivate){
+            if (isTeamPrivate) {
                 message = `${playerName} ha solicitado unirse al siguiente equipo: ${teamName}.`;
-            }
-            else {
+                url = `http://localhost:8080/manejarSolicitudesEquipo.html?id=${team.id}`;
+            } else {
                 message = `${playerName} se ha unido a tu equipo: ${teamName}`;
+                url = `http://localhost:8080/visualizarJugadoresEquipo?id=${team.id}`;
             }
 
             const notificationTo = teamRequest.requestTo;
@@ -251,61 +273,28 @@ function createTeamNotification(teamRequest) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
+                    redirectUrl: url
                 })
-
             });
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to create notification: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function displayModal(modal, closeButton) {
-    modal.style.display = "block";
-
-    closeButton.onclick = function() {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
+        .catch(error => console.log(error));
 }
 
 function fetchPlayerDetails(playerId) {
     return fetch(`/api/user/players/${playerId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch player details: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        });
+        .then(response => response.json());
 }
 
-const displaySuccessMessage = message => {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
+function displayModal(modal, closeButton) {
+    modal.style.display = "block";
+    closeButton.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+}
 
-    setTimeout(() => {
-        successMessage.style.display = "none";
-    }, 3000);
-};
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
+function isUserInTeam(players, userId) {
+  return players.some(player => player.id == userId);
 }
 
 document.addEventListener("DOMContentLoaded", loadTeams);
+

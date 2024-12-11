@@ -162,6 +162,8 @@ function sendExpulsionNotification(teamId, playerId) {
         .then((team) => {
             const teamName = team.name;
             const message = `Has sido expulsado del equipo ${teamName}.`;
+            const url = "no-redirect";
+
             return fetch(`/api/notifications/create`, {
                 method: 'POST',
                 headers: {
@@ -170,7 +172,8 @@ function sendExpulsionNotification(teamId, playerId) {
                 body: JSON.stringify({
                     toId: playerId,
                     message: message,
-                })
+                    redirectUrl: url,
+                }),
             });
         })
         .then(response => {

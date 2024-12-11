@@ -8,5 +8,5 @@ import lombok.Setter;
 public class NotificationDto {
     private Long toId;
     private String message;
-
+    private String redirectUrl;
 }

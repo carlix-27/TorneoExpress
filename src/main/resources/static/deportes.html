@@ -5,30 +5,48 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>My Sports - Torneos Express</title>
         <link rel="stylesheet" href="styles/sport/sports.css">
-        <script src="js/auth/checkRedirect.js"></script>
+        <link rel="stylesheet" href="styles/button.css">
+        <link rel="stylesheet" href="styles/back-button.css">
+        <link rel="stylesheet" href="styles/base.css">
+        <link rel="stylesheet" href="styles/toast.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+        <script src="js/user/userIdCheck.js"></script>
+        <script src="js/message/toast.js"></script>
+        <script src="js/sport/sports.js"></script>
     </head>
+
+    <style>
+        h2{
+            margin-top: 50px;
+        }
+    </style>
     <body>
 
-    <!-- Header -->
-    <header>
-        <h1>TorneosExpress - Deportes</h1>
-        <!-- Navigation Menu -->
-        <nav>
-            <ul>
-                <li><a href="home.html">Inicio</a></li>
-                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-    </header>
-
     <section id="my-sports">
-        <h2>Mis Deportes</h2>
-        <ul id="sports-list">
-            <!-- Sports will be dynamically loaded here -->
+        <h2>Deportes Disponibles</h2>
+        <a href="javascript: window.history.back();" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>        <ul id="sports-list">
         </ul>
     </section>
 
-    <!-- Scripts -->
-    <script src="js/sport/sports.js"></script>
+    <div id="success-toast" class="toast toast-success" style="display: none;">
+        <span class="close-btn" onclick="closeToast()">×</span>
+        <span id="success-toast-message"></span>
+    </div>
+
+    <div id="error-toast" class="toast toast-error" style="display: none;">
+        <span class="close-btn" onclick="closeToast()">×</span>
+        <span id="error-toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            handleToastFromQuery(
+                "success",
+                "Deporte agregado con exito!",
+                "Hubo un error al agregar deporte"
+            );
+        });
+    </script>
     </body>
 </html>

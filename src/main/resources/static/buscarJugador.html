@@ -3,23 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Torneos Express - Buscar Jugador</title>
+    <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/x-icon">
+    <link rel="icon" href="img/Trophy%20Winner%20Icon.ico" type="image/png">
     <link rel="stylesheet" href="styles/buscarJugador.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link rel="stylesheet" href="styles/message.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="js/search/buscarJugador.js"></script>
-    <script src="js/auth/checkRedirect.js"></script>
+    <script src="js/user/userIdCheck.js"></script>
+    <script src="js/message/fieldMessages.js" defer></script>
+
 </head>
+
+<style>
+    .invite-button {
+        color: black;
+        background-color: transparent; /* Transparent background */
+        border: 2px solid #3d1f7f; /* Purple outline */
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .invite-button:hover {
+        background-color: #3d1f7f; /* Purple background on hover */
+        color: #fff; /* White text on hover */
+        border-color: #3d1f7f; /* Maintain the purple border */
+    }
+
+    #sendInviteButton{
+        color: white;
+        background-color: #3d1f7f;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+</style>
 <body>
 
-<!-- Encabezado -->
-<header>
-    <h1>Torneos Express - Buscar</h1>
-    <!-- Menú de navegación -->
-    <nav>
-        <ul>
-            <li><a href="home.html">Inicio</a></li>
-            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
-</header>
 
 <div class="search-player-box">
     <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
@@ -27,39 +63,29 @@
 
     <form id="find-player-form">
         <input type="text" id="playerName" placeholder="Player Name">
-        <input type="text" id="playerLocation" placeholder="Player Location">
         <button type="submit">Search</button>
     </form>
 </div>
 
 
 <div id="inviteModal" class="modal">
+
     <div class="modal-content">
+        <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
+        <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
         <span class="close">&times;</span>
         <h2>Invite Player to Team</h2>
         <select id="teamInput">
             <option value="">Select Team</option>
-            <!-- Teams will be dynamically added here -->
         </select>
-        <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
-        <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>
         <button id="sendInviteButton">Send Invite</button>
     </div>
 </div>
 
-<!-- Contenido de la página -->
 <section id="results">
     <ul id="lista-jugadores">
-        <!-- Los torneos se cargarán dinámicamente aquí -->
     </ul>
 </section>
 
-<!-- Logout Script -->
-<script>
-    function logout() {
-        localStorage.removeItem("userId"); // Remove userId from localStorage
-        window.location.href = "login.html"; // Redirect to login page after logout
-    }
-</script>
 </body>
 </html>

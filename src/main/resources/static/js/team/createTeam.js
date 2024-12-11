@@ -1,54 +1,13 @@
-let autocomplete;
-
-function initAutocomplete(apiKey) {
-    const input = document.getElementById('location');
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-}
-
-function initializeAutocomplete() {
-    const input = document.getElementById('location');
-    if (!input) {
-        console.error("No input element with ID 'location' found.");
-        return;
-    }
-    autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', function() {
-        const place = autocomplete.getPlace();
-        if (place.geometry) {
-            const location = place.geometry.location;
-            input.dataset.latitude = location.lat();
-            input.dataset.longitude = location.lng();
-        } else {
-            console.error('No details available for input: ' + place.name);
-        }
-    });
-}
-
-function fetchSports() {
-    fetch('/api/sports')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch sports: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(sports => {
-            const sportDropdown = document.getElementById('sport');
-            sports.forEach(sport => {
-                const option = document.createElement('option');
-                option.value = sport.sportId;
-                option.text = sport.sportName;
-                sportDropdown.appendChild(option);
-            });
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+            initializeAutocomplete('location');
         })
         .catch(error => {
-            console.error('Error fetching sports:', error);
+            console.error("Error loading Google Maps API:", error);
+            showErrorToast("Error loading location services.", "error");
         });
-}
+});
 
 function createTeam(event) {
     event.preventDefault();
@@ -58,7 +17,7 @@ function createTeam(event) {
     const latitude = document.getElementById('location').dataset.latitude;
     const longitude = document.getElementById('location').dataset.longitude;
 
-    const isPrivate = document.getElementById('privacy').checked;
+    const isPrivate = document.getElementById("privacy");
     const captainId = localStorage.getItem("userId");
 
     if (!name) {
@@ -79,7 +38,7 @@ function createTeam(event) {
         captainId: captainId,
         sport: { sportId: sportId },
         location: location,
-        isPrivate: isPrivate
+        isPrivate: isPrivate.checked
     };
 
     fetch('/api/teams/create', {
@@ -91,6 +50,7 @@ function createTeam(event) {
     })
         .then(response => {
             if (response.status === 201) {
+                window.location.href = "misEquipos.html";
                 displaySuccessMessage("Equipo creado exitosamente!");
             } else if (response.status === 500) {
                 displayErrorMessage("El nombre del equipo debe ser único. Por favor, elija un nombre diferente.");
@@ -103,41 +63,5 @@ function createTeam(event) {
             displayErrorMessage("Ocurrió un error al crear el equipo.");
         });
 }
-
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-    setTimeout(() => {
-        successMessage.style.display = "none";
-    }, 3000);
-}
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/api/googleMapsApiKey')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then(apiKey => {
-            initAutocomplete(apiKey);
-        })
-        .catch(error => {
-            console.error('Error fetching API key:', error);
-        });
-
-    fetchSports();
-});
 
 

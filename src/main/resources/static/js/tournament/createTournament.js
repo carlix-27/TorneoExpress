@@ -1,50 +1,13 @@
-let autocomplete;
-
-function initAutocomplete(apiKey) {
-    const input = document.getElementById('location');
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeAutocomplete`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-}
-
-function initializeAutocomplete() {
-    const input = document.getElementById('location');
-    autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', function() {
-        const place = autocomplete.getPlace();
-        if (place.geometry) {
-            const location = place.geometry.location;
-            document.getElementById('location').dataset.latitude = location.lat();
-            document.getElementById('location').dataset.longitude = location.lng();
-        } else {
-            console.error('No details available for input: ' + place.name);
-        }
-    });
-}
-
-function fetchSports() {
-    fetch('/api/sports')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch sports: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(sports => {
-            const sportDropdown = document.getElementById('sport');
-            sports.forEach(sport => {
-                const option = document.createElement('option');
-                option.value = sport.sportId;
-                option.text = sport.sportName;
-                sportDropdown.appendChild(option);
-            });
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+            initializeAutocomplete('location');
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error("Error loading Google Maps API:", error);
+            showErrorToast("Error loading location services.", "error");
         });
-}
+});
 
 function createTournament() {
     const name = document.getElementById('tournament-name').value;
@@ -68,19 +31,8 @@ function createTournament() {
     const userId = localStorage.getItem("userId");
 
     if (!name.trim()) {
-        displayErrorMessage("Tournament name cannot be blank.")
+        displayErrorMessage("El nombre del torneo no puede estar vació.")
         return
-    }
-
-    const today = new Date();
-    const selectedDate = new Date(date);
-
-    today.setHours(0, 0, 0, 0);
-    selectedDate.setHours(0, 0, 0, 0);
-
-    if (selectedDate < today) {
-        displayErrorMessage("La fecha del torneo no puede ser anterior a la fecha actual.");
-        return;
     }
 
     if (maxTeams < 0) {
@@ -101,15 +53,12 @@ function createTournament() {
         type: type
     };
 
-    console.log(tournamentData)
-
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/api/tournaments/create', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {
-            const createdTournament = JSON.parse(xhr.responseText);
-            displaySuccessMessage("Torneo creado con exito!")
+            window.location.href = "misTorneos.html";
         } else if (xhr.status === 500) {
             displayErrorMessage("El nombre del torneo debe ser único, por favor elegir un nuevo nombre.")
         } else {
@@ -119,37 +68,3 @@ function createTournament() {
     xhr.send(JSON.stringify(tournamentData));
 
 }
-
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-    setTimeout(() => {
-        successMessage.style.display = "none";
-    }, 3000);
-}
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/api/googleMapsApiKey')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch API key: ${response.status} ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then(apiKey => {
-            initAutocomplete(apiKey);
-        })
-        .catch(error => {
-            console.error('Error fetching API key:', error);
-        });
-});

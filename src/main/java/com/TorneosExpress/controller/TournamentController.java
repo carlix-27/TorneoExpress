@@ -6,6 +6,7 @@ import com.TorneosExpress.dto.tournament.CreateTournamentDto;
 import com.TorneosExpress.dto.tournament.UpdateTournamentDto;
 import com.TorneosExpress.model.*;
 import com.TorneosExpress.service.TournamentService;
+import com.TorneosExpress.websockets.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class TournamentController {
     private final TournamentService tournamentService;
 
     @Autowired
-    public TournamentController(TournamentService tournamentService) {
+    public TournamentController(TournamentService tournamentService, WebSocketService webSocketService) {
         this.tournamentService = tournamentService;
     }
 
@@ -35,8 +36,6 @@ public class TournamentController {
     public Tournament endTournament(@PathVariable Long tournamentId) {
         return tournamentService.endTournament(tournamentId);
     }
-
-
 
     @GetMapping("/history")
     public List<Tournament> getTournamentHistory() {
@@ -75,25 +74,9 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/{type}/calendar")
-    public List<Match> getTournamentCalendar(@PathVariable Long tournamentId, @PathVariable Type type) {
+    public List<Match> getTournamentCalendar(@PathVariable Long tournamentId, @PathVariable StageType type) {
         return tournamentService.getTournamentFixture(tournamentId, type);
     }
-
-    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfQuarterFinals")
-    public List<Match> getTournamentCalendarKnockoutOfQuarterFinals(@PathVariable Long tournamentId, @PathVariable Type type) {
-        return tournamentService.getTournamentFixtureKnockoutQuarterFinals(tournamentId, type);
-    }
-
-    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfSemifinals")
-    public List<Match> getTournamentCalendarKnockoutOfSemifinals(@PathVariable Long tournamentId, @PathVariable Type type) {
-        return tournamentService.getTournamentFixtureKnockoutSemifinals(tournamentId, type);
-    }
-
-    @PutMapping("/{tournamentId}/{type}/calendarKnockoutOfFinals")
-    public List<Match> getTournamentCalendarKnockoutOfFinals(@PathVariable Long tournamentId, @PathVariable Type type) {
-        return tournamentService.getTournamentFixtureKnockoutFinals(tournamentId, type);
-    }
-
 
     @GetMapping("/matches/{matchId}")
     public Match getMatch(@PathVariable Long matchId) {
@@ -110,14 +93,10 @@ public class TournamentController {
         return tournamentService.updateMatchStats(matchId, saveMatchStatsDto);
     }
 
-
-    
-
     @PutMapping("/{tournamentId}")
     public Tournament updateTournament(@PathVariable Long tournamentId, @RequestBody UpdateTournamentDto updatedTournamentTournamentDto) {
         return tournamentService.updateTournament(tournamentId, updatedTournamentTournamentDto);
     }
-
 
     @GetMapping("/active")
     public List<Tournament> getActiveTournaments() {
@@ -143,6 +122,4 @@ public class TournamentController {
     public TournamentTeam addPoints(@PathVariable Long tournamentId, @PathVariable Long teamId) {
         return tournamentService.addPointsToTeam(tournamentId, teamId);
     }
-
-
 }

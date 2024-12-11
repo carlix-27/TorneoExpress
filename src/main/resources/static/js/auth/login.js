@@ -25,22 +25,11 @@ function login() {
 
             localStorage.setItem("userId", response);
 
-            redirectToHome();
+            window.location.href='/home.html'
+
         } else {
-            console.error(xhr.responseText);
-            const errorMessage = document.getElementById('error-message');
-            errorMessage.style.display = 'block';
+            showToast(xhr.responseText)
         }
     };
     xhr.send(JSON.stringify(loginRequest));
-}
-
-function redirectToHome() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('success')) {
-        const successMessage = document.getElementById('success-message');
-        successMessage.style.display = 'block';
-    }
-
-    window.location.replace("home.html");
 }

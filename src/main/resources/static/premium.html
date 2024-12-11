@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/premium.css">
+    <link rel="stylesheet" href="styles/button.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="js/user/userIdCheck.js"></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script src="js/mercadoPago/mercadoPago.js" defer></script>
+    <title>Comprar Premium</title>
+</head>
+<body>
+<section class="shopping-cart dark" id="shopping-cart">
+    <div class="illustrations">
+        <img src="illustrations/Fitness%20Stats%20Illustration.svg" alt="Left Illustration" class="left-illustration">
+        <img src="illustrations/Grand%20Slam%20Illustration.svg" alt="Right Illustration" class="right-illustration">
+    </div>
+    <div class="content">
+        <div class="block-heading">
+            <h1>Torneos Express - Premium</h1>
+        </div>
+        <h2>Beneficios de Premium:</h2>
+        <ul>
+            <li>Creación de Torneos</li>
+            <li>Creación de Equipos</li>
+            <li>Beneficios con la tienda</li>
+        </ul>
+        <h2>Precio:</h2>
+        <ul>
+            <b>Precio:</b> $ <span id="unit-price">50 USD</span>
+        </ul>
+        <button class="button" id="checkout-btn">Checkout</button>
+        <button class="button back" onclick="goToBenefits()">Volver</button>
+    </div>
+</section>
+<section class="payment-form dark" id="payment-form" style="display: none;">
+    <div class="container_payment">
+        <div class="block-heading">
+            <h2>Checkout Payment</h2>
+        </div>
+        <div class="form-payment">
+            <div class="products">
+                <h2 class="title">Resumen de compra</h2>
+                <div class="item">
+                    <span class="price" id="summary-price"></span>
+                    <p class="item-name">Torneos Express Premium</p>
+                </div>
+                <div class="total">Total<span class="price" id="summary-total"></span></div>
+            </div>
+            <div class="payment-details">
+                <div class="form-group col-sm-12">
+                    <br>
+                    <div id="button-checkout"></div>
+                    <br>
+                    <a id="go-back" onclick=" window.location.href = 'premium.html'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 10 10" class="chevron-left">
+                            <path fill="#009EE3" fill-rule="nonzero" id="chevron_left"
+                                  d="M7.05 1.4L6.2.552 1.756 4.997l4.449 4.448.849-.848-3.6-3.6z"></path>
+                        </svg>
+                        Volver a los beneficios
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<p id="upgrade-status"></p>
+
+<script>
+    document.getElementById("checkout-btn").addEventListener("click", function() {
+        document.getElementById("shopping-cart").style.display = 'none';
+
+        document.getElementById("payment-form").style.display = 'block';
+    });
+
+    function goToBenefits(){
+        window.location.href = 'home.html';
+    }
+</script>
+</body>
+</html>

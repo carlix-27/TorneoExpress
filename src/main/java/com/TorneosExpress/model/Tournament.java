@@ -18,7 +18,7 @@ public class Tournament {
 
   public Tournament() {}
 
-  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty, Type type, Team winner) {
+  public Tournament(String tournamentName, String tournamentLocation, Sport sport, boolean privacy, Difficulty difficulty, StageType type, Team winner) {
     this.name = tournamentName;
     this.location = tournamentLocation;
     this.sport = sport;
@@ -97,7 +97,7 @@ public class Tournament {
 
 
   @Column
-  private Type type;
+  private StageType type;
 
 
 }

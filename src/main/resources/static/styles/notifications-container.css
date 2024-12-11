@@ -1,0 +1,26 @@
+.notifications-container {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#notification-icon {
+    width: 40px;
+    height: 40px;
+}
+
+#unread-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

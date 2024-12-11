@@ -14,7 +14,6 @@ function fetchArticles() {
                 productList.innerHTML = `<p>No hay ventajas disponibles</p>`;
             } else {
                 articles.forEach(article => {
-                    // Log the article object to verify its structure
                     console.log(article);
 
                     const divItem = document.createElement("div");
@@ -26,7 +25,6 @@ function fetchArticles() {
                         article_price: articlePrice,
                     } = article;
 
-                    // Log the destructured values to verify they are not undefined
                     console.log('Name:', articleName, 'Price:', articlePrice);
 
                     divItem.innerHTML = `

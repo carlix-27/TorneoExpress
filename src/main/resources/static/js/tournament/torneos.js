@@ -1,5 +1,16 @@
 let signupButtonListenerAdded = false;
 
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndLoadGoogleMapsAPI()
+        .then(() => {
+            initializeAutocomplete('location');
+        })
+        .catch(error => {
+            console.error("Error loading Google Maps API:", error);
+            showErrorToast("Error loading location services.", "error");
+        });
+});
+
 function fetchActiveTournaments() {
     fetch('/api/tournaments/active')
         .then(response => {
@@ -10,15 +21,13 @@ function fetchActiveTournaments() {
         })
         .then(tournaments => {
             const tournamentList = document.getElementById('tournament-list');
-
             tournamentList.innerHTML = '';
 
             tournaments.forEach(tournament => {
-
                 const {
                     name: tournamentName,
                     sport: tournamentSport,
-                    location: tournamentLocation,
+                    location: tournamentLocation, // coordinates string
                     private: tournamentPrivacy,
                     maxTeams,
                     participatingTeams
@@ -27,17 +36,39 @@ function fetchActiveTournaments() {
                 const tournamentSportName = tournamentSport.sportName;
                 const numOfParticipatingTeams = participatingTeams.length;
 
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a> 
-                    <p>Deporte: ${tournamentSportName}</p>
-                    <p>Ubicación: ${tournamentLocation}</p>
-                    <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
-                    <p>Dificultad: ${tournament.difficulty}</p>
-                    <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
-                    <button class="signup-button" data-tournament-id="${tournament.id}">Inscribirse</button>
-                `;
-                tournamentList.appendChild(listItem);
+                // Split the coordinates string into latitude and longitude
+                const [lat, lng] = tournamentLocation.split(',');
+
+                // Use reverseGeocode to get the human-readable address
+                reverseGeocode(lat, lng)
+                    .then(locationAddress => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                            <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a>
+                            <p>Deporte: ${tournamentSportName}</p>
+                            <p>Ubicación: ${locationAddress}</p>
+                            <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
+                            <p>Dificultad: ${tournament.difficulty}</p>
+                            <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+                            <button class="signup-button" data-tournament-id="${tournament.id}">Inscribirse</button>
+                        `;
+                        tournamentList.appendChild(listItem);
+                    })
+                    .catch(error => {
+                        console.error('Error geocoding location:', error);
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                            <a href="loadTournament.html?id=${tournament.id}"><h3>${tournamentName}</h3></a>
+                            <p>Deporte: ${tournamentSportName}</p>
+                            <p>Ubicación: No se pudo obtener la ubicación</p>
+                            <p>Privacidad: ${tournamentPrivacy ? "Privado" : "Público"}</p>
+                            <p>Dificultad: ${tournament.difficulty}</p>
+                            <p>Equipos Participantes: ${numOfParticipatingTeams} / ${maxTeams}</p>
+                            <button class="signup-button" data-tournament-id="${tournament.id}">Inscribirse</button>
+                        `;
+                        tournamentList.appendChild(listItem);
+                    });
+
             });
 
             document.querySelectorAll('.signup-button').forEach(button => {
@@ -53,6 +84,8 @@ function fetchActiveTournaments() {
             document.getElementById('error-message').style.display = 'block';
         });
 }
+
+
 
 function showSignupModal(tournamentId) {
     const modal = document.getElementById("signupModal");
@@ -267,7 +300,7 @@ function sendTournamentRequest(tournament, teamId, userId) {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        displayErrorMessage("Error al inscribirse al torneo.");
+                        throw new Error("Error sending request")
                     }
                     return response.json();
                 })
@@ -275,7 +308,9 @@ function sendTournamentRequest(tournament, teamId, userId) {
                     displaySuccessMessage("Solicitud mandada");
                     createRequestNotification(tournamentRequest);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                  displayErrorMessage("Ya tiene una solicitud pendiente.");
+                });
         })
         .catch(error => console.error('Error fetching team details:', error));
 }
@@ -289,6 +324,7 @@ function createRequestNotification(tournamentRequest) {
             const tournamentName = tournament.name;
             const teamName = team.name;
             const message = `${teamName} ha solicitado unirse al siguiente torneo: ${tournamentName}.`;
+            const url = `http://localhost:8080/manejarSolicitudesTorneo.html?id=${tournament.id}`;
 
             const notificationTo = tournamentRequest.requestTo;
 
@@ -300,6 +336,7 @@ function createRequestNotification(tournamentRequest) {
                 body: JSON.stringify({
                     toId: notificationTo,
                     message: message,
+                    redirectUrl: url,
                 })
 
             });
@@ -347,31 +384,13 @@ function fetchTeamDetails(teamId) {
         });
 }
 
-const displaySuccessMessage = message => {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-
-    setTimeout(() => {
-        successMessage.style.display = "none";
-    }, 3000);
-};
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
 
 function permaDisplayErrorMessage(message) {
     const errorMessage = document.getElementById('errorMessage');
     errorMessage.innerText = message;
     errorMessage.style.display = 'block';
 }
+
 
 document.addEventListener("DOMContentLoaded", function() {
     fetchActiveTournaments();

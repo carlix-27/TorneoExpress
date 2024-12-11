@@ -3,30 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torneos Express - Torneo - Agregar Deporte</title>
-
+    <title>Agregar Deporte</title>
     <link rel="stylesheet" href="styles/sport/addSport.css">
-    <link rel="stylesheet" href="styles/messages.css">
-    <link rel="stylesheet" href="styles/backButton.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/box.css">
+    <link rel="stylesheet" href="styles/message.css">
+    <link rel="stylesheet" href="styles/textbox.css">
+    <link rel="stylesheet" href="styles/link.css">
+    <link rel="stylesheet" href="styles/toast.css">
+    <link rel="stylesheet" href="styles/back-button.css">
+    <link rel="stylesheet" href="styles/button.css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
     <script src="js/sport/addSport.js"></script>
-    <script src="js/auth/checkRedirect.js"></script>
+    <script src="js/user/userIdCheck.js"></script>
+    <script src="js/message/fieldMessages.js" defer></script>
 </head>
+
+<style>
+    .button {
+        background: #3d1f7f;
+        color: white;
+    }
+
+    .box {
+        width: 50%;
+        margin-top: 50px;
+    }
+
+</style>
 <body>
-<header>
-    <h1>Torneos Express - Deportes</h1>
-    <nav>
-        <ul>
-            <li><a href="home.html">Inicio</a></li>
-            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
-</header>
-<div class="create-sport-box">
+
+<a href="home.html" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+
+<div class="box">
     <div class="header-row">
-        <a href="home.html" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+
         <h2>Agregar Deporte</h2>
     </div>
 
@@ -39,11 +51,11 @@
             <input type="text" id="sport-name" name="sport-name" required>
         </div>
         <div class="form-group">
-            <label for="num_players">Cantidad de Jugadores:</label>
+            <label for="num_players">Cantidad de Jugadores por equipo:</label>
             <input type="number" id="num_players" name="num_players" min="1" required>
         </div>
         <div class="form-group">
-            <button type="button" onclick="addSport()">Agregar Deporte</button>
+            <button class="button" type="button" onclick="addSport()">Agregar Deporte</button>
         </div>
     </form>
 </div>

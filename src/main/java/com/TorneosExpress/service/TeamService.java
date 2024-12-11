@@ -1,5 +1,6 @@
 package com.TorneosExpress.service;
 
+import com.TorneosExpress.results.PurchaseResult;
 import com.TorneosExpress.dto.team.UpdateTeamDto;
 import com.TorneosExpress.model.Article;
 import com.TorneosExpress.model.Player;
@@ -139,12 +140,17 @@ public class TeamService {
   }
 
   @Transactional
-  public Team purchaseArticle(Long teamId, Long articleId) {
+  public PurchaseResult purchaseArticle(Long teamId, Long articleId) {
     Team team = findById(teamId);
     Article article = articleRepository.findArticleById(articleId);
-    team.getArticles().add(article);
-    team.setPrestigePoints(team.getPrestigePoints() - article.getPrice());
-    return teamRepository.save(team);
+    if (team.getPrestigePoints() >= article.getPrice()) {
+      team.getArticles().add(article);
+      team.setPrestigePoints(team.getPrestigePoints() - article.getPrice());
+      teamRepository.save(team);
+      return new PurchaseResult(team, true);
+    } else {
+      return new PurchaseResult(team, false);
+    }
   }
 
   @Transactional

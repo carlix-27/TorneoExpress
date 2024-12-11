@@ -5,20 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Tournament - Torneos Express</title>
     <link rel="stylesheet" href="styles/tournament/edit-tournament.css">
-    <script src="js/auth/checkRedirect.js"></script>
+    <script src="js/user/userIdCheck.js"></script>
+    <script src="js/message/fieldMessages.js" defer></script>
 </head>
 <body>
-<header>
-    <h1>Torneos Express</h1>
-    <nav>
-        <ul>
-            <li><a href="home.html">Torneos</a></li>
-            <li><a href="equipo.html">Equipos</a></li>
-            <li><a href="tienda.html">Tienda</a></li>
-            <li><a href="calendario.html">Calendario</a></li>
-        </ul>
-    </nav>
-</header>
+
 <form id="edit-tournament-form" class="update-tournament-box" action="/api/tournaments/update" method="post">
     <div id="successMessage" style="display: none; color: green; margin-top: 10px;"></div>
     <div id="errorMessage" style="display: none; color: red; margin-top: 10px;"></div>

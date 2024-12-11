@@ -9,7 +9,7 @@ function fetchTeamDetails(teamId) {
         .then(team => {
             document.getElementById('team-id').value = team.id;
             document.getElementById('team-name').value = team.name;
-            document.getElementById('privacy').checked = team.private;
+            document.getElementById('privacy').checked = team.isPrivate;
         })
         .catch(error => {
             console.error('Error:', error);
@@ -52,12 +52,6 @@ function getTeamIdFromUrl() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get('id');
-}
-
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
 }
 
 

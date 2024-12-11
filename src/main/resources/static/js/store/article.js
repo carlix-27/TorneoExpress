@@ -19,36 +19,36 @@ function loadArticle() {
                 article_price: articlePrice,
             } = article;
 
-            /* Choose a team that user is captain of. Then choose tournament. */
             articleSection.innerHTML = `
                 <div id="article-result">
                     <h2>${articleName}</h2>
                     <p>Descripcion: ${articleDescription}</p>
                     <p>Precio: ${articlePrice}</p>
-                    
+
                     <label for="my-teams">Equipo:</label>
                     <select id="my-teams" name="my-teams" required>
                         <option value="-1">Seleccione un equipo</option>
                     </select> <br>
-                    
+
                     <p id="prestige-points"></p>
-                    
+
                     <div id="purchase-button">
                         <button id="buy-button">Comprar</button>
                     </div>
 
                     <div id="successMessage" style="display: none; color: green; margin-top: 10px;">
-                    
+
                     </div>
-                    
+
                     <div id="errorMessage" style="display: none; color: red; margin-top: 10px;">
-                    
+
                     </div>
-                    
+
                 </div>
             `;
 
             fetchMyTeams(article);
+            connectWebSocket();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -58,7 +58,7 @@ function loadArticle() {
 function fetchMyTeams(article) {
     const userId = localStorage.getItem("userId");
 
-    fetch(`/api/teams/user/${userId}`) // Assuming this endpoint returns the list of teams
+    fetch(`/api/teams/user/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
@@ -108,7 +108,6 @@ function fetchMyTeams(article) {
                 });
             }
 
-            // Trigger change event to set initial button state
             teamDropDown.dispatchEvent(new Event('change'));
         })
         .catch(error => {
@@ -125,23 +124,6 @@ function validateTransaction(price, prestigePoints, articleId, teamId) {
     }
 }
 
-function displaySuccessMessage(message) {
-    const successMessage = document.getElementById("successMessage");
-    successMessage.textContent = message;
-    successMessage.style.display = "block";
-    setTimeout(() => {
-        successMessage.style.display = "none";
-    }, 3000);
-}
-
-function displayErrorMessage(message) {
-    const errorMessage = document.getElementById("errorMessage");
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-    setTimeout(() => {
-        errorMessage.style.display = "none";
-    }, 3000);
-}
 
 function handleTransaction(articleId, teamId) {
     fetch(`/api/teams/${teamId}/purchase/${articleId}`, {
@@ -152,17 +134,43 @@ function handleTransaction(articleId, teamId) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+                throw new Error(`Failed to purchase article: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log("Transaccion exitosa");
-            displaySuccessMessage("Artículo comprado con éxito");
+            console.log("Transaction completed");
+            displaySuccessMessage("Compra exitosa");
         })
         .catch(error => {
             console.error('Error:', error);
+            displayErrorMessage("Fondos insuficientes");
         });
+}
+
+function connectWebSocket() {
+    let socket = new SockJS('/ws');
+    let stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/points', function (message) {
+            updatePrestigePoints(JSON.parse(message.body));
+        });
+    });
+}
+
+function updatePrestigePoints(updatedTeam) {
+    const teamDropDown = document.getElementById('my-teams');
+    const selectedTeamId = teamDropDown.value;
+    if (updatedTeam.id == selectedTeamId) {
+        const points = document.getElementById("prestige-points");
+        points.innerHTML = `Sus puntos de prestigio: ${updatedTeam.prestigePoints}`;
+
+        const selectedTeam = teamsAsCaptain.find(t => t.id == selectedTeamId);
+        if (selectedTeam) {
+            selectedTeam.prestigePoints = updatedTeam.prestigePoints;
+        }
+    }
 }
 
 function goBack() {
