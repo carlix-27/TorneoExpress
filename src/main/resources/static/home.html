@@ -89,6 +89,36 @@
             transform: scale(1.1);
         }
 
+        .equipos-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 50%;
+            margin: 20px;
+        }
+
+        .image-container {
+            margin-left: auto;
+            margin-right: 20px;
+            width: 50%;
+        }
+
+        .centered-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+        }
+
+        .team-grid-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+
+
 
     </style>
 </head>
@@ -132,7 +162,7 @@
     <div class="grid-container">
         <div class="card" onclick="redirectToCreateTournament()">
             <h3>Crear Torneo</h3>
-            <p>Crea un nuevo torneo y administra equipos.</p>
+            <p>Crea tu proximo torneo!</p>
         </div>
         <div class="card">
             <a href="misTorneos.html" class="card-link">
@@ -157,27 +187,36 @@
 
 <section id="equipos">
     <h2 class="section-title">Equipos</h2>
-    <div class="grid-container">
-        <div class="card">
-            <a href="crearEquipo.html" class="card-link">
-                <h3>Crear Equipo</h3>
-            </a>
+    <div class="team-grid-container">
+        <div class="equipos-content">
+            <div class="card">
+                <a href="crearEquipo.html" class="card-link">
+                    <h3>Crear Equipo</h3>
+                    <p>Crea un nuevo equipo para empezar a jugar!</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="misEquipos.html" class="card-link">
+                    <h3>Ver mis equipos</h3>
+                    <p>Revisa y gestiona tus equipos</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="getAllTeams.html" class="card-link">
+                    <h3>Ver todos los equipos</h3>
+                    <p>Explora los equipos disponibles.</p>
+                </a>
+            </div>
         </div>
 
-        <div class="card">
-            <a href="misEquipos.html" class="card-link">
-                <h3>Ver mis equipos</h3>
-            </a>
+        <div class="image-container">
+            <img src="illustrations/Winners%20Illustration.svg" alt="Your Image" class="centered-image">
         </div>
-
-        <div class="card">
-            <a href="getAllTeams.html" class="card-link">
-                <h3>Ver todos los equipos</h3>
-            </a>
-        </div>
-
     </div>
 </section>
+
 
 <section id="invitaciones">
     <h2 class="section-title">Social</h2>
@@ -186,12 +225,15 @@
         <div class="card">
             <a href="buscarJugador.html" class="card-link">
                 <h3>Invitar a Jugadores</h3>
+                <p>¡Invita a tus amigos!</p>
+
             </a>
         </div>
 
         <div class="card">
             <a href="manejarInvitacionesJugador.html" class="card-link">
                 <h3>Ver invitaciones</h3>
+                <p>Maneja tus invitaciones</p>
             </a>
         </div>
 
@@ -203,10 +245,13 @@
     <div class="grid-container">
         <div class="card" onclick="redirectToCreateSport()">
             <h3>Agregar Deporte</h3>
+            <p>Agrega tu deporte favorito</p>
+
         </div>
         <div class="card">
             <a href="deportes.html" class="card-link">
                 <h3>Ver Todos los Deportes</h3>
+                <p>¡Mira todos los deportes disponibles!</p>
             </a>
         </div>
     </div>
