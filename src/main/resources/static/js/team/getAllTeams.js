@@ -22,6 +22,8 @@ function loadTeams() {
 
             listaEquipos.innerHTML = '';
 
+            const userId = localStorage.getItem("userId");
+
             teams.forEach(team => {
 
                 const {
@@ -37,8 +39,8 @@ function loadTeams() {
                 const isInTeam = isUserInTeam(players, userId);
                 const maxPlayers = teamSport.num_players * 2;
 
-        const li = document.createElement("li");
-        li.innerHTML = `
+                const li = document.createElement("li");
+                li.innerHTML = `
                     <div>
                         <a href="loadTeam.html?id=${team.id}"><h3>${name}</h3></a>
                         <p>Ubicación: <span id="location-${team.id}">Cargando...</span></p>
@@ -51,7 +53,6 @@ function loadTeams() {
                 listaEquipos.appendChild(li);
 
                 const [lat, lng] = teamLocation.split(',');
-
 
                 reverseGeocode(lat, lng).then(address => {
                     const locationElement = document.getElementById(`location-${team.id}`);
@@ -72,11 +73,6 @@ function loadTeams() {
         .catch(error => {
             console.error('Error:', error);
         });
-      });
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
 }
 
 function showSignupModal(teamId) {
@@ -253,7 +249,7 @@ function createTeamNotification(teamRequest) {
         .then(([team, player]) => {
             const playerName = player.name;
             const teamName = team.name;
-            let url = "";
+            let url;
 
             const isTeamPrivate = team.isPrivate;
 
@@ -275,9 +271,9 @@ function createTeamNotification(teamRequest) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    notificationTo: notificationTo,
+                    toId: notificationTo,
                     message: message,
-                    url: url
+                    redirectUrl: url
                 })
             });
         })
@@ -285,7 +281,7 @@ function createTeamNotification(teamRequest) {
 }
 
 function fetchPlayerDetails(playerId) {
-    return fetch(`/api/players/${playerId}`)
+    return fetch(`/api/user/players/${playerId}`)
         .then(response => response.json());
 }
 
