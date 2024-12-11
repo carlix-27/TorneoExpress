@@ -1,3 +1,5 @@
+let userLat, userLng, map, userMarker;
+
 document.addEventListener("DOMContentLoaded", () => {
     fetchAndLoadGoogleMapsAPI()
         .then(() => {
@@ -7,16 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error loading Google Maps API:", error);
             showErrorToast("Error loading location services.", "error");
         });
+
     const userId = localStorage.getItem("userId");
     if (userId) {
         fetchUserInfo(userId);
     } else {
         console.error("User ID not found in localStorage.");
     }
-    fetchActiveTournaments();
 });
-
-let userLat, userLng;
 
 function fetchUserInfo(userId) {
     fetch(`/api/user/players/${userId}`)
@@ -35,6 +35,7 @@ function fetchUserInfo(userId) {
                 userLat = lat;
                 userLng = lng;
                 fetchActiveTournaments();
+                initializeMap();
             } else {
                 console.error("Invalid location format for user.");
             }
@@ -63,9 +64,7 @@ function fetchActiveTournaments() {
 
 function renderTournaments(tournaments) {
     const tournamentList = document.getElementById("tournament-list");
-    const proximityList = document.getElementById("proximity-list");
     tournamentList.innerHTML = "";
-    proximityList.innerHTML = "";
 
     tournaments.forEach(function (tournament) {
         const [tournamentLat, tournamentLng] = tournament.location.split(',').map(Number);
@@ -92,16 +91,7 @@ function renderTournaments(tournaments) {
                 // Only render nearby tournaments (within 50 km)
                 const distance = getDistanceFromLatLonInKm(userLat, userLng, tournamentLat, tournamentLng);
                 if (distance <= 50) {
-                    const proximityListItem = document.createElement("li");
-                    proximityListItem.innerHTML = `
-                        <a href="loadTournament.html?id=${tournament.id}">
-                            <h3>${tournament.name}</h3>
-                        </a>
-                        <p>Ubicación: ${address}</p>
-                        <p>Deporte: ${tournament.sport.sportName}</p>
-                        <p>Distancia: ${distance.toFixed(2)} km</p>
-                    `;
-                    proximityList.appendChild(proximityListItem);
+                    addMarker(tournament, tournamentLat, tournamentLng, address, distance);
                 }
             })
             .catch(error => {
@@ -117,6 +107,49 @@ function renderTournaments(tournaments) {
                 `;
                 tournamentList.appendChild(listItem);
             });
+    });
+}
+
+function initializeMap() {
+    const mapOptions = {
+        center: { lat: userLat, lng: userLng },
+        zoom: 12,
+    };
+
+    map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    // Marker for user's location
+    userMarker = new google.maps.Marker({
+        position: { lat: userLat, lng: userLng },
+        map: map,
+        title: "Your Location",
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: "blue",
+            fillOpacity: 1,
+            strokeWeight: 2
+        }
+    });
+}
+
+function addMarker(tournament, lat, lng, address, distance) {
+    const marker = new google.maps.Marker({
+        position: { lat: lat, lng: lng },
+        map: map,
+        title: `${tournament.name} - ${address}`,
+    });
+
+    const infowindow = new google.maps.InfoWindow({
+        content: `
+            <h4>${tournament.name}</h4>
+            <p>Ubicación: ${address}</p>
+            <p>Distancia: ${distance.toFixed(2)} km</p>
+        `
+    });
+
+    marker.addListener("click", function() {
+        infowindow.open(map, marker);
     });
 }
 
