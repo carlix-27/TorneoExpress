@@ -34,17 +34,18 @@ function loadTeams() {
 
                 const sport = teamSport.sportName;
                 const playersInTeam = players.length;
+                const isInTeam = isUserInTeam(players, userId);
                 const maxPlayers = teamSport.num_players * 2;
 
-                const li = document.createElement("li");
-                li.innerHTML = `
+        const li = document.createElement("li");
+        li.innerHTML = `
                     <div>
                         <a href="loadTeam.html?id=${team.id}"><h3>${name}</h3></a>
                         <p>Ubicación: <span id="location-${team.id}">Cargando...</span></p>
                         <p>Deporte: ${sport}</p>
                         <p>Privacidad: ${isPrivate ? "Privado" : "Público"}</p>
                         <p>Jugadores anotados: ${playersInTeam} / ${maxPlayers}</p>
-                        <button class="signup-button" data-team-id="${team.id}">Inscribirse</button>
+                        ${!isInTeam ? `<button class="signup-button" data-team-id="${team.id}">Inscribirse</button>` : ''}
                     </div>
                 `;
                 listaEquipos.appendChild(li);
@@ -71,6 +72,11 @@ function loadTeams() {
         .catch(error => {
             console.error('Error:', error);
         });
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 function showSignupModal(teamId) {
@@ -231,7 +237,10 @@ function sendTeamRequest(team, userId) {
                     displaySuccessMessage("Solicitud mandada con éxito");
                     createTeamNotification(teamRequest);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    displayErrorMessage("Ya tiene una solicitud pendiente.");
+                    console.error('Error:', error);
+                });
         })
         .catch(error => console.error('Error fetching player details:', error));
 }
@@ -286,4 +295,10 @@ function displayModal(modal, closeButton) {
         modal.style.display = "none";
     });
 }
+
+function isUserInTeam(players, userId) {
+  return players.some(player => player.id == userId);
+}
+
+document.addEventListener("DOMContentLoaded", loadTeams);
 

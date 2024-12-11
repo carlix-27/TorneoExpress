@@ -97,3 +97,21 @@ h2 {
 #tournament-result button:hover {
     background-color: #342160;
 }
+
+#tournament-result #danger-button {
+    color: #fff;
+    font-size: 16px;
+    background-color: #dc3545;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#tournament-result #danger-button:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: #fff;
+    text-decoration: none;
+}

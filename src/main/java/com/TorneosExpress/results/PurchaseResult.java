@@ -1,4 +1,4 @@
-package com.TorneosExpress.dto.store;
+package com.TorneosExpress.results;
 
 import com.TorneosExpress.model.Team;
 import lombok.Getter;

@@ -300,7 +300,7 @@ function sendTournamentRequest(tournament, teamId, userId) {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        displayErrorMessage("Error al inscribirse al torneo.");
+                        throw new Error("Error sending request")
                     }
                     return response.json();
                 })
@@ -308,7 +308,9 @@ function sendTournamentRequest(tournament, teamId, userId) {
                     displaySuccessMessage("Solicitud mandada");
                     createRequestNotification(tournamentRequest);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                  displayErrorMessage("Ya tiene una solicitud pendiente.");
+                });
         })
         .catch(error => console.error('Error fetching team details:', error));
 }
